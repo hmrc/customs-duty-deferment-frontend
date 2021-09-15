@@ -1,5 +1,6 @@
 # microservice specific routes
 
-->         /hmrc-frontend           hmrcfrontend.Routes
-GET        /                        uk.gov.hmrc.customsdutydefermentfrontend.controllers.HelloWorldController.helloWorld
-GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
+->         /hmrc-frontend                 hmrcfrontend.Routes
+GET        /assets/*file                  controllers.Assets.versioned(path = "/public", file: Asset)
+
+GET        /not-subscribed-for-cds        controllers.UnauthorisedController.onPageLoad
