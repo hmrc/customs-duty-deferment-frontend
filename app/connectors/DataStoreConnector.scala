@@ -17,17 +17,19 @@
 package connectors
 
 import config.AppConfig
-import models.FileRole
-import play.mvc.Http.Status
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import models.{EoriHistory, EoriHistoryResponse}
+import play.api.Logging
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class FinancialsApiConnector @Inject()(http: HttpClient,
-                                       appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
-  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val apiEndpoint = appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
-    http.DELETE[HttpResponse](apiEndpoint).map(_.status == Status.OK)
+class DataStoreConnector @Inject()(http: HttpClient,
+                                   appConfig: AppConfig)
+                                  (implicit executionContext: ExecutionContext) extends Logging {
+  def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
+    http.GET[EoriHistoryResponse](appConfig.customsDataStore + s"/eori/$eori/eori-history")
+      .map(response => response.eoriHistory)
+      .recover { case _ => Seq(EoriHistory(eori, None, None)) }
   }
 }

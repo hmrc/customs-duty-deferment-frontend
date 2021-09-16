@@ -1,0 +1,53 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.DutyDefermentStatementPeriodsByMonth
+@import views.helpers.Formatters
+@import models.DDStatementType._
+@import models.FileFormat._
+@import views.html.components.duty_deferment_file
+
+@this()
+
+@(group: DutyDefermentStatementPeriodsByMonth)(implicit messages: Messages)
+
+
+    <h2 id="statements-month-heading-0-@{group.year}-@{group.month}" class="govuk-heading-m">@{Formatters.dateAsMonthAndYear(group.monthAndYear)}</h2>
+    <dl class="govuk-summary-list">
+    @for((period, index) <- group.periods.zipWithIndex) {
+        <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
+            <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell" class="govuk-summary-list__value">
+            @if(period.defermentStatementType == Supplementary) {
+                @messages("cf.account.detail.row.supplementary.info")
+            } else {@if(period.defermentStatementType == Excise) {
+                @messages("cf.account.details.row.excise.info")
+            } else {
+                @messages("cf.account.detail.period-group",
+                    Formatters.dateAsDay(period.startDate),
+                    Formatters.dateAsDay(period.endDate),
+                    Formatters.dateAsMonth(period.endDate))
+            }}
+            </dt>
+            <dd class="govuk-summary-list__actions">
+            @duty_deferment_file(period, Pdf, s"pdf-0-${group.year}-${group.month}-row-${index}")
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            @duty_deferment_file(period, Csv, s"csv-0-${group.year}-${group.month}-row-${index}")
+            </dd>
+        </div>
+    }
+    </dl>
+    <p class="govuk-body" id="direct-debit-info">@messages("cf.account.detail.direct-debit.duty-vat-and-excise")</p>

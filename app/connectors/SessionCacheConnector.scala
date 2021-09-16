@@ -17,47 +17,26 @@
 package connectors
 
 import config.AppConfig
-import models.{AccountLink, SessionCacheAccountLink}
-import play.api.libs.json.{Json, OFormat}
+import models.AccountLink
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-case class AccountLinksRequest(sessionId: String,
-                               accountLinks: Seq[SessionCacheAccountLink])
-
-object AccountLinksRequest {
-  implicit val format: OFormat[AccountLinksRequest] = Json.format[AccountLinksRequest]
-}
-
-
 class SessionCacheConnector @Inject()(httpClient: HttpClient,
-                                                       appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
+                                      appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
 
   def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
     val sessionCacheUrl = appConfig.customsFinancialsSessionCacheUrl + s"/account-link/$id/$linkId"
-    httpClient.GET[SessionCacheAccountLink](sessionCacheUrl).map(response => Some(new AccountLink(id, response)))
+    httpClient.GET[AccountLink](sessionCacheUrl).map(Some(_))
       .recover {
         case _ => None
       }
-  }
-
-  def storeSession(id: String, accountLinks: Seq[AccountLink])(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val sessionCacheUrl = appConfig.customsFinancialsSessionCacheUrl + "/update-links"
-    val request: AccountLinksRequest = AccountLinksRequest(id, toSessionCacheAccountLinks(accountLinks))
-    httpClient.POST[AccountLinksRequest, HttpResponse](sessionCacheUrl, request)
   }
 
   def removeSession(id: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
     val sessionCacheUrl = appConfig.customsFinancialsSessionCacheUrl + "/remove/" + id
     httpClient.DELETE[HttpResponse](sessionCacheUrl)
   }
-
-  private def toSessionCacheAccountLinks(accountLinks: Seq[AccountLink]): Seq[SessionCacheAccountLink] = for {
-    accountLink <- accountLinks
-    sessionAccountLink = SessionCacheAccountLink(accountLink.eori, accountLink.accountNumber, accountLink.accountStatus, accountLink.accountStatusId, accountLink.linkId)
-  } yield sessionAccountLink
-
 }

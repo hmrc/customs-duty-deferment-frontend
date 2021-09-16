@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package utils
 
-@this(layout: Layout)
+import org.joda.time
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
+import java.time.{LocalDate, ZoneId, ZoneOffset}
+import java.util.Date
+
+object DateConverters {
+  implicit def toLocalDate(date: Date): LocalDate = date.toInstant.atZone(ZoneId.systemDefault()).toLocalDate
+
+  implicit class OrderedLocalDate(date: LocalDate) extends Ordered[LocalDate] {
+    def compare(that: LocalDate): Int = date.compareTo(that)
+  }
+
+  implicit def toJodaTime(date: LocalDate): time.LocalDate  = {
+    new time.LocalDate(java.util.Date.from(date.atStartOfDay().toInstant(ZoneOffset.UTC)))
+  }
 }

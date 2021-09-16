@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.html.components.Text
+package utils
 
-@this(layout: Layout)
+import models.EoriHistory
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
-@layout(pageTitle = Some(pageTitle)) {
-    <h1 class="govuk-heading-xl">@{Text(heading).asHtml}</h1>
-    <p class="govuk-body">@{Text(message).asHtml}</p>
+trait OrderedByEoriHistory[T <: OrderedByEoriHistory[_]] extends Ordered[T] {
+  val eoriHistory: EoriHistory
+
+  override def compare(that: T): Int = {
+    (for {
+      thatValidFrom <- that.eoriHistory.validFrom
+      thisValidFrom <- this.eoriHistory.validFrom
+    } yield {
+      thatValidFrom.compareTo(thisValidFrom)
+    }).getOrElse(1)
+  }
 }
