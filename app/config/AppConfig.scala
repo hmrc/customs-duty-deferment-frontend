@@ -34,9 +34,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val financialsHomepage: String = config.get[String]("external-urls.customsFinancialsHomepage")
   lazy val xClientIdHeader: String = config.get[String]("microservice.services.sdes.x-client-id")
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
-
-
-
+  lazy val contactDetailsUri: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
 
   def requestedStatementsUrl(linkId: String): String = {
     config.get[String]("external-urls.requestedStatements") + s"duty-deferment/$linkId"
@@ -45,6 +43,9 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   def historicRequestUrl(linkId: String): String = {
     config.get[String]("external-urls.historicRequest") + s"duty-deferment/$linkId"
   }
+
+  lazy val contactDetailsCryptoBaseConfigKey: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.baseConfigKey")
+  lazy val contactDetailsCryptoEncryptionKey: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.encryptionKey")
 
   lazy val feedbackService: String = config.get[String]("microservice.services.feedback.url") +
     config.get[String]("microservice.services.feedback.source")
@@ -60,5 +61,9 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   lazy val sdesApi: String = servicesConfig.baseUrl("sdes") +
     config.get[String]("microservice.services.sdes.context")
+
+  lazy val sddsUri: String = servicesConfig.baseUrl("sdds") +
+    config.get[String]("microservice.services.sdds.context") + "/cds-homepage/cds/journey/start"
+
 
 }

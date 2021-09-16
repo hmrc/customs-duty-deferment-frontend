@@ -20,7 +20,31 @@ import play.api.libs.json._
 
 
 case class Metadata(items: Seq[MetadataItem]) {
-  val asMap: Map[String, String] = items.map(item => (item.key, item.value)).toMap
+  def toDutyDefermentStatementFileMetadata: DutyDefermentStatementFileMetadata = {
+    val metadata = items.map(item => (item.key, item.value)).toMap
+
+    def mapDutyOverLimit: Boolean = {
+      metadata.getOrElse("DutyOverLimit", "false") match {
+        case "Y" => true
+        case _ => false
+      }
+    }
+
+    DutyDefermentStatementFileMetadata(
+      metadata("PeriodStartYear").toInt,
+      metadata("PeriodStartMonth").toInt,
+      metadata("PeriodStartDay").toInt,
+      metadata("PeriodEndYear").toInt,
+      metadata("PeriodEndMonth").toInt,
+      metadata("PeriodEndDay").toInt,
+      FileFormat(metadata("FileType")),
+      FileRole(metadata("FileRole")),
+      DDStatementType(metadata("DefermentStatementType")),
+      Some(mapDutyOverLimit),
+      Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
+      metadata.getOrElse("DAN", "Unknown"),
+      metadata.get("statementRequestID"))
+  }
 }
 
 object Metadata {

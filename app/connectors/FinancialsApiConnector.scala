@@ -26,8 +26,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FinancialsApiConnector @Inject()(http: HttpClient,
                                        appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
-  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val apiEndpoint = appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
-    http.DELETE[HttpResponse](apiEndpoint).map(_.status == Status.OK)
-  }
+
+  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
+    http.DELETE[HttpResponse](
+      appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
+    ).map(_.status == Status.OK)
 }

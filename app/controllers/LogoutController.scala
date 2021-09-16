@@ -18,7 +18,8 @@ package controllers
 
 import config.AppConfig
 import connectors.SessionCacheConnector
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result, Results}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -28,21 +29,16 @@ class LogoutController @Inject()(sessionCacheConnector: SessionCacheConnector, m
                                 (implicit val appConfig: AppConfig, ec: ExecutionContext)
   extends FrontendController(mcc) {
 
-  val feedbackLink: String = appConfig.feedbackService
-
-  def logout: Action[AnyContent] = Action async { implicit request => {
-    hc.sessionId match {
-      case Some(id) => sessionCacheConnector.removeSession(id.value).map(_ => Redirect(appConfig.signOutUrl, Map("continue" -> Seq(feedbackLink))))
-      case None => Future.successful(Redirect(appConfig.signOutUrl, Map("continue" -> Seq(feedbackLink))))
-    }
-  }
+  def logout: Action[AnyContent] = Action { implicit request =>
+    clearSession(appConfig.feedbackService)
   }
 
-  def logoutNoSurvey: Action[AnyContent] = Action async { implicit request => {
-    hc.sessionId match {
-      case Some(id) => sessionCacheConnector.removeSession(id.value).map(_ => Results.Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.loginContinueUrl))))
-      case None => Future.successful(Redirect(appConfig.signOutUrl, Map("continue" -> Seq(appConfig.loginContinueUrl))))
-    }
+  def logoutNoSurvey: Action[AnyContent] = Action { implicit request =>
+    clearSession(appConfig.loginContinueUrl)
   }
+
+  private def clearSession(continue: String)(implicit hc: HeaderCarrier): Result = {
+    hc.sessionId.map(sessionId => sessionCacheConnector.removeSession(sessionId.value))
+    Redirect(appConfig.signOutUrl, Map("continue" -> Seq(continue)))
   }
 }

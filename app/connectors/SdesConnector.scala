@@ -40,38 +40,7 @@ class SdesConnector @Inject()(http: HttpClient,
       sdesDutyDefermentStatementListUrl,
       headers = Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> s"$eori-$dan")
     )(implicitly, HeaderCarrier(), implicitly)
-      .map(_.map(convertToDutyDefermentStatementFile))
+      .map(_.map(_.toDutyDefermentStatementFile))
       .map(filterFileFormats(SdesFileFormats))
-  }
-
-  private def convertToDutyDefermentStatementFile(sdesResponseFile: FileInformation): DutyDefermentStatementFile = {
-    val metadata = sdesResponseFile.metadata.asMap
-
-    DutyDefermentStatementFile(
-      sdesResponseFile.filename,
-      sdesResponseFile.downloadURL,
-      sdesResponseFile.fileSize,
-      DutyDefermentStatementFileMetadata(
-        metadata("PeriodStartYear").toInt,
-        metadata("PeriodStartMonth").toInt,
-        metadata("PeriodStartDay").toInt,
-        metadata("PeriodEndYear").toInt,
-        metadata("PeriodEndMonth").toInt,
-        metadata("PeriodEndDay").toInt,
-        FileFormat(metadata("FileType")),
-        FileRole(metadata("FileRole")),
-        DDStatementType(metadata("DefermentStatementType")),
-        Some(mapDutyOverLimit(metadata.getOrElse("DutyOverLimit", "false"))),
-        Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
-        metadata.getOrElse("DAN", "Unknown"),
-        metadata.get("statementRequestID"))
-    )
-  }
-
-  private def mapDutyOverLimit(MDGDutyOverLimitResponse: String): Boolean = {
-    MDGDutyOverLimitResponse match {
-      case "Y" => true
-      case _   => false
-    }
   }
 }

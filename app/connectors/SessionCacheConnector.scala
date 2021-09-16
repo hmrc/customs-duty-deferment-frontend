@@ -27,16 +27,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class SessionCacheConnector @Inject()(httpClient: HttpClient,
                                       appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
 
-  def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
-    val sessionCacheUrl = appConfig.customsFinancialsSessionCacheUrl + s"/account-link/$id/$linkId"
-    httpClient.GET[AccountLink](sessionCacheUrl).map(Some(_))
-      .recover {
-        case _ => None
-      }
-  }
+  def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
+    httpClient.GET[AccountLink](
+      appConfig.customsFinancialsSessionCacheUrl + s"/account-link/$id/$linkId"
+    ).map(Some(_)).recover { case _ => None }
 
-  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val sessionCacheUrl = appConfig.customsFinancialsSessionCacheUrl + "/remove/" + id
-    httpClient.DELETE[HttpResponse](sessionCacheUrl)
-  }
+  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    httpClient.DELETE[HttpResponse](
+      appConfig.customsFinancialsSessionCacheUrl + "/remove/" + id
+    )
 }

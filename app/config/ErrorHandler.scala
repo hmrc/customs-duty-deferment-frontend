@@ -33,4 +33,12 @@ class ErrorHandler @Inject()(errorTemplate: ErrorTemplate, val messagesApi: Mess
     errorTemplate(Messages("cf.error.unauthorized.title"), Messages("cf.error.unauthorized.heading"),
       Messages("cf.error.unauthorized.message"))
   }
+
+  def sddsErrorTemplate()(implicit request: Request[_]): Html =
+    errorTemplate(Messages("cf.error.standard-error-sdds.title"), Messages("cf.error.standard-error-sdds.heading"),
+      Messages("cf.error.standard-error-sdds.message"))
+
+  def contactDetailsErrorTemplate()(implicit request: Request[_]): Html =
+    errorTemplate(Messages("cf.error.standard-error-contact-details.title"), Messages("cf.error.standard-error-contact-details.heading"),
+      Messages("cf.error.standard-error-contact-details.message"))
 }

@@ -21,7 +21,17 @@ import play.api.libs.json.{Format, Json}
 case class FileInformation(filename: String,
                            downloadURL: String,
                            fileSize: Long,
-                           metadata: Metadata)
+                           metadata: Metadata) {
+
+  def toDutyDefermentStatementFile: DutyDefermentStatementFile =
+    DutyDefermentStatementFile(
+      filename,
+      downloadURL,
+      fileSize,
+      metadata.toDutyDefermentStatementFileMetadata
+    )
+
+}
 
 object FileInformation {
   implicit val fileInformationFormats: Format[FileInformation] = Json.format[FileInformation]
