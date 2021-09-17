@@ -1,7 +1,9 @@
 service.name=Bwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
+service.back=Yn ôl
 
 # Duty Deferment Account Detail view
-cf.account-number=Cyfrif:{0}
+# ----------------------------------------------------------
+cf.account-number=Cyfrif: {0}
 cf.account.detail.title=Datganiadau gohirio tollau
 cf.account.detail.deferment-account-heading=Datganiadau gohirio tollau
 cf.account.detail.deferment-account-secondary-heading=Y cyfrif gohirio:
@@ -30,10 +32,39 @@ cf.duty-deferment-account.historic.description=Rydym ond yn dangos datganiadau a
 cf.duty-deferment-account.historic.request=ofyn am ddatganiadau hŷn.
 cf.duty-deferment-account.problem-with-service.text=Mae’n ddrwg gennym, nid yw’ch datganiadau ar gael ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
 cf.account.detail.account-not-available=Ni allwn ddangos eich cyfrif ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
+# ----------------------------------------------------------
+
+# Standard Error SDDS
+# ----------------------------------------------------------
+cf.error.standard-error-sdds.title=Mae’n ddrwg gennym, nid oes modd sefydlu Debyd Uniongyrchol ar hyn o bryd
+cf.error.standard-error-sdds.heading=Mae’n ddrwg gennym, nid oes modd sefydlu Debyd Uniongyrchol ar hyn o bryd
+cf.error.standard-error-sdds.message=Rhowch gynnig arall arni yn nes ymlaen
+# ----------------------------------------------------------
+
+# Standard Error Contact Details
+# ----------------------------------------------------------
+cf.error.standard-error-contact-details.title=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.heading=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.message=Rhowch gynnig arall arni yn nes ymlaen
+# ----------------------------------------------------------
+
+# Timeout Messages
+# ----------------------------------------------------------
+timeout.title=Rydych ar fin cael eich allgofnodi
+timeout.message="Am resymau diogelwch, cewch eich allgofnodi o’r gwasanaeth hwn ymhen"
+timeout.keepAlive=Parhau i fod wedi’ch mewngofnodi
+timeout.signOut=Allgofnodi
+# ----------------------------------------------------------
+
+# BETA Banner
+# ----------------------------------------------------------
+feedback.before =  Gwasanaeth newydd yw hwn – bydd eich
+feedback.link =  adborth
+feedback.after =  yn ein helpu i’w wella.
+# ----------------------------------------------------------
 
 # Date Format
 # ----------------------------------------------------------
-
 month.1 = Ionawr
 month.2 = Chwefror
 month.3 = Mawrth

@@ -24,5 +24,6 @@ class Module extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
+    bind(classOf[ErrorHandler]).asEagerSingleton()
   }
 }

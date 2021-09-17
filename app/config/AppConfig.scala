@@ -33,6 +33,9 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val xClientIdHeader: String = config.get[String]("microservice.services.sdes.x-client-id")
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
 
+  lazy val timeout: Int = config.get[Int]("timeout.timeout")
+  lazy val countdown: Int = config.get[Int]("timeout.countdown")
+
   lazy val contactDetailsUri: String =
     config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
 

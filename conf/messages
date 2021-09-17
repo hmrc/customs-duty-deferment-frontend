@@ -1,7 +1,9 @@
 service.name=View your customs financial accounts
+service.back = Back
 
 # Duty Deferment Account Detail view
-cf.account-number=Account:{0}
+# ----------------------------------------------------------
+cf.account-number=Account: {0}
 cf.account.detail.title=Duty deferment statements
 cf.account.detail.deferment-account-heading=Duty deferment statements
 cf.account.detail.deferment-account-secondary-heading=Deferment account:
@@ -28,6 +30,37 @@ cf.account.detail.unavailable=Unavailable
 cf.account.detail.no-statements=No statements available for deferment account {0}
 cf.duty-deferment-account.problem-with-service.text=Sorry, your statements are not available at the moment. Please try again later.
 cf.account.detail.account-not-available=We are unable to show your account at the moment. Please try again later.
+# ----------------------------------------------------------
+
+# BETA Banner
+# ----------------------------------------------------------
+feedback.before = This is a new service – your
+feedback.link = feedback
+feedback.after = will help us to improve it.
+# ----------------------------------------------------------
+
+# Timeout Messages
+# ----------------------------------------------------------
+timeout.title = You’re about to be signed out
+timeout.message = For security reasons, you will be signed out of this service in
+timeout.keepAlive = Stay signed in
+timeout.signOut = Sign out
+# ----------------------------------------------------------
+
+# Standard Error SDDS
+# ----------------------------------------------------------
+cf.error.standard-error-sdds.title=Sorry, setting up a direct debit is unavailable at the moment
+cf.error.standard-error-sdds.heading=Sorry, setting up a direct debit is unavailable at the moment
+cf.error.standard-error-sdds.message=Please try again later
+# ----------------------------------------------------------
+
+# Standard Error Contact Details
+# ----------------------------------------------------------
+cf.error.standard-error-contact-details.title=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.heading=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.message=Rhowch gynnig arall arni yn nes ymlaen
+# ----------------------------------------------------------
+
 
 # Date Format
 # ----------------------------------------------------------
