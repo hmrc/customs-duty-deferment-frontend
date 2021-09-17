@@ -3,8 +3,11 @@
 ->         /hmrc-frontend                         hmrcfrontend.Routes
 GET        /assets/*file                          controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET        /account/:linkId                       controllers.AccountController.showAccountDetails(linkId: String)
-GET        /not-subscribed-for-cds                controllers.NotSubscribedController.onPageLoad
+GET        /:linkId/account                       controllers.AccountController.showAccountDetails(linkId: String)
 GET        /:linkId/statements-unavailable        controllers.AccountController.statementsUnavailablePage(linkId: String)
+GET        /:linkId/contact-details               controllers.ContactDetailsController.showContactDetails(linkId: String)
+GET        /:linkId/direct-debit                  controllers.DirectDebitController.setup(linkId: String)
+
+GET        /not-subscribed-for-cds                controllers.NotSubscribedController.onPageLoad
 GET        /logout                                controllers.LogoutController.logout
 GET        /logout-no-survey                      controllers.LogoutController.logoutNoSurvey

@@ -39,13 +39,4 @@ case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Se
 
     month1 == month2
   }
-
-  def doMonthsOverlap(eoriIndex: Int): Boolean = {
-    if (eoriIndex < 1 || eoriIndex >= statementsForAllEoris.size) {
-      false
-    }
-    else {
-      isSameMonth(statementsForAllEoris(eoriIndex - 1).eoriHistory.eori, statementsForAllEoris(eoriIndex).eoriHistory.eori)
-    }
-  }
 }

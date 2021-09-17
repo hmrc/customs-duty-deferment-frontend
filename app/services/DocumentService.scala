@@ -17,8 +17,9 @@
 package services
 
 import connectors.SdesConnector
-import models.DutyDefermentStatementFile
+import models.{DutyDefermentStatementFile, EoriHistory}
 import uk.gov.hmrc.http.HeaderCarrier
+import viewmodels.DutyDefermentStatementsForEori
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -27,14 +28,17 @@ import scala.concurrent.{ExecutionContext, Future}
 class DocumentService @Inject()(sdesConnector: SdesConnector,
                                 auditingService: AuditingService)(implicit ec: ExecutionContext) {
 
-  def getDutyDefermentStatements(eori: String, dan: String)(implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
-    sdesConnector.getDutyDefermentStatements(eori, dan).map(auditFiles(_, eori))
-  }
+  def getDutyDefermentStatements(eoriHistory: EoriHistory, dan: String)(implicit hc: HeaderCarrier): Future[DutyDefermentStatementsForEori] =
+    sdesConnector.getDutyDefermentStatements(eoriHistory.eori, dan).map(auditFiles(_, eoriHistory.eori))
+      .map(_.partition(_.metadata.statementRequestId.isEmpty))
+      .map {
+        case (current, requested) => DutyDefermentStatementsForEori(eoriHistory, current, requested)
+      }
 
-  private def auditFiles(files: Seq[DutyDefermentStatementFile], eori: String)(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] = {
+
+  private def auditFiles(files: Seq[DutyDefermentStatementFile], eori: String)(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] =
     files.map { file =>
       auditingService.audit(file.auditModelFor(eori))
       file
     }
-  }
 }

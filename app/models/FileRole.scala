@@ -24,7 +24,12 @@ sealed abstract class FileRole(val name: String, val featureName: String, val tr
 
 object FileRole {
 
-  case object DutyDefermentStatement extends FileRole("DutyDefermentStatement", "duty-deferment", "Download duty deferment statement", "duty-deferment")
+  case object DutyDefermentStatement extends FileRole(
+    name = "DutyDefermentStatement",
+    featureName = "duty-deferment",
+    transactionName = "Download duty deferment statement",
+    messageKey = "duty-deferment"
+  )
 
   val log: LoggerLike = Logger(this.getClass)
 
@@ -35,7 +40,7 @@ object FileRole {
 
   def unapply(fileRole: FileRole): Option[String] = Some(fileRole.name)
 
-  implicit val fileRoleFormat = new Format[FileRole] {
+  implicit val fileRoleFormat: Format[FileRole] = new Format[FileRole] {
     def reads(json: JsValue) = JsSuccess(apply(json.as[String]))
     def writes(obj: FileRole) = JsString(obj.name)
   }

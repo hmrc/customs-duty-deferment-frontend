@@ -19,7 +19,6 @@ package models
 import play.api.libs.json._
 import play.api.{Logger, LoggerLike}
 
-import java.time.LocalDate
 import scala.collection.immutable.SortedSet
 
 sealed abstract class FileFormat(val name: String) extends Ordered[FileFormat] {
@@ -62,7 +61,7 @@ object FileFormat {
 
   def unapply(arg: FileFormat): Option[String] = Some(arg.name)
 
-  implicit val fileFormatFormat = new Format[FileFormat] {
+  implicit val fileFormatFormat: Format[FileFormat] = new Format[FileFormat] {
     def reads(json: JsValue) = JsSuccess(apply(json.as[String]))
 
     def writes(obj: FileFormat) = JsString(obj.name)

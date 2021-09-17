@@ -32,7 +32,7 @@ case class EoriHistory(eori: String,
 }
 
 object EoriHistory {
-  val logger = Logger(this.getClass)
+  val logger: Logger = Logger(this.getClass)
 
   implicit val eoriHistoryFormat: Reads[EoriHistory] = (
     (JsPath \ "eori").read[String] and
@@ -54,9 +54,7 @@ object EoriHistory {
       case Failure(_) =>
         Try(LocalDateTime.parse(dateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME)) match {
           case Success(dateTime) => Some(dateTime.toLocalDate)
-          case Failure(ex) =>
-            logger.error(ex.getMessage, ex)
-            None
+          case Failure(ex) => logger.error(ex.getMessage, ex); None
         }
     })
   }

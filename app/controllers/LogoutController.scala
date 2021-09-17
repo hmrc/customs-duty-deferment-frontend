@@ -18,16 +18,16 @@ package controllers
 
 import config.AppConfig
 import connectors.SessionCacheConnector
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result, Results}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
-class LogoutController @Inject()(sessionCacheConnector: SessionCacheConnector, mcc: MessagesControllerComponents)
-                                (implicit val appConfig: AppConfig, ec: ExecutionContext)
-  extends FrontendController(mcc) {
+class LogoutController @Inject()(sessionCacheConnector: SessionCacheConnector,
+                                 appConfig: AppConfig,
+                                 mcc: MessagesControllerComponents
+                                ) extends FrontendController(mcc) {
 
   def logout: Action[AnyContent] = Action { implicit request =>
     clearSession(appConfig.feedbackService)

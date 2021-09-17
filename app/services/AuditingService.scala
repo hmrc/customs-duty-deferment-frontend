@@ -56,12 +56,13 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
       detail = auditModel.detail
     )
 
-  private def logAuditResult(auditResult: AuditResult): Unit = auditResult match {
-    case Success =>
-      log.debug("Splunk Audit Successful")
-    case Failure(err, _) =>
-      log.debug(s"Splunk Audit Error, message: $err")
-    case Disabled =>
-      log.debug(s"Auditing Disabled")
-  }
+  private def logAuditResult(auditResult: AuditResult): Unit =
+    auditResult match {
+      case Success =>
+        log.debug("Splunk Audit Successful")
+      case Failure(err, _) =>
+        log.debug(s"Splunk Audit Error, message: $err")
+      case Disabled =>
+        log.debug(s"Auditing Disabled")
+    }
 }

@@ -29,11 +29,11 @@ class SessionCacheConnector @Inject()(httpClient: HttpClient,
 
   def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
     httpClient.GET[AccountLink](
-      appConfig.customsFinancialsSessionCacheUrl + s"/account-link/$id/$linkId"
+      appConfig.customsSessionCacheUrl + s"/account-link/$id/$linkId"
     ).map(Some(_)).recover { case _ => None }
 
   def removeSession(id: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     httpClient.DELETE[HttpResponse](
-      appConfig.customsFinancialsSessionCacheUrl + "/remove/" + id
+      appConfig.customsSessionCacheUrl + "/remove/" + id
     )
 }

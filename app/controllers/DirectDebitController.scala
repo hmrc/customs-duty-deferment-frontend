@@ -1,8 +1,25 @@
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
 import cats.data.EitherT
 import cats.data.EitherT.{fromOptionF, liftF}
-import config.{AppConfig, ErrorHandler}
+import cats.instances.future._
+import config.ErrorHandler
 import connectors.{DataStoreConnector, SDDSConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import play.api.i18n.I18nSupport
@@ -17,13 +34,12 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
                                       sddsConnector: SDDSConnector,
                                       dateStoreConnector: DataStoreConnector,
                                       sessionCacheConnector: SessionCacheConnector,
-                                      implicit val mcc: MessagesControllerComponents)
-                                     (implicit val appConfig: AppConfig,
                                       errorHandler: ErrorHandler,
-                                      ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
+                                      mcc: MessagesControllerComponents
+                                     )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   def setup(linkId: String): Action[AnyContent] = (authenticate andThen resolveSessionId) async { implicit req =>
-    val result: EitherT[Future, Result, Result] = for {
+    val result: EitherT[Future, Result, Result] = (for {
       accountLink <- fromOptionF(
         sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
         NotFound(errorHandler.notFoundTemplate(req))
@@ -32,17 +48,11 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
         dateStoreConnector.getEmail(req.request.user.eori),
         InternalServerError(errorHandler.sddsErrorTemplate())
       )
-      directDebitSetupUrl <- liftF(sddsConnector.startJourney(
-        appConfig.financialsHomepage,
-        appConfig.financialsHomepage,
-        accountLink.accountNumber,
-        email.value)
-      )
-    } yield Redirect(directDebitSetupUrl)
+      directDebitSetupUrl <- liftF(sddsConnector.startJourney(accountLink.accountNumber, email.value))
+    } yield Redirect(directDebitSetupUrl))
 
-    result.merge.recover {
-      case _ =>
-        InternalServerError(errorHandler.sddsErrorTemplate())
+    result.merge.recover { case _ =>
+      InternalServerError(errorHandler.sddsErrorTemplate())
     }
   }
 }

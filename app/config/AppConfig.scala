@@ -22,11 +22,9 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+
   lazy val appName: String = config.get[String]("appName")
-
-  lazy val welshLanguageSupportEnabled: Boolean =
-    config.get[Boolean]("features.welsh-language-support")
-
+  lazy val welshLanguageSupportEnabled: Boolean = config.get[Boolean]("features.welsh-language-support")
   lazy val registerCdsUrl: String = config.get[String]("external-urls.cdsRegisterUrl")
   lazy val subscribeCdsUrl: String = config.get[String]("external-urls.cdsSubscribeUrl")
   lazy val loginUrl: String = config.get[String]("external-urls.login")
@@ -34,18 +32,15 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val financialsHomepage: String = config.get[String]("external-urls.customsFinancialsHomepage")
   lazy val xClientIdHeader: String = config.get[String]("microservice.services.sdes.x-client-id")
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
-  lazy val contactDetailsUri: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
 
-  def requestedStatementsUrl(linkId: String): String = {
-    config.get[String]("external-urls.requestedStatements") + s"duty-deferment/$linkId"
-  }
+  lazy val contactDetailsUri: String =
+    config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
 
-  def historicRequestUrl(linkId: String): String = {
-    config.get[String]("external-urls.historicRequest") + s"duty-deferment/$linkId"
-  }
+  lazy val contactDetailsCryptoBaseConfigKey: String =
+    config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.baseConfigKey")
 
-  lazy val contactDetailsCryptoBaseConfigKey: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.baseConfigKey")
-  lazy val contactDetailsCryptoEncryptionKey: String = config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.encryptionKey")
+  lazy val contactDetailsCryptoEncryptionKey: String =
+    config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.encryptionKey")
 
   lazy val feedbackService: String = config.get[String]("microservice.services.feedback.url") +
     config.get[String]("microservice.services.feedback.source")
@@ -53,7 +48,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val customsFinancialsApi: String = servicesConfig.baseUrl("customs-financials-api") +
     config.get[String]("microservice.services.customs-financials-api.context")
 
-  lazy val customsFinancialsSessionCacheUrl: String = servicesConfig.baseUrl("customs-financials-session-cache") +
+  lazy val customsSessionCacheUrl: String = servicesConfig.baseUrl("customs-financials-session-cache") +
     config.get[String]("microservice.services.customs-financials-session-cache.context")
 
   lazy val customsDataStore: String = servicesConfig.baseUrl("customs-data-store") +
@@ -65,5 +60,9 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val sddsUri: String = servicesConfig.baseUrl("sdds") +
     config.get[String]("microservice.services.sdds.context") + "/cds-homepage/cds/journey/start"
 
+  def requestedStatementsUrl(linkId: String): String =
+    config.get[String]("external-urls.requestedStatements") + s"duty-deferment/$linkId"
 
+  def historicRequestUrl(linkId: String): String =
+    config.get[String]("external-urls.historicRequest") + s"duty-deferment/$linkId"
 }
