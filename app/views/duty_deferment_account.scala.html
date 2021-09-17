@@ -22,62 +22,59 @@
 @this(
         layout: Layout,
         accordian: duty_deferement_accordian,
-        dutyDeferementHead: duty_deferment_head
+        dutyDeferementHead: duty_deferment_head,
+        h1: components.h1,
+        span: components.span
 )
 
 @(model: DutyDefermentAccount)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some(messages("cf.account.detail.title"))){
-    <span class="govuk-caption-xl" id="eori-heading">
-        @messages("cf.account-number")
-        @{
-            model.accountNumber
-        }
-    </span>
-    <h1 id="statements-heading" class="govuk-heading-xl">
-    @messages("cf.account.detail.deferment-account-heading")
-    </h1>
+    @layout(pageTitle = Some(messages("cf.account.detail.title"))) {
+        @span(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+        @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"), "govuk-heading-xl")
 
-    @if(model.hasRequestedStatements) {
-        <div id="notification-panel" class="notifications-panel">
-            <ul class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-                <li>@messages("cf.account.detail.requested-certificates-available-text.pre") <a id="request-statement-link" href="@{
+        @if(model.hasRequestedStatements) {
+            <div id="notification-panel" class="notifications-panel">
+                <ul class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                    <li>@messages("cf.account.detail.requested-certificates-available-text.pre") <a id="request-statement-link" href="@{
                         appConfig.requestedStatementsUrl(model.linkId)
-                }" class="govuk-link">@messages("cf.account.detail.requested-certificates-available-link-text")</a>
-                    @messages("cf.account.detail.requested-certificates-available-text.post")</li>
-            </ul>
-        </div>
-    }
-
-    @if(model.hasCurrentStatements) {
-        @model.firstPopulatedStatement.map { statement =>
-            @if(statement.eoriHistory.isHistoricEori) {
-                <h2 id="historic-eori-0" class="govuk-heading-m" >
-                @messages("cf.account.details.previous-eori", statement.eoriHistory.eori)
-                </h2>
-            }
-            @dutyDeferementHead(statement.groups.head)
-
-            @if(statement.groups.size > 1) {
-                @accordian(statement.groups.tail, 0)
-            }
+                    }" class="govuk-link">@messages("cf.account.detail.requested-certificates-available-link-text")</a>
+                        @messages("cf.account.detail.requested-certificates-available-text.post")</li>
+                </ul>
+            </div>
         }
 
-        @for((statementsForEori, historyIndex) <- model.tailingStatements.zipWithIndex) {
-            @if(statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
-                <h2 id="historic-eori-@{historyIndex + 1}" class="govuk-heading-m" >
-                @messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
-                </h2>
-            }
-            @accordian(statementsForEori.groups, historyIndex + 1)
-        }
-    } else {
-        <div class="govuk-inset-text">
-            <p class="govuk-body">@messages("cf.account.detail.no-statements", model.accountNumber)</p>
-        </div>
-    }
+        @if(model.hasCurrentStatements) {
+            @model.firstPopulatedStatement.map { statement =>
+                @if(statement.eoriHistory.isHistoricEori) {
+                    <h2 id="historic-eori-0" class="govuk-heading-m" >
+                    @messages("cf.account.details.previous-eori", statement.eoriHistory.eori)
+                    </h2>
+                }
+                @dutyDeferementHead(statement.groups.head)
 
-    @missing_documents_guidance("statement")
+                @if(statement.groups.size > 1) {
+                    @accordian(statement.groups.tail, 0)
+                }
+            }
+
+            @for((statementsForEori, historyIndex) <- model.tailingStatements.zipWithIndex) {
+                @if(statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
+                    <h2 id="historic-eori-@{
+                        historyIndex + 1
+                    }" class="govuk-heading-m" >
+                    @messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
+                    </h2>
+                }
+                @accordian(statementsForEori.groups, historyIndex + 1)
+            }
+        } else {
+            <div class="govuk-inset-text">
+                <p class="govuk-body">@messages("cf.account.detail.no-statements", model.accountNumber)</p>
+            </div>
+        }
+
+        @missing_documents_guidance("statement")
 
         <p id="historic-statement-request" class="govuk-body govuk-!-margin-bottom-7">
             @messages("cf.duty-deferment-account.historic.description") <a href="@{
@@ -85,4 +82,4 @@
         }" class="govuk-link">
         @messages("cf.duty-deferment-account.historic.request")</a>
         </p>
-}
+    }

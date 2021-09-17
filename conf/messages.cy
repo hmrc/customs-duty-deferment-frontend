@@ -1,7 +1,7 @@
 service.name=Bwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
 
 # Duty Deferment Account Detail view
-cf.account-number=Cyfrif:
+cf.account-number=Cyfrif:{0}
 cf.account.detail.title=Datganiadau gohirio tollau
 cf.account.detail.deferment-account-heading=Datganiadau gohirio tollau
 cf.account.detail.deferment-account-secondary-heading=Y cyfrif gohirio:

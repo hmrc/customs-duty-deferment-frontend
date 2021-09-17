@@ -1,7 +1,7 @@
 service.name=View your customs financial accounts
 
 # Duty Deferment Account Detail view
-cf.account-number=Account:
+cf.account-number=Account:{0}
 cf.account.detail.title=Duty deferment statements
 cf.account.detail.deferment-account-heading=Duty deferment statements
 cf.account.detail.deferment-account-secondary-heading=Deferment account:
