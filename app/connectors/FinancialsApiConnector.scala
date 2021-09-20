@@ -30,5 +30,5 @@ class FinancialsApiConnector @Inject()(http: HttpClient,
   def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
     http.DELETE[HttpResponse](
       appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
-    ).map(_.status == Status.OK)
+    ).map(_.status == Status.OK).recover { case _ => false }
 }

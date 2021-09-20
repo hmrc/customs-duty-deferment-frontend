@@ -67,10 +67,10 @@ class AccountController @Inject()(
     }
 
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
-    (authenticate andThen resolveSessionId) async { implicit req =>
-      val eventualMaybeAccountLink = sessionCacheConnector.retrieveSession(req.sessionId.value, linkId)
-      eventualMaybeAccountLink.map {
-        accountLink => accountLink.fold(Unauthorized(errorHandler.unauthorized()))(link => Ok(unavailable(link.accountNumber, linkId)))
+    (authenticate andThen resolveSessionId).async { implicit req =>
+      sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
+        case Some(link) => Ok(unavailable(link.accountNumber, linkId))
+        case None => Unauthorized(errorHandler.unauthorized())
       }
     }
 }

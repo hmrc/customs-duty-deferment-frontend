@@ -26,38 +26,38 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class IdentifierAction @Inject()(override val authConnector: AuthConnector,
-                                 appConfig: AppConfig,
-                                 val parser: BodyParsers.Default,
-                                 dataStoreConnector: DataStoreConnector)(override implicit val executionContext: ExecutionContext)
-  extends ActionBuilder[AuthenticatedRequest, AnyContent]
-    with ActionRefiner[Request, AuthenticatedRequest]
-    with AuthorisedFunctions {
+trait IdentifierAction extends ActionBuilder[AuthenticatedRequest, AnyContent] with ActionFunction[Request, AuthenticatedRequest]
 
-  override protected def refine[A](request: Request[A]): Future[Either[Result, AuthenticatedRequest[A]]] = {
+class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
+                                              appConfig: AppConfig,
+                                              val parser: BodyParsers.Default,
+                                              dataStoreConnector: DataStoreConnector)(override implicit val executionContext: ExecutionContext)
+  extends IdentifierAction with AuthorisedFunctions {
+
+  override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised().retrieve(Retrievals.allEnrolments) { allEnrolments =>
-        allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
-          case Some(eori) =>
-            for {
-              allEoriHistory <- dataStoreConnector.getAllEoriHistory(eori.value)
-              cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory)
-            } yield Right(AuthenticatedRequest(request, cdsLoggedInUser))
-          case None => Future.successful(Left(Redirect(controllers.routes.NotSubscribedController.onPageLoad())))
-        }
+      allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
+        case Some(eori) =>
+          for {
+            allEoriHistory <- dataStoreConnector.getAllEoriHistory(eori.value)
+            cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory)
+            result <- block(AuthenticatedRequest(request, cdsLoggedInUser))
+          } yield result
+        case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+      }
     }
   } recover {
     case _: NoActiveSession =>
-      Left(Redirect(appConfig.loginUrl, Map("continue_url" -> Seq(appConfig.loginContinueUrl))))
+      Redirect(appConfig.loginUrl, Map("continue_url" -> Seq(appConfig.loginContinueUrl)))
     case _: InsufficientEnrolments =>
-      Left(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+      Redirect(controllers.routes.NotSubscribedController.onPageLoad())
     case _ =>
-      Left(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+      Redirect(controllers.routes.NotSubscribedController.onPageLoad())
 
   }
 }

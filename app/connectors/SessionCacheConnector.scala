@@ -18,6 +18,7 @@ package connectors
 
 import config.AppConfig
 import models.AccountLink
+import play.api.http.Status.OK
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
@@ -32,8 +33,8 @@ class SessionCacheConnector @Inject()(httpClient: HttpClient,
       appConfig.customsSessionCacheUrl + s"/account-link/$id/$linkId"
     ).map(Some(_)).recover { case _ => None }
 
-  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[Boolean] =
     httpClient.DELETE[HttpResponse](
       appConfig.customsSessionCacheUrl + "/remove/" + id
-    )
+    ).map(_.status == OK).recover { case _ => false }
 }

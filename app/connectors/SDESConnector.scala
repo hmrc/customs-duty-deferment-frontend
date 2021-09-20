@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SdesConnector @Inject()(http: HttpClient,
+class SDESConnector @Inject()(http: HttpClient,
                               auditingService: AuditingService,
                               appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
 

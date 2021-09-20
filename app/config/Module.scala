@@ -17,13 +17,15 @@
 package config
 
 import com.google.inject.AbstractModule
+import controllers.actions.{AuthenticatedIdentifierAction, IdentifierAction}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
+
 
 class Module extends AbstractModule {
 
   override def configure(): Unit = {
-    bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector])
-    bind(classOf[ErrorHandler]).asEagerSingleton()
+    bind(classOf[AuthConnector]).to(classOf[DefaultAuthConnector]).asEagerSingleton()
+    bind(classOf[IdentifierAction]).to(classOf[AuthenticatedIdentifierAction]).asEagerSingleton()
   }
 }

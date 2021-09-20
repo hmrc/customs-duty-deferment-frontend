@@ -16,7 +16,7 @@
 
 package services
 
-import connectors.SdesConnector
+import connectors.SDESConnector
 import models.{DutyDefermentStatementFile, EoriHistory}
 import uk.gov.hmrc.http.HeaderCarrier
 import viewmodels.DutyDefermentStatementsForEori
@@ -25,7 +25,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DocumentService @Inject()(sdesConnector: SdesConnector,
+class DocumentService @Inject()(sdesConnector: SDESConnector,
                                 auditingService: AuditingService)(implicit ec: ExecutionContext) {
 
   def getDutyDefermentStatements(eoriHistory: EoriHistory, dan: String)(implicit hc: HeaderCarrier): Future[DutyDefermentStatementsForEori] =
