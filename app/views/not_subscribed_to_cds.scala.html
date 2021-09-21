@@ -15,9 +15,12 @@
  *@
 
 @import config.AppConfig
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 
 @this(
-        layout: Layout
+        layout: Layout,
+        hmrcNewTabLink: HmrcNewTabLink
 )
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -28,12 +31,26 @@
 
     <p class="govuk-body">
         @messages("cf.not-subscribed-to-cds.detail.eori-info")
-        <a class="govuk-link" target="_blank" href="@(appConfig.registerCdsUrl)">@messages("cf.not-subscribed-to-cds.detail.eori-link")</a>.
+        @hmrcNewTabLink(
+            NewTabLink(
+                classList = Some("govuk-link"),
+                href=Some(appConfig.registerCdsUrl),
+                text=messages("cf.not-subscribed-to-cds.detail.eori-link")
+            )
+        )
+        .
     </p>
 
     <p class="govuk-body">
         @messages("cf.not-subscribed-to-cds.detail.get-access-info")
-        <a class="govuk-link" target="_blank" href="@(appConfig.subscribeCdsUrl)">@messages("cf.not-subscribed-to-cds.detail.get-access-link")</a>.
+        @hmrcNewTabLink(
+            NewTabLink(
+                classList = Some("govuk-link"),
+                href=Some(appConfig.subscribeCdsUrl),
+                text=messages("cf.not-subscribed-to-cds.detail.get-access-link")
+            )
+        )
+        .
     </p>
 
     <p class="govuk-body">
