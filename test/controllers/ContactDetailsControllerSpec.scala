@@ -43,7 +43,7 @@ class ContactDetailsControllerSpec extends SpecBase {
 
     "return NOT_FOUND if account status is not available" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(accountLink)))
+        .thenReturn(Future.successful(Some(accountLink.copy(accountStatusId = None))))
 
       running(app) {
         val request = FakeRequest(GET, routes.ContactDetailsController.showContactDetails("someLink").url)

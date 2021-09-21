@@ -19,7 +19,7 @@ package util
 import com.codahale.metrics.MetricRegistry
 import com.kenshoo.play.metrics.Metrics
 import controllers.actions.IdentifierAction
-import models.DDStatementType.Weekly
+import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models._
 import org.mockito.scalatest.MockitoSugar
@@ -37,9 +37,19 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
       "someFilename",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None))
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+    DutyDefermentStatementFile(
+      "someFilename2",
+      "downloadUrl",
+      10L,
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "123456", None)),
+    DutyDefermentStatementFile(
+      "someFilename3",
+      "downloadUrl",
+      10L,
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None))
   )
-  val dutyDefermentStatementMetadata: Seq[MetadataItem] = List(
+  val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),
     MetadataItem("PeriodStartMonth", "6"),
     MetadataItem("PeriodStartDay", "1"),
@@ -53,8 +63,38 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
     MetadataItem("DutyPaymentType", "BACS"),
     MetadataItem("DAN", "123456")
   )
+
+  val dutyDefermentStatementMetadata2: Seq[MetadataItem] = List(
+    MetadataItem("PeriodStartYear", "2018"),
+    MetadataItem("PeriodStartMonth", "6"),
+    MetadataItem("PeriodStartDay", "1"),
+    MetadataItem("PeriodEndYear", "2018"),
+    MetadataItem("PeriodEndMonth", "6"),
+    MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("FileType", "PDF"),
+    MetadataItem("FileRole", "DutyDefermentStatement"),
+    MetadataItem("DefermentStatementType", "Supplementary"),
+    MetadataItem("DutyOverLimit", "Y"),
+    MetadataItem("DutyPaymentType", "BACS"),
+    MetadataItem("DAN", "123456")
+  )
+
+  val dutyDefermentStatementMetadata3: Seq[MetadataItem] = List(
+    MetadataItem("PeriodStartYear", "2018"),
+    MetadataItem("PeriodStartMonth", "6"),
+    MetadataItem("PeriodStartDay", "1"),
+    MetadataItem("PeriodEndYear", "2018"),
+    MetadataItem("PeriodEndMonth", "6"),
+    MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("FileType", "CSV"),
+    MetadataItem("FileRole", "DutyDefermentStatement"),
+    MetadataItem("DefermentStatementType", "Excise"),
+    MetadataItem("DutyOverLimit", "N"),
+    MetadataItem("DutyPaymentType", "BACS"),
+    MetadataItem("DAN", "123456")
+  )
   val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
-  val accountLink: AccountLink = AccountLink("accountNumber", "linkId", AccountStatusOpen, None)
+  val accountLink: AccountLink = AccountLink("accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable))
 
   val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,

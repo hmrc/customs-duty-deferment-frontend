@@ -18,7 +18,9 @@ package models
 
 import play.api.libs.json._
 
-sealed trait CDSAccountStatus { val name: String }
+sealed trait CDSAccountStatus {
+  val name: String
+}
 case object AccountStatusOpen extends CDSAccountStatus { override val name: String = "open" }
 case object AccountStatusClosed extends CDSAccountStatus { override val name: String = "closed" }
 case object AccountStatusSuspended extends CDSAccountStatus { override val name: String = "suspended" }
@@ -32,12 +34,12 @@ object CDSAccountStatus {
     override def writes(accountStatus: CDSAccountStatus): JsValue = JsString(accountStatus.name)
 
     override def reads(json: JsValue): JsResult[CDSAccountStatus] = {
-      json.as[String] match {
-        case status if status.equalsIgnoreCase("Open") => JsSuccess(AccountStatusOpen)
-        case status if status.equalsIgnoreCase("Suspended") => JsSuccess(AccountStatusSuspended)
-        case status if status.equalsIgnoreCase("Closed") => JsSuccess(AccountStatusClosed)
-        case status if status.equalsIgnoreCase("Pending") => JsSuccess(AccountStatusPending)
-        case unknown => logger.warn(s"Invalid account status: $unknown"); JsSuccess(AccountStatusOpen)
+      json.as[String].toUpperCase match {
+        case "OPEN" => JsSuccess(AccountStatusOpen)
+        case "SUSPENDED" => JsSuccess(AccountStatusSuspended)
+        case "CLOSED" => JsSuccess(AccountStatusClosed)
+        case "PENDING" => JsSuccess(AccountStatusPending)
+        case e => logger.warn(s"Invalid account status: $e"); JsSuccess(AccountStatusOpen)
       }
     }
   }

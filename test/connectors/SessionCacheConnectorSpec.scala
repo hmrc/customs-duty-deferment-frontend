@@ -52,13 +52,23 @@ class SessionCacheConnectorSpec extends SpecBase {
   }
 
   "removeSession" should {
-    "return the HttpResponse returned from the API" in new Setup {
+    "return true on a successful response from the API" in new Setup {
       when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
         .thenReturn(Future.successful(HttpResponse(Status.OK, "")))
 
       running(app) {
         val result = await(connector.removeSession("someId"))
         result mustBe true
+      }
+    }
+
+    "return false if the api call fails" in new Setup {
+      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
+        .thenReturn(Future.failed(new RuntimeException("something went wrong")))
+
+      running(app) {
+        val result = await(connector.removeSession("someId"))
+        result mustBe false
       }
     }
   }

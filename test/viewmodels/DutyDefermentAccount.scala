@@ -16,6 +16,8 @@
 
 package viewmodels
 
+import java.time.LocalDate
+
 case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], linkId: String) {
 
   val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
@@ -23,4 +25,27 @@ case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Se
 
   def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
   def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
+
+  def isSameMonth(eori1: String, eori2: String): Boolean = {
+    implicit val localDateOrdering: Ordering[LocalDate] = _ compareTo _
+
+    val month1 = statementsForAllEoris
+      .find(_.eoriHistory.eori == eori1)
+      .map(_.currentStatements.maxBy(_.startDate).metadata.periodEndMonth)
+
+    val month2 = statementsForAllEoris
+      .find(_.eoriHistory.eori == eori2)
+      .map(_.currentStatements.maxBy(_.endDate).metadata.periodStartMonth)
+
+    month1 == month2
+  }
+
+  def doMonthsOverlap(eoriIndex: Int): Boolean = {
+    if (eoriIndex < 1 || eoriIndex >= statementsForAllEoris.size) {
+      false
+    }
+    else {
+      isSameMonth(statementsForAllEoris(eoriIndex - 1).eoriHistory.eori, statementsForAllEoris(eoriIndex).eoriHistory.eori)
+    }
+  }
 }

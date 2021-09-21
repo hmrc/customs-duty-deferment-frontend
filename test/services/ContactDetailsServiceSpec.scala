@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package services
 
-import play.api.Application
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import util.SpecBase
 
-class NotSubscribedControllerSpec extends SpecBase {
-  "onPageLoad" should {
-    "return OK" in {
-      val app: Application = application().build()
-      val request = FakeRequest(GET, routes.NotSubscribedController.onPageLoad().url)
+class ContactDetailsServiceSpec extends SpecBase {
+
+  "getEncyptedDanWithStatus" should {
+    "return a url with an encrypted parameter" in {
+      val app = application().build()
+      val service = app.injector.instanceOf[ContactDetailsService]
+
       running(app) {
-        val result = route(app, request).value
-        status(result) mustBe OK
+        val result = await(service.getEncyptedDanWithStatus("someDan", 1))
+        result.startsWith("http://localhost:8324/customs/financials-account/duty-deferment/") mustBe true
       }
     }
   }

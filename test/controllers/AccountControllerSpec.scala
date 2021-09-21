@@ -29,6 +29,17 @@ import scala.concurrent.Future
 class AccountControllerSpec extends SpecBase {
 
   "showAccountDetails" should {
+    "return unauthorized if no session id present" in {
+      val app: Application = application().build()
+
+      running(app) {
+        val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
+
+        val result = route(app, request).value
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
     "redirect to the financials homepage if there is no session available" in {
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
 
@@ -49,9 +60,32 @@ class AccountControllerSpec extends SpecBase {
       }
     }
 
+
+    "redirect to statements unavailable page if a failure occurs receiving historic statements" in new Setup {
+      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+        .thenReturn(Future.successful(Some(accountLink)))
+
+      when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
+        .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
+
+      when(mockApiConnector.deleteNotification(any, any)(any))
+        .thenReturn(Future.successful(true))
+
+      running(app) {
+        val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
+          .withHeaders("X-Session-Id" -> "someSessionId")
+        val result = route(app, request).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.AccountController.statementsUnavailablePage("someLink").url
+      }
+    }
+
     "display the account page on a successful response" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
+
+      when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
+        .thenReturn(Future.successful(dutyDefermentStatementsForEori))
 
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
@@ -63,57 +97,58 @@ class AccountControllerSpec extends SpecBase {
         status(result) mustBe OK
       }
     }
-  }
 
-  "statementsUnavailablePage" should {
-    "return unauthorized page when no account link found" in {
-      val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+    "statementsUnavailablePage" should {
+      "return unauthorized page when no account link found" in {
+        val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
 
-      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(None))
+        when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+          .thenReturn(Future.successful(None))
 
-      val app: Application = application().overrides(
-        inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
-      ).build()
+        val app: Application = application().overrides(
+          inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
+        ).build()
 
-      running(app) {
-        val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
-          .withHeaders("X-Session-Id" -> "someSessionId")
-        val result = route(app, request).value
-        status(result) mustBe UNAUTHORIZED
+        running(app) {
+          val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
+            .withHeaders("X-Session-Id" -> "someSessionId")
+          val result = route(app, request).value
+          status(result) mustBe UNAUTHORIZED
 
+        }
+      }
+
+      "return the accounts unavailable page when an account link found" in {
+        val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+
+        when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+          .thenReturn(Future.successful(Some(accountLink)))
+
+        val app: Application = application().overrides(
+          inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
+        ).build()
+
+        running(app) {
+          val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
+            .withHeaders("X-Session-Id" -> "someSessionId")
+          val result = route(app, request).value
+          status(result) mustBe OK
+        }
       }
     }
 
-    "return the accounts unavailable page when an account link found" in {
+    trait Setup {
+      val mockApiConnector: FinancialsApiConnector = mock[FinancialsApiConnector]
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+      val mockDocumentService: DocumentService = mock[DocumentService]
 
-      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(accountLink)))
+      implicit val hc: HeaderCarrier = HeaderCarrier()
 
       val app: Application = application().overrides(
+        inject.bind[FinancialsApiConnector].toInstance(mockApiConnector),
+        inject.bind[DocumentService].toInstance(mockDocumentService),
         inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
       ).build()
-
-      running(app) {
-        val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
-          .withHeaders("X-Session-Id" -> "someSessionId")
-        val result = route(app, request).value
-        status(result) mustBe OK
-      }
     }
-  }
-
-  trait Setup {
-    val mockApiConnector: FinancialsApiConnector = mock[FinancialsApiConnector]
-    val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
-    val mockDocumentService: DocumentService = mock[DocumentService]
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
-    val app: Application = application().overrides(
-      inject.bind[FinancialsApiConnector].toInstance(mockApiConnector),
-      inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
-    ).build()
   }
 }

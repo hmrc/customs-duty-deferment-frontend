@@ -24,6 +24,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
 @import views.html.helper.CSPNonce
+@import views.html.components.help_and_support_message
 
 @this(appConfig: AppConfig,
         hmrcLayout: HmrcLayout,
@@ -34,7 +35,6 @@
 
 )
 
-@import views.html.components.help_and_support_message
 @(pageTitle: Option[String] = None,
         backLink: Option[String] = None,
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)

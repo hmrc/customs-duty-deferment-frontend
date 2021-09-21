@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package controllers
+package viewmodels
 
-import play.api.Application
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import util.SpecBase
+import java.time.LocalDate
 
-class NotSubscribedControllerSpec extends SpecBase {
-  "onPageLoad" should {
-    "return OK" in {
-      val app: Application = application().build()
-      val request = FakeRequest(GET, routes.NotSubscribedController.onPageLoad().url)
-      running(app) {
-        val result = route(app, request).value
-        status(result) mustBe OK
-      }
-    }
-  }
+case class DutyDefermentStatementPeriodsByMonth(monthAndYear: LocalDate, periods: Seq[DutyDefermentStatementPeriod]) {
+
+  val month: Int = monthAndYear.getMonth.getValue
+  val year: Int = monthAndYear.getYear
+
 }
