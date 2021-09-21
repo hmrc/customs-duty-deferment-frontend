@@ -43,7 +43,7 @@ class ContactDetailsController @Inject()(authenticate: IdentifierAction,
       (for {
         accountLink <- fromOptionF(
           sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
-          NotFound(errorHandler.notFoundTemplate(req))
+          Redirect(appConfig.financialsHomepage)
         )
         accountStatusId <- fromOption(
           accountLink.accountStatusId,

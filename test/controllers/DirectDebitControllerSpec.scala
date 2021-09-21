@@ -16,81 +16,98 @@
 
 package controllers
 
-import connectors.SessionCacheConnector
+import connectors.{DataStoreConnector, SDDSConnector, SessionCacheConnector}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-import services.ContactDetailsService
+import uk.gov.hmrc.auth.core.retrieve.Email
 import util.SpecBase
 
 import scala.concurrent.Future
 
-class ContactDetailsControllerSpec extends SpecBase {
+class DirectDebitControllerSpec extends SpecBase {
 
-  "showContactDetails" should {
-    "return redirect to financials homepage if account link not available" in new Setup {
+  "setup" should {
+    "redirect to the financials homepage when no accountLink found" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(None))
 
       running(app) {
-        val request = FakeRequest(GET, routes.ContactDetailsController.showContactDetails("someLink").url)
+        val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
+
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9876/customs/payment-records"
       }
     }
 
-    "return NOT_FOUND if account status is not available" in new Setup {
+    "return 500 when no email found from the data-store" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
-      running(app) {
-        val request = FakeRequest(GET, routes.ContactDetailsController.showContactDetails("someLink").url)
-          .withHeaders("X-Session-Id" -> "someSessionId")
-        val result = route(app, request).value
-        status(result) mustBe NOT_FOUND
-      }
-
-    }
-
-    "return INTERNAL_SERVER_ERROR if an issue with encryption occurs" in new Setup {
-      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(accountLink)))
-      when(mockContactDetailsService.getEncyptedDanWithStatus(any, any))
-        .thenReturn(Future.failed(new RuntimeException("Unknown error")))
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(None))
 
       running(app) {
-        val request = FakeRequest(GET, routes.ContactDetailsController.showContactDetails("someLink").url)
+        val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
+
         val result = route(app, request).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
 
-    "redirect to contact details on a successful request" in new Setup{
+    "return 500 when an error is thrown from SDDS" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
-      when(mockContactDetailsService.getEncyptedDanWithStatus(any, any))
-        .thenReturn(Future.successful("encryptedParams"))
+
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Some(Email("some@email.com"))))
+
+      when(mockSDDSConnector.startJourney(any, any)(any))
+        .thenReturn(Future.failed(new RuntimeException("Unknown error")))
 
       running(app) {
-        val request = FakeRequest(GET, routes.ContactDetailsController.showContactDetails("someLink").url)
+        val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
+
+        val result = route(app, request).value
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "redirect to the setup url on a successful response" in new Setup {
+      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+        .thenReturn(Future.successful(Some(accountLink)))
+
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Some(Email("some@email.com"))))
+
+      when(mockSDDSConnector.startJourney(any, any)(any))
+        .thenReturn(Future.successful("someUrl"))
+
+      running(app) {
+        val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
+          .withHeaders("X-Session-Id" -> "someSessionId")
+
         val result = route(app, request).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe "encryptedParams"
+        redirectLocation(result).value mustBe "someUrl"
       }
     }
   }
 
   trait Setup {
-    val mockContactDetailsService: ContactDetailsService = mock[ContactDetailsService]
+    val mockSDDSConnector: SDDSConnector = mock[SDDSConnector]
     val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
+
 
     val app: Application = application().overrides(
-      inject.bind[ContactDetailsService].toInstance(mockContactDetailsService),
-      inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
+      inject.bind[SDDSConnector].toInstance(mockSDDSConnector),
+      inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
+      inject.bind[DataStoreConnector].toInstance(mockDataStoreConnector)
     ).build()
   }
 }

@@ -1,0 +1,17 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ *@
+
+@(classStyle:String = "govuk-heading-m")(implicit messages: Messages)
+
+<div id="help_and_support" class="govuk-!-padding-top-4">
+    <h2 class=@classStyle>@messages("cf.help-and-support.title")</h2>
+    <div id="help-message">
+        <p class="govuk-body govuk-!-margin-bottom-5" id="contact-number">
+            @messages("cf.account.help-support.message")
+            @messages("cf.account.help-support.duty-deferment.numbers").
+        </p>
+        <p class="govuk-body govuk-!-margin-bottom-5" id="office-hours">@messages("cf.account.help-support.duty-deferment.office-hours")</p>
+    </div>
+</div>

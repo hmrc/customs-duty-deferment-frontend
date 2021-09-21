@@ -133,3 +133,13 @@ cf.error.unauthorized.title=Nid ydych wedi’ch awdurdodi i fwrw golwg dros y du
 cf.error.unauthorized.heading=Heb awdurdod
 cf.error.unauthorized.message=Nid ydych wedi’ch awdurdodi i fwrw golwg dros y dudalen hon
 # ----------------------------------------------------------
+
+# Help and Support
+# ----------------------------------------------------------
+cf.help-and-support.title=Help a chymorth
+cf.account.help-support.message=Os ydych yn profi anawsterau, ffoniwch
+cf.account.help-support.numbers=0300 200 3705
+cf.account.help-support.office-hours=Ar agor 08:30 i 17:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
+cf.account.help-support.duty-deferment.numbers=0300 059 4243
+cf.account.help-support.duty-deferment.office-hours=Ar agor 09:00 i 12:00, a 14:00 i 16:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
+# ----------------------------------------------------------

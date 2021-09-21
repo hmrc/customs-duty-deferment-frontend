@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.data.EitherT.{fromOptionF, liftF}
 import cats.instances.future._
-import config.ErrorHandler
+import config.{AppConfig, ErrorHandler}
 import connectors.{DataStoreConnector, SDDSConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import play.api.i18n.I18nSupport
@@ -35,6 +35,7 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
                                       dateStoreConnector: DataStoreConnector,
                                       sessionCacheConnector: SessionCacheConnector,
                                       errorHandler: ErrorHandler,
+                                      appConfig: AppConfig,
                                       mcc: MessagesControllerComponents
                                      )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
@@ -42,7 +43,7 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
     val result: EitherT[Future, Result, Result] = (for {
       accountLink <- fromOptionF(
         sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
-        NotFound(errorHandler.notFoundTemplate(req))
+        Redirect(appConfig.financialsHomepage)
       )
       email <- fromOptionF(
         dateStoreConnector.getEmail(req.request.user.eori),
