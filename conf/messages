@@ -1,2 +1,148 @@
-service.name = customs-duty-deferment-frontend
-service.text = This is your new service
+service.name=View your customs financial accounts
+service.back = Back
+
+# Duty Deferment Account Detail view
+# ----------------------------------------------------------
+cf.account-number=Account: {0}
+cf.account.detail.title=Duty deferment statements
+cf.account.detail.deferment-account-heading=Duty deferment statements
+cf.account.detail.deferment-account-secondary-heading=Deferment account:
+cf.account.detail.account-summary=Account summary
+cf.account.detail.your-account-limit-remaining=Your account limit remaining:
+cf.account.details.your-guarantee-limit-remaining=Your guarantee limit remaining:
+cf.account.details.overall-account-limit=Overall account limit:
+cf.account.details.including-your=including your
+cf.account.details.guarantee=guarantee
+cf.account.details.period=Period
+cf.account.details.previous-eori=EORI: {0}
+cf.account.detail.direct-debit.duty-vat-and-excise=HMRC will charge your bank each month for Duty and VAT on or after the 15th, and Excise on or after the 29th.
+cf.account.detail.period-group={0} to {1} {2}
+cf.account.detail.row.supplementary.info=Supplementary end of month
+cf.account.details.row.excise.info=Excise summary
+cf.account.detail.supplementary-period-group={0} to {1} supplementary
+cf.account.detail.download-link=Download {1} to {2} {0} ({3})
+cf.account.detail.supplementary-download-link=Download supplementary end of month for {1} {0} ({2})
+cf.account.detail.excise-download-link=Download excise summary for {1} {0} ({2})
+cf.account.detail.missing-file-type-supplementary=Supplementary end of month {0} for {1} unavailable
+cf.account.detail.missing-file-type-excise=Excise summary {0} for {1} unavailable
+cf.account.detail.missing-file-type={0} for {1} to {2} unavailable
+cf.account.detail.unavailable=Unavailable
+cf.account.detail.no-statements=No statements available for deferment account {0}
+cf.duty-deferment-account.problem-with-service.text=Sorry, your statements are not available at the moment. Please try again later.
+cf.account.detail.account-not-available=We are unable to show your account at the moment. Please try again later.
+# ----------------------------------------------------------
+
+# BETA Banner
+# ----------------------------------------------------------
+feedback.before = This is a new service – your
+feedback.link = feedback
+feedback.after = will help us to improve it.
+# ----------------------------------------------------------
+
+# Timeout Messages
+# ----------------------------------------------------------
+timeout.title = You’re about to be signed out
+timeout.message = For security reasons, you will be signed out of this service in
+timeout.keepAlive = Stay signed in
+timeout.signOut = Sign out
+# ----------------------------------------------------------
+
+# Standard Error SDDS
+# ----------------------------------------------------------
+cf.error.standard-error-sdds.title=Sorry, setting up a direct debit is unavailable at the moment
+cf.error.standard-error-sdds.heading=Sorry, setting up a direct debit is unavailable at the moment
+cf.error.standard-error-sdds.message=Please try again later
+# ----------------------------------------------------------
+
+# Standard Error Contact Details
+# ----------------------------------------------------------
+cf.error.standard-error-contact-details.title=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.heading=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
+cf.error.standard-error-contact-details.message=Rhowch gynnig arall arni yn nes ymlaen
+# ----------------------------------------------------------
+
+
+# Date Format
+# ----------------------------------------------------------
+month.1 = January
+month.2 = February
+month.3 = March
+month.4 = April
+month.5 = May
+month.6 = June
+month.7 = July
+month.8 = August
+month.9 = September
+month.10 = October
+month.11 = November
+month.12 = December
+
+month.abbr.1 = Jan
+month.abbr.2 = Feb
+month.abbr.3 = Mar
+month.abbr.4 = Apr
+month.abbr.5 = May
+month.abbr.6 = Jun
+month.abbr.7 = Jul
+month.abbr.8 = Aug
+month.abbr.9 = Sep
+month.abbr.10 = Oct
+month.abbr.11 = Nov
+month.abbr.12 = Dec
+# ----------------------------------------------------------
+
+
+# Request statement guidance
+# ----------------------------------------------------------
+cf.common.missing-documents-guidance.statement = statement
+cf.common.missing-documents-guidance.statements = Statements
+cf.common.missing-documents-guidance.heading=Can’t find the {0} you’re looking for?
+cf.common.missing-documents-guidance.text1={0} for import declarations made in CHIEF are not available in this service.
+cf.common.missing-documents-guidance.text2={0} are only generated for periods in which you imported goods.
+cf.duty-deferment-account.historic.description=We only show statements for the last 6 months. If required, you can
+cf.duty-deferment-account.historic.request=request older statements.
+# ----------------------------------------------------------
+
+
+# Not subscribed to CDS
+# ----------------------------------------------------------
+cf.not-subscribed-to-cds.detail.title=Not registered with CDS
+cf.not-subscribed-to-cds.detail.heading=To continue with this you need to get access to Customs Declaration Services (CDS)
+cf.not-subscribed-to-cds.detail.eori-info=You''ll need an
+cf.not-subscribed-to-cds.detail.eori-link=Economic Operator and Registration Identification (EORI) number (opens in a new window or tab)
+cf.not-subscribed-to-cds.detail.get-access-info=If you already have an EORI number, you can
+cf.not-subscribed-to-cds.detail.get-access-link=get access to CDS (opens in a new window or tab)
+cf.not-subscribed-to-cds.detail.how-to-get-access-info=How to get access to CDS
+cf.not-subscribed-to-cds.detail.process-application-info=It can take up to one hour for HMRC to process your application.
+cf.not-subscribed-to-cds.detail.already-applied-info=If you''ve already applied to get access to CDS
+cf.not-subscribed-to-cds.detail.status-info=You can
+cf.not-subscribed-to-cds.detail.status-check-info=check the status of your application (opens in a new window or tab)
+# ----------------------------------------------------------
+
+#  Duty Deferment requested statements view
+# ----------------------------------------------------------
+cf.account.detail.requested.title=Requested duty deferment statements
+cf.account.detail.requested-certificates-available-text.pre=Your
+cf.account.detail.requested-certificates-available-link-text=requested statements
+cf.account.detail.requested-certificates-available-text.post=are now available
+cf.account.detail.requested.deferment-account-secondary-heading=Account:
+cf.account.detail.requested.deferment-account-heading=Requested duty deferment statements
+cf.account.detail.requested.deferment-account-statements-available.text=Requested statements are available to view for 10 days. We can only provide these in PDF format.
+# ----------------------------------------------------------
+
+# Unauthorised Error
+# ----------------------------------------------------------
+cf.error.unauthorized.title=You are not authorised to view this page
+cf.error.unauthorized.heading=Unauthorised
+cf.error.unauthorized.message=You are not authorised to view this page
+# ----------------------------------------------------------
+
+# Help and Support
+# ----------------------------------------------------------
+cf.help-and-support.title=Help and support
+cf.account.help-support.message=If you are having issues, phone
+cf.account.help-support.numbers=0300 200 3701
+cf.account.help-support.office-hours=Open 8am to 6pm, Monday to Friday (closed bank holidays).
+cf.account.help-support.duty-deferment.numbers=0300 059 4243
+cf.account.help-support.duty-deferment.office-hours=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
+# ----------------------------------------------------------

@@ -1,0 +1,49 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.components.missing_documents_guidance
+@import config.AppConfig
+
+@this(
+        layout: Layout
+)
+
+@(accountNumber: String, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@layout(pageTitle = Some(messages("service.name")), backLink = Some(appConfig.financialsHomepage)) {
+
+    <span class="govuk-caption-xl" id="account-number-heading">
+        @messages("cf.account.detail.requested.deferment-account-secondary-heading")
+        @{
+            accountNumber
+        }
+    </span>
+    <h1 id="statements-heading" class="govuk-heading-xl">
+    @messages("cf.account.detail.deferment-account-heading")
+    </h1>
+
+    <div class="govuk-inset-text" id="no-statements">@messages("cf.duty-deferment-account.problem-with-service.text")</div>
+
+    @missing_documents_guidance("statement")
+
+    <p id="historic-statement-request" class="govuk-body govuk-!-margin-bottom-7">
+        @messages("cf.duty-deferment-account.historic.description") <a href="@{
+        appConfig.historicRequestUrl(linkId)
+    }" class="govuk-link">
+    @messages("cf.duty-deferment-account.historic.request")</a>
+    </p>
+
+}
