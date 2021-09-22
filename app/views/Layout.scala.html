@@ -47,6 +47,13 @@
         @messages("feedback.after")
     }
 
+    @fullPageTitle = @{
+        pageTitle match {
+            case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
+            case _ => Some(s"${messages("service.name")} - GOV.UK")
+        }
+    }
+
     @additionalHead = {
         @hmrcTrackingConsentSnippet()
         @hmrcTimeoutDialog(TimeoutDialog(
@@ -66,7 +73,7 @@
     }
 
 @hmrcLayout(
-    pageTitle = pageTitle,
+    pageTitle = fullPageTitle,
     serviceUrl = Some(appConfig.financialsHomepage),
     signOutUrl = Some(routes.LogoutController.logout().url),
     nonce = CSPNonce.get,
