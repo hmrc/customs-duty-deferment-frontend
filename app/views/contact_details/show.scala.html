@@ -26,7 +26,7 @@
 @changeActionItem() = @{
     if(status != AccountCancelled) {
         Seq(ActionItem(
-            href = routes.ContactDetailsEditStartController.start(linkId).url,
+            href = routes.ContactDetailsEditStartController.start().url,
             content = Text(messages("accountDetails.change")),
             visuallyHiddenText = Some(messages("accountDetails.details.name"))
         ))

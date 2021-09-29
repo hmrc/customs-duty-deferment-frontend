@@ -34,8 +34,8 @@ case class ContactDetailsCacheService @Inject()(connector: CustomsFinancialsApiC
   val log: Logger = Logger(this.getClass)
 
 
-  def getContactDetails(identifier: String, dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
-    getAndCacheContactDetails(identifier: String, dan: String, eori: String)
+  def getContactDetails(internalId: String, dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
+    getAndCacheContactDetails(internalId: String, dan: String, eori: String)
   }
 
   private def getAndCacheContactDetails(identifier: String, dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {

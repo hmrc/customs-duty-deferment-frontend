@@ -19,12 +19,12 @@ package controllers
 import com.google.inject.Inject
 import config.AppConfig
 import connectors.SessionCacheConnector
-import controllers.actions.{IdentifierAction, SessionIdAction}
-import models.AccountLink
+import controllers.actions.{AuthenticatedRequestWithSessionId, IdentifierAction, SessionIdAction}
+import models.{AccountLink, CDSAccountStatusId, DutyDefermentDetails}
 import play.api.Logger
 import play.api.i18n.I18nSupport
-import play.api.mvc._
-import services.{ContactDetailsCacheService, CountriesProviderService}
+import play.api.mvc.{request, _}
+import services.{ContactDetailsCacheService, CountriesProviderService, DutyDefermentCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
@@ -37,7 +37,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
                                              errorView: show_error,
                                              identifier: IdentifierAction,
                                              resolveSessionId: SessionIdAction,
-                                             sessionCacheConnector: SessionCacheConnector,
+                                             dutyDefermentCacheService: DutyDefermentCacheService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
                                              countriesProviderService: CountriesProviderService)
                                             (implicit ec: ExecutionContext, appConfig: AppConfig)
@@ -46,31 +46,34 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   private val log = Logger(this.getClass)
 
-  def show(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+  def showActiveSession(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+    dutyDefermentCacheService.get(request.request.user.internalId).flatMap {
+      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case Some(details) => process(details)
+    }
+  }
 
-    sessionCacheConnector.retrieveSession(request.sessionId.value, linkId).flatMap {
-      case Some(AccountLink(accountNumber, _, _, Some(accountStatusId))) =>
-        def detailedErrorView(dan: String): Result = InternalServerError(errorView(
-          dan,
-          Option(appConfig.financialsHomepage),
-          accountStatusId,
-          linkId)
-        )
-        (for {
-          contactDetails <- contactDetailsCacheService.getContactDetails(
-            request.request.user.internalId,
-            accountNumber,
-            request.request.user.eori
-          )
-          viewModel = ContactDetailsViewModel(accountNumber, contactDetails, countriesProviderService.getCountryName)
-        } yield {
-          Ok(view(viewModel, accountStatusId, linkId))
-        }).recover {
-          case NonFatal(e) =>
-            log.error(s"Unable to retrieve account details: ${e.getMessage}")
-            detailedErrorView(accountNumber)
-        }
-      case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+  def show(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+    dutyDefermentCacheService.getAndCache(linkId, request.sessionId.value, request.request.user.internalId).flatMap {
+      case Left(_) => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case Right(details) => process(details)
+    }
+  }
+
+  private def process(details: DutyDefermentDetails)(implicit request: AuthenticatedRequestWithSessionId[AnyContent]): Future[Result] = {
+    (for {
+      contactDetails <- contactDetailsCacheService.getContactDetails(
+        request.request.user.internalId,
+        details.dan,
+        request.request.user.eori
+      )
+      viewModel = ContactDetailsViewModel(details.dan, contactDetails, countriesProviderService.getCountryName)
+    } yield {
+      Ok(view(viewModel, details.statusId, details.linkId))
+    }).recover {
+      case NonFatal(e) =>
+        log.error(s"Unable to retrieve account details: ${e.getMessage}")
+        InternalServerError(errorView(details.dan, Option(appConfig.financialsHomepage), details.statusId, details.linkId))
     }
   }
 }

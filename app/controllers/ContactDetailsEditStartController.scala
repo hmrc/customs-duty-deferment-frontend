@@ -24,7 +24,7 @@ import config.{AppConfig, ErrorHandler}
 import connectors.SessionCacheConnector
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.responses.retrieve.ContactDetails
-import models.{AccountLink, ContactDetailsUserAnswers, UserAnswers}
+import models.{AccountLink, ContactDetailsUserAnswers, DutyDefermentDetails, UserAnswers}
 import pages.EditContactDetailsPage
 import play.api.Logging
 import play.api.i18n.I18nSupport
@@ -41,7 +41,7 @@ class ContactDetailsEditStartController @Inject()(
                                                    dateTimeService: DateTimeService,
                                                    identifier: IdentifierAction,
                                                    resolveSessionId: SessionIdAction,
-                                                   sessionCacheConnector: SessionCacheConnector,
+                                                   dutyDefermentCacheService: DutyDefermentCacheService,
                                                    errorHandler: ErrorHandler,
                                                    countriesProviderService: CountriesProviderService,
                                                    appConfig: AppConfig,
@@ -50,21 +50,21 @@ class ContactDetailsEditStartController @Inject()(
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
-  def start(linkId: String): Action[AnyContent] = (identifier andThen resolveSessionId) async {
+  def start: Action[AnyContent] = (identifier andThen resolveSessionId) async {
     implicit request =>
       val futureResponse: EitherT[Future, Result, Result] = for {
-        accountLink <- fromOptionF(
-          sessionCacheConnector.retrieveSession(request.sessionId.value, linkId),
+        dutyDefermentDetails <- fromOptionF(
+          dutyDefermentCacheService.get(request.request.user.internalId),
           Redirect(appConfig.financialsHomepage)
         )
         initialContactDetails <- liftF(
           contactDetailsCacheService.getContactDetails(
             request.request.user.internalId,
-            accountLink.accountNumber,
+            dutyDefermentDetails.dan,
             request.request.user.eori)
         )
         initialUserAnswers <- fromOption(
-          setUserAnswers(initialContactDetails, accountLink, request.request.user.internalId), {
+          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId), {
             logger.error(s"Unable to store user answers")
             InternalServerError(errorHandler.contactDetailsErrorTemplate())
           }
@@ -81,9 +81,9 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, accountLink: AccountLink, internalId: String): Option[UserAnswers] = {
+  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentDetails, internalId: String): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.fromContactDetails(
-      dan = accountLink.accountNumber,
+      dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,
       getCountryNameF = countriesProviderService.getCountryName)
 

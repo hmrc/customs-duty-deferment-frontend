@@ -39,6 +39,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
   val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
   val mongoSessionContactDetailsTtl: Int = config.get[Int]("mongodb.contactDetailsTtl")
+  val mongoAccountLinkTtl: Int = config.get[Int]("mongodb.accountLinkTtl")
 
 
 

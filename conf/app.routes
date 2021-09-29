@@ -8,8 +8,9 @@ GET         /:linkId/statements-unavailable            controllers.AccountContro
 GET         /:linkId/direct-debit                      controllers.DirectDebitController.setup(linkId: String)
 
 GET         /:linkId/contact-details                   controllers.ShowContactDetailsController.show(linkId: String)
-GET         /:linkId/contact-details/edit/start        controllers.ContactDetailsEditStartController.start(linkId: String)
+GET         /contact-details                           controllers.ShowContactDetailsController.showActiveSession()
 
+GET         /contact-details/edit/start                controllers.ContactDetailsEditStartController.start()
 GET         /contact-details/edit                      controllers.EditContactDetailsController.onPageLoad
 POST        /contact-details/edit                      controllers.EditContactDetailsController.submit
 

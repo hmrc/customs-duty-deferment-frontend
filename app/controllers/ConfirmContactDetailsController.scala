@@ -52,8 +52,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
               if (!removeSuccessful) {
                 logger.error("Failed to remove user answers from mongo")
               }
-              //TODO find way to implement linkId
-              Ok(successView(userAnswers.dan, "LinkId"))
+              Ok(successView(userAnswers.dan))
           }
         case None =>
           //TODO check error templates

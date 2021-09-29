@@ -26,11 +26,11 @@
         errorSummary: components.errorSummary
 
 )
-@(dan: String, linkId: String, form: Form[_], countries: List[Country])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(dan: String, form: Form[_], countries: List[Country])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title", dan)),
-    backLink = Some(routes.ContactDetailsEditStartController.start(linkId).url)) {
+    backLink = Some(routes.ContactDetailsEditStartController.start().url)) {
 
     @fieldset {
 
@@ -125,7 +125,7 @@
     }
 
     @components.cancel_button(
-        Some(routes.ContactDetailsEditStartController.start(linkId).url),
+        Some(routes.ShowContactDetailsController.showActiveSession().url),
         messages("accountDetails.edit.back")
     )
 

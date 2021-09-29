@@ -56,8 +56,7 @@ class EditContactDetailsController @Inject()(view: edit,
       Future(
         request.userAnswers.get(EditContactDetailsPage) match {
           case Some(contactDetails) =>
-            //TODO implement linkId
-            Ok(view(contactDetails.dan, "NO-LINK-ID", form.fill(contactDetails), countriesProviderService.countries))
+            Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries))
           case None =>
             //TODO review error template
             log.error(s"Unable to retrieve stored account contact details")
@@ -73,8 +72,7 @@ class EditContactDetailsController @Inject()(view: edit,
         form.fold(
           (formWithErrors: Form[ContactDetailsUserAnswers]) => {
             Future.successful(
-              //TODO needs linkId maybe
-              BadRequest(view(userAnswers.dan, "fakeLinkId", formWithErrors, countriesProviderService.countries))
+              BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
             )
           },
           (updatedContactDetails: ContactDetailsUserAnswers) => {
