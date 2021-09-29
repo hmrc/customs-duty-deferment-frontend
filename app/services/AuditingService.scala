@@ -17,7 +17,8 @@
 package services
 
 import config.AppConfig
-import models.AuditModel
+import models.responses.retrieve.ContactDetails
+import models.{AuditModel, ChangeContactDetailsAuditEvent, ContactDetailsUserAnswers}
 import play.api.http.HeaderNames
 import play.api.libs.json.{Json, Writes}
 import play.api.{Logger, LoggerLike}
@@ -31,14 +32,15 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConnector) {
+class AuditingService @Inject()(appConfig: AppConfig,
+                                auditConnector: AuditConnector)(implicit executionContext: ExecutionContext) {
 
   val log: LoggerLike = Logger(this.getClass)
   implicit val dataEventWrites: Writes[DataEvent] = Json.writes[DataEvent]
 
   val referrer: HeaderCarrier => String = _.headers(Seq(HeaderNames.REFERER)).headOption.fold("-")(_._2)
 
-  def audit(auditModel: AuditModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  def audit(auditModel: AuditModel)(implicit hc: HeaderCarrier): Future[AuditResult] = {
     val dataEvent = toExtendedDataEvent(appConfig.appName, auditModel, referrer(hc))
 
     auditConnector.sendExtendedEvent(dataEvent)
@@ -46,6 +48,15 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
         logAuditResult(auditResult)
         auditResult
       }
+  }
+
+  def changeContactDetailsAuditEvent(dan: String,
+                                     previousContactDetails: ContactDetails,
+                                     updatedContactDetails: ContactDetailsUserAnswers)
+                                    (implicit hc: HeaderCarrier): Future[AuditResult] = {
+    val event = ChangeContactDetailsAuditEvent(dan, previousContactDetails, updatedContactDetails)
+    val auditModel = AuditModel("UpdateDefermentAccountCorrespondence", "Update contact details", Json.toJson(event))
+    audit(auditModel)
   }
 
   private def toExtendedDataEvent(appName: String, auditModel: AuditModel, path: String)(implicit hc: HeaderCarrier): ExtendedDataEvent =

@@ -25,8 +25,8 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-
-import javax.inject.Inject
+import com.google.inject.Inject
+import uk.gov.hmrc.auth.core.retrieve.~
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[AuthenticatedRequest, AnyContent] with ActionFunction[Request, AuthenticatedRequest]
@@ -40,15 +40,17 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised().retrieve(Retrievals.allEnrolments) { allEnrolments =>
-      allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
-        case Some(eori) =>
-          for {
-            allEoriHistory <- dataStoreConnector.getAllEoriHistory(eori.value)
-            cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory)
-            result <- block(AuthenticatedRequest(request, cdsLoggedInUser))
-          } yield result
-        case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+    authorised().retrieve(Retrievals.allEnrolments and Retrievals.internalId) {
+      case allEnrolments ~ Some(internalId) => {
+        allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
+          case Some(eori) =>
+            for {
+              allEoriHistory <- dataStoreConnector.getAllEoriHistory(eori.value)
+              cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory, internalId)
+              result <- block(AuthenticatedRequest(request, cdsLoggedInUser))
+            } yield result
+          case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+        }
       }
     }
   } recover {
@@ -58,7 +60,6 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       Redirect(controllers.routes.NotSubscribedController.onPageLoad())
     case _ =>
       Redirect(controllers.routes.NotSubscribedController.onPageLoad())
-
   }
 }
 

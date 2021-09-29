@@ -17,4 +17,5 @@
 package models
 
 case class SignedInUser(eori: String,
-                        allEoriHistory: Seq[EoriHistory])
+                        allEoriHistory: Seq[EoriHistory],
+                        internalId: String)
