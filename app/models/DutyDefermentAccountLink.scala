@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class DutyDefermentDetails(dan: String, linkId: String, status: CDSAccountStatus, statusId: CDSAccountStatusId)
+case class DutyDefermentAccountLink(dan: String, linkId: String, status: CDSAccountStatus, statusId: CDSAccountStatusId)
 
-object DutyDefermentDetails {
-  implicit val format: OFormat[DutyDefermentDetails] = Json.format[DutyDefermentDetails]
+object DutyDefermentAccountLink {
+  implicit val format: OFormat[DutyDefermentAccountLink] = Json.format[DutyDefermentAccountLink]
 }

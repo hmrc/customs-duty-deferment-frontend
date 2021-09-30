@@ -16,18 +16,18 @@
 
 package services
 
-import cache.DutyDefermentAccountCache
+import cache.AccountLinkCache
 import connectors.SessionCacheConnector
-import models.{AccountLink, DutyDefermentDetails}
+import models.{AccountLink, DutyDefermentAccountLink}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DutyDefermentCacheService @Inject()(
-                                           sessionCacheConnector: SessionCacheConnector,
-                                           dutyDefermentAccountCache: DutyDefermentAccountCache
-                                         )(implicit executionContext: ExecutionContext) {
+class AccountLinkCacheService @Inject()(
+  sessionCacheConnector: SessionCacheConnector,
+  accountLinkCache: AccountLinkCache
+)(implicit executionContext: ExecutionContext) {
 
   sealed trait SessionCacheError
 
@@ -35,21 +35,21 @@ class DutyDefermentCacheService @Inject()(
 
   case object NoDutyDefermentSessionAvailable extends SessionCacheError
 
-  def getAndCache(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentDetails]] = {
+  def getAndCache(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
     sessionCacheConnector.retrieveSession(sessionId, linkId).flatMap {
       case None => Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(_, _, _, None)) => Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(accountNumber, _, accountStatus, Some(accountStatusId))) =>
-        val details = DutyDefermentDetails(accountNumber, linkId, accountStatus, accountStatusId)
-        dutyDefermentAccountCache.store(internalId, details).map(_ => Right(details))
+        val details = DutyDefermentAccountLink(accountNumber, linkId, accountStatus, accountStatusId)
+        accountLinkCache.store(internalId, details).map(_ => Right(details))
     }
   }
 
-  def get(internalId: String): Future[Option[DutyDefermentDetails]] = {
-    dutyDefermentAccountCache.retrieve(internalId)
+  def get(internalId: String): Future[Option[DutyDefermentAccountLink]] = {
+    accountLinkCache.retrieve(internalId)
   }
 
   def remove(internalId: String): Future[Boolean] = {
-    dutyDefermentAccountCache.remove(internalId)
+    accountLinkCache.remove(internalId)
   }
 }

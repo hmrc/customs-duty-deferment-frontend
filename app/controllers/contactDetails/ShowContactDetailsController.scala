@@ -20,11 +20,11 @@ import com.google.inject.Inject
 import config.AppConfig
 import controllers.actions.{AuthenticatedRequestWithSessionId, IdentifierAction, SessionIdAction}
 import controllers.routes
-import models.DutyDefermentDetails
+import models.DutyDefermentAccountLink
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{ContactDetailsCacheService, CountriesProviderService, DutyDefermentCacheService}
+import services.{ContactDetailsCacheService, CountriesProviderService, AccountLinkCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
@@ -37,7 +37,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
                                              errorView: show_error,
                                              identifier: IdentifierAction,
                                              resolveSessionId: SessionIdAction,
-                                             dutyDefermentCacheService: DutyDefermentCacheService,
+                                             accountLinkCacheService: AccountLinkCacheService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
                                              countriesProviderService: CountriesProviderService)
                                             (implicit ec: ExecutionContext, appConfig: AppConfig)
@@ -46,34 +46,31 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   private val log = Logger(this.getClass)
 
-  def showActiveSession(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
-    dutyDefermentCacheService.get(request.request.user.internalId).flatMap {
+  def show(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+    accountLinkCacheService.get(request.request.user.internalId).flatMap {
       case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      case Some(details) => process(details)
+      case Some(details) =>
+        (for {
+          contactDetails <- contactDetailsCacheService.getContactDetails(
+            request.request.user.internalId,
+            details.dan,
+            request.request.user.eori
+          )
+          viewModel = ContactDetailsViewModel(details.dan, contactDetails, countriesProviderService.getCountryName)
+        } yield {
+          Ok(view(viewModel, details.statusId, details.linkId))
+        }).recover {
+          case NonFatal(e) =>
+            log.error(s"Unable to retrieve account details: ${e.getMessage}")
+            InternalServerError(errorView(details.dan, Option(appConfig.financialsHomepage), details.statusId, details.linkId))
+        }
     }
   }
 
-  def show(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
-    dutyDefermentCacheService.getAndCache(linkId, request.sessionId.value, request.request.user.internalId).flatMap {
-      case Left(_) => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
-      case Right(details) => process(details)
-    }
-  }
-
-  private def process(details: DutyDefermentDetails)(implicit request: AuthenticatedRequestWithSessionId[AnyContent]): Future[Result] = {
-    (for {
-      contactDetails <- contactDetailsCacheService.getContactDetails(
-        request.request.user.internalId,
-        details.dan,
-        request.request.user.eori
-      )
-      viewModel = ContactDetailsViewModel(details.dan, contactDetails, countriesProviderService.getCountryName)
-    } yield {
-      Ok(view(viewModel, details.statusId, details.linkId))
-    }).recover {
-      case NonFatal(e) =>
-        log.error(s"Unable to retrieve account details: ${e.getMessage}")
-        InternalServerError(errorView(details.dan, Option(appConfig.financialsHomepage), details.statusId, details.linkId))
+  def startSession(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+    accountLinkCacheService.getAndCache(linkId, request.sessionId.value, request.request.user.internalId).map {
+      case Left(_) => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
+      case Right(details) => Redirect(controllers.contactDetails.routes.ShowContactDetailsController.show())
     }
   }
 }

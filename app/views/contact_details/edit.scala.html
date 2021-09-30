@@ -29,7 +29,7 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title", dan)),
-    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
+    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.show().url),
     helpAndSupport = false,
     deskpro = false) {
 
@@ -126,7 +126,7 @@
     }
 
     @components.cancel_button(
-        Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
+        Some(controllers.contactDetails.routes.ShowContactDetailsController.show().url),
         messages("accountDetails.edit.back")
     )
 

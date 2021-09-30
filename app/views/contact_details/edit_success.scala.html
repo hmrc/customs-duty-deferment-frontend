@@ -28,7 +28,7 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.success.title")),
-    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
+    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.show().url),
     helpAndSupport = false,
     deskpro = false,
     welshToggle = false) {
@@ -41,7 +41,7 @@
     )
 
     @cancel_button(
-        href = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
+        href = Some(controllers.contactDetails.routes.ShowContactDetailsController.show().url),
         message = messages("accountDetails.edit.confirm.back")
     )
 

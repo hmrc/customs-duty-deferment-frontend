@@ -7,8 +7,8 @@ GET         /:linkId/account                           controllers.AccountContro
 GET         /:linkId/statements-unavailable            controllers.AccountController.statementsUnavailablePage(linkId: String)
 GET         /:linkId/direct-debit                      controllers.DirectDebitController.setup(linkId: String)
 
-GET         /:linkId/contact-details                   controllers.contactDetails.ShowContactDetailsController.show(linkId: String)
-GET         /contact-details                           controllers.contactDetails.ShowContactDetailsController.showActiveSession()
+GET         /:linkId/contact-details                   controllers.contactDetails.ShowContactDetailsController.startSession(linkId: String)
+GET         /contact-details                           controllers.contactDetails.ShowContactDetailsController.show()
 
 GET         /contact-details/edit/start                controllers.contactDetails.ContactDetailsEditStartController.start()
 GET         /contact-details/edit                      controllers.contactDetails.EditContactDetailsController.onPageLoad

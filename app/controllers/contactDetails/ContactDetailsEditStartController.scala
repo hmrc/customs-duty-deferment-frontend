@@ -24,7 +24,7 @@ import config.{AppConfig, ErrorHandler}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import controllers.routes
 import models.responses.retrieve.ContactDetails
-import models.{ContactDetailsUserAnswers, DutyDefermentDetails, UserAnswers}
+import models.{ContactDetailsUserAnswers, DutyDefermentAccountLink, UserAnswers}
 import pages.EditContactDetailsPage
 import play.api.Logging
 import play.api.i18n.I18nSupport
@@ -37,16 +37,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class ContactDetailsEditStartController @Inject()(
-                                                   contactDetailsCacheService: ContactDetailsCacheService,
-                                                   dateTimeService: DateTimeService,
-                                                   identifier: IdentifierAction,
-                                                   resolveSessionId: SessionIdAction,
-                                                   dutyDefermentCacheService: DutyDefermentCacheService,
-                                                   errorHandler: ErrorHandler,
-                                                   countriesProviderService: CountriesProviderService,
-                                                   appConfig: AppConfig,
-                                                   userAnswersCache: UserAnswersCache,
-                                                   mcc: MessagesControllerComponents
+  contactDetailsCacheService: ContactDetailsCacheService,
+  dateTimeService: DateTimeService,
+  identifier: IdentifierAction,
+  resolveSessionId: SessionIdAction,
+  dutyDefermentCacheService: AccountLinkCacheService,
+  errorHandler: ErrorHandler,
+  countriesProviderService: CountriesProviderService,
+  appConfig: AppConfig,
+  userAnswersCache: UserAnswersCache,
+  mcc: MessagesControllerComponents
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
@@ -81,7 +81,7 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentDetails, internalId: String): Option[UserAnswers] = {
+  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.fromContactDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,

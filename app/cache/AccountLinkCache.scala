@@ -17,17 +17,17 @@
 package cache
 
 import config.AppConfig
-import models.DutyDefermentDetails
+import models.DutyDefermentAccountLink
 import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.cache.repository.CacheMongoRepository
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class DutyDefermentAccountCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
+class AccountLinkCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
                                 (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("duty-deferment-cache", appConfig.mongoAccountLinkTtl)(mongo.mongoConnector.db, ec) with
-  SessionCache[DutyDefermentDetails] {
+  CacheMongoRepository("account-link-cache", appConfig.mongoAccountLinkTtl)(mongo.mongoConnector.db, ec) with
+  SessionCache[DutyDefermentAccountLink] {
 
-  override val key: String = "dutyDefermentAccount"
+  override val key: String = "dutyDefermentAccountLink"
 }
