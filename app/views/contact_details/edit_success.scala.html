@@ -21,15 +21,14 @@
 @this(
         layout: Layout,
         button: components.button,
-        inputText: components.input_text,
-        backlink: components.back_link
+        inputText: components.input_text
 )
 
 @(dan: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.success.title")),
-    backLink = Some(routes.ShowContactDetailsController.showActiveSession().url),
+    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
     helpAndSupport = false,
     deskpro = false,
     welshToggle = false) {
@@ -42,7 +41,7 @@
     )
 
     @cancel_button(
-        href = Some(routes.ShowContactDetailsController.showActiveSession().url),
+        href = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
         message = messages("accountDetails.edit.confirm.back")
     )
 

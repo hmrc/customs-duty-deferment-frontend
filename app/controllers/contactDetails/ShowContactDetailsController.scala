@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.contactDetails
 
 import com.google.inject.Inject
 import config.AppConfig
-import connectors.SessionCacheConnector
 import controllers.actions.{AuthenticatedRequestWithSessionId, IdentifierAction, SessionIdAction}
-import models.{AccountLink, CDSAccountStatusId, DutyDefermentDetails}
+import controllers.routes
+import models.DutyDefermentDetails
 import play.api.Logger
 import play.api.i18n.I18nSupport
-import play.api.mvc.{request, _}
+import play.api.mvc._
 import services.{ContactDetailsCacheService, CountriesProviderService, DutyDefermentCacheService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.ContactDetailsViewModel
@@ -48,14 +48,14 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   def showActiveSession(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
     dutyDefermentCacheService.get(request.request.user.internalId).flatMap {
-      case None => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       case Some(details) => process(details)
     }
   }
 
   def show(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
     dutyDefermentCacheService.getAndCache(linkId, request.sessionId.value, request.request.user.internalId).flatMap {
-      case Left(_) => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
+      case Left(_) => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
       case Right(details) => process(details)
     }
   }

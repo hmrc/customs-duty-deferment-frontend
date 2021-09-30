@@ -25,7 +25,7 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.title")),
-    backLink = Some(routes.EditContactDetailsController.onPageLoad().url),
+    backLink = Some(controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url),
     helpAndSupport = false,
     deskpro = false
 
@@ -34,7 +34,7 @@
     @h1_l(messages("accountDetails.confirm.heading"))
     @h2(messages("accountDetails.confirm.details.heading"))
 
-    @helper.form(routes.CheckAnswersContactDetailsController.submit, 'id -> "form") {
+    @helper.form(controllers.contactDetails.routes.CheckAnswersContactDetailsController.submit, 'id -> "form") {
         @CSRF.formField
 
         @summary_list {
@@ -46,7 +46,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.name")</span>
                 </a>
@@ -71,7 +71,7 @@
                 @amendContactDetails.countryName
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.address")</span>
                 </a>
@@ -85,7 +85,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.telephone")</span>
                 </a>
@@ -99,7 +99,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.fax")</span>
                 </a>
@@ -111,7 +111,7 @@
                 @amendContactDetails.email
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    controllers.contactDetails.routes.EditContactDetailsController.onPageLoad().url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.email")</span>
                 </a>

@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.contactDetails
 
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
+import controllers.routes
 import mappings.EditContactDetailsFormProvider
 import models.ContactDetailsUserAnswers
 import pages.EditContactDetailsPage
@@ -81,7 +82,7 @@ class EditContactDetailsController @Inject()(view: edit,
             } yield Redirect(routes.CheckAnswersContactDetailsController.onPageLoad())
           })
       case None =>
-        Future(Redirect(routes.SessionExpiredController.onPageLoad()))
+        Future(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
     }
   }
 

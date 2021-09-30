@@ -22,7 +22,6 @@
         layout: Layout,
         button: components.button,
         inputText: components.input_text,
-        backlink: components.back_link,
         errorSummary: components.errorSummary
 
 )
@@ -30,7 +29,7 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title", dan)),
-    backLink = Some(routes.ShowContactDetailsController.showActiveSession().url),
+    backLink = Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
     helpAndSupport = false,
     deskpro = false) {
 
@@ -43,7 +42,7 @@
             "govuk-fieldset__legend govuk-fieldset__legend--l"
         )
 
-        @helper.form(routes.EditContactDetailsController.submit, 'id -> "form") {
+        @helper.form(controllers.contactDetails.routes.EditContactDetailsController.submit, 'id -> "form") {
             @CSRF.formField
 
             @inputText(
@@ -127,7 +126,7 @@
     }
 
     @components.cancel_button(
-        Some(routes.ShowContactDetailsController.showActiveSession().url),
+        Some(controllers.contactDetails.routes.ShowContactDetailsController.showActiveSession().url),
         messages("accountDetails.edit.back")
     )
 
