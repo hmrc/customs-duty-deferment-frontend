@@ -25,7 +25,11 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.title")),
-    backLink = Some(routes.EditContactDetailsController.onPageLoad().url)) {
+    backLink = Some(routes.EditContactDetailsController.onPageLoad().url),
+    helpAndSupport = false,
+    deskpro = false
+
+) {
 
     @h1_l(messages("accountDetails.confirm.heading"))
     @h2(messages("accountDetails.confirm.details.heading"))

@@ -240,3 +240,7 @@ country-picker.country.label=Country
 country-picker.hint.screen-reader=Start to type the name of the country and then use up and down arrows to review and enter to select a country
 country-picker.no-results=No results found
 country-picker.emptyValueText=Pick a country
+
+session_expired.title = For your security, this service has been reset
+session_expired.heading = For your security, this service has been reset
+session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.

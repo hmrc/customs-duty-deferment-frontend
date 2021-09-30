@@ -143,3 +143,136 @@ cf.account.help-support.office-hours=Ar agor 08:30 i 17:00, o ddydd Llun i ddydd
 cf.account.help-support.duty-deferment.numbers=0300 059 4243
 cf.account.help-support.duty-deferment.office-hours=Ar agor 09:00 i 12:00, a 14:00 i 16:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
 # ----------------------------------------------------------
+
+accountDetails.change=Newid
+accountDetails.edit.title=Newid manylion cyswllt ar gyfer cyfrif gohirio tollau {0}
+accountDetails.edit.heading=Newid manylion cyswllt ar gyfer cyfrif gohirio tollau {0}
+accountDetails.edit.name=Enw llawn
+accountDetails.edit.address.line1=Cyfeiriad – llinell 1
+accountDetails.edit.address.line2=Cyfeiriad – llinell 2 (dewisol)
+accountDetails.edit.address.line3=Tref neu ddinas (dewisol)
+accountDetails.edit.address.line4=Sir (dewisol)
+accountDetails.edit.postcode=Cod post
+accountDetails.edit.telephone=Rhif ffôn (dewisol)
+accountDetails.edit.fax=Rhif ffacs (dewisol)
+accountDetails.edit.save=Cadw newidiadau
+accountDetails.edit.back=Canslo
+accountDetails.edit.confirm.back=Dychwelwch i fanylion y cyfrif gohirio tollau
+accountDetails.edit.success.title=Wedi llwyddo i ddiweddaru manylion cyswllt
+accountDetails.edit.success.message=Cyfrif Gohirio Tollau
+
+accountDetails.edit.name.empty=Nodwch eich enw llawn
+accountDetails.edit.address.line1.empty=Nodwch adeilad a stryd
+accountDetails.edit.postcode.empty=Nodwch god post
+
+accountDetails.edit.name.max=Mae’n rhaid i’r enw llawn fod yn 50 o gymeriadau neu lai
+accountDetails.edit.address.line1.max=Mae’n rhaid i’r adeilad a’r stryd fod yn 35 o gymeriadau neu lai
+accountDetails.edit.address.line2.max=Mae’n rhaid i’r adeilad a’r stryd yn llinell 2 fod yn 35 o gymeriadau neu lai
+accountDetails.edit.address.line3.max=Mae’n rhaid i’r dref neu’r ddinas fod yn 35 o gymeriadau neu lai
+accountDetails.edit.address.line4.max=Mae’n rhaid i’r sir fod yn 35 o gymeriadau neu lai
+
+accountDetails.edit.name.invalid=Nodwch enw dilys
+accountDetails.edit.address.line1.invalid=Nodwch adeilad a stryd ddilys
+accountDetails.edit.address.line2.invalid=Nodwch linell 2 ddilys ar gyfer y cyfeiriad
+accountDetails.edit.address.line3.invalid=Nodwch dref neu ddinas ddilys
+accountDetails.edit.address.line4.invalid=Nodwch sir ddilys
+
+accountDetails.edit.postcode.max=Mae’n rhaid i’r cod post fod rhwng 6 ac 8 o gymeriadau
+accountDetails.edit.postcode.invalid=Nodwch god post dilys
+accountDetails.edit.address.country.invalid=Dewiswch wlad ddilys
+accountDetails.edit.telephone.invalid=Nodwch rif ffôn dilys
+accountDetails.edit.fax.invalid=Nodwch rif ffacs dilys
+
+accountDetails.back=Yn ôl
+accountDetails.cancel=Canslo
+
+accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
+accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
+accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
+
+emailAddress.edit.title=Newid cyfeiriad e-bost cyswllt ar gyfer cyfrif gohirio tollau {0}
+emailAddress.edit.heading=Newid cyfeiriad e-bost cyswllt ar gyfer cyfrif gohirio tollau {0}
+emailAddress.edit.emailAddress=Cyfeiriad e-bost
+emailAddress.edit.continue=Yn eich blaen
+emailAddress.edit.confirm.back=Dychwelwch i fanylion y cyfrif gohirio tollau
+emailAddress.edit.empty=Nodwch eich cyfeiriad e-bost
+emailAddress.edit.too-long=E-bost yn rhy hir
+emailAddress.edit.wrong-format=Nodwch gyfeiriad e-bost sy’n ddilys
+emailAddress.confirm.required=Dewiswch ai mai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio
+
+emailAddress.confirm.title=Gwirio’ch cyfeiriad e-bost
+emailAddress.confirm.email=Cyfeiriad e-bost
+emailAddress.confirm.question=Ai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio?
+emailAddress.confirm.question.yes=Le, dyma’r cyfeiriad e-bost rwyf am ei ddefnyddio
+emailAddress.confirm.question.no=Na, mae angen i mi newid y cyfeiriad e-bost hwn
+
+accountDetails.confirm.heading = Gwirio'ch manylion
+accountDetails.confirm.details.heading = Manylion personol
+accountDetails.confirm.button = Cadarnhau
+
+# Unauthorised Error
+error.unauthorized.title=Nid ydych wedi’ch awdurdodi i fwrw golwg ar y dudalen hon
+error.unauthorized.heading=Heb awdurdod
+error.unauthorized.message=Nid ydych wedi’ch awdurdodi i fwrw golwg ar y dudalen hon
+
+error.techDifficulties.title=Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
+error.techDifficulties.heading=Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
+error.techDifficulties.message=Rhowch gynnig arall arni mewn ychydig o funudau.
+
+# Standard Error SDDS
+error.sdds.title=Mae’n ddrwg gennym, nid yw sefydlu debyd uniongyrchol ar gael ar hyn o bryd
+error.sdds.heading=Mae'n ddrwg gennym, nid yw sefydlu debyd uniongyrchol ar gael ar hyn o bryd
+error.sdds.message=Rhowch gynnig arall arni yn nes ymlaen
+
+error.browser.title.prefix=Gwall:
+error.boolean=Rhowch ateb
+error.invalid_date=Rhowch ddyddiad cywir
+error.date.day_blank=Nodwch ddiwrnod
+error.date.day_invalid=Rhowch ddiwrnod cywir gan ddefnyddio’r rhifau 1 i 31
+error.date.month_blank=Nodwch fis
+error.date.month_invalid=Rhowch fis cywir gan ddefnyddio’r rhifau 1 i 12
+error.date.year_blank=Nodwch flwyddyn
+error.date.year_invalid=Rhowch flwyddyn gywir
+error.integer=Rhowch ateb mewn rhifau cyfan
+error.non_numeric=Rhowch ateb gan ddefnyddio rhifau yn unig
+error.number=Nodwch rif dilys
+error.required=Nodwch werth
+error.summary.title=Mae problem wedi codi
+
+country-picker.country.label=Gwlad
+country-picker.hint.screen-reader=Dechreuwch deipio enw’r wlad ac yna defnyddiwch y botymau i fyny ac i lawr i adolygu a chadarnhau er mwyn dewis gwlad
+country-picker.no-results=Dim canlyniadau wedi’u darganfod
+country-picker.emptyValueText=Dewiswch wlad
+
+checkYourAnswers.title=Gwirio’ch Atebion
+checkYourAnswers.heading=Gwirio’ch Atebion
+checkYourAnswers.guidance=Arweiniad ar gyfer gwirio’ch atebion
+
+accountDetails.title=Manylion y cyfrif gohirio tollau
+accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.guidance=Arweiniad ar fanylion ar gyfer y cyfrif gohirio tollau
+
+accountDetails.details.heading=Manylion cyswllt
+accountDetails.details.guidance=Dyma’r manylion y byddwn yn eu defnyddio i gysylltu â chi ynghylch y cyfrif gohirio tollau hwn.
+accountDetails.details.name=Enw
+accountDetails.details.address=Cyfeiriad
+accountDetails.details.telephone=Ffôn
+accountDetails.details.fax=Rhif ffacs
+accountDetails.details.email=Cyfeiriad e-bost
+accountDetails.details.directdebit.heading=Debyd Uniongyrchol
+accountDetails.details.error.message=Mae’n ddrwg gennym, ni allwn ddangos y rhain ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
+accountDetails.details.error.description1=Dyma’r manylion y byddwn yn eu defnyddio os bydd angen i ni gysylltu â chi ynghylch y cyfrif gohirio tollau hwn. Anfonir hysbysiadau datganiad at y
+accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
+accountDetails.details.error.advice1=Gallwch
+accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau uniongyrchol.
+
+dd.setup.unavailable.heading=Mae’n ddrwg gennym, ni allwch sefydlu debyd uniongyrchol newydd ar hyn o bryd.
+dd.setup.unavailable.message=Os ydych wedi dilysu’ch cyfeiriad e-bost yn ddiweddar, gallai gymryd hyd at 2 awr iddo gael ei nodi gan y gwasanaeth hwn.
+
+session_expired.title=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
+session_expired.heading=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
+session_expired.guidance=Mae’r manylion a roddwyd gennych wedi’u dileu gan nad ydych wedi mynd yn eich blaen â’r gwasanaeth ers 15 munud.
+
+accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
+accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
+accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.

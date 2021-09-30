@@ -30,7 +30,9 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title", dan)),
-    backLink = Some(routes.ContactDetailsEditStartController.start().url)) {
+    backLink = Some(routes.ShowContactDetailsController.showActiveSession().url),
+    helpAndSupport = false,
+    deskpro = false) {
 
     @fieldset {
 

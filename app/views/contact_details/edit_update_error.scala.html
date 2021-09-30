@@ -22,13 +22,15 @@
         p: components.p)
 
 
-@(title: String, heading: String, message: String, contactDetailsLink: Option[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(title: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some(title)) {
+@layout(pageTitle = Some(title),
+    helpAndSupport = false,
+    deskpro = false) {
     @components.heading(headingKey = heading, headingSize = "govuk-heading-l")
     @p(Html(messages(message)))
     @components.cancel_button(
-        contactDetailsLink, messages("accountDetails.edit.backToAccountDetails")
+        Some(routes.ShowContactDetailsController.showActiveSession().url), messages("accountDetails.edit.backToAccountDetails")
     )
 }
 

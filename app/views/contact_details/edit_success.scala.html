@@ -29,7 +29,10 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.success.title")),
-    backLink = Some(routes.ShowContactDetailsController.showActiveSession().url)) {
+    backLink = Some(routes.ShowContactDetailsController.showActiveSession().url),
+    helpAndSupport = false,
+    deskpro = false,
+    welshToggle = false) {
 
     @confirmation_panel(
         message = Some(messages("accountDetails.edit.success.title")),

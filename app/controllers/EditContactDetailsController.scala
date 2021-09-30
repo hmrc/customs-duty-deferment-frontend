@@ -58,9 +58,8 @@ class EditContactDetailsController @Inject()(view: edit,
           case Some(contactDetails) =>
             Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries))
           case None =>
-            //TODO review error template
             log.error(s"Unable to retrieve stored account contact details")
-            InternalServerError(errorHandler.contactDetailsErrorTemplate())
+            InternalServerError(errorHandler.standardErrorTemplate())
         }
       )
   }

@@ -55,18 +55,15 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
               Ok(successView(userAnswers.dan))
           }
         case None =>
-          //TODO check error templates
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")
-          Future.successful(InternalServerError(errorHandler.contactDetailsErrorTemplate()))
+          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
       }
     }
   }
 
   def problem: Action[AnyContent] = identify async { implicit request =>
       Future {
-        //TODO check error template
-        val backLink = Some(appConfig.financialsHomepage)
-        InternalServerError(errorHandler.contactDetailsErrorTemplate())
+        InternalServerError(errorHandler.errorUpdatingContactDetails)
       }
   }
 

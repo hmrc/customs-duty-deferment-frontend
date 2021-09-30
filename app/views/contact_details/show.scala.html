@@ -36,7 +36,9 @@
 
 }
 
-@layout(pageTitle = Some(messages("accountDetails.title")), backLink = Some(appConfig.financialsHomepage)) {
+@layout(pageTitle = Some(messages("accountDetails.title")), backLink = Some(appConfig.financialsHomepage),
+    helpAndSupport = false,
+    deskpro = false) {
 
     @h1_xl(messages("accountDetails.heading", accountDetails.dan), h1Class = Some("govuk-!-margin-bottom-9"))
     @h2(messages("accountDetails.details.heading"))
