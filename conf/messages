@@ -146,3 +146,8 @@ cf.account.help-support.office-hours=Open 8am to 6pm, Monday to Friday (closed b
 cf.account.help-support.duty-deferment.numbers=0300 059 4243
 cf.account.help-support.duty-deferment.office-hours=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
 # ----------------------------------------------------------
+
+cf.customs-financials-home.recruitment-banner-heading=Help us improve this service
+cf.customs-financials-home.recruitment-banner-link-text=Sign up to be a potential user research participant
+cf.customs-financials-home.recruitment-banner.close=Close
+cf.customs-financials-home.recruitment-banner.hidden-text.close=the help us improve this service banner

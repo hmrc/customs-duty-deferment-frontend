@@ -143,3 +143,8 @@ cf.account.help-support.office-hours=Ar agor 08:30 i 17:00, o ddydd Llun i ddydd
 cf.account.help-support.duty-deferment.numbers=0300 059 4243
 cf.account.help-support.duty-deferment.office-hours=Ar agor 09:00 i 12:00, a 14:00 i 16:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
 # ----------------------------------------------------------
+
+cf.customs-financials-home.recruitment-banner-heading=Helpu ni i wella’r gwasanaeth hwn
+cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymryd rhan bosibl yn ein hymchwil defnyddiwr
+cf.customs-financials-home.recruitment-banner.close=Cau
+cf.customs-financials-home.recruitment-banner.hidden-text.close=Y faner ‘Helpu ni i wella’r gwasanaeth hwn’
