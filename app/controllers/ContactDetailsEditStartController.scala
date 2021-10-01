@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.contactDetails
+package controllers
 
 import cache.UserAnswersCache
 import cats.data.EitherT
@@ -22,7 +22,6 @@ import cats.data.EitherT.{fromOption, fromOptionF, liftF}
 import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{IdentifierAction, SessionIdAction}
-import controllers.routes
 import models.responses.retrieve.ContactDetails
 import models.{ContactDetailsUserAnswers, DutyDefermentAccountLink, UserAnswers}
 import pages.EditContactDetailsPage

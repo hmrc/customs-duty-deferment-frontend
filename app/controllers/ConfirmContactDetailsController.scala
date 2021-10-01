@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.contactDetails
+package controllers
 
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}

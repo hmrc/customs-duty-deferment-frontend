@@ -30,7 +30,7 @@
     @components.heading(headingKey = heading, headingSize = "govuk-heading-l")
     @p(Html(messages(message)))
     @components.cancel_button(
-        Some(controllers.contactDetails.routes.ShowContactDetailsController.show().url), messages("accountDetails.edit.backToAccountDetails")
+        Some(routes.ShowContactDetailsController.show().url), messages("accountDetails.edit.backToAccountDetails")
     )
 }
 

@@ -7,18 +7,18 @@ GET         /:linkId/account                           controllers.AccountContro
 GET         /:linkId/statements-unavailable            controllers.AccountController.statementsUnavailablePage(linkId: String)
 GET         /:linkId/direct-debit                      controllers.DirectDebitController.setup(linkId: String)
 
-GET         /:linkId/contact-details                   controllers.contactDetails.ShowContactDetailsController.startSession(linkId: String)
-GET         /contact-details                           controllers.contactDetails.ShowContactDetailsController.show()
+GET         /:linkId/contact-details                   controllers.ShowContactDetailsController.startSession(linkId: String)
+GET         /contact-details                           controllers.ShowContactDetailsController.show()
 
-GET         /contact-details/edit/start                controllers.contactDetails.ContactDetailsEditStartController.start()
-GET         /contact-details/edit                      controllers.contactDetails.EditContactDetailsController.onPageLoad
-POST        /contact-details/edit                      controllers.contactDetails.EditContactDetailsController.submit
+GET         /contact-details/edit/start                controllers.ContactDetailsEditStartController.start()
+GET         /contact-details/edit                      controllers.EditContactDetailsController.onPageLoad
+POST        /contact-details/edit                      controllers.EditContactDetailsController.submit
 
-GET         /contact-details/check-answers             controllers.contactDetails.CheckAnswersContactDetailsController.onPageLoad
-POST        /contact-details/check-answers             controllers.contactDetails.CheckAnswersContactDetailsController.submit
+GET         /contact-details/check-answers             controllers.CheckAnswersContactDetailsController.onPageLoad
+POST        /contact-details/check-answers             controllers.CheckAnswersContactDetailsController.submit
 
-GET         /contact-details/confirmation              controllers.contactDetails.ConfirmContactDetailsController.success
-GET         /contact-details/there-is-a-problem        controllers.contactDetails.ConfirmContactDetailsController.problem
+GET         /contact-details/confirmation              controllers.ConfirmContactDetailsController.success
+GET         /contact-details/there-is-a-problem        controllers.ConfirmContactDetailsController.problem
 
 
 GET         /this-service-has-been-reset               controllers.SessionExpiredController.onPageLoad

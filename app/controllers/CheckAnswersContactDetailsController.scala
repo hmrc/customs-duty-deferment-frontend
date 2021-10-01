@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package controllers.contactDetails
+package controllers
 
 import config.{AppConfig, ErrorHandler}
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
-import controllers.routes
 import models.{ContactDetailsUserAnswers, DataRequest}
 import pages.EditContactDetailsPage
 import play.api.Logger

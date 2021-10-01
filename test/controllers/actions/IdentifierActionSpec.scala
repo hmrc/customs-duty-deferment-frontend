@@ -49,8 +49,8 @@ class AuthActionSpec extends SpecBase {
       val mockAuthConnector = mock[AuthConnector]
       val mockDataStoreConnector = mock[DataStoreConnector]
 
-      when(mockAuthConnector.authorise[Enrolments](any, any)(any, any))
-        .thenReturn(Future.successful(Enrolments(Set.empty)))
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
+        .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("internalId")))
 
       val app = application().overrides().build()
       val config = app.injector.instanceOf[AppConfig]
@@ -70,8 +70,8 @@ class AuthActionSpec extends SpecBase {
       val mockAuthConnector = mock[AuthConnector]
       val mockDataStoreConnector = mock[DataStoreConnector]
 
-      when(mockAuthConnector.authorise[Enrolments](any, any)(any, any))
-        .thenReturn(Future.successful(Enrolments(Set(Enrolment("someKey", Seq(EnrolmentIdentifier("someKey", "someValue")), "ACTIVE")))))
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
+        .thenReturn(Future.successful(Enrolments(Set(Enrolment("someKey", Seq(EnrolmentIdentifier("someKey", "someValue")), "ACTIVE"))) ~ Some("internalId")))
 
       val app = application().overrides().build()
       val config = app.injector.instanceOf[AppConfig]
@@ -91,7 +91,7 @@ class AuthActionSpec extends SpecBase {
       val mockAuthConnector = mock[AuthConnector]
       val mockDataStoreConnector = mock[DataStoreConnector]
 
-      when(mockAuthConnector.authorise[Enrolments](any, any)(any, any))
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.failed(new RuntimeException("something went wrong")))
 
       val app = application().overrides().build()
@@ -116,9 +116,11 @@ class AuthActionSpec extends SpecBase {
         .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
 
 
-      when(mockAuthConnector.authorise[Enrolments](any, any)(any, any))
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.successful(
-            Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active")))))
+          Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some("internalId")
+        )
+        )
 
       val app = application().overrides().build()
       val config = app.injector.instanceOf[AppConfig]

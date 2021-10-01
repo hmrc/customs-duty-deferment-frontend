@@ -24,18 +24,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+
+
 class AccountLinkCacheService @Inject()(
   sessionCacheConnector: SessionCacheConnector,
   accountLinkCache: AccountLinkCache
 )(implicit executionContext: ExecutionContext) {
-
-  sealed trait SessionCacheError
-
-  case object NoAccountStatusId extends SessionCacheError
-
-  case object NoDutyDefermentSessionAvailable extends SessionCacheError
-
-  def getAndCache(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
+  def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
     sessionCacheConnector.retrieveSession(sessionId, linkId).flatMap {
       case None => Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(_, _, _, None)) => Future.successful(Left(NoDutyDefermentSessionAvailable))
@@ -53,3 +48,7 @@ class AccountLinkCacheService @Inject()(
     accountLinkCache.remove(internalId)
   }
 }
+
+sealed trait SessionCacheError
+case object NoAccountStatusId extends SessionCacheError
+case object NoDutyDefermentSessionAvailable extends SessionCacheError

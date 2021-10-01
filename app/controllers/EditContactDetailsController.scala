@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package controllers.contactDetails
+package controllers
 
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
-import controllers.routes
 import mappings.EditContactDetailsFormProvider
-import models.ContactDetailsUserAnswers
+import models.{ContactDetailsUserAnswers, DataRequest}
 import pages.EditContactDetailsPage
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import services.CountriesProviderService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit
@@ -52,20 +51,21 @@ class EditContactDetailsController @Inject()(view: edit,
 
   private def form: Form[ContactDetailsUserAnswers] = formProvider()
 
-  def onPageLoad: Action[AnyContent] = identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction async {
+  private val commonActions: ActionBuilder[DataRequest, AnyContent] =
+    identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
+
+  def onPageLoad: Action[AnyContent] = commonActions async {
     implicit request =>
-      Future(
-        request.userAnswers.get(EditContactDetailsPage) match {
-          case Some(contactDetails) =>
-            Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries))
-          case None =>
-            log.error(s"Unable to retrieve stored account contact details")
-            InternalServerError(errorHandler.standardErrorTemplate())
-        }
-      )
+      request.userAnswers.get(EditContactDetailsPage) match {
+        case Some(contactDetails) =>
+          Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
+        case None =>
+          log.error(s"Unable to retrieve stored account contact details")
+          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
+      }
   }
 
-  def submit: Action[AnyContent] = identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction async { implicit request =>
+  def submit: Action[AnyContent] = commonActions async { implicit request =>
     request.userAnswers.get(EditContactDetailsPage) match {
       case Some(userAnswers) =>
         val form: Form[ContactDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)

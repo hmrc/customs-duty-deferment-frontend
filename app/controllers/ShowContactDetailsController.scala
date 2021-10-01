@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package controllers.contactDetails
+package controllers
 
 import com.google.inject.Inject
 import config.AppConfig
-import controllers.actions.{AuthenticatedRequestWithSessionId, IdentifierAction, SessionIdAction}
-import controllers.routes
-import models.DutyDefermentAccountLink
+import controllers.actions.{IdentifierAction, SessionIdAction}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{ContactDetailsCacheService, CountriesProviderService, AccountLinkCacheService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
@@ -68,9 +66,9 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
   }
 
   def startSession(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
-    accountLinkCacheService.getAndCache(linkId, request.sessionId.value, request.request.user.internalId).map {
-      case Left(_) => Redirect(controllers.routes.SessionExpiredController.onPageLoad())
-      case Right(details) => Redirect(controllers.contactDetails.routes.ShowContactDetailsController.show())
+    accountLinkCacheService.cacheAccountLink(linkId, request.sessionId.value, request.request.user.internalId).map {
+      case Left(_) => Redirect(routes.SessionExpiredController.onPageLoad())
+      case Right(_) => Redirect(routes.ShowContactDetailsController.show())
     }
   }
 }
