@@ -82,7 +82,7 @@ class EditContactDetailsController @Inject()(view: edit,
             } yield Redirect(routes.CheckAnswersContactDetailsController.onPageLoad())
           })
       case None =>
-        Future(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+        Future(Redirect(routes.SessionExpiredController.onPageLoad()))
     }
   }
 

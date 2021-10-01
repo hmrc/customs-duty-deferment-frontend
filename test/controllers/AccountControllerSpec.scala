@@ -16,13 +16,18 @@
 
 package controllers
 
-import connectors.{FinancialsApiConnector, SessionCacheConnector}
+import config.AppConfig
+import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
+import viewmodels.DutyDefermentAccount
+import views.html.duty_deferment_account.duty_deferment_account
 
 import scala.concurrent.Future
 
@@ -90,11 +95,18 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
+      val view: duty_deferment_account = app.injector.instanceOf[duty_deferment_account]
+      val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
+        .withHeaders("X-Session-Id" -> "someSessionId")
+
+      val model: DutyDefermentAccount = DutyDefermentAccount("accountNumber", Seq(dutyDefermentStatementsForEori), "linkId")
+
+      val messages: Messages = messagesApi.preferred(request)
       running(app) {
-        val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
-          .withHeaders("X-Session-Id" -> "someSessionId")
+
         val result = route(app, request).value
         status(result) mustBe OK
+        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
       }
     }
 
@@ -138,17 +150,21 @@ class AccountControllerSpec extends SpecBase {
     }
 
     trait Setup {
-      val mockApiConnector: FinancialsApiConnector = mock[FinancialsApiConnector]
+      val mockApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
       val mockDocumentService: DocumentService = mock[DocumentService]
 
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
       val app: Application = application().overrides(
-        inject.bind[FinancialsApiConnector].toInstance(mockApiConnector),
+        inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
         inject.bind[DocumentService].toInstance(mockDocumentService),
         inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
       ).build()
+
+      val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+      val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+
     }
   }
 }

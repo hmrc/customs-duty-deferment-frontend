@@ -17,22 +17,53 @@
 package connectors
 
 import models.FileRole.DutyDefermentStatement
+import models.{GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse}
+import models.responses.retrieve.ContactDetails
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}
+import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
 
 import scala.concurrent.Future
 
-class FinancialsApiConnectorSpec extends SpecBase {
+class CustomsFinancialsApiConnectorSpec extends SpecBase {
+
+  "getContactDetails" should {
+    "return contact details from the API" in new Setup {
+      when(mockHttpClient.POST[GetContactDetailsRequest, ContactDetails](any, any, any)(any, any, any, any))
+        .thenReturn(Future.successful(validAccountContactDetails))
+
+      running(app) {
+        val result = await(connector.getContactDetails("someDan", "someEori"))
+        result mustBe validAccountContactDetails
+      }
+    }
+  }
+
+  "updateContactDetails" should {
+    "return a contact details response" in new Setup {
+      when(mockHttpClient.POST[UpdateContactDetailsRequest, UpdateContactDetailsResponse](any, any, any)(any, any, any, any))
+        .thenReturn(Future.successful(UpdateContactDetailsResponse(true)))
+
+      when(mockAuditingService.changeContactDetailsAuditEvent(any, any, any)(any))
+        .thenReturn(Future.successful(AuditResult.Success))
+
+      running(app) {
+        val result = await(connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
+        result mustBe UpdateContactDetailsResponse(true)
+      }
+    }
+  }
 
   "deleteNotification" should {
     "return true when the response from the API returns OK" in new Setup {
       when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
         .thenReturn(Future.successful(HttpResponse.apply(Status.OK, "")))
 
-      running(app){
+      running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe true
       }
@@ -42,7 +73,7 @@ class FinancialsApiConnectorSpec extends SpecBase {
       when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
         .thenReturn(Future.successful(HttpResponse.apply(Status.NOT_FOUND, "")))
 
-      running(app){
+      running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe false
       }
@@ -52,12 +83,14 @@ class FinancialsApiConnectorSpec extends SpecBase {
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockAuditingService: AuditingService = mock[AuditingService]
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient)
+      inject.bind[HttpClient].toInstance(mockHttpClient),
+      inject.bind[AuditingService].toInstance(mockAuditingService)
     ).build()
 
-    val connector: FinancialsApiConnector =
-      app.injector.instanceOf[FinancialsApiConnector]
+    val connector: CustomsFinancialsApiConnector =
+      app.injector.instanceOf[CustomsFinancialsApiConnector]
   }
 }

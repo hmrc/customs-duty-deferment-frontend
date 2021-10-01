@@ -19,8 +19,9 @@ package connectors
 import config.AppConfig
 import models._
 import models.responses.retrieve.ContactDetails
+import play.mvc.Http.Status
 import services.AuditingService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,6 +29,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
                                               httpClient: HttpClient,
                                               auditingService: AuditingService)(implicit ec: ExecutionContext) {
+
+  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
+    httpClient.DELETE[HttpResponse](
+      appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
+    ).map(_.status == Status.OK).recover { case _ => false }
 
   def getContactDetails(dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
     val request = GetContactDetailsRequest(dan, eori)

@@ -40,7 +40,7 @@ class ContactDetailsEditStartController @Inject()(
   dateTimeService: DateTimeService,
   identifier: IdentifierAction,
   resolveSessionId: SessionIdAction,
-  dutyDefermentCacheService: AccountLinkCacheService,
+  accountLinkCacheService: AccountLinkCacheService,
   errorHandler: ErrorHandler,
   countriesProviderService: CountriesProviderService,
   appConfig: AppConfig,
@@ -53,7 +53,7 @@ class ContactDetailsEditStartController @Inject()(
     implicit request =>
       val futureResponse: EitherT[Future, Result, Result] = for {
         dutyDefermentDetails <- fromOptionF(
-          dutyDefermentCacheService.get(request.request.user.internalId),
+          accountLinkCacheService.get(request.request.user.internalId),
           Redirect(appConfig.financialsHomepage)
         )
         initialContactDetails <- liftF(

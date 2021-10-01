@@ -38,8 +38,15 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
-      running(app) {
-        val result = route(app, onPageLoadRequest).value
+
+      val newApp: Application = application(Some(userAnswers)).overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+      ).build()
+
+
+      running(newApp) {
+        val result = route(newApp, onPageLoadRequest).value
         status(result) mustBe OK
 
         contentAsString(result).removeCsrf() mustBe view(
@@ -82,7 +89,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe ""
+        redirectLocation(result).value mustBe routes.CheckAnswersContactDetailsController.onPageLoad().url
       }
     }
   }
@@ -116,7 +123,6 @@ class EditContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
     lazy val app: Application = application(Some(userAnswers)).overrides(
-      inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService),
       inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
     ).build()
 

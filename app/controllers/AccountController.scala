@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT._
 import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
-import connectors.{FinancialsApiConnector, SessionCacheConnector}
+import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.FileRole.DutyDefermentStatement
 import play.api.i18n.I18nSupport
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AccountController @Inject()(
                                    val authenticate: IdentifierAction,
-                                   apiConnector: FinancialsApiConnector,
+                                   apiConnector: CustomsFinancialsApiConnector,
                                    resolveSessionId: SessionIdAction,
                                    mcc: MessagesControllerComponents,
                                    sessionCacheConnector: SessionCacheConnector,
