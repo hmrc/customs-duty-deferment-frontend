@@ -276,3 +276,8 @@ session_expired.guidance=Mae’r manylion a roddwyd gennych wedi’u dileu gan n
 accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
+
+cf.customs-financials-home.recruitment-banner-heading=Helpu ni i wella’r gwasanaeth hwn
+cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymryd rhan bosibl yn ein hymchwil defnyddiwr
+cf.customs-financials-home.recruitment-banner.close=Cau
+cf.customs-financials-home.recruitment-banner.hidden-text.close=Y faner ‘Helpu ni i wella’r gwasanaeth hwn’

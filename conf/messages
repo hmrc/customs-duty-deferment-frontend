@@ -244,3 +244,7 @@ country-picker.emptyValueText=Pick a country
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
+cf.customs-financials-home.recruitment-banner-heading=Help us improve this service
+cf.customs-financials-home.recruitment-banner-link-text=Sign up to be a potential user research participant
+cf.customs-financials-home.recruitment-banner.close=Close
+cf.customs-financials-home.recruitment-banner.hidden-text.close=the help us improve this service banner
