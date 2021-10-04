@@ -68,4 +68,6 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   def historicRequestUrl(linkId: String): String =
     config.get[String]("external-urls.historicRequest") + s"duty-deferment/$linkId"
+
+  lazy val helpMakeGovUkBetterUrl: String = config.get[String]("external-urls.helpMakeGovUkBetterUrl")
 }
