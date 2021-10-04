@@ -147,6 +147,103 @@ cf.account.help-support.duty-deferment.numbers=0300 059 4243
 cf.account.help-support.duty-deferment.office-hours=Open 9am to 12pm, and 2pm to 4pm Monday to Friday (closed bank holidays).
 # ----------------------------------------------------------
 
+checkYourAnswers.title = Check Your Answers
+checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.guidance = Guidance for check your answers
+
+accountDetails.title = Duty deferment account details
+accountDetails.heading = Details for duty deferment account {0}
+accountDetails.guidance = Guidance for Duty deferment account details
+accountDetails.change=Change
+
+accountDetails.details.heading = Contact details
+accountDetails.details.guidance = These are the details we will use to contact you regarding this duty deferment account.
+accountDetails.details.name = Name
+accountDetails.details.address = Address
+accountDetails.details.telephone = Telephone
+accountDetails.details.fax = Fax number
+accountDetails.details.email = Email address
+accountDetails.details.directdebit.heading = Direct Debit
+accountDetails.details.error.message = Sorry, we are unable to show these at the moment. Please try again later.
+accountDetails.details.error.description1 = These are the details we will use if we need to contact you about this duty deferment account. Statement notifications will be sent to the
+accountDetails.details.error.description2 = email address used to register for CDS
+accountDetails.details.error.advice1 = You can
+accountDetails.details.error.advice2 = view your Direct Debit details.
+
+accountDetails.edit.title=Change contact details for Duty Deferment account {0}
+accountDetails.edit.heading=Change contact details for Duty Deferment account {0}
+accountDetails.edit.name=Full name
+accountDetails.edit.address.line1=Address line 1
+accountDetails.edit.address.line2=Address line 2 (optional)
+accountDetails.edit.address.line3=Town or city (optional)
+accountDetails.edit.address.line4=County (optional)
+accountDetails.edit.postcode=Postcode
+accountDetails.edit.telephone=Telephone number (optional)
+accountDetails.edit.fax=Fax number (optional)
+accountDetails.edit.save=Save changes
+accountDetails.edit.back=Cancel
+accountDetails.edit.confirm.back=Return to duty deferment account details
+accountDetails.edit.success.title=Contact details successfully updated
+accountDetails.edit.success.message=Duty Deferment account
+
+accountDetails.edit.name.empty=Enter your full name
+accountDetails.edit.address.line1.empty=Enter building and street
+accountDetails.edit.postcode.empty=Enter a postcode
+
+accountDetails.edit.name.max=Full name must be 50 characters or less
+accountDetails.edit.address.line1.max=Building and street must be 35 characters or less
+accountDetails.edit.address.line2.max=Building and street line 2 must be 35 characters or less
+accountDetails.edit.address.line3.max=Town or city must be 35 characters or less
+accountDetails.edit.address.line4.max=County must be 35 characters or less
+
+accountDetails.edit.name.invalid=Enter a valid name
+accountDetails.edit.address.line1.invalid=Enter a valid building and street
+accountDetails.edit.address.line2.invalid=Enter a valid address line 2
+accountDetails.edit.address.line3.invalid=Enter a valid town or city
+accountDetails.edit.address.line4.invalid=Enter a valid county
+
+accountDetails.edit.postcode.max=Postcode must be a minimum 6 characters, maximum 8 characters
+accountDetails.edit.postcode.invalid=Enter a valid postcode
+accountDetails.edit.address.country.invalid=Select a valid country
+accountDetails.edit.telephone.invalid=Enter a valid telephone number
+accountDetails.edit.fax.invalid=Enter a valid fax number
+
+accountDetails.back=Back
+accountDetails.cancel=Cancel
+
+accountDetails.edit.error.title=Sorry we are unable to make these changes at the moment.
+accountDetails.edit.error.heading=Sorry we are unable to make these changes at the moment.
+accountDetails.edit.error.message=Try again later.
+accountDetails.edit.backToAccountDetails=Back to Duty deferment account details
+
+emailAddress.edit.title=Change contact email address for Duty Deferment account {0}
+emailAddress.edit.heading=Change contact email address for Duty Deferment account {0}
+emailAddress.edit.emailAddress=Email address
+emailAddress.edit.continue=Continue
+emailAddress.edit.confirm.back=Return to duty deferment account details
+emailAddress.edit.empty=Enter your email address
+emailAddress.edit.too-long=Email too long
+emailAddress.edit.wrong-format=Enter a valid email address
+emailAddress.confirm.required=Select if this is the email you want to use
+
+emailAddress.confirm.title=Check your email address
+emailAddress.confirm.email=Email address
+emailAddress.confirm.question = Is this the email address you want to use?
+emailAddress.confirm.question.yes = Yes, this is the email address I want to use
+emailAddress.confirm.question.no = No, I need to change this email
+
+accountDetails.confirm.heading = Check your details
+accountDetails.confirm.details.heading = Personal details
+accountDetails.confirm.button = Confirm
+
+country-picker.country.label=Country
+country-picker.hint.screen-reader=Start to type the name of the country and then use up and down arrows to review and enter to select a country
+country-picker.no-results=No results found
+country-picker.emptyValueText=Pick a country
+
+session_expired.title = For your security, this service has been reset
+session_expired.heading = For your security, this service has been reset
+session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 cf.customs-financials-home.recruitment-banner-heading=Help us improve this service
 cf.customs-financials-home.recruitment-banner-link-text=Sign up to be a potential user research participant
 cf.customs-financials-home.recruitment-banner.close=Close

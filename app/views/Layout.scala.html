@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
 @import views.html.helper.CSPNonce
 @import views.html.components.help_and_support_message
+@import views.html.partials.countrypickerscript
 
 @this(appConfig: AppConfig,
         hmrcLayout: HmrcLayout,
@@ -37,6 +38,9 @@
 
 @(pageTitle: Option[String] = None,
         backLink: Option[String] = None,
+        helpAndSupport: Boolean = true,
+        deskpro: Boolean = true,
+        welshToggle: Boolean = true,
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
@@ -55,6 +59,7 @@
     }
 
     @additionalHead = {
+        @countrypickerscript()
         @hmrcTrackingConsentSnippet()
         @hmrcTimeoutDialog(TimeoutDialog(
         title = Some(messages("timeout.title")),
@@ -68,8 +73,13 @@
 
     @mainContent = {
         @contentBlock
-        @hmrcReportTechnicalIssueHelper()
-        @help_and_support_message()
+        @if(deskpro) {
+            @hmrcReportTechnicalIssueHelper()
+        }
+
+        @if(helpAndSupport) {
+            @help_and_support_message()
+        }
     }
 
 @hmrcLayout(
@@ -80,6 +90,6 @@
     backLinkUrl = backLink,
     additionalHeadBlock = Some(additionalHead),
     phaseBanner = Some(PhaseBanner(tag = Some(Tag(content = Text("BETA"))), content = HtmlContent(phaseBannerContent))),
-    isWelshTranslationAvailable = appConfig.welshLanguageSupportEnabled,
+    isWelshTranslationAvailable = welshToggle,
     accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
 )(mainContent)

@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT._
 import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
-import connectors.{FinancialsApiConnector, SessionCacheConnector}
+import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.FileRole.DutyDefermentStatement
 import play.api.i18n.I18nSupport
@@ -27,14 +27,14 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DocumentService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
-import views.html.{duty_deferment_account, duty_deferment_statements_not_available}
+import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AccountController @Inject()(
                                    val authenticate: IdentifierAction,
-                                   apiConnector: FinancialsApiConnector,
+                                   apiConnector: CustomsFinancialsApiConnector,
                                    resolveSessionId: SessionIdAction,
                                    mcc: MessagesControllerComponents,
                                    sessionCacheConnector: SessionCacheConnector,

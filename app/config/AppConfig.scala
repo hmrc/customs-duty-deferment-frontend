@@ -24,7 +24,6 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
 
   lazy val appName: String = config.get[String]("appName")
-  lazy val welshLanguageSupportEnabled: Boolean = config.get[Boolean]("features.welsh-language-support")
   lazy val registerCdsUrl: String = config.get[String]("external-urls.cdsRegisterUrl")
   lazy val subscribeCdsUrl: String = config.get[String]("external-urls.cdsSubscribeUrl")
   lazy val loginUrl: String = config.get[String]("external-urls.login")
@@ -32,18 +31,20 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val financialsHomepage: String = config.get[String]("external-urls.customsFinancialsHomepage")
   lazy val xClientIdHeader: String = config.get[String]("microservice.services.sdes.x-client-id")
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
+  lazy val countriesFilename: String = config.get[String]("countriesFilename")
+  lazy val dutyDefermentContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-contact-details-endpoint")
+  lazy val dutyDefermentUpdateContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
+  lazy val getAccountDetailsUrl: String = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
+  lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
+  val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
+  val mongoSessionContactDetailsTtl: Int = config.get[Int]("mongodb.contactDetailsTtl")
+  val mongoAccountLinkTtl: Int = config.get[Int]("mongodb.accountLinkTtl")
 
   lazy val timeout: Int = config.get[Int]("timeout.timeout")
   lazy val countdown: Int = config.get[Int]("timeout.countdown")
 
   lazy val contactDetailsUri: String =
     config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
-
-  lazy val contactDetailsCryptoBaseConfigKey: String =
-    config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.baseConfigKey")
-
-  lazy val contactDetailsCryptoEncryptionKey: String =
-    config.get[String]("microservice.services.customs-financials-account-contact-frontend.crypto.encryptionKey")
 
   lazy val feedbackService: String = config.get[String]("microservice.services.feedback.url") +
     config.get[String]("microservice.services.feedback.source")

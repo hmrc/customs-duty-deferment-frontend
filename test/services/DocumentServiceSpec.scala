@@ -35,7 +35,7 @@ class DocumentServiceSpec extends SpecBase {
       when(mockSDESConnector.getDutyDefermentStatements(any,any)(any))
         .thenReturn(Future.successful(Seq(currentFile, requestedFile)))
 
-      when(mockAuditingService.audit(any)(any, any))
+      when(mockAuditingService.audit(any)(any))
         .thenReturn(Future.successful(AuditResult.Success))
 
       running(app) {

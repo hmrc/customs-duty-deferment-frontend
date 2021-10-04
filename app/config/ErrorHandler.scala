@@ -22,23 +22,51 @@ import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
+import views.html.contact_details.edit_update_error
 
 @Singleton
-class ErrorHandler @Inject()(errorTemplate: ErrorTemplate, val messagesApi: MessagesApi) extends FrontendErrorHandler {
+class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
+                             val messagesApi: MessagesApi,
+                             editUpdateError: edit_update_error)(implicit appConfig: AppConfig) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
     errorTemplate(pageTitle, heading, message)
 
   def unauthorized()(implicit request: Request[_]): Html = {
-    errorTemplate(Messages("cf.error.unauthorized.title"), Messages("cf.error.unauthorized.heading"),
-      Messages("cf.error.unauthorized.message"))
+    errorTemplate(
+      Messages("cf.error.unauthorized.title"),
+      Messages("cf.error.unauthorized.heading"),
+      Messages("cf.error.unauthorized.message")
+    )
+  }
+
+  def standardErrorTemplate()(implicit rh: Request[_]): Html = {
+    errorTemplate(
+      Messages("accountDetails.edit.error.title"),
+      Messages("accountDetails.edit.error.heading"),
+      Messages("accountDetails.edit.error.message")
+    )
   }
 
   def sddsErrorTemplate()(implicit request: Request[_]): Html =
-    errorTemplate(Messages("cf.error.standard-error-sdds.title"), Messages("cf.error.standard-error-sdds.heading"),
-      Messages("cf.error.standard-error-sdds.message"))
+    errorTemplate(
+      Messages("cf.error.standard-error-sdds.title"),
+      Messages("cf.error.standard-error-sdds.heading"),
+      Messages("cf.error.standard-error-sdds.message")
+    )
 
   def contactDetailsErrorTemplate()(implicit request: Request[_]): Html =
-    errorTemplate(Messages("cf.error.standard-error-contact-details.title"), Messages("cf.error.standard-error-contact-details.heading"),
-      Messages("cf.error.standard-error-contact-details.message"))
+    errorTemplate(
+      Messages("cf.error.standard-error-contact-details.title"),
+      Messages("cf.error.standard-error-contact-details.heading"),
+      Messages("cf.error.standard-error-contact-details.message")
+    )
+
+  def errorUpdatingContactDetails()(implicit rh: Request[_]): Html = {
+    editUpdateError(
+      title = Messages("accountDetails.edit.error.title"),
+      heading = Messages("accountDetails.edit.error.heading"),
+      message = Messages("accountDetails.edit.error.message")
+    )
+  }
 }
