@@ -14,10 +14,12 @@
  * limitations under the License.
  *@
 
-@this()
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Button
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukButton
 
-@(messageKey: String = "", inputClass: Option[String] = None)(implicit messages: Messages)
+@this(govukButton: GovukButton)
 
-<div class="section">
-    <input type="submit" class="govuk-button @inputClass" value="@messages(messageKey)" />
-</div>
+@(msg: String)(implicit messages: Messages)
+
+@govukButton(Button(content = Text(messages(msg))))
