@@ -31,7 +31,6 @@
         hmrcLayout: HmrcLayout,
         govukBackLink: GovukBackLink,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
         hmrcTimeoutDialog: HmrcTimeoutDialog
 
 )
@@ -60,7 +59,6 @@
 
     @additionalHead = {
         @countrypickerscript()
-        @hmrcTrackingConsentSnippet()
         @hmrcTimeoutDialog(TimeoutDialog(
         title = Some(messages("timeout.title")),
         timeout = Some(appConfig.timeout),
