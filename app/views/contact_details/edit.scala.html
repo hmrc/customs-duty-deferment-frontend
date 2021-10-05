@@ -42,7 +42,7 @@
             "govuk-fieldset__legend govuk-fieldset__legend--l"
         )
 
-        @helper.form(routes.EditContactDetailsController.submit, 'id -> "form") {
+        @helper.form(routes.EditContactDetailsController.submit, 'id -> "form", 'novalidate -> "novalidate") {
             @CSRF.formField
 
             @inputText(
