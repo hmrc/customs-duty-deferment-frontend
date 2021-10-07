@@ -82,6 +82,7 @@
     }
 
 @hmrcLayout(
+    userResearchBannerUrl = Some(appConfig.helpMakeGovUkBetterUrl),
     pageTitle = fullPageTitle,
     serviceUrl = Some(appConfig.financialsHomepage),
     signOutUrl = Some(routes.LogoutController.logout().url),
