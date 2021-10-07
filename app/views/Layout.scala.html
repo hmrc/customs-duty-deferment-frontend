@@ -59,6 +59,7 @@
 
     @additionalHead = {
         @countrypickerscript()
+        <script @{CSPNonce.attr} src='@controllers.routes.Assets.versioned("javascripts/recruitmentBanner.js")'></script>
         @hmrcTimeoutDialog(TimeoutDialog(
         title = Some(messages("timeout.title")),
         timeout = Some(appConfig.timeout),

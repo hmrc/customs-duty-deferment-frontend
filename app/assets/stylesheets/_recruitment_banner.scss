@@ -1,7 +1,8 @@
 .recruitment_banner {
+
   background-color: $endeavour-blue;
   padding: 20px;
-  display: none;
+  display: block;
 
   &__heading {
     display: flex;
@@ -9,17 +10,17 @@
 
   &__link {
     &:visited, &:hover, &:link {
-      color: govuk-colour("white");
+      color: govuk-colour("white") !important;
     }
     &:focus {
-      color: govuk-colour("black");
+      color: govuk-colour("black") !important;
     }
   }
 
   &__title {
-    color: govuk-colour("white");
-    margin-bottom: 11px;
-    flex: 1;
+    color: govuk-colour("white") !important;
+    margin-bottom: 11px !important;
+    flex: 1  !important;
   }
 
   &__link {
