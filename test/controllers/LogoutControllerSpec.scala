@@ -29,7 +29,7 @@ class LogoutControllerSpec extends SpecBase {
   "logout" should {
     "redirect to the logout route with a continueUrl to feedback survey" in new Setup {
       running(app) {
-        val request = FakeRequest(GET, routes.LogoutController.logout().url)
+        val request = FakeRequest(GET, routes.LogoutController.logout.url)
           .withHeaders("X-Session-Id" -> "someSessionId")
 
         val result = route(app, request).value
@@ -42,7 +42,7 @@ class LogoutControllerSpec extends SpecBase {
   "logoutNoSurvey" should {
     "redirect to the logout route without a continueUrl to the feedback survey" in new Setup {
       running(app) {
-        val request = FakeRequest(GET, routes.LogoutController.logoutNoSurvey().url)
+        val request = FakeRequest(GET, routes.LogoutController.logoutNoSurvey.url)
           .withHeaders("X-Session-Id" -> "someSessionId")
 
         val result = route(app, request).value

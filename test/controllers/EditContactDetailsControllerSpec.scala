@@ -80,7 +80,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
       running(newApp) {
         val result = route(newApp, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
     }
 
@@ -89,7 +89,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.CheckAnswersContactDetailsController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.CheckAnswersContactDetailsController.onPageLoad.url
       }
     }
   }
@@ -99,10 +99,10 @@ class EditContactDetailsControllerSpec extends SpecBase {
       emptyUserAnswers.set(EditContactDetailsPage, contactDetailsUserAnswers).toOption.value
 
     val onPageLoadRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.EditContactDetailsController.onPageLoad().url)
+      fakeRequestWithCsrf(GET, routes.EditContactDetailsController.onPageLoad.url)
 
     val validSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit().url)
+      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit.url)
         .withFormUrlEncodedBody(
           ("dan", validDan),
           ("name", "New Name"),
@@ -115,7 +115,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
         )
 
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit().url)
+      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit.url)
         .withFormUrlEncodedBody(
           ("dan", validDan)
         )

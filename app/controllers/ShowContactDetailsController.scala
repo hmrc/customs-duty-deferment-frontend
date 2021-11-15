@@ -46,7 +46,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   def show(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
     accountLinkCacheService.get(request.request.user.internalId).flatMap {
-      case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad()))
+      case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
       case Some(details) =>
         (for {
           contactDetails <- contactDetailsCacheService.getContactDetails(
@@ -67,7 +67,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   def startSession(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
     accountLinkCacheService.cacheAccountLink(linkId, request.sessionId.value, request.request.user.internalId).map {
-      case Left(_) => Redirect(routes.SessionExpiredController.onPageLoad())
+      case Left(_) => Redirect(routes.SessionExpiredController.onPageLoad)
       case Right(_) => Redirect(routes.ShowContactDetailsController.show())
     }
   }

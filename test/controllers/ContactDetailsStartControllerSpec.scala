@@ -69,7 +69,7 @@ class ContactDetailsStartControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, startRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.EditContactDetailsController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.EditContactDetailsController.onPageLoad.url
       }
     }
   }
