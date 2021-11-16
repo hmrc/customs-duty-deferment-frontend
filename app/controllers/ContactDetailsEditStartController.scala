@@ -69,7 +69,7 @@ class ContactDetailsEditStartController @Inject()(
           }
         )
         _ <- liftF(userAnswersCache.store(initialUserAnswers.id, initialUserAnswers))
-      } yield Redirect(routes.EditContactDetailsController.onPageLoad())
+      } yield Redirect(routes.EditContactDetailsController.onPageLoad)
 
       futureResponse
         .merge

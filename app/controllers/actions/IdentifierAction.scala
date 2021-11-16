@@ -49,7 +49,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
               cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory, internalId)
               result <- block(AuthenticatedRequest(request, cdsLoggedInUser))
             } yield result
-          case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad()))
+          case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
         }
       }
     }
@@ -57,9 +57,9 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
     case _: NoActiveSession =>
       Redirect(appConfig.loginUrl, Map("continue_url" -> Seq(appConfig.loginContinueUrl)))
     case _: InsufficientEnrolments =>
-      Redirect(controllers.routes.NotSubscribedController.onPageLoad())
+      Redirect(controllers.routes.NotSubscribedController.onPageLoad)
     case _ =>
-      Redirect(controllers.routes.NotSubscribedController.onPageLoad())
+      Redirect(controllers.routes.NotSubscribedController.onPageLoad)
   }
 }
 

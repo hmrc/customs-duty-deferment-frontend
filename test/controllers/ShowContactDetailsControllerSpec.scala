@@ -58,7 +58,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result: Future[Result] = route(app, showRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
     }
 
@@ -89,7 +89,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, startSessionRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad().url
+        redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
     }
 

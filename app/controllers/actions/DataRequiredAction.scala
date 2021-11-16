@@ -34,7 +34,7 @@ class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionC
     request.maybeUserAnswers match {
       case None =>
         log.error("Unable to get user answers")
-        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad())))
+        Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad)))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.internalId, request.eoriNumber, request.sessionId, data)))
     }

@@ -72,7 +72,7 @@ class CheckAnswersContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, submitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.success().url
+        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.success.url
       }
     }
 
@@ -83,7 +83,7 @@ class CheckAnswersContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, submitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem().url
+        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
     }
 
@@ -104,10 +104,10 @@ class CheckAnswersContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
     val onPageLoadRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.CheckAnswersContactDetailsController.onPageLoad().url)
+      fakeRequestWithCsrf(GET, routes.CheckAnswersContactDetailsController.onPageLoad.url)
 
     val submitRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(POST, routes.CheckAnswersContactDetailsController.submit().url)
+      fakeRequestWithCsrf(POST, routes.CheckAnswersContactDetailsController.submit.url)
 
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]

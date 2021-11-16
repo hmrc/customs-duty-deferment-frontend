@@ -80,10 +80,10 @@ class CheckAnswersContactDetailsController @Inject()(checkAnswersView: check_ans
         newContactDetails = contactDetailsUserAnswers
       )
       _ <- contactDetailsCacheService.updateContactDetails(contactDetailsUserAnswers)
-    } yield Redirect(routes.ConfirmContactDetailsController.success())).recover {
+    } yield Redirect(routes.ConfirmContactDetailsController.success)).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
-        Redirect(routes.ConfirmContactDetailsController.problem())
+        Redirect(routes.ConfirmContactDetailsController.problem)
     }
   }
 

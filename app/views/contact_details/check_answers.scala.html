@@ -25,7 +25,7 @@
 
 @layout(
     pageTitle = Some(messages("accountDetails.title")),
-    backLink = Some(routes.EditContactDetailsController.onPageLoad().url),
+    backLink = Some(routes.EditContactDetailsController.onPageLoad.url),
     helpAndSupport = false,
     deskpro = false
 
@@ -46,7 +46,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    routes.EditContactDetailsController.onPageLoad.url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.name")</span>
                 </a>
@@ -71,7 +71,7 @@
                 @amendContactDetails.countryName
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    routes.EditContactDetailsController.onPageLoad.url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.address")</span>
                 </a>
@@ -85,7 +85,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    routes.EditContactDetailsController.onPageLoad.url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.telephone")</span>
                 </a>
@@ -99,7 +99,7 @@
                 }
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    routes.EditContactDetailsController.onPageLoad.url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.fax")</span>
                 </a>
@@ -111,7 +111,7 @@
                 @amendContactDetails.email
             } {
                 <a href="@{
-                    routes.EditContactDetailsController.onPageLoad().url
+                    routes.EditContactDetailsController.onPageLoad.url
                 }">
                     @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.email")</span>
                 </a>

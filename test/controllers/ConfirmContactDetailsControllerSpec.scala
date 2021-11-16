@@ -87,10 +87,10 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       emptyUserAnswers.set(EditContactDetailsPage, contactDetailsUserAnswers).toOption.value
 
     val successRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.success().url)
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.success.url)
 
     val problemRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem().url)
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem.url)
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 

@@ -79,10 +79,10 @@ class EditContactDetailsController @Inject()(view: edit,
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditContactDetailsPage, updatedContactDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-            } yield Redirect(routes.CheckAnswersContactDetailsController.onPageLoad())
+            } yield Redirect(routes.CheckAnswersContactDetailsController.onPageLoad)
           })
       case None =>
-        Future(Redirect(routes.SessionExpiredController.onPageLoad()))
+        Future(Redirect(routes.SessionExpiredController.onPageLoad))
     }
   }
 
