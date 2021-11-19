@@ -76,8 +76,7 @@
             @inputText(
                 form("addressLine4"),
                 messages("accountDetails.edit.address.line4"),
-                Some("govuk-!-width-two-thirds"),
-                Some("address-level3")
+                Some("govuk-!-width-two-thirds")
             )
 
             @inputText(
@@ -87,7 +86,12 @@
                 Some("postal-code")
             )
 
-            @country_field(form, "countryCode", messages("country-picker.country.label"), countries, Some("govuk-!-width-two-thirds"))
+            @country_field(
+                form,
+                "countryCode",
+                messages("country-picker.country.label"),
+                countries,
+                Some("govuk-!-width-two-thirds"))
 
             @inputText(
                 form("telephone"),
