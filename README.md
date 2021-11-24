@@ -6,8 +6,6 @@
 | GET  /:linkId/account                                                  | Retrieves duty deferment statement                                                                |                
 | GET  /:linkId/contact-details                                          | Retrieves user contact details                                                                    |                
 | GET  /contact-details/edit                                             | Edit user contact details                                                                         |                
-| POST /contact-details/check-answers                                    | Check answers for edit contact details                                                              |                
-| GET /contact-details/check-answers                                     | Check answers for edit contact details                                                              |                
 
 
 ## Running the application locally
