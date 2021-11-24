@@ -26,6 +26,7 @@ The application has the following runtime dependencies:
 * `CONTACT_FRONTEND`
 * `CUSTOMS_DATA_STORE`
 * `CUSTOMS_FINANCIALS_SESSION_CACHE`
+* `CUSTOMS-FINANCIALS_ACCOUNT_CONTACT_FRONTEND`
 
 Once these services are running, you should be able to do `sbt "run 9397"` to start in `DEV` mode or
 `sbt "start -Dhttp.port=9397"` to run in `PROD` mode.
