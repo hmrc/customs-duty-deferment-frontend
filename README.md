@@ -1,5 +1,6 @@
 
 # customs-duty-deferment-frontend
+A frontend component for the CDS Financials project which aims to allow the user to view duty deferment statements.
 
 | Path                                                                   | Description                                                                                       |
 | ---------------------------------------------------------------------  | ------------------------------------------------------------------------------------------------- |
