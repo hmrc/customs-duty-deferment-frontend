@@ -100,7 +100,7 @@ cf.common.missing-documents-guidance.heading=Can’t find the {0} you’re looki
 cf.common.missing-documents-guidance.text1={0} for import declarations made in CHIEF are not available in this service.
 cf.common.missing-documents-guidance.text2={0} are only generated for periods in which you imported goods.
 cf.duty-deferment-account.historic.description=We only show statements for the last 6 months. If required, you can
-cf.duty-deferment-account.historic.request=request older statements.
+cf.duty-deferment-account.historic.request=request older statements
 # ----------------------------------------------------------
 
 
