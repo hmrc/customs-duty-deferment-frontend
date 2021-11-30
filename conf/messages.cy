@@ -240,7 +240,7 @@ error.required=Nodwch werth
 error.summary.title=Mae problem wedi codi
 
 country-picker.country.label=Gwlad
-country-picker.hint.screen-reader=Dechreuwch deipio enw’r wlad ac yna defnyddiwch y botymau i fyny ac i lawr i adolygu a chadarnhau er mwyn dewis gwlad
+country-picker.hint.screen-reader=Dechreuwch deipio enw’r wlad ac yna defnyddiwch y botymau i fyny ac i lawr i adolygu a chadarnhau er mwyn dewis gwlad.
 country-picker.no-results=Dim canlyniadau wedi’u darganfod
 country-picker.emptyValueText=Dewiswch wlad
 
