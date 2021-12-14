@@ -264,7 +264,7 @@ accountDetails.details.error.message=Mae’n ddrwg gennym, ni allwn ddangos y rh
 accountDetails.details.error.description1=Dyma’r manylion y byddwn yn eu defnyddio os bydd angen i ni gysylltu â chi ynghylch y cyfrif gohirio tollau hwn. Anfonir hysbysiadau datganiad at y
 accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
 accountDetails.details.error.advice1=Gallwch
-accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau uniongyrchol.
+accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau uniongyrchol
 
 dd.setup.unavailable.heading=Mae’n ddrwg gennym, ni allwch sefydlu debyd uniongyrchol newydd ar hyn o bryd.
 dd.setup.unavailable.message=Os ydych wedi dilysu’ch cyfeiriad e-bost yn ddiweddar, gallai gymryd hyd at 2 awr iddo gael ei nodi gan y gwasanaeth hwn.
