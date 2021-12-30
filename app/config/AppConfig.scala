@@ -43,9 +43,6 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val timeout: Int = config.get[Int]("timeout.timeout")
   lazy val countdown: Int = config.get[Int]("timeout.countdown")
 
-  lazy val contactDetailsUri: String =
-    config.get[String]("microservice.services.customs-financials-account-contact-frontend.url") + "/duty-deferment/"
-
   lazy val feedbackService: String = config.get[String]("microservice.services.feedback.url") +
     config.get[String]("microservice.services.feedback.source")
 
