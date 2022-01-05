@@ -20,9 +20,12 @@
     <h2 id="missing-documents-guidance-heading" class="govuk-heading-m govuk-!-margin-top-6">
         @messages("cf.common.missing-documents-guidance.heading", messages(s"cf.common.missing-documents-guidance.$documentType")
         )</h2>
+    <h3 class="govuk-heading-s" >@messages("cf.common.missing-documents-guidance.chiefStatements.heading", messages(s"cf.common.missing-documents-guidance.${documentType}s"))</h3>
 
     <p id="missing-documents-guidance-text1" class="govuk-body" >@messages("cf.common.missing-documents-guidance.text1",
         messages(s"cf.common.missing-documents-guidance.${documentType}s"))</p>
+
+    <h3 class="govuk-heading-s">@messages("cf.common.missing-documents-guidance.olderStatements.heading", messages(s"cf.common.missing-documents-guidance.${documentType}s"))</h3>
 
     <p id="missing-documents-guidance-text2" class="govuk-body" >@messages("cf.common.missing-documents-guidance.text2",
         messages(s"cf.common.missing-documents-guidance.${documentType}s"))</p>
