@@ -62,7 +62,7 @@
                 @if(statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
                     @h2(
                         id = Some(s"historic-eori-${historyIndex + 1}"),
-                        msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori) + "YY"
+                        msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
                     )
                 }
                 @accordian(statementsForEori.groups, historyIndex + 1)

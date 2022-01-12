@@ -19,5 +19,5 @@
 @(msg1: String, msg2: String, id: Option[String] = None, classes: Option[String] = None, anchor: Html)(implicit messages: Messages)
 
 <p @{id.fold("")(id => s"id=$id")}  class="@{classes.fold("govuk-body govuk-!-margin-bottom-7")(classes => s"$classes")}">
-@msg1 @anchor @msg2
+@msg1 @anchor@msg2
 </p>
