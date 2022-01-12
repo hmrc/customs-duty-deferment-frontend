@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@this()
+@this(
+  span: components.span
+)
 
-@(msg: String, id: Option[String] = None, classes: String)
+@(msg: String, id: Option[String] = None, classes: String = "govuk-link", url: String)(implicit messages: Messages)
 
-<span @{id.fold("")(id => s"id=$id")} class="@classes">@msg</span>
-
-
+<a @{id.fold("")(id => s"id=$id")} href="@url" class="@classes" >@messages(msg)</a>

@@ -20,13 +20,16 @@
 @import models.FileFormat._
 @import views.html.components.duty_deferment_file
 
-@this()
+@this(
+    h2: components.h2,
+    p: components.p
+)
 
 @(group: DutyDefermentStatementPeriodsByMonth)(implicit messages: Messages)
 
+    @h2(id=Some(s"statements-month-heading-0-${group.year}-${group.month}"), msg = Formatters.dateAsMonthAndYear(group.monthAndYear))
 
-    <h2 id="statements-month-heading-0-@{group.year}-@{group.month}" class="govuk-heading-m">@{Formatters.dateAsMonthAndYear(group.monthAndYear)}</h2>
-    <dl class="govuk-summary-list">
+<dl class="govuk-summary-list">
     @for((period, index) <- group.periods.zipWithIndex) {
         <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
             <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell" class="govuk-summary-list__value">
@@ -50,4 +53,4 @@
         </div>
     }
     </dl>
-    <p class="govuk-body" id="direct-debit-info">@messages("cf.account.detail.direct-debit.duty-vat-and-excise")</p>
+    @p(id = Some("direct-debit-info"), content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
