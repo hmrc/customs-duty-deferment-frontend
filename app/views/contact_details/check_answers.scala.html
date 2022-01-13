@@ -19,7 +19,12 @@
 @import views.html.helper._
 @import views.html.components.h1_l
 
-@this(layout: Layout, button: components.button, h2: components.h2)
+@this(
+        layout: Layout,
+        button: components.button,
+        h2: components.h2,
+        link_span: components.link_span
+)
 
 @(amendContactDetails: ContactDetailsUserAnswers)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -45,11 +50,12 @@
                     @name
                 }
             } {
-                <a href="@{
-                    routes.EditContactDetailsController.onPageLoad.url
-                }">
-                    @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.name")</span>
-                </a>
+                @link_span(
+                    msg = messages("accountDetails.change"),
+                    url = routes.EditContactDetailsController.onPageLoad.url,
+                    spanClass= Some("visually-hidden"),
+                    spanMsg= Some(messages("accountDetails.details.name"))
+                )
             }
 
             @list_row {
@@ -70,11 +76,12 @@
                 }
                 @amendContactDetails.countryName
             } {
-                <a href="@{
-                    routes.EditContactDetailsController.onPageLoad.url
-                }">
-                    @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.address")</span>
-                </a>
+                @link_span(
+                    msg = messages("accountDetails.change"),
+                    url = routes.EditContactDetailsController.onPageLoad.url,
+                    spanClass= Some("visually-hidden"),
+                    spanMsg= Some(messages("accountDetails.details.address"))
+                )
             }
 
             @list_row {
@@ -84,11 +91,12 @@
                     @telephone
                 }
             } {
-                <a href="@{
-                    routes.EditContactDetailsController.onPageLoad.url
-                }">
-                    @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.telephone")</span>
-                </a>
+                @link_span(
+                    msg = messages("accountDetails.change"),
+                    url = routes.EditContactDetailsController.onPageLoad.url,
+                    spanClass= Some("visually-hidden"),
+                    spanMsg= Some(messages("accountDetails.details.telephone"))
+                )
             }
 
             @list_row {
@@ -98,11 +106,12 @@
                     @fax
                 }
             } {
-                <a href="@{
-                    routes.EditContactDetailsController.onPageLoad.url
-                }">
-                    @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.fax")</span>
-                </a>
+                @link_span(
+                    msg = messages("accountDetails.change"),
+                    url = routes.EditContactDetailsController.onPageLoad.url,
+                    spanClass= Some("visually-hidden"),
+                    spanMsg= Some(messages("accountDetails.details.fax"))
+                )
             }
 
             @list_row {
@@ -110,11 +119,12 @@
             } {
                 @amendContactDetails.email
             } {
-                <a href="@{
-                    routes.EditContactDetailsController.onPageLoad.url
-                }">
-                    @messages("accountDetails.change") <span class="visually-hidden">@messages("accountDetails.details.email")</span>
-                </a>
+                @link_span(
+                    msg = messages("accountDetails.change"),
+                    url = routes.EditContactDetailsController.onPageLoad.url,
+                    spanClass= Some("visually-hidden"),
+                    spanMsg= Some(messages("accountDetails.details.email"))
+                )
             }
         }
         

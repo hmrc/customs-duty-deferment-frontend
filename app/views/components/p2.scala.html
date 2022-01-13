@@ -16,8 +16,8 @@
 
 @this()
 
-@(msg: String, id: Option[String] = None, classes: String)
+@(msg1: String, msg2: String, id: Option[String] = None, classes: Option[String] = None, anchor: Html)(implicit messages: Messages)
 
-<span @{id.fold("")(id => s"id=$id")} class="@classes">@msg</span>
-
-
+<p @{id.fold("")(id => s"id=$id")}  class="@{classes.fold("govuk-body govuk-!-margin-bottom-7")(classes => s"$classes")}">
+@msg1 @anchor@msg2
+</p>
