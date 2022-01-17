@@ -27,6 +27,7 @@
         h1: components.h1,
         h2: components.h2,
         p2: components.p2,
+        p: components.p,
         span: components.span,
         link: components.link,
         inset: components.inset
@@ -74,14 +75,13 @@
 
         @missing_documents_guidance("statement")
 
-        <div class="govuk-body govuk-!-margin-bottom-7">
-            <p id="historic-statement-request">
-                @messages("cf.duty-deferment-account.historic.description")
-            </p>
-            <p id="historic-statement-request">
-                <a href="@{appConfig.historicRequestUrl(model.linkId)}" class="govuk-link">
-                @messages("cf.duty-deferment-account.historic.request")</a>
-            </p>
-        </div>
+        @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
+
+        @link(
+            id = Some("historic-statement-request"),
+            classes = "govuk-link govuk-body govuk-!-margin-bottom-7",
+            msg = "cf.duty-deferment-account.historic.request",
+            url = appConfig.historicRequestUrl(model.linkId)
+        )
 
 }
