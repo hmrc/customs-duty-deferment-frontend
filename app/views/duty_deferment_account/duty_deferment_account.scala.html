@@ -74,10 +74,14 @@
 
         @missing_documents_guidance("statement")
 
-        @p2(id = Some("historic-statement-request"),
-            msg1 = messages("cf.duty-deferment-account.historic.description"),
-            msg2 = messages("cf.duty-deferment-account.historic.link.fullStop"),
-            anchor = link(msg = "cf.duty-deferment-account.historic.request", url = appConfig.historicRequestUrl(model.linkId))
-    )
+        <div class="govuk-body govuk-!-margin-bottom-7">
+            <p id="historic-statement-request">
+                @messages("cf.duty-deferment-account.historic.description")
+            </p>
+            <p id="historic-statement-request">
+                <a href="@{appConfig.historicRequestUrl(model.linkId)}" class="govuk-link">
+                @messages("cf.duty-deferment-account.historic.request")</a>
+            </p>
+        </div>
 
 }
