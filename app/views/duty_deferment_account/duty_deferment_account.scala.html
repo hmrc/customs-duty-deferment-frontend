@@ -26,8 +26,8 @@
         requestedStatements: requested_statements,
         h1: components.h1,
         h2: components.h2,
-        p2: components.p2,
         p: components.p,
+        p3: components.p3,
         span: components.span,
         link: components.link,
         inset: components.inset
@@ -77,11 +77,7 @@
 
         @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
 
-        @link(
-            id = Some("historic-statement-request-link"),
-            classes = "govuk-link govuk-body govuk-!-margin-bottom-7",
-            msg = "cf.duty-deferment-account.historic.request",
-            url = appConfig.historicRequestUrl(model.linkId)
-        )
+        @p3(Some("historic-statement-request-link"),
+            anchor = link(msg = "cf.duty-deferment-account.historic.request", url = appConfig.historicRequestUrl(model.linkId)))
 
 }
