@@ -23,10 +23,10 @@
 
 @(accountDetails: ContactDetailsViewModel, status: CDSAccountStatusId, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@changeActionItem() = @{
+@changeActionItem(contactDetailsChange: Boolean) = @{
     if(status != AccountCancelled) {
         Seq(ActionItem(
-            href = routes.ContactDetailsEditStartController.start().url,
+            href = routes.ContactDetailsEditStartController.start(contactDetailsChange).url,
             content = Text(messages("accountDetails.change")),
             visuallyHiddenText = Some(messages("accountDetails.details.name"))
         ))
@@ -36,12 +36,13 @@
 
 }
 
+
+
 @layout(pageTitle = Some(messages("accountDetails.title")), backLink = Some(appConfig.financialsHomepage),
     helpAndSupport = false,
     deskpro = false) {
 
     @h1_xl(messages("accountDetails.heading", accountDetails.dan), h1Class = Some("govuk-!-margin-bottom-9"))
-    @h2(messages("accountDetails.details.heading"))
     @p(Html(messages("accountDetails.details.guidance")))
 
     @govukSummaryList(SummaryList(
@@ -54,7 +55,7 @@
                     content = Text(accountDetails.name.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem()
+                    items = changeActionItem(true)
                 ))
             ),
             SummaryListRow(
@@ -78,7 +79,7 @@
                                 """)
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem()
+                    items = changeActionItem(false)
                 ))
             ),
             SummaryListRow(
@@ -89,18 +90,7 @@
                     content = Text(accountDetails.telephone.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem()
-                ))
-            ),
-            SummaryListRow(
-                key = Key(
-                    content = Text(messages("accountDetails.details.fax"))
-                ),
-                value = Value(
-                    content = Text(accountDetails.fax.getOrElse(""))
-                ),
-                actions = Some(Actions(
-                    items = changeActionItem()
+                    items = changeActionItem(true)
                 ))
             ),
             SummaryListRow(
@@ -111,7 +101,7 @@
                     content = Text(accountDetails.email.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem()
+                    items = changeActionItem(true)
                 ))
             )
         )

@@ -49,7 +49,7 @@ class ContactDetailsEditStartController @Inject()(
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
-  def start: Action[AnyContent] = (identifier andThen resolveSessionId) async {
+  def start(contactDetailsChange: Boolean): Action[AnyContent] = (identifier andThen resolveSessionId) async {
     implicit request =>
       val futureResponse: EitherT[Future, Result, Result] = for {
         dutyDefermentDetails <- fromOptionF(
@@ -69,7 +69,8 @@ class ContactDetailsEditStartController @Inject()(
           }
         )
         _ <- liftF(userAnswersCache.store(initialUserAnswers.id, initialUserAnswers))
-      } yield Redirect(routes.EditContactDetailsController.onPageLoad)
+      } yield if(contactDetailsChange)Redirect(routes.EditContactDetailsController.onPageLoad)
+      else Redirect(routes.EditAddressDetailsController.onPageLoad)
 
       futureResponse
         .merge

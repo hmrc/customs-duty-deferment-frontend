@@ -22,7 +22,8 @@
         layout: Layout,
         button: components.button,
         inputText: components.input_text,
-        errorSummary: components.errorSummary
+        errorSummary: components.errorSummary,
+        p: components.p
 
 )
 @(dan: String, form: Form[_], countries: List[Country])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -38,19 +39,15 @@
         @errorSummary(form)
 
         @heading(
-            messages("accountDetails.edit.title", form("dan").value.getOrElse("")),
-            "govuk-fieldset__legend govuk-fieldset__legend--l"
+            messages("accountDetails.editAddress.title", form("dan").value.getOrElse("")),
+            "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6"
         )
 
-        @helper.form(routes.EditContactDetailsController.submit, 'id -> "form", 'novalidate -> "novalidate") {
-            @CSRF.formField
+        @p(content = Html(messages("accountDetails.editAddress.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 
-            @inputText(
-                form("name"),
-                messages("accountDetails.edit.name"),
-                Some("govuk-!-width-two-thirds"),
-                Some("name")
-            )
+
+        @helper.form(routes.EditAddressDetailsController.submit, 'id -> "form", 'novalidate -> "novalidate") {
+            @CSRF.formField
 
             @inputText(
                 form("addressLine1"),
@@ -92,36 +89,6 @@
                 messages("country-picker.country.label"),
                 countries,
                 Some("govuk-!-width-two-thirds"))
-
-            @inputText(
-                form("telephone"),
-                messages("accountDetails.edit.telephone"),
-                Some("govuk-input--width-20"),
-                Some("tel"),
-                "tel"
-            )
-
-            @inputText(
-                form("fax"),
-                messages("accountDetails.edit.fax"),
-                Some("govuk-input--width-20"),
-                Some("fax tel"),
-                "text",
-                Some("numeric"),
-                Some("[0-9]*")
-            )
-
-            @inputText(
-                form("email"),
-                messages("emailAddress.edit.emailAddress"),
-                Some("govuk-!-width-two-thirds"),
-                Some("email"),
-                "email",
-                None,
-                None,
-                Some("false"),
-                None
-            )
 
             @button(
                 messages("accountDetails.edit.save")

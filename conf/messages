@@ -135,7 +135,7 @@ accountDetails.heading = Details for duty deferment account {0}
 accountDetails.change=Change
 
 accountDetails.details.heading = Contact details
-accountDetails.details.guidance = These are the details we will use to contact you regarding this duty deferment account.
+accountDetails.details.guidance = We will only use these details to contact you if there is an issue with this deferment account.
 accountDetails.details.name = Name
 accountDetails.details.address = Address
 accountDetails.details.telephone = Telephone
@@ -148,21 +148,27 @@ accountDetails.details.error.description2 = email address used to register for C
 accountDetails.details.error.advice1 = You can
 accountDetails.details.error.advice2 = view your Direct Debit details
 
-accountDetails.edit.title=Change contact details for Duty Deferment account {0}
-accountDetails.edit.heading=Change contact details for Duty Deferment account {0}
+accountDetails.edit.title=Contact details for duty deferment account {0}
+accountDetails.edit.heading=Contact details for duty deferment account {0}
+accountDetails.edit.guidance=These contact details will only be used for this duty deferment account.
 accountDetails.edit.name=Full name
 accountDetails.edit.address.line1=Address line 1
 accountDetails.edit.address.line2=Address line 2 (optional)
-accountDetails.edit.address.line3=Town or city (optional)
-accountDetails.edit.address.line4=County (optional)
+accountDetails.edit.address.line3=Address line 3 (optional)
+accountDetails.edit.address.line4=Town/city
 accountDetails.edit.postcode=Postcode
-accountDetails.edit.telephone=Telephone number (optional)
+accountDetails.edit.telephone=Telephone number
+accountDetails.edit.telephone.hint=Only enter numbers, for example 01632 960 001.
 accountDetails.edit.fax=Fax number (optional)
 accountDetails.edit.save=Save changes
-accountDetails.edit.back=Cancel
+accountDetails.edit.back=Cancel changes
 accountDetails.edit.confirm.back=Return to duty deferment account details
 accountDetails.edit.success.title=Contact details successfully updated
 accountDetails.edit.success.message=Duty Deferment account
+accountDetails.editAddress.title=Address details for duty deferment account {0}
+accountDetails.editAddress.heading=Address details for duty deferment account {0}
+accountDetails.editAddress.guidance=These address details will only be used for this duty deferment account.
+
 
 accountDetails.edit.name.empty=Enter your full name
 accountDetails.edit.address.line1.empty=Enter building and street

@@ -24,7 +24,6 @@ import play.api.data.format.Formats._
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError, Forms}
 import services.CountriesProviderService
-
 import javax.inject.Inject
 
 

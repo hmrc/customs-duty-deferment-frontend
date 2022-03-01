@@ -29,11 +29,11 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import services.CountriesProviderService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.contact_details.edit_contact_details
+import views.html.contact_details.edit_address_details
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EditContactDetailsController @Inject()(view: edit_contact_details,
+class EditAddressDetailsController @Inject()(view: edit_address_details,
                                              identifier: IdentifierAction,
                                              dataRetrievalAction: DataRetrievalAction,
                                              dataRequiredAction: DataRequiredAction,

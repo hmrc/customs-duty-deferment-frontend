@@ -10,9 +10,11 @@ GET         /:linkId/direct-debit                      controllers.DirectDebitCo
 GET         /:linkId/contact-details                   controllers.ShowContactDetailsController.startSession(linkId: String)
 GET         /contact-details                           controllers.ShowContactDetailsController.show()
 
-GET         /contact-details/edit/start                controllers.ContactDetailsEditStartController.start()
+GET         /contact-details/edit/start                controllers.ContactDetailsEditStartController.start(contactDetailsChange: Boolean)
 GET         /contact-details/edit                      controllers.EditContactDetailsController.onPageLoad
 POST        /contact-details/edit                      controllers.EditContactDetailsController.submit
+GET         /address-details/edit                      controllers.EditAddressDetailsController.onPageLoad
+POST        /address-details/edit                      controllers.EditAddressDetailsController.submit
 
 GET         /contact-details/check-answers             controllers.CheckAnswersContactDetailsController.onPageLoad
 POST        /contact-details/check-answers             controllers.CheckAnswersContactDetailsController.submit

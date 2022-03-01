@@ -146,13 +146,14 @@ accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau union
 
 accountDetails.edit.title=Newid manylion cyswllt ar gyfer cyfrif gohirio tollau {0}
 accountDetails.edit.heading=Newid manylion cyswllt ar gyfer cyfrif gohirio tollau {0}
+accountDetails.edit.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion cyswllt hyn.
 accountDetails.edit.name=Enw llawn
 accountDetails.edit.address.line1=Cyfeiriad – llinell 1
 accountDetails.edit.address.line2=Cyfeiriad – llinell 2 (dewisol)
 accountDetails.edit.address.line3=Tref neu ddinas (dewisol)
 accountDetails.edit.address.line4=Sir (dewisol)
 accountDetails.edit.postcode=Cod post
-accountDetails.edit.telephone=Rhif ffôn (dewisol)
+accountDetails.edit.telephone=Rhif ffôn
 accountDetails.edit.fax=Rhif ffacs (dewisol)
 accountDetails.edit.save=Cadw newidiadau
 accountDetails.edit.back=Canslo
