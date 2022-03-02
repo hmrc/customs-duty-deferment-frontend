@@ -20,16 +20,16 @@ import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
 
-case class AddressDetailsUserAnswers(dan: String,
-                                     addressLine1: String,
-                                     addressLine2: Option[String],
-                                     addressLine3: Option[String],
-                                     addressLine4: Option[String],
-                                     postCode: Option[String],
-                                     countryCode: String,
-                                     countryName: Option[String]) {
+case class EditAddressDetailsUserAnswers(dan: String,
+                                         addressLine1: String,
+                                         addressLine2: Option[String],
+                                         addressLine3: Option[String],
+                                         addressLine4: Option[String],
+                                         postCode: Option[String],
+                                         countryCode: String,
+                                         countryName: Option[String]) {
 
-  def withWhitespaceTrimmed: AddressDetailsUserAnswers = {
+  def withWhitespaceTrimmed: EditAddressDetailsUserAnswers = {
     this.copy(
       addressLine1 = addressLine1.trim,
       addressLine2 = addressLine2.map(_.trim),
@@ -43,14 +43,14 @@ case class AddressDetailsUserAnswers(dan: String,
 
 }
 
-object AddressDetailsUserAnswers {
+object EditAddressDetailsUserAnswers {
 
-  implicit val formats: OFormat[AddressDetailsUserAnswers] = Json.format[AddressDetailsUserAnswers]
+  implicit val formats: OFormat[EditAddressDetailsUserAnswers] = Json.format[EditAddressDetailsUserAnswers]
 
   def editAddressDetails(dan: String,
                          contactDetails: ContactDetails,
-                         getCountryNameF: String => Option[String]): AddressDetailsUserAnswers = {
-    AddressDetailsUserAnswers(
+                         getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
+    EditAddressDetailsUserAnswers(
       dan,
       contactDetails.addressLine1,
       contactDetails.addressLine2,

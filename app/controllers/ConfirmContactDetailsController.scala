@@ -43,9 +43,27 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
 
   private val commonActions = identify andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
-  def success: Action[AnyContent] = commonActions.async {
+  def successAddress(): Action[AnyContent] = commonActions.async {
     implicit request => {
       request.userAnswers.get(EditAddressDetailsPage) match {
+        case Some(userAnswers) =>
+          userAnswersCache.remove(request.identifier).map {
+            removeSuccessful =>
+              if (!removeSuccessful) {
+                logger.error("Failed to remove user answers from mongo")
+              }
+              Ok(successView(userAnswers.dan))
+          }
+        case None =>
+          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
+      }
+    }
+  }
+
+  def successContactDetails(): Action[AnyContent] = commonActions.async {
+    implicit request => {
+      request.userAnswers.get(EditContactDetailsPage) match {
         case Some(userAnswers) =>
           userAnswersCache.remove(request.identifier).map {
             removeSuccessful =>

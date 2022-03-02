@@ -18,7 +18,7 @@ package mappings
 
 import javax.inject.Inject
 import mappings.ConditionalMappingsExt.mandatoryIfNotExists
-import models.AddressDetailsUserAnswers
+import models.EditAddressDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats._
 import play.api.data.validation.{Constraint, Invalid, Valid}
@@ -30,7 +30,7 @@ class EditAddressDetailsFormProvider @Inject()(
                                                 countriesProviderService: CountriesProviderService
                                               ) extends Constraints {
 
-  def apply(): Form[AddressDetailsUserAnswers] = {
+  def apply(): Form[EditAddressDetailsUserAnswers] = {
     // A hidden form component tracks countryName and is updated using JS.
     // if JS is not enabled it defaults to countryNameNoJs, and this check is not performed - as they just select from a dropdown.
     Form(
@@ -43,7 +43,7 @@ class EditAddressDetailsFormProvider @Inject()(
         "postCode" -> postcodeMapping,
         "countryCode" -> of[String].verifying(isValidCountryCode),
         "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName))
-      )(AddressDetailsUserAnswers.apply)(AddressDetailsUserAnswers.unapply)
+      )(EditAddressDetailsUserAnswers.apply)(EditAddressDetailsUserAnswers.unapply)
     )
   }
 
@@ -52,14 +52,14 @@ class EditAddressDetailsFormProvider @Inject()(
     case _ => Invalid(countryError)
   })
 
-  def toForm(formData: Map[String, Seq[String]], dan: String): Form[AddressDetailsUserAnswers] = {
+  def toForm(formData: Map[String, Seq[String]], dan: String): Form[EditAddressDetailsUserAnswers] = {
     val newDetailsFormData: Map[String, Seq[String]] = formData + ("dan" -> Seq(dan))
     deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
   }
 
 
   // If there are countryCode and countryName errors - this combines them
-  private def deDuplicateCountryErrors(form: Form[AddressDetailsUserAnswers]): Form[AddressDetailsUserAnswers] = {
+  private def deDuplicateCountryErrors(form: Form[EditAddressDetailsUserAnswers]): Form[EditAddressDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
         case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")

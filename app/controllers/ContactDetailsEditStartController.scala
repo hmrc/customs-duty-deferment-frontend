@@ -49,7 +49,7 @@ class ContactDetailsEditStartController @Inject()(
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
-  def start(contactDetailsChange: Boolean): Action[AnyContent] = (identifier andThen resolveSessionId) async {
+  def start(changeContactDetails: Boolean): Action[AnyContent] = (identifier andThen resolveSessionId) async {
     implicit request =>
       val futureResponse: EitherT[Future, Result, Result] = for {
         dutyDefermentDetails <- fromOptionF(
@@ -63,13 +63,13 @@ class ContactDetailsEditStartController @Inject()(
             request.request.user.eori)
         )
         initialUserAnswers <- fromOption(
-          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId, contactDetailsChange), {
+          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId, changeContactDetails), {
             logger.error(s"Unable to store user answers")
             InternalServerError(errorHandler.contactDetailsErrorTemplate())
           }
         )
         _ <- liftF(userAnswersCache.store(initialUserAnswers.id, initialUserAnswers))
-      } yield if(contactDetailsChange)Redirect(routes.EditContactDetailsController.onPageLoad)
+      } yield if(changeContactDetails)Redirect(routes.EditContactDetailsController.onPageLoad)
       else Redirect(routes.EditAddressDetailsController.onPageLoad)
 
       futureResponse
@@ -82,10 +82,9 @@ class ContactDetailsEditStartController @Inject()(
   }
 
   private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
-    val initialUserAnswers = ContactDetailsUserAnswers.fromContactDetails(
+    val initialUserAnswers = ContactDetailsUserAnswers.toEditContactDetails(
       dan = dutyDefermentDetails.dan,
-      contactDetails = initialContactDetails,
-      getCountryNameF = countriesProviderService.getCountryName)
+      contactDetails = initialContactDetails)
 
     val initialAddressUserAnswers = ContactDetailsUserAnswers.toAddressDetails(
       dan = dutyDefermentDetails.dan,

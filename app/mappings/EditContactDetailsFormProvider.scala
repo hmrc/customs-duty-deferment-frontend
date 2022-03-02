@@ -17,38 +17,29 @@
 package mappings
 
 
-import mappings.ConditionalMappingsExt.mandatoryIfNotExists
-import models.ContactDetailsUserAnswers
+import javax.inject.Inject
+import models.EditContactDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats._
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError, Forms}
 import services.CountriesProviderService
-import javax.inject.Inject
-
 
 class EditContactDetailsFormProvider @Inject()(
                                                 countriesProviderService: CountriesProviderService
                                               ) extends Constraints {
 
-  def apply(): Form[ContactDetailsUserAnswers] = {
+  def apply(): Form[EditContactDetailsUserAnswers] = {
     // A hidden form component tracks countryName and is updated using JS.
     // if JS is not enabled it defaults to countryNameNoJs, and this check is not performed - as they just select from a dropdown.
     Form(
       mapping(
         "dan" -> of[String],
         "name" -> optional(Forms.text).verifying(isValidNameField("accountDetails.edit.name")),
-        "addressLine1" -> of[String].verifying(validMandatoryAddressField("accountDetails.edit.address.line1")),
-        "addressLine2" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line2")),
-        "addressLine3" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line3")),
-        "addressLine4" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line4")),
-        "postCode" -> postcodeMapping,
-        "countryCode" -> of[String].verifying(isValidCountryCode),
-        "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName)),
         "telephone" -> optional(Forms.text).verifying(isValidPhoneNumber("accountDetails.edit.telephone")),
         "fax" -> optional(Forms.text).verifying(isValidPhoneNumber("accountDetails.edit.fax")),
         "email" -> optional(Forms.text).verifying(isValidEmail)
-      )(ContactDetailsUserAnswers.apply)(ContactDetailsUserAnswers.unapply)
+      )(EditContactDetailsUserAnswers.apply)(EditContactDetailsUserAnswers.unapply)
     )
   }
 
@@ -57,14 +48,14 @@ class EditContactDetailsFormProvider @Inject()(
     case _ => Invalid(countryError)
   })
 
-  def toForm(formData: Map[String, Seq[String]], dan: String): Form[ContactDetailsUserAnswers] = {
+  def toForm(formData: Map[String, Seq[String]], dan: String): Form[EditContactDetailsUserAnswers] = {
     val newDetailsFormData: Map[String, Seq[String]] = formData + ("dan" -> Seq(dan))
     deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
   }
 
 
   // If there are countryCode and countryName errors - this combines them
-  private def deDuplicateCountryErrors(form: Form[ContactDetailsUserAnswers]): Form[ContactDetailsUserAnswers] = {
+  private def deDuplicateCountryErrors(form: Form[EditContactDetailsUserAnswers]): Form[EditContactDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
         case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")

@@ -88,8 +88,8 @@ object ContactDetailsUserAnswers {
 
   def toAddressDetails(dan: String,
                          contactDetails: ContactDetails,
-                         getCountryNameF: String => Option[String]): AddressDetailsUserAnswers = {
-    AddressDetailsUserAnswers(
+                         getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
+    EditAddressDetailsUserAnswers(
       dan,
       contactDetails.addressLine1,
       contactDetails.addressLine2,
@@ -102,4 +102,14 @@ object ContactDetailsUserAnswers {
 
   }
 
+  def toEditContactDetails(dan: String,
+                           contactDetails: ContactDetails): EditContactDetailsUserAnswers = {
+    EditContactDetailsUserAnswers(
+      dan,
+      contactDetails.contactName,
+      contactDetails.telephone,
+      contactDetails.faxNumber,
+      contactDetails.email
+    )
+  }
 }

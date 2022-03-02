@@ -21,19 +21,18 @@ import config.{AppConfig, ErrorHandler}
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import javax.inject.Inject
-import mappings.{EditAddressDetailsFormProvider, EditContactDetailsFormProvider}
+import mappings.EditAddressDetailsFormProvider
 import models.responses.retrieve.ContactDetails
-import models.{AddressDetailsUserAnswers, ContactDetailsUserAnswers, DataRequest}
-import pages.{EditAddressDetailsPage, EditContactDetailsPage}
+import models.{ContactDetailsUserAnswers, DataRequest, EditAddressDetailsUserAnswers}
+import pages.EditAddressDetailsPage
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc._
 import services.{ContactDetailsCacheService, CountriesProviderService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_address_details
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class EditAddressDetailsController @Inject()(view: edit_address_details,
@@ -54,7 +53,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
 
   private val log = Logger(this.getClass)
 
-  private def form: Form[AddressDetailsUserAnswers] = formProvider()
+  private def form: Form[EditAddressDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =
     identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
@@ -73,14 +72,14 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
   def submit: Action[AnyContent] = commonActions async { implicit request =>
     request.userAnswers.get(EditAddressDetailsPage) match {
       case Some(userAnswers) =>
-        val form: Form[AddressDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
+        val form: Form[EditAddressDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
         form.fold(
-          (formWithErrors: Form[AddressDetailsUserAnswers]) => {
+          (formWithErrors: Form[EditAddressDetailsUserAnswers]) => {
             Future.successful(
               BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
             )
           },
-          (updatedContactDetails: AddressDetailsUserAnswers) => {
+          (updatedContactDetails: EditAddressDetailsUserAnswers) => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedContactDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
@@ -92,7 +91,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
     }
   }
 
-  private def updateContactDetails(addressDetailsUserAnswers: AddressDetailsUserAnswers)
+  private def updateContactDetails(addressDetailsUserAnswers: EditAddressDetailsUserAnswers)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
       initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, addressDetailsUserAnswers.dan, request.eoriNumber)
@@ -104,14 +103,14 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
         newContactDetails = updatedContactDetails
       )
       _ <- contactDetailsCacheService.updateContactDetails(updatedContactDetails)
-    } yield Redirect(routes.ConfirmContactDetailsController.success)).recover {
+    } yield Redirect(routes.ConfirmContactDetailsController.successAddress)).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)
     }
   }
 
-  def contactDetailsWithUpdatedAddress(oldContactDetails: ContactDetails, updatedAddressDetails: AddressDetailsUserAnswers): ContactDetailsUserAnswers = {
+  def contactDetailsWithUpdatedAddress(oldContactDetails: ContactDetails, updatedAddressDetails: EditAddressDetailsUserAnswers): ContactDetailsUserAnswers = {
     ContactDetailsUserAnswers(dan = updatedAddressDetails.dan, name = oldContactDetails.contactName,
       addressLine1 = updatedAddressDetails.addressLine1, addressLine2 = updatedAddressDetails.addressLine2,
       addressLine3 = updatedAddressDetails.addressLine3, addressLine4 = updatedAddressDetails.addressLine4,

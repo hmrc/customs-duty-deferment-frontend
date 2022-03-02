@@ -16,10 +16,10 @@
 
 package pages
 
-import models.AddressDetailsUserAnswers
+import models.EditAddressDetailsUserAnswers
 import play.api.libs.json.JsPath
 
-object EditAddressDetailsPage extends QuestionPage[AddressDetailsUserAnswers] {
+object EditAddressDetailsPage extends QuestionPage[EditAddressDetailsUserAnswers] {
   override def path: JsPath = JsPath \ toString
   override def toString: String = "updatedAddressDetailsPage"
 }

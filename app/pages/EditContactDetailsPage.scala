@@ -16,10 +16,10 @@
 
 package pages
 
-import models.ContactDetailsUserAnswers
+import models.EditContactDetailsUserAnswers
 import play.api.libs.json.JsPath
 
-object EditContactDetailsPage extends QuestionPage[ContactDetailsUserAnswers] {
+object EditContactDetailsPage extends QuestionPage[EditContactDetailsUserAnswers] {
   override def path: JsPath = JsPath \ toString
   override def toString: String = "updatedContactDetailsPage"
 }
