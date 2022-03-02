@@ -18,16 +18,19 @@ package controllers
 
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
+import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import javax.inject.Inject
-import mappings.EditContactDetailsFormProvider
-import models.{ContactDetailsUserAnswers, DataRequest}
-import pages.EditContactDetailsPage
+import mappings.{EditAddressDetailsFormProvider, EditContactDetailsFormProvider}
+import models.responses.retrieve.ContactDetails
+import models.{AddressDetailsUserAnswers, ContactDetailsUserAnswers, DataRequest}
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
-import services.CountriesProviderService
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import services.{ContactDetailsCacheService, CountriesProviderService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_address_details
 
@@ -39,8 +42,10 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
                                              dataRequiredAction: DataRequiredAction,
                                              resolveSessionId: SessionIdAction,
                                              userAnswersCache: UserAnswersCache,
-                                             formProvider: EditContactDetailsFormProvider,
-                                             countriesProviderService: CountriesProviderService)
+                                             formProvider: EditAddressDetailsFormProvider,
+                                             countriesProviderService: CountriesProviderService,
+                                             contactDetailsCacheService: ContactDetailsCacheService,
+                                             customsFinancialsApiConnector: CustomsFinancialsApiConnector)
                                             (implicit ec: ExecutionContext,
                                              errorHandler: ErrorHandler,
                                              mcc: MessagesControllerComponents,
@@ -49,14 +54,14 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
 
   private val log = Logger(this.getClass)
 
-  private def form: Form[ContactDetailsUserAnswers] = formProvider()
+  private def form: Form[AddressDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =
     identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
   def onPageLoad: Action[AnyContent] = commonActions async {
     implicit request =>
-      request.userAnswers.get(EditContactDetailsPage) match {
+      request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(contactDetails) =>
           Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
         case None =>
@@ -66,24 +71,52 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
   }
 
   def submit: Action[AnyContent] = commonActions async { implicit request =>
-    request.userAnswers.get(EditContactDetailsPage) match {
+    request.userAnswers.get(EditAddressDetailsPage) match {
       case Some(userAnswers) =>
-        val form: Form[ContactDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
+        val form: Form[AddressDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
         form.fold(
-          (formWithErrors: Form[ContactDetailsUserAnswers]) => {
+          (formWithErrors: Form[AddressDetailsUserAnswers]) => {
             Future.successful(
               BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
             )
           },
-          (updatedContactDetails: ContactDetailsUserAnswers) => {
+          (updatedContactDetails: AddressDetailsUserAnswers) => {
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditContactDetailsPage, updatedContactDetails))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedContactDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-            } yield Redirect(routes.CheckAnswersContactDetailsController.onPageLoad)
+              updateAddressDetails <- updateContactDetails(updatedContactDetails)
+            } yield updateAddressDetails
           })
       case None =>
         Future(Redirect(routes.SessionExpiredController.onPageLoad))
     }
   }
 
+  private def updateContactDetails(addressDetailsUserAnswers: AddressDetailsUserAnswers)
+                                  (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    (for {
+      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, addressDetailsUserAnswers.dan, request.eoriNumber)
+      updatedContactDetails = contactDetailsWithUpdatedAddress(initialContactDetails, addressDetailsUserAnswers)
+      _ <- customsFinancialsApiConnector.updateContactDetails(
+        dan = addressDetailsUserAnswers.dan,
+        eori = request.eoriNumber,
+        oldContactDetails = initialContactDetails,
+        newContactDetails = updatedContactDetails
+      )
+      _ <- contactDetailsCacheService.updateContactDetails(updatedContactDetails)
+    } yield Redirect(routes.ConfirmContactDetailsController.success)).recover {
+      case e =>
+        log.error(s"Unable to update account contact details: ${e.getMessage}")
+        Redirect(routes.ConfirmContactDetailsController.problem)
+    }
+  }
+
+  def contactDetailsWithUpdatedAddress(oldContactDetails: ContactDetails, updatedAddressDetails: AddressDetailsUserAnswers): ContactDetailsUserAnswers = {
+    ContactDetailsUserAnswers(dan = updatedAddressDetails.dan, name = oldContactDetails.contactName,
+      addressLine1 = updatedAddressDetails.addressLine1, addressLine2 = updatedAddressDetails.addressLine2,
+      addressLine3 = updatedAddressDetails.addressLine3, addressLine4 = updatedAddressDetails.addressLine4,
+      postCode = updatedAddressDetails.postCode, countryCode = updatedAddressDetails.countryCode,
+      countryName = updatedAddressDetails.countryName, telephone = oldContactDetails.telephone,
+      fax = oldContactDetails.faxNumber, email = oldContactDetails.email)
+  }
 }

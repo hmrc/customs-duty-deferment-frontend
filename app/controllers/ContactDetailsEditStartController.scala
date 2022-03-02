@@ -24,14 +24,14 @@ import config.{AppConfig, ErrorHandler}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.responses.retrieve.ContactDetails
 import models.{ContactDetailsUserAnswers, DutyDefermentAccountLink, UserAnswers}
-import pages.EditContactDetailsPage
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -63,7 +63,7 @@ class ContactDetailsEditStartController @Inject()(
             request.request.user.eori)
         )
         initialUserAnswers <- fromOption(
-          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId), {
+          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId, contactDetailsChange), {
             logger.error(s"Unable to store user answers")
             InternalServerError(errorHandler.contactDetailsErrorTemplate())
           }
@@ -81,13 +81,22 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String): Option[UserAnswers] = {
+  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.fromContactDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,
       getCountryNameF = countriesProviderService.getCountryName)
 
-    UserAnswers(internalId, lastUpdated = dateTimeService.now())
-      .set(EditContactDetailsPage, initialUserAnswers).toOption
+    val initialAddressUserAnswers = ContactDetailsUserAnswers.toAddressDetails(
+      dan = dutyDefermentDetails.dan,
+      contactDetails = initialContactDetails,
+      getCountryNameF = countriesProviderService.getCountryName)
+
+    contactDetailsChange match {
+      case true => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+        .set(EditContactDetailsPage, initialUserAnswers).toOption
+      case _ => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+        .set(EditAddressDetailsPage, initialAddressUserAnswers).toOption
+    }
   }
 }

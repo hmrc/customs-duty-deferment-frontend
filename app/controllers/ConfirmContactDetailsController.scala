@@ -19,14 +19,14 @@ package controllers
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
-import pages.EditContactDetailsPage
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_success
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmContactDetailsController @Inject()(successView: edit_success,
@@ -45,7 +45,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
 
   def success: Action[AnyContent] = commonActions.async {
     implicit request => {
-      request.userAnswers.get(EditContactDetailsPage) match {
+      request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(userAnswers) =>
           userAnswersCache.remove(request.identifier).map {
             removeSuccessful =>

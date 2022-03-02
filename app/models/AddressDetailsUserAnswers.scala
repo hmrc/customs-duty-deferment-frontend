@@ -19,74 +19,35 @@ package models
 import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
-case class ContactDetailsUserAnswers(dan: String,
-                                     name: Option[String],
+
+case class AddressDetailsUserAnswers(dan: String,
                                      addressLine1: String,
                                      addressLine2: Option[String],
                                      addressLine3: Option[String],
                                      addressLine4: Option[String],
                                      postCode: Option[String],
                                      countryCode: String,
-                                     countryName: Option[String],
-                                     telephone: Option[String],
-                                     fax: Option[String],
-                                     email: Option[String]) {
+                                     countryName: Option[String]) {
 
-  def withWhitespaceTrimmed: ContactDetailsUserAnswers = {
+  def withWhitespaceTrimmed: AddressDetailsUserAnswers = {
     this.copy(
-      name = name.map(_.trim),
       addressLine1 = addressLine1.trim,
       addressLine2 = addressLine2.map(_.trim),
       addressLine3 = addressLine3.map(_.trim),
       addressLine4 = addressLine4.map(_.trim),
       postCode = postCode.map(_.trim),
-      telephone = telephone.map(_.trim),
       countryCode = countryCode.trim,
-      countryName = countryName.map(_.trim),
-      fax = fax.map(_.trim),
-      email = email.map(_.trim)
+      countryName = countryName.map(_.trim)
     )
   }
-
-  def toContactDetails: ContactDetails =
-    ContactDetails(name,
-      addressLine1,
-      addressLine2,
-      addressLine3,
-      addressLine4,
-      postCode,
-      countryCode,
-      telephone,
-      fax,
-      email)
 
 }
 
-object ContactDetailsUserAnswers {
+object AddressDetailsUserAnswers {
 
-  implicit val formats: OFormat[ContactDetailsUserAnswers] = Json.format[ContactDetailsUserAnswers]
+  implicit val formats: OFormat[AddressDetailsUserAnswers] = Json.format[AddressDetailsUserAnswers]
 
-  def fromContactDetails(dan: String,
-                         contactDetails: ContactDetails,
-                         getCountryNameF: String => Option[String]): ContactDetailsUserAnswers = {
-    ContactDetailsUserAnswers(
-      dan,
-      contactDetails.contactName,
-      contactDetails.addressLine1,
-      contactDetails.addressLine2,
-      contactDetails.addressLine3,
-      contactDetails.addressLine4,
-      contactDetails.postCode,
-      contactDetails.countryCode,
-      getCountryNameF(contactDetails.countryCode),
-      contactDetails.telephone,
-      contactDetails.faxNumber,
-      contactDetails.email
-    )
-
-  }
-
-  def toAddressDetails(dan: String,
+  def editAddressDetails(dan: String,
                          contactDetails: ContactDetails,
                          getCountryNameF: String => Option[String]): AddressDetailsUserAnswers = {
     AddressDetailsUserAnswers(
@@ -99,7 +60,7 @@ object ContactDetailsUserAnswers {
       contactDetails.countryCode,
       getCountryNameF(contactDetails.countryCode)
     )
-
   }
-
 }
+
+
