@@ -29,38 +29,26 @@ case class EditAddressDetailsUserAnswers(dan: String,
                                          countryCode: String,
                                          countryName: Option[String]) {
 
-  def withWhitespaceTrimmed: EditAddressDetailsUserAnswers = {
-    this.copy(
-      addressLine1 = addressLine1.trim,
-      addressLine2 = addressLine2.map(_.trim),
-      addressLine3 = addressLine3.map(_.trim),
-      addressLine4 = addressLine4.map(_.trim),
-      postCode = postCode.map(_.trim),
-      countryCode = countryCode.trim,
-      countryName = countryName.map(_.trim)
-    )
+  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails): ContactDetailsUserAnswers = {
+    ContactDetailsUserAnswers(
+      dan = dan,
+      name = initialContactDetails.contactName,
+      addressLine1 = addressLine1,
+      addressLine2 = addressLine2,
+      addressLine3 = addressLine3,
+      addressLine4 = addressLine4,
+      postCode = postCode,
+      countryCode = countryCode,
+      countryName = countryName,
+      telephone = initialContactDetails.telephone,
+      fax = initialContactDetails.faxNumber,
+      email = initialContactDetails.email)
   }
-
 }
 
 object EditAddressDetailsUserAnswers {
 
   implicit val formats: OFormat[EditAddressDetailsUserAnswers] = Json.format[EditAddressDetailsUserAnswers]
-
-  def editAddressDetails(dan: String,
-                         contactDetails: ContactDetails,
-                         getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
-    EditAddressDetailsUserAnswers(
-      dan,
-      contactDetails.addressLine1,
-      contactDetails.addressLine2,
-      contactDetails.addressLine3,
-      contactDetails.addressLine4,
-      contactDetails.postCode,
-      contactDetails.countryCode,
-      getCountryNameF(contactDetails.countryCode)
-    )
-  }
 }
 
 

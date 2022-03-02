@@ -69,9 +69,10 @@ class ContactDetailsEditStartController @Inject()(
           }
         )
         _ <- liftF(userAnswersCache.store(initialUserAnswers.id, initialUserAnswers))
-      } yield if(changeContactDetails)Redirect(routes.EditContactDetailsController.onPageLoad)
-      else Redirect(routes.EditAddressDetailsController.onPageLoad)
-
+      } yield changeContactDetails match {
+        case true => Redirect(routes.EditContactDetailsController.onPageLoad)
+        case _ => Redirect(routes.EditAddressDetailsController.onPageLoad)
+      }
       futureResponse
         .merge
         .recover {

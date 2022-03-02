@@ -84,7 +84,7 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditContactDetailsPage, updatedContactDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetails(updatedContactDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails)
             } yield updateAddressDetails
           })
       case None =>
@@ -92,13 +92,13 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
     }
   }
 
-  private def updateContactDetails(editContactDetailsUserAnswers: EditContactDetailsUserAnswers)
+  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
-      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailsUserAnswers.dan, request.eoriNumber)
-      updatedContactDetails = contactDetailsWithUpdatedAddress(initialContactDetails, editContactDetailsUserAnswers)
+      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailAnswers.dan, request.eoriNumber)
+      updatedContactDetails = editContactDetailAnswers.toContactDetailsUserAnswers(initialContactDetails, countriesProviderService.getCountryName)
       _ <- customsFinancialsApiConnector.updateContactDetails(
-        dan = editContactDetailsUserAnswers.dan,
+        dan = editContactDetailAnswers.dan,
         eori = request.eoriNumber,
         oldContactDetails = initialContactDetails,
         newContactDetails = updatedContactDetails
@@ -109,16 +109,5 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)
     }
-  }
-
-  def contactDetailsWithUpdatedAddress(cachedDetails: ContactDetails, updatedDetails: EditContactDetailsUserAnswers): ContactDetailsUserAnswers = {
-    ContactDetailsUserAnswers(dan = updatedDetails.dan, name = updatedDetails.name,
-      addressLine1 = cachedDetails.addressLine1, addressLine2 = cachedDetails.addressLine2,
-      addressLine3 = cachedDetails.addressLine3, addressLine4 = cachedDetails.addressLine4,
-      postCode = cachedDetails.postCode, countryCode = cachedDetails.countryCode,
-      countryName = None, telephone = updatedDetails.telephone,
-      fax = updatedDetails.fax, email = updatedDetails.email)
-
-    // fix country name?
   }
 }

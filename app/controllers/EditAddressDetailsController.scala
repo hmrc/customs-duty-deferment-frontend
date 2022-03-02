@@ -83,7 +83,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedContactDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetails(updatedContactDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails)
             } yield updateAddressDetails
           })
       case None =>
@@ -91,31 +91,22 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
     }
   }
 
-  private def updateContactDetails(addressDetailsUserAnswers: EditAddressDetailsUserAnswers)
+  private def updateContactDetailsUserAnswers(editAddressAnswers: EditAddressDetailsUserAnswers)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
-      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, addressDetailsUserAnswers.dan, request.eoriNumber)
-      updatedContactDetails = contactDetailsWithUpdatedAddress(initialContactDetails, addressDetailsUserAnswers)
+      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editAddressAnswers.dan, request.eoriNumber)
+      updatedAddressDetails = editAddressAnswers.toContactDetailsUserAnswers(initialContactDetails)
       _ <- customsFinancialsApiConnector.updateContactDetails(
-        dan = addressDetailsUserAnswers.dan,
+        dan = editAddressAnswers.dan,
         eori = request.eoriNumber,
         oldContactDetails = initialContactDetails,
-        newContactDetails = updatedContactDetails
+        newContactDetails = updatedAddressDetails
       )
-      _ <- contactDetailsCacheService.updateContactDetails(updatedContactDetails)
-    } yield Redirect(routes.ConfirmContactDetailsController.successAddress)).recover {
+      _ <- contactDetailsCacheService.updateContactDetails(updatedAddressDetails)
+    } yield Redirect(routes.ConfirmContactDetailsController.success)).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)
     }
-  }
-
-  def contactDetailsWithUpdatedAddress(oldContactDetails: ContactDetails, updatedAddressDetails: EditAddressDetailsUserAnswers): ContactDetailsUserAnswers = {
-    ContactDetailsUserAnswers(dan = updatedAddressDetails.dan, name = oldContactDetails.contactName,
-      addressLine1 = updatedAddressDetails.addressLine1, addressLine2 = updatedAddressDetails.addressLine2,
-      addressLine3 = updatedAddressDetails.addressLine3, addressLine4 = updatedAddressDetails.addressLine4,
-      postCode = updatedAddressDetails.postCode, countryCode = updatedAddressDetails.countryCode,
-      countryName = updatedAddressDetails.countryName, telephone = oldContactDetails.telephone,
-      fax = oldContactDetails.faxNumber, email = oldContactDetails.email)
   }
 }

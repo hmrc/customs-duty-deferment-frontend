@@ -43,7 +43,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
 
   private val commonActions = identify andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
-  def successAddress(): Action[AnyContent] = commonActions.async {
+  def success(): Action[AnyContent] = commonActions.async {
     implicit request => {
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(userAnswers) =>
@@ -54,7 +54,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
               }
               Ok(successView(userAnswers.dan))
           }
-        case None =>
+        case _ =>
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")
           Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
       }
@@ -84,5 +84,4 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
         InternalServerError(errorHandler.errorUpdatingContactDetails)
       }
   }
-
 }

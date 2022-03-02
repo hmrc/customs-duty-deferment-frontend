@@ -23,10 +23,10 @@
 
 @(accountDetails: ContactDetailsViewModel, status: CDSAccountStatusId, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@changeActionItem(contactDetailsChange: Boolean) = @{
+@changeActionItem(editContactDetails: Boolean) = @{
     if(status != AccountCancelled) {
         Seq(ActionItem(
-            href = routes.ContactDetailsEditStartController.start(contactDetailsChange).url,
+            href = routes.ContactDetailsEditStartController.start(editContactDetails).url,
             content = Text(messages("accountDetails.change")),
             visuallyHiddenText = Some(messages("accountDetails.details.name"))
         ))
@@ -55,7 +55,7 @@
                     content = Text(accountDetails.name.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(true)
+                    items = changeActionItem(editContactDetails = true)
                 ))
             ),
             SummaryListRow(
@@ -79,7 +79,7 @@
                                 """)
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(false)
+                    items = changeActionItem(editContactDetails = false)
                 ))
             ),
             SummaryListRow(
@@ -90,7 +90,7 @@
                     content = Text(accountDetails.telephone.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(true)
+                    items = changeActionItem(editContactDetails = true)
                 ))
             ),
             SummaryListRow(
@@ -101,7 +101,7 @@
                     content = Text(accountDetails.email.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(true)
+                    items = changeActionItem(editContactDetails = true)
                 ))
             )
         )
