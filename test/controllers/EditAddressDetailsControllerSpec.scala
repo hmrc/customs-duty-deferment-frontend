@@ -19,9 +19,9 @@ package controllers
 import cache.UserAnswersCache
 import config.AppConfig
 import connectors.CustomsFinancialsApiConnector
-import mappings.EditContactDetailsFormProvider
-import models.{EditContactDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
-import pages.EditContactDetailsPage
+import mappings.{EditAddressDetailsFormProvider, EditContactDetailsFormProvider}
+import models.{EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
@@ -31,11 +31,11 @@ import play.api.{Application, inject}
 import services.{ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
-import views.html.contact_details.edit_contact_details
+import views.html.contact_details.{edit_address_details, edit_contact_details}
 
 import scala.concurrent.Future
 
-class EditContactDetailsControllerSpec extends SpecBase {
+class EditAddressDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
@@ -52,7 +52,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
         contentAsString(result).removeCsrf() mustBe view(
           validDan,
-          form.fill(editContactDetailsUserAnswers),
+          form.fill(editAddressDetailsUserAnswers),
           fakeCountries
         )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
       }
@@ -68,11 +68,12 @@ class EditContactDetailsControllerSpec extends SpecBase {
   }
 
   "submit" must {
-
     "return BAD_REQUEST when form errors occur" in new Setup {
+
       running(app) {
         val result = route(app, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
+        contentAsString(result) must include("""<a href="#countryCode"""")
       }
     }
 
@@ -85,7 +86,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "return a redirect to confirm with valid information" in new Setup {
+    "redirect to the confirmation success page when a successful request made" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
 
@@ -106,34 +107,33 @@ class EditContactDetailsControllerSpec extends SpecBase {
       running(newApp) {
         val result = route(newApp, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successContactDetails.url
+        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails.url
       }
     }
-
   }
 
   trait Setup {
     val userAnswers: UserAnswers =
-      emptyUserAnswers.set(EditContactDetailsPage, editContactDetailsUserAnswers).toOption.value
+      emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
 
     val onPageLoadRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.EditContactDetailsController.onPageLoad.url)
+      fakeRequestWithCsrf(GET, routes.EditAddressDetailsController.onPageLoad.url)
 
     val validSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit.url)
+      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(
           ("dan", validDan),
           ("name", "New Name"),
-//          ("addressLine1", "123 A New Street"),
-//          ("postCode", "SW1 6EL"),
-//          ("countryCode", "GB"),
+          ("addressLine1", "123 A New Street"),
+          ("postCode", "SW1 6EL"),
+          ("countryCode", "GB"),
           ("telephone", "+441111222333"),
-//          ("countryName", "United Kingdom"),
+          ("countryName", "United Kingdom"),
           ("email", "first.name@email.com")
         )
 
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditContactDetailsController.submit.url)
+      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(
           ("dan", validDan)
         )
@@ -144,10 +144,11 @@ class EditContactDetailsControllerSpec extends SpecBase {
       inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
     ).build()
 
-    val view: edit_contact_details = app.injector.instanceOf[edit_contact_details]
-    val form: Form[EditContactDetailsUserAnswers] = app.injector.instanceOf[EditContactDetailsFormProvider].apply()
+    val view: edit_address_details = app.injector.instanceOf[edit_address_details]
+    val form: Form[EditAddressDetailsUserAnswers] = app.injector.instanceOf[EditAddressDetailsFormProvider].apply()
     val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
     val messages: Messages = messagesApi.preferred(onPageLoadRequest)
+
   }
 }

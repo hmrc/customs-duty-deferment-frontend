@@ -43,7 +43,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
 
   private val commonActions = identify andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
-  def success(): Action[AnyContent] = commonActions.async {
+  def successAddressDetails(): Action[AnyContent] = commonActions.async {
     implicit request => {
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(userAnswers) =>

@@ -84,10 +84,10 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
 
   trait Setup {
     val userAnswers: UserAnswers =
-      emptyUserAnswers.set(EditContactDetailsPage, contactDetailsUserAnswers).toOption.value
+      emptyUserAnswers.set(EditContactDetailsPage, editContactDetailsUserAnswers).toOption.value
 
     val successRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.success.url)
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successContactDetails.url)
 
     val problemRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem.url)

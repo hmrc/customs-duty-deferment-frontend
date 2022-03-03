@@ -79,11 +79,11 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
               BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
             )
           },
-          (updatedContactDetails: EditAddressDetailsUserAnswers) => {
+          (updatedAddressDetails: EditAddressDetailsUserAnswers) => {
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedContactDetails))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedAddressDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedAddressDetails)
             } yield updateAddressDetails
           })
       case None =>
@@ -103,7 +103,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
         newContactDetails = updatedAddressDetails
       )
       _ <- contactDetailsCacheService.updateContactDetails(updatedAddressDetails)
-    } yield Redirect(routes.ConfirmContactDetailsController.success)).recover {
+    } yield Redirect(routes.ConfirmContactDetailsController.successAddressDetails)).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)

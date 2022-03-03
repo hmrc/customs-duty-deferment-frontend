@@ -131,7 +131,7 @@ accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.change=Newid
 
 accountDetails.details.heading=Manylion cyswllt
-accountDetails.details.guidance=Dyma’r manylion y byddwn yn eu defnyddio i gysylltu â chi ynghylch y cyfrif gohirio tollau hwn.
+accountDetails.details.guidance=Byddwn ond yn defnyddio’r manylion hyn i gysylltu â chi os oes problem gyda’r cyfrif gohirio hwn.
 accountDetails.details.name=Enw
 accountDetails.details.address=Cyfeiriad
 accountDetails.details.telephone=Ffôn
@@ -154,6 +154,7 @@ accountDetails.edit.address.line3=Tref neu ddinas (dewisol)
 accountDetails.edit.address.line4=Sir (dewisol)
 accountDetails.edit.postcode=Cod post
 accountDetails.edit.telephone=Rhif ffôn
+accountDetails.edit.telephone.hint=Nodwch rifau yn unig, er enghraifft 01632 960 001.
 accountDetails.edit.fax=Rhif ffacs (dewisol)
 accountDetails.edit.save=Cadw newidiadau
 accountDetails.edit.back=Canslo

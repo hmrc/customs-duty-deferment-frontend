@@ -19,7 +19,7 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers, DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
+import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers, DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers, EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
 import org.mockito.scalatest.MockitoSugar
 import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
@@ -67,6 +67,25 @@ trait TestData extends MockitoSugar {
     None,
     "GB",
     Some("United Kingdom"),
+    Some("11111 222333"),
+    None,
+    Some("example@email.com")
+  )
+
+  val editAddressDetailsUserAnswers: EditAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
+    validDan,
+    "Example Road",
+    None,
+    None,
+    None,
+    None,
+    "GB",
+    Some("United Kingdom")
+  )
+
+  val editContactDetailsUserAnswers: EditContactDetailsUserAnswers = EditContactDetailsUserAnswers(
+    validDan,
+    Some("Example Name"),
     Some("11111 222333"),
     None,
     Some("example@email.com")
