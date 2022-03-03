@@ -194,8 +194,6 @@ accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau
 accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
 
-emailAddress.edit.title=Newid cyfeiriad e-bost cyswllt ar gyfer cyfrif gohirio tollau {0}
-emailAddress.edit.heading=Newid cyfeiriad e-bost cyswllt ar gyfer cyfrif gohirio tollau {0}
 emailAddress.edit.emailAddress=Cyfeiriad e-bost
 emailAddress.edit.continue=Yn eich blaen
 emailAddress.edit.confirm.back=Dychwelwch i fanylion y cyfrif gohirio tollau

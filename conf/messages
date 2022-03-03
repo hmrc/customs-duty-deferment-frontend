@@ -164,7 +164,7 @@ accountDetails.edit.save=Save changes
 accountDetails.edit.back=Cancel changes
 accountDetails.edit.confirm.back=Return to duty deferment account details
 accountDetails.edit.success.title=Contact details successfully updated
-accountDetails.edit.success.message=Duty Deferment account
+accountDetails.edit.success.message=Duty deferment account
 accountDetails.editAddress.title=Address details for duty deferment account {0}
 accountDetails.editAddress.heading=Address details for duty deferment account {0}
 accountDetails.editAddress.guidance=These address details will only be used for this duty deferment account.
@@ -200,8 +200,6 @@ accountDetails.edit.error.heading=Sorry we are unable to make these changes at t
 accountDetails.edit.error.message=Try again later.
 accountDetails.edit.backToAccountDetails=Back to Duty deferment account details
 
-emailAddress.edit.title=Change contact email address for Duty Deferment account {0}
-emailAddress.edit.heading=Change contact email address for Duty Deferment account {0}
 emailAddress.edit.emailAddress=Email address
 emailAddress.edit.continue=Continue
 emailAddress.edit.confirm.back=Return to duty deferment account details
