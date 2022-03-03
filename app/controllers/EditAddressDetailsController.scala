@@ -22,8 +22,7 @@ import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import javax.inject.Inject
 import mappings.EditAddressDetailsFormProvider
-import models.responses.retrieve.ContactDetails
-import models.{ContactDetailsUserAnswers, DataRequest, EditAddressDetailsUserAnswers}
+import models.{DataRequest, EditAddressDetailsUserAnswers}
 import pages.EditAddressDetailsPage
 import play.api.Logger
 import play.api.data.Form

@@ -21,7 +21,6 @@ import javax.inject.Inject
 import models.EditContactDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats._
-import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError, Forms}
 import services.CountriesProviderService
 
@@ -42,11 +41,6 @@ class EditContactDetailsFormProvider @Inject()(
       )(EditContactDetailsUserAnswers.apply)(EditContactDetailsUserAnswers.unapply)
     )
   }
-
-  private val isValidCountryName: Constraint[Any] = Constraint({
-    case country: String if countriesProviderService.isValidCountryName(country) => Valid
-    case _ => Invalid(countryError)
-  })
 
   def toForm(formData: Map[String, Seq[String]], dan: String): Form[EditContactDetailsUserAnswers] = {
     val newDetailsFormData: Map[String, Seq[String]] = formData + ("dan" -> Seq(dan))

@@ -32,7 +32,6 @@ import services.{ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_contact_details
-
 import scala.concurrent.Future
 
 class EditContactDetailsControllerSpec extends SpecBase {

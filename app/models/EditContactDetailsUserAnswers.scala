@@ -40,7 +40,6 @@ case class EditContactDetailsUserAnswers(dan: String,
       telephone = telephone,
       fax = fax,
       email = email)
-    // fix country name?
   }
 }
 

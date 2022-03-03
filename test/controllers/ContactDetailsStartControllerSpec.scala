@@ -23,7 +23,6 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
-
 import scala.concurrent.Future
 
 class ContactDetailsStartControllerSpec extends SpecBase {

@@ -28,7 +28,6 @@ import services.DocumentService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
