@@ -161,6 +161,9 @@ accountDetails.edit.back=Canslo newidiadau
 accountDetails.edit.confirm.back=Dychwelwch i fanylion y cyfrif gohirio tollau
 accountDetails.edit.success.title=Wedi llwyddo i ddiweddaru manylion cyswllt
 accountDetails.edit.success.message=Cyfrif Gohirio Tollau
+accountDetails.editAddress.title=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.editAddress.heading=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.editAddress.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion cyfeiriad hyn
 
 accountDetails.edit.name.empty=Nodwch eich enw llawn
 accountDetails.edit.address.line1.empty=Nodwch adeilad a stryd
