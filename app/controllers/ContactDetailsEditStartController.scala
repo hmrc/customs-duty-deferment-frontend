@@ -24,14 +24,14 @@ import config.{AppConfig, ErrorHandler}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.responses.retrieve.ContactDetails
 import models.{ContactDetailsUserAnswers, DutyDefermentAccountLink, UserAnswers}
-import pages.EditContactDetailsPage
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -49,7 +49,7 @@ class ContactDetailsEditStartController @Inject()(
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
-  def start: Action[AnyContent] = (identifier andThen resolveSessionId) async {
+  def start(changeContactDetails: Boolean): Action[AnyContent] = (identifier andThen resolveSessionId) async {
     implicit request =>
       val futureResponse: EitherT[Future, Result, Result] = for {
         dutyDefermentDetails <- fromOptionF(
@@ -63,14 +63,16 @@ class ContactDetailsEditStartController @Inject()(
             request.request.user.eori)
         )
         initialUserAnswers <- fromOption(
-          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId), {
+          setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId, changeContactDetails), {
             logger.error(s"Unable to store user answers")
             InternalServerError(errorHandler.contactDetailsErrorTemplate())
           }
         )
         _ <- liftF(userAnswersCache.store(initialUserAnswers.id, initialUserAnswers))
-      } yield Redirect(routes.EditContactDetailsController.onPageLoad)
-
+      } yield changeContactDetails match {
+        case true => Redirect(routes.EditContactDetailsController.onPageLoad)
+        case _ => Redirect(routes.EditAddressDetailsController.onPageLoad)
+      }
       futureResponse
         .merge
         .recover {
@@ -80,13 +82,21 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String): Option[UserAnswers] = {
-    val initialUserAnswers = ContactDetailsUserAnswers.fromContactDetails(
+  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
+    val initialUserAnswers = ContactDetailsUserAnswers.toEditContactDetails(
+      dan = dutyDefermentDetails.dan,
+      contactDetails = initialContactDetails)
+
+    val initialAddressUserAnswers = ContactDetailsUserAnswers.toAddressDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,
       getCountryNameF = countriesProviderService.getCountryName)
 
-    UserAnswers(internalId, lastUpdated = dateTimeService.now())
-      .set(EditContactDetailsPage, initialUserAnswers).toOption
+    contactDetailsChange match {
+      case true => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+        .set(EditContactDetailsPage, initialUserAnswers).toOption
+      case _ => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+        .set(EditAddressDetailsPage, initialAddressUserAnswers).toOption
+    }
   }
 }

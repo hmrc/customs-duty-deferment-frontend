@@ -19,14 +19,14 @@ package controllers
 import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
-import pages.EditContactDetailsPage
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_success
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmContactDetailsController @Inject()(successView: edit_success,
@@ -43,7 +43,25 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
 
   private val commonActions = identify andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
-  def success: Action[AnyContent] = commonActions.async {
+  def successAddressDetails(): Action[AnyContent] = commonActions.async {
+    implicit request => {
+      request.userAnswers.get(EditAddressDetailsPage) match {
+        case Some(userAnswers) =>
+          userAnswersCache.remove(request.identifier).map {
+            removeSuccessful =>
+              if (!removeSuccessful) {
+                logger.error("Failed to remove user answers from mongo")
+              }
+              Ok(successView(userAnswers.dan))
+          }
+        case _ =>
+          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
+      }
+    }
+  }
+
+  def successContactDetails(): Action[AnyContent] = commonActions.async {
     implicit request => {
       request.userAnswers.get(EditContactDetailsPage) match {
         case Some(userAnswers) =>
@@ -66,5 +84,4 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
         InternalServerError(errorHandler.errorUpdatingContactDetails)
       }
   }
-
 }

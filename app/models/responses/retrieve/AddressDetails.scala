@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models.responses.retrieve
 
-import models.EditContactDetailsUserAnswers
-import play.api.libs.json.JsPath
+case class AddressDetails(addressLine1: String,
+                          addressLine2: Option[String],
+                          addressLine3: Option[String],
+                          addressLine4: Option[String],
+                          postCode: Option[String],
+                          countryCode: String)
 
-object EditContactDetailsPage extends QuestionPage[EditContactDetailsUserAnswers] {
-  override def path: JsPath = JsPath \ toString
-  override def toString: String = "updatedContactDetailsPage"
-}

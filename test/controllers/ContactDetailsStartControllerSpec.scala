@@ -23,7 +23,6 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
-
 import scala.concurrent.Future
 
 class ContactDetailsStartControllerSpec extends SpecBase {
@@ -34,7 +33,7 @@ class ContactDetailsStartControllerSpec extends SpecBase {
         .thenReturn(Future.successful(None))
 
       running(app) {
-        val result = route(app, startRequest).value
+        val result = route(app, startEditContactDetailsRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9876/customs/payment-records"
       }
@@ -51,7 +50,7 @@ class ContactDetailsStartControllerSpec extends SpecBase {
         .thenReturn(Future.failed(new RuntimeException("Unknown Error")))
 
       running(app) {
-        val result = route(app, startRequest).value
+        val result = route(app, startEditContactDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -67,9 +66,26 @@ class ContactDetailsStartControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val result = route(app, startRequest).value
+        val result = route(app, startEditContactDetailsRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.EditContactDetailsController.onPageLoad.url
+      }
+    }
+
+    "redirect to edit address page on successful submission" in new Setup {
+      when(mockAccountLinkCacheService.get(any))
+        .thenReturn(Future.successful(Some(dutyDefermentAccountLink)))
+      when(mockContactDetailsCacheService.getContactDetails(any, any, any)(any))
+        .thenReturn(Future.successful(validAccountContactDetails))
+      when(mockCountryProviderService.getCountryName(any))
+        .thenReturn(Some("United Kingdom"))
+      when(mockUserAnswersCache.store(any, any)(any))
+        .thenReturn(Future.successful(true))
+
+      running(app) {
+        val result = route(app, startEditAddressDetailsRequest).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.EditAddressDetailsController.onPageLoad.url
       }
     }
   }
@@ -81,8 +97,11 @@ class ContactDetailsStartControllerSpec extends SpecBase {
     val mockCountryProviderService: CountriesProviderService = mock[CountriesProviderService]
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    val startRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start().url)
+    val startEditContactDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
+      fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(true).url)
+
+    val startEditAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
+      fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(false).url)
 
     val app: Application = application().overrides(
       inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),

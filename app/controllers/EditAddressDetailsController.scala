@@ -21,28 +21,26 @@ import config.{AppConfig, ErrorHandler}
 import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import javax.inject.Inject
-import mappings.EditContactDetailsFormProvider
-import models.responses.retrieve.ContactDetails
-import models.{ContactDetailsUserAnswers, DataRequest, EditContactDetailsUserAnswers}
-import pages.EditContactDetailsPage
+import mappings.EditAddressDetailsFormProvider
+import models.{DataRequest, EditAddressDetailsUserAnswers}
+import pages.EditAddressDetailsPage
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc._
 import services.{ContactDetailsCacheService, CountriesProviderService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.contact_details.edit_contact_details
-
+import views.html.contact_details.edit_address_details
 import scala.concurrent.{ExecutionContext, Future}
 
-class EditContactDetailsController @Inject()(view: edit_contact_details,
+class EditAddressDetailsController @Inject()(view: edit_address_details,
                                              identifier: IdentifierAction,
                                              dataRetrievalAction: DataRetrievalAction,
                                              dataRequiredAction: DataRequiredAction,
                                              resolveSessionId: SessionIdAction,
                                              userAnswersCache: UserAnswersCache,
-                                             formProvider: EditContactDetailsFormProvider,
+                                             formProvider: EditAddressDetailsFormProvider,
                                              countriesProviderService: CountriesProviderService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
                                              customsFinancialsApiConnector: CustomsFinancialsApiConnector)
@@ -54,14 +52,14 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
 
   private val log = Logger(this.getClass)
 
-  private def form: Form[EditContactDetailsUserAnswers] = formProvider()
+  private def form: Form[EditAddressDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =
     identifier andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
   def onPageLoad: Action[AnyContent] = commonActions async {
     implicit request =>
-      request.userAnswers.get(EditContactDetailsPage) match {
+      request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(contactDetails) =>
           Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
         case None =>
@@ -71,20 +69,20 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
   }
 
   def submit: Action[AnyContent] = commonActions async { implicit request =>
-    request.userAnswers.get(EditContactDetailsPage) match {
+    request.userAnswers.get(EditAddressDetailsPage) match {
       case Some(userAnswers) =>
-        val form: Form[EditContactDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
+        val form: Form[EditAddressDetailsUserAnswers] = formProvider.toForm(request.body.asFormUrlEncoded.get, userAnswers.dan)
         form.fold(
-          (formWithErrors: Form[EditContactDetailsUserAnswers]) => {
+          (formWithErrors: Form[EditAddressDetailsUserAnswers]) => {
             Future.successful(
               BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
             )
           },
-          (updatedContactDetails: EditContactDetailsUserAnswers) => {
+          (updatedAddressDetails: EditAddressDetailsUserAnswers) => {
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditContactDetailsPage, updatedContactDetails))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedAddressDetails))
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedAddressDetails)
             } yield updateAddressDetails
           })
       case None =>
@@ -92,19 +90,19 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
     }
   }
 
-  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers)
+  private def updateContactDetailsUserAnswers(editAddressAnswers: EditAddressDetailsUserAnswers)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
-      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailAnswers.dan, request.eoriNumber)
-      updatedContactDetails = editContactDetailAnswers.toContactDetailsUserAnswers(initialContactDetails, countriesProviderService.getCountryName)
+      initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editAddressAnswers.dan, request.eoriNumber)
+      updatedAddressDetails = editAddressAnswers.toContactDetailsUserAnswers(initialContactDetails)
       _ <- customsFinancialsApiConnector.updateContactDetails(
-        dan = editContactDetailAnswers.dan,
+        dan = editAddressAnswers.dan,
         eori = request.eoriNumber,
         oldContactDetails = initialContactDetails,
-        newContactDetails = updatedContactDetails
+        newContactDetails = updatedAddressDetails
       )
-      _ <- contactDetailsCacheService.updateContactDetails(updatedContactDetails)
-    } yield Redirect(routes.ConfirmContactDetailsController.successContactDetails)).recover {
+      _ <- contactDetailsCacheService.updateContactDetails(updatedAddressDetails)
+    } yield Redirect(routes.ConfirmContactDetailsController.successAddressDetails)).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)

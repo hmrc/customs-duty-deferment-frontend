@@ -27,7 +27,7 @@
   inputMode: Option[String] = None,
   pattern: Option[String] = None,
   spellcheck: Option[Boolean] = None,
-  hint: Option[Hint] = None
+  hint: Option[String] = None
 )(implicit messages: Messages)
 
 @govukInput(Input(
@@ -46,6 +46,7 @@
     inputmode = inputMode,
     pattern = pattern,
     spellcheck = spellcheck,
-    hint = hint
-))
+    hint = hint.map(hintKey => Hint(
+      content = HtmlContent(messages(hintKey)))),
+    ))
 

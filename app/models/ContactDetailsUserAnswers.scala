@@ -86,4 +86,30 @@ object ContactDetailsUserAnswers {
 
   }
 
+  def toAddressDetails(dan: String,
+                         contactDetails: ContactDetails,
+                         getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
+    EditAddressDetailsUserAnswers(
+      dan,
+      contactDetails.addressLine1,
+      contactDetails.addressLine2,
+      contactDetails.addressLine3,
+      contactDetails.addressLine4,
+      contactDetails.postCode,
+      contactDetails.countryCode,
+      getCountryNameF(contactDetails.countryCode)
+    )
+
+  }
+
+  def toEditContactDetails(dan: String,
+                           contactDetails: ContactDetails): EditContactDetailsUserAnswers = {
+    EditContactDetailsUserAnswers(
+      dan,
+      contactDetails.contactName,
+      contactDetails.telephone,
+      contactDetails.faxNumber,
+      contactDetails.email
+    )
+  }
 }
