@@ -46,6 +46,6 @@
     @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
 
     @p3(Some("historic-statement-request-link"),
-        anchor = link(msg = "cf.duty-deferment-account.historic.request", url = appConfig.historicRequestUrl(linkId)))
+        anchor = link(linkMessage = "cf.duty-deferment-account.historic.request", location = appConfig.historicRequestUrl(linkId)))
 
 }
