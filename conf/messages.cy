@@ -85,10 +85,10 @@ cf.common.missing-documents-guidance.statements = Datganiadau
 cf.common.missing-documents-guidance.heading=Pam nad yw fy {0} ar gael?
 cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIEF
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
-cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na chwe mis
+cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
-cf.duty-deferment-account.historic.description=Dim ond ar gyfer y chwe mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
-cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na chwe mis
+cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 6 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
+cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 6 mis
 cf.duty-deferment-account.historic.link.fullStop=.
 
 # Not subscribed to CDS
