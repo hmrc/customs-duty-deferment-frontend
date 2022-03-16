@@ -86,10 +86,10 @@ cf.common.missing-documents-guidance.statements = Statements
 cf.common.missing-documents-guidance.heading=Why is my {0} not available?
 cf.common.missing-documents-guidance.chiefStatements.heading={0} made in CHIEF
 cf.common.missing-documents-guidance.text1={0} for import declarations made in Customs Handling of Import and Export Freight (CHIEF) are not available in this service.
-cf.common.missing-documents-guidance.olderStatements.heading={0} older than six months
+cf.common.missing-documents-guidance.olderStatements.heading={0} older than 6 months
 cf.common.missing-documents-guidance.text2={0} are only created for periods in which you imported goods.
-cf.duty-deferment-account.historic.description=This service will only show statements for the last six months.
-cf.duty-deferment-account.historic.request=Request a statement that’s older than six months
+cf.duty-deferment-account.historic.description=This service will only show statements for the last 6 months.
+cf.duty-deferment-account.historic.request=Request a statement that’s older than 6 months
 cf.duty-deferment-account.historic.link.fullStop=.
 # ----------------------------------------------------------
 
