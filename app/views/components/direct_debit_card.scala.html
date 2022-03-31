@@ -24,14 +24,14 @@
     @h2(messages("accountDetails.details.directdebit.heading"), h2Class = Some("govuk-!-margin-top-9"))
 
     @warning_text(
-        messages("direct.debit.warning")
+        messages("accountDetails.details.direct.debit.warning")
     ) {
         <p class="govuk-body govuk-!-margin-top-4">
-            @messages("direct.debit.warning.link.pre")
+            @messages("accountDetails.direct.debit.warning.link.pre")
             <a href="@{
                 routes.DirectDebitController.setup(linkId)
-            }">@messages("direct.debit.warning.link")</a>
-            @messages("direct.debit.warning.link.post")
+            }">@messages("accountDetails.direct.debit.warning.link")</a>
+            @messages("accountDetails.direct.debit.warning.link.fullStop")
         </p>
     }
 } else { @if(status != AccountCancelled) {
