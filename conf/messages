@@ -90,7 +90,6 @@ cf.common.missing-documents-guidance.olderStatements.heading={0} older than 6 mo
 cf.common.missing-documents-guidance.text2={0} are only created for periods in which you imported goods.
 cf.duty-deferment-account.historic.description=This service will only show statements for the last 6 months.
 cf.duty-deferment-account.historic.request=Request a statement that’s older than 6 months
-cf.duty-deferment-account.historic.link.fullStop=.
 # ----------------------------------------------------------
 
 

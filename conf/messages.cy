@@ -89,7 +89,7 @@ cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
 cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 6 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
 cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 6 mis
-cf.duty-deferment-account.historic.link.fullStop=.
+
 
 # Not subscribed to CDS
 # ----------------------------------------------------------
