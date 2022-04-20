@@ -20,15 +20,16 @@
 
 @this(
         layout: Layout,
-        hmrcNewTabLink: HmrcNewTabLink
-)
+        hmrcNewTabLink: HmrcNewTabLink,
+        p: components.p,
+        h1: components.h1,
+        h2: components.h2)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(pageTitle = Some(messages("cf.not-subscribed-to-cds.detail.title"))) {
-    <h1 class="govuk-heading-l">@messages("cf.not-subscribed-to-cds.detail.heading")</h1>
-    <h2 class="govuk-heading-m">@messages("cf.not-subscribed-to-cds.detail.how-to-get-access-info")</h2>
-
+    @h1(messages("cf.not-subscribed-to-cds.detail.heading"))
+    @h2(messages("cf.not-subscribed-to-cds.detail.how-to-get-access-info"))
     <p class="govuk-body">
         @messages("cf.not-subscribed-to-cds.detail.eori-info")
         @hmrcNewTabLink(
@@ -55,7 +56,5 @@
         .
     </p>
 
-    <p class="govuk-body">
-    @messages("cf.not-subscribed-to-cds.detail.process-application-info")
-    </p>
+    @p(Html(messages("cf.not-subscribed-to-cds.detail.process-application-info")))
 }

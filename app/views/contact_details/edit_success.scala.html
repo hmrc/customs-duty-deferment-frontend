@@ -15,12 +15,11 @@
  *@
 
 @import config.AppConfig
-@import views.html.components.{cancel_button, confirmation_panel}
-@import views.html.components.p
+@import views.html.components.confirmation_panel
 
 @this(
         layout: Layout,
-        button: components.button,
+        cancel_button: components.cancel_button,
         inputText: components.input_text
 )
 
@@ -44,5 +43,4 @@
         href = Some(routes.ShowContactDetailsController.show().url),
         message = messages("accountDetails.edit.confirm.back")
     )
-
 }

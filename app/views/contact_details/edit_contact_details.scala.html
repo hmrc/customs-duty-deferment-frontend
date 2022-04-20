@@ -15,12 +15,13 @@
  *@
 
 @import config.AppConfig
-@import views.html.components.{country_field, fieldset, heading}
+@import views.html.components.{fieldset, heading}
 @import views.html.helper._
 
 @this(
         layout: Layout,
         button: components.button,
+        cancel_button: components.cancel_button,
         inputText: components.input_text,
         errorSummary: components.errorSummary,
         p: components.p
@@ -80,7 +81,7 @@
         }
     }
 
-    @components.cancel_button(
+    @cancel_button(
         Some(routes.ShowContactDetailsController.show().url),
         messages("accountDetails.edit.back")
     )
