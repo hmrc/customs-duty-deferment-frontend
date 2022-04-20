@@ -61,9 +61,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
     implicit request =>
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(contactDetails) =>
-          Future.successful(InternalServerError(errorHandler.errorUpdatingContactDetails()))
-
-//          Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
+          Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
         case None =>
           log.error(s"Unable to retrieve stored account contact details")
           Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
