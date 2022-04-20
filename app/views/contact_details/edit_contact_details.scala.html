@@ -15,11 +15,12 @@
  *@
 
 @import config.AppConfig
-@import views.html.components.{fieldset, heading}
+@import views.html.components.fieldset
 @import views.html.helper._
 
 @this(
         layout: Layout,
+        h1: components.h1,
         button: components.button,
         cancel_button: components.cancel_button,
         inputText: components.input_text,
@@ -39,10 +40,8 @@
 
         @errorSummary(form)
 
-        @heading(
-            messages("accountDetails.edit.title", form("dan").value.getOrElse("")),
-            "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6"
-        )
+        @h1(msg = messages("accountDetails.edit.title", form("dan").value.getOrElse("")),
+            classes = "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6")
 
         @p(content = Html(messages("accountDetails.edit.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 

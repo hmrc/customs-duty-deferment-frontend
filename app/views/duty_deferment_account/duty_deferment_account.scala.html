@@ -38,7 +38,7 @@
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
         @span(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
-        @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"), "govuk-heading-xl")
+        @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
 
         @if(model.hasRequestedStatements) {
             @requestedStatements(model.linkId)

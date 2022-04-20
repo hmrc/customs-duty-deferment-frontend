@@ -16,12 +16,13 @@
 
 @import views.html.components.missing_documents_guidance
 @import config.AppConfig
-@import views.html.components.{h1_xl, inset}
 
 @this(
         layout: Layout,
         inset: components.inset,
+        h1: components.h1,
         link: components.link,
+        span: components.span,
         p: components.p,
         p3: components.p3
 )
@@ -30,22 +31,19 @@
 
 @layout(pageTitle = Some(messages("service.name")), backLink = Some(appConfig.financialsHomepage)) {
 
-        <span class="govuk-caption-xl" id="account-number-heading">
+    <span class="govuk-caption-xl" id="account-number-heading">
         @messages("cf.account.detail.requested.deferment-account-secondary-heading")
-        @{
-            accountNumber
-        }
+        @{accountNumber}
     </span>
 
-    @h1_xl(msg = messages("cf.account.detail.deferment-account-heading"), id = Some("statements-heading") )
+    @h1(msg = messages("cf.account.detail.deferment-account-heading"), id = Some("statements-heading"))
 
-    @inset(id = Some("no-statements"), msg = messages("cf.duty-deferment-account.problem-with-service.text") )
+    @inset(id = Some("no-statements"), msg = messages("cf.duty-deferment-account.problem-with-service.text"))
 
     @missing_documents_guidance("statement")
 
     @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
 
-    @p3(Some("historic-statement-request-link"),
-        anchor = link(linkMessage = "cf.duty-deferment-account.historic.request", location = appConfig.historicRequestUrl(linkId)))
-
+    @p3(Some("historic-statement-request-link"), anchor = link(linkMessage = "cf.duty-deferment-account.historic.request",
+        location = appConfig.historicRequestUrl(linkId)))
 }

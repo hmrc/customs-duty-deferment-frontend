@@ -58,7 +58,8 @@ class AccountController @Inject()(
           )))
       } yield {
         val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber, statementsForEoris, accountLink.linkId)
-        Ok(account(dutyDefermentViewModel))
+//        Ok(account(dutyDefermentViewModel))
+        Ok(unavailable(accountLink.accountNumber, linkId))
       }
         ).merge.recover {
         case _ => Redirect(routes.AccountController.statementsUnavailablePage(linkId))

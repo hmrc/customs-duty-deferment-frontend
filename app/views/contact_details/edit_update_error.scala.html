@@ -24,9 +24,7 @@
 
 @(title: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some(title),
-    helpAndSupport = false,
-    deskpro = false) {
+@layout(pageTitle = Some(title), helpAndSupport = false, deskpro = false) {
     @h1(msg = heading)
     @p(Html(messages(message)))
     @cancel_button(
