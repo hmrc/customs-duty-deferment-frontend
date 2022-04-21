@@ -17,9 +17,9 @@
 package controllers
 
 import cache.UserAnswersCache
-import config.AppConfig
+import config.{AppConfig, ErrorHandler}
 import models.UserAnswers
-import pages.EditContactDetailsPage
+import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -34,16 +34,31 @@ import scala.concurrent.Future
 class ConfirmContactDetailsControllerSpec extends SpecBase {
 
   "success" must {
-    "return OK on a successful submission" in new Setup {
+    "return OK on a successful edit contact details submission" in new Setup {
       when(mockUserAnswersCache.remove(any[String]))
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val result = route(app, successRequest).value
+        val result = route(app, successContactDetailsRequest).value
         status(result) mustBe OK
         contentAsString(result).removeCsrf() mustBe view(validDan)(
-          successRequest,
+          successContactDetailsRequest,
           messages,
+          appConfig
+        ).toString().removeCsrf()
+      }
+    }
+
+    "return OK on a successful edit address details submission" in new Setup {
+      when(mockUserAnswersCache.remove(any[String]))
+        .thenReturn(Future.successful(true))
+
+      running(appAddressEdit) {
+        val result = route(appAddressEdit, successAddressDetailsRequest).value
+        status(result) mustBe OK
+        contentAsString(result).removeCsrf() mustBe view(validDan)(
+          successAddressDetailsRequest,
+          messagesAddress,
           appConfig
         ).toString().removeCsrf()
       }
@@ -54,10 +69,10 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
         .thenReturn(Future.successful(false))
 
       running(app) {
-        val result = route(app, successRequest).value
+        val result = route(app, successContactDetailsRequest).value
         status(result) mustBe OK
         contentAsString(result).removeCsrf() mustBe view(validDan)(
-          successRequest,
+          successContactDetailsRequest,
           messages,
           appConfig
         ).toString().removeCsrf()
@@ -67,7 +82,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
       running(newApp) {
-        val result = route(newApp, successRequest).value
+        val result = route(newApp, successContactDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -86,8 +101,14 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     val userAnswers: UserAnswers =
       emptyUserAnswers.set(EditContactDetailsPage, editContactDetailsUserAnswers).toOption.value
 
-    val successRequest: FakeRequest[AnyContentAsEmpty.type] =
+    val userAnswersAddress: UserAnswers =
+      emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
+
+    val successContactDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successContactDetails.url)
+
+    val successAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successAddressDetails.url)
 
     val problemRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem.url)
@@ -98,9 +119,14 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
     ).build()
 
+    val appAddressEdit: Application = application(Some(userAnswersAddress)).overrides(
+      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
+    ).build()
+
     val view: edit_success = app.injector.instanceOf[edit_success]
     val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(successRequest)
+    val messages: Messages = messagesApi.preferred(successContactDetailsRequest)
+    val messagesAddress: Messages = messagesApi.preferred(successAddressDetailsRequest)
   }
 }

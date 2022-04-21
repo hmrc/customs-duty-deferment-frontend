@@ -109,6 +109,29 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails.url
       }
     }
+
+    "redirect to the confirmation problem page when a update failed" in new Setup {
+      val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
+      val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
+
+      val newApp: Application = application(Some(userAnswers)).overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices)
+      ).build()
+
+      when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
+      when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
+        .thenReturn(Future.successful(validAccountContactDetails))
+      when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
+        .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
+
+      running(newApp) {
+        val result = route(newApp, validSubmitRequest).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
+      }
+    }
   }
 
   trait Setup {
@@ -126,6 +149,19 @@ class EditAddressDetailsControllerSpec extends SpecBase {
           ("addressLine1", "123 A New Street"),
           ("postCode", "SW1 6EL"),
           ("countryCode", "GB"),
+          ("telephone", "+441111222333"),
+          ("countryName", "United Kingdom"),
+          ("email", "first.name@email.com")
+        )
+
+    val invalidCountryCodeRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
+      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
+        .withFormUrlEncodedBody(
+          ("dan", validDan),
+          ("name", "New Name"),
+          ("addressLine1", "123 A New Street"),
+          ("postCode", "SW1 6EL"),
+          ("countryCode", "P1"),
           ("telephone", "+441111222333"),
           ("countryName", "United Kingdom"),
           ("email", "first.name@email.com")

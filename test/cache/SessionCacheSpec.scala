@@ -49,5 +49,29 @@ class SessionCacheSpec extends SpecBase {
         retrieved.get mustBe test
       }
     }
+
+    ".get call after data removed from cache returns none" in new Setup {
+      private val app = application().build()
+      running(app) {
+        val testCache = app.injector.instanceOf[TestCache]
+        val storeResult = await(testCache.store(id, test))
+        storeResult mustBe true
+        val removeResult = await(testCache.remove(id))
+        removeResult mustBe true
+        val retrieveResult = await(testCache.retrieve(id))
+        retrieveResult mustBe None
+      }
+    }
+
+    ".set and then remove value successfully" in new Setup {
+      private val app = application().build()
+      running(app) {
+        val testCache = app.injector.instanceOf[TestCache]
+        val storeResult = await(testCache.store(id, test))
+        storeResult mustBe true
+        val removeResult = await(testCache.remove(id))
+        removeResult mustBe true
+      }
+    }
   }
 }
