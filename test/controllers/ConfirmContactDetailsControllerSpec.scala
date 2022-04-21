@@ -64,7 +64,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "return OK on a successful submission when the cache returns false" in new Setup {
+    "return OK on a successful submission when the cache returns false for contact details" in new Setup {
       when(mockUserAnswersCache.remove(any[String]))
         .thenReturn(Future.successful(false))
 
@@ -79,10 +79,33 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
+    "return OK on a successful submission when the cache returns false for address details" in new Setup {
+      when(mockUserAnswersCache.remove(any[String]))
+        .thenReturn(Future.successful(false))
+
+      running(app) {
+        val result = route(appAddressEdit, successAddressDetailsRequest).value
+        status(result) mustBe OK
+        contentAsString(result).removeCsrf() mustBe view(validDan)(
+          successAddressDetailsRequest,
+          messages,
+          appConfig
+        ).toString().removeCsrf()
+      }
+    }
+
+    "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
       running(newApp) {
         val result = route(newApp, successContactDetailsRequest).value
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return INTERNAL_SERVER_ERROR when user answers is empty for address details" in new Setup {
+      val newApp: Application = application(Some(emptyUserAnswers)).build()
+      running(newApp) {
+        val result = route(newApp, successAddressDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
