@@ -26,8 +26,7 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
     @layout(pageTitle = Some(messages("cf.error.not-found.title")), helpAndSupport = false, backLink = None) {
-
-        @h1("cf.error.not-found.heading", id = None, classes = "govuk-heading-xl")
+        @h1("cf.error.not-found.heading")
         @p(Html(messages("cf.error.not-found.message.address-typed-wrong")))
         @p(Html(messages("cf.error.not-found.message.address-pasted-wrong")))
         @link(

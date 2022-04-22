@@ -16,6 +16,8 @@
 
 @import views.html.helper._
 
+@this()
+
 @(form: Form[_], field: String, label: String, countries: List[Country], inputClass: Option[String], args: (Symbol, Any)*)(implicit messages: Messages, request: Request[_])
 
 @elements = @{

@@ -15,29 +15,24 @@
  *@
 
 @import config.AppConfig
-@import views.html.components.direct_debit_card
 
 @this(
         layout: Layout,
-        button: components.button,
+        h1: components.h1,
         h2: components.h2,
-        p2: components.p2,
+        inset: components.inset,
         link: components.link,
         directDebitCard: components.direct_debit_card
 )
 
 @(dan: String, backLink: Option[String], status: CDSAccountStatusId, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@layout(pageTitle = Some(messages("accountDetails.heading", dan)), backLink = backLink,
-    helpAndSupport = false,
-    deskpro = false) {
-    @components.heading(headingKey = messages("accountDetails.heading", dan), headingSize = "govuk-heading-l")
-    @h2(messages("accountDetails.details.heading"), h2Class = Some("govuk-heading-m"))
-
-    @p2(messages("accountDetails.details.error.description1"),
-            anchor = link("accountDetails.details.error.description2", location = "https://www.gov.uk/guidance/manage-your-email-address-for-the-customs-declaration-service"))
-    <div class="govuk-inset-text">
-    @messages("accountDetails.details.error.message")
-    </div>
+@layout(pageTitle = Some(messages("accountDetails.heading", dan)), backLink = backLink, helpAndSupport = false, deskpro = false) {
+    @h1(messages("accountDetails.heading", dan))
+    @h2(messages("accountDetails.details.heading"))
+    @link(linkMessage = "accountDetails.details.error.description2",
+          location = "https://www.gov.uk/guidance/manage-your-email-address-for-the-customs-declaration-service",
+          preLinkMessage = Some("accountDetails.details.error.description1"), linkSentence = true)
+    @inset(messages("accountDetails.details.error.message"))
     @directDebitCard(status, linkId)
 }

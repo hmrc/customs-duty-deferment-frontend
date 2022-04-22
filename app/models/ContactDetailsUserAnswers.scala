@@ -66,26 +66,6 @@ object ContactDetailsUserAnswers {
 
   implicit val formats: OFormat[ContactDetailsUserAnswers] = Json.format[ContactDetailsUserAnswers]
 
-  def fromContactDetails(dan: String,
-                         contactDetails: ContactDetails,
-                         getCountryNameF: String => Option[String]): ContactDetailsUserAnswers = {
-    ContactDetailsUserAnswers(
-      dan,
-      contactDetails.contactName,
-      contactDetails.addressLine1,
-      contactDetails.addressLine2,
-      contactDetails.addressLine3,
-      contactDetails.addressLine4,
-      contactDetails.postCode,
-      contactDetails.countryCode,
-      getCountryNameF(contactDetails.countryCode),
-      contactDetails.telephone,
-      contactDetails.faxNumber,
-      contactDetails.email
-    )
-
-  }
-
   def toAddressDetails(dan: String,
                          contactDetails: ContactDetails,
                          getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
