@@ -26,14 +26,14 @@
 @(dan: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(
-    pageTitle = Some(messages("accountDetails.edit.success.title")),
+    pageTitle = Some(messages("accountDetails.edit.address.title")),
     backLink = None,
     helpAndSupport = false,
     deskpro = false,
     welshToggle = false) {
 
     @confirmation_panel(
-        message = Some(messages("accountDetails.edit.success.title")),
+        message = Some(messages("accountDetails.edit.address.title")),
         accountDesc = Some(messages("accountDetails.edit.success.message")),
         accountNo = Some(dan),
         divClass = Some("govuk-!-margin-bottom-6")
