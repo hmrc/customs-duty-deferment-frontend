@@ -24,12 +24,13 @@ import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.contact_details.edit_success
+import views.html.contact_details.{edit_success_contact, edit_success_address}
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmContactDetailsController @Inject()(successView: edit_success,
+class ConfirmContactDetailsController @Inject()(successViewContact: edit_success_contact,
+                                                successViewAddress: edit_success_address,
                                                 identify: IdentifierAction,
                                                 dataRetrievalAction: DataRetrievalAction,
                                                 resolveSessionId: SessionIdAction,
@@ -52,7 +53,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
               if (!removeSuccessful) {
                 logger.error("Failed to remove user answers from mongo")
               }
-              Ok(successView(userAnswers.dan))
+              Ok(successViewAddress(userAnswers.dan))
           }
         case _ =>
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")
@@ -70,7 +71,7 @@ class ConfirmContactDetailsController @Inject()(successView: edit_success,
               if (!removeSuccessful) {
                 logger.error("Failed to remove user answers from mongo")
               }
-              Ok(successView(userAnswers.dan))
+              Ok(successViewContact(userAnswers.dan))
           }
         case None =>
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")

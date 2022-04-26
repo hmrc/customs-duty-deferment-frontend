@@ -27,7 +27,8 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
-import views.html.contact_details.edit_success
+import views.html.contact_details.edit_success_address
+import views.html.contact_details.edit_success_contact
 
 import scala.concurrent.Future
 
@@ -41,7 +42,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, successContactDetailsRequest).value
         status(result) mustBe OK
-        contentAsString(result).removeCsrf() mustBe view(validDan)(
+        contentAsString(result).removeCsrf() mustBe viewContact(validDan)(
           successContactDetailsRequest,
           messages,
           appConfig
@@ -56,7 +57,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       running(appAddressEdit) {
         val result = route(appAddressEdit, successAddressDetailsRequest).value
         status(result) mustBe OK
-        contentAsString(result).removeCsrf() mustBe view(validDan)(
+        contentAsString(result).removeCsrf() mustBe viewAddress(validDan)(
           successAddressDetailsRequest,
           messagesAddress,
           appConfig
@@ -71,7 +72,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(app, successContactDetailsRequest).value
         status(result) mustBe OK
-        contentAsString(result).removeCsrf() mustBe view(validDan)(
+        contentAsString(result).removeCsrf() mustBe viewContact(validDan)(
           successContactDetailsRequest,
           messages,
           appConfig
@@ -86,7 +87,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result = route(appAddressEdit, successAddressDetailsRequest).value
         status(result) mustBe OK
-        contentAsString(result).removeCsrf() mustBe view(validDan)(
+        contentAsString(result).removeCsrf() mustBe viewAddress(validDan)(
           successAddressDetailsRequest,
           messages,
           appConfig
@@ -146,7 +147,8 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
     ).build()
 
-    val view: edit_success = app.injector.instanceOf[edit_success]
+    val viewAddress: edit_success_address = app.injector.instanceOf[edit_success_address]
+    val viewContact: edit_success_contact = app.injector.instanceOf[edit_success_contact]
     val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
     val messages: Messages = messagesApi.preferred(successContactDetailsRequest)
