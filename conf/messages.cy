@@ -108,7 +108,7 @@ cf.not-subscribed-to-cds.detail.process-application-info=Gall gymryd hyd at awr 
 cf.account.detail.requested.title=Datganiadau gohirio tollau y gofynnwyd amdanynt
 cf.account.detail.requested-certificates-available-text.pre=Eich
 cf.account.detail.requested-certificates-available-link-text=datganiadau y gofynnwyd amdanynt
-cf.account.detail.requested-certificates-available-text.post=nawr ar gael
+cf.account.detail.requested-certificates-available-text.post=nawr ar gael.
 cf.account.detail.requested.deferment-account-secondary-heading=Cyfrif:
 # ----------------------------------------------------------
 
@@ -157,6 +157,11 @@ accountDetails.details.error.description1=Dyma’r manylion y byddwn yn eu defny
 accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
 accountDetails.details.error.advice1=Gallwch
 accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau uniongyrchol
+#TODO add welsh
+accountDetails.details.name.hidden-text = Change name
+accountDetails.details.telephone.hidden-text = Change telephone number
+accountDetails.details.email.hidden-text = Change email address
+accountDetails.details.address.hidden-text = Change address
 
 accountDetails.edit.title=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.edit.heading=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
@@ -262,10 +267,6 @@ dd.setup.unavailable.message=Os ydych wedi dilysu’ch cyfeiriad e-bost yn ddiwe
 session_expired.title=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.guidance=Mae’r manylion a roddwyd gennych wedi’u dileu gan nad ydych wedi mynd yn eich blaen â’r gwasanaeth ers 15 munud.
-
-accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
-accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
-accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
 
 cf.customs-financials-home.recruitment-banner-heading=Helpu ni i wella’r gwasanaeth hwn
 cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymryd rhan bosibl yn ein hymchwil defnyddiwr

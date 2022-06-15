@@ -57,7 +57,7 @@
                     content = Text(accountDetails.name.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(editContactDetails = true, "accountDetails.details.hidden-text")
+                    items = changeActionItem(editContactDetails = true, "accountDetails.details.name.hidden-text")
                 ))
             ),
             SummaryListRow(
@@ -92,7 +92,7 @@
                     content = Text(accountDetails.telephone.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(editContactDetails = true, "accountDetails.details.hidden-text")
+                    items = changeActionItem(editContactDetails = true, "accountDetails.details.telephone.hidden-text")
                 ))
             ),
             SummaryListRow(
@@ -103,7 +103,7 @@
                     content = Text(accountDetails.email.getOrElse(""))
                 ),
                 actions = Some(Actions(
-                    items = changeActionItem(editContactDetails = true, "accountDetails.details.hidden-text")
+                    items = changeActionItem(editContactDetails = true, "accountDetails.details.email.hidden-text")
                 ))
             )
         )

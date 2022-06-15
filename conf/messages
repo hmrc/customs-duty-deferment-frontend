@@ -159,8 +159,10 @@ accountDetails.details.error.description1 = These are the details we will use if
 accountDetails.details.error.description2 = email address used to register for CDS
 accountDetails.details.error.advice1 = You can
 accountDetails.details.error.advice2 = view your Direct Debit details
-accountDetails.details.hidden-text = Change contact details
-accountDetails.details.address.hidden-text = Change address details
+accountDetails.details.name.hidden-text = Change name
+accountDetails.details.telephone.hidden-text = Change telephone number
+accountDetails.details.email.hidden-text = Change email address
+accountDetails.details.address.hidden-text = Change address
 
 accountDetails.edit.title=Contact details for duty deferment account {0}
 accountDetails.edit.heading=Contact details for duty deferment account {0}
