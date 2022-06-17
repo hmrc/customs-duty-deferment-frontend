@@ -19,6 +19,7 @@ cf.account.detail.missing-file-type-excise=Nid yw’r crynodeb o’r ecséis {0}
 cf.account.detail.missing-file-type=Nid yw {0} ar gyfer {1} i {2} ar gael
 cf.account.detail.unavailable=Nid yw ar gael
 cf.account.detail.no-statements=Nid oes datganiadau ar gael ar gyfer cyfrif gohirio tollau {0}.
+#TODO: investigate which key is being displayed & where they should displayed
 cf.duty-deferment-account.historic.description=Rydym ond yn dangos datganiadau ar gyfer y 6 mis diwethaf. Os oes angen, gallwch
 cf.duty-deferment-account.historic.request=ofyn am ddatganiadau hŷn
 cf.duty-deferment-account.problem-with-service.text=Mae’n ddrwg gennym, nid yw’ch datganiadau ar gael ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
@@ -87,6 +88,7 @@ cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIE
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
+#TODO: investigate which key is being displayed & where they should displayed
 cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 6 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
 cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 6 mis
 
@@ -157,11 +159,10 @@ accountDetails.details.error.description1=Dyma’r manylion y byddwn yn eu defny
 accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
 accountDetails.details.error.advice1=Gallwch
 accountDetails.details.error.advice2=fwrw golwg dros fanylion eich debydau uniongyrchol
-#TODO add welsh
-accountDetails.details.name.hidden-text = Change name
-accountDetails.details.telephone.hidden-text = Change telephone number
-accountDetails.details.email.hidden-text = Change email address
-accountDetails.details.address.hidden-text = Change address
+accountDetails.details.name.hidden-text = Newid enw
+accountDetails.details.telephone.hidden-text = Newid rhif ffôn
+accountDetails.details.email.hidden-text = Newid cyfeiriad e-bost
+accountDetails.details.address.hidden-text = Newid cyfeiriad
 
 accountDetails.edit.title=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.edit.heading=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
