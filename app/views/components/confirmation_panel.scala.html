@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
-@(message: Option[String] = None, accountDesc: Option[String] = None, accountNo: Option[String] = None, warning: Option[String] = None, divClass: Option[String] = None, h1Class: Option[String] = None)(implicit messages: Messages)
+@(message: Option[String] = None, accountDesc: Option[String] = None, accountNo: Option[String] = None, divClass: Option[String] = None, h1Class: Option[String] = None)(implicit messages: Messages)
 
 <div class="govuk-panel govuk-panel--confirmation @divClass">
-    <h1 class="govuk-panel__title @h1Class">@message</h1>
-    <h3>@warning</h3>
+    <h1 class="govuk-panel__title @h1Class">
+        @message
+    </h1>
     <div class="govuk-panel__body govuk-!-margin-bottom-6">
         @accountDesc 
         <strong>@accountNo</strong>
