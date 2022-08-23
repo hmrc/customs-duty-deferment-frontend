@@ -20,12 +20,17 @@ import play.api.libs.json._
 import uk.gov.hmrc.cache.model.Cache
 import uk.gov.hmrc.cache.repository.CacheMongoRepository
 
+import uk.gov.hmrc.mongo.cache.CacheItem
+import uk.gov.hmrc.mongo.cache.MongoCacheRepository
+import uk.gov.hmrc.mongo.cache.EntityCache
+
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 trait SessionCache[A] {
-  this: CacheMongoRepository =>
+  //this: MongoCacheRepository =>
+  this: EntityCache
 
   val key: String
   implicit val ec: ExecutionContext
@@ -40,7 +45,7 @@ trait SessionCache[A] {
 
   def retrieve(id: String)(implicit reads: Reads[A]): Future[Option[A]] = {
     findById(id).map {
-      case Some(Cache(_, Some(data), _, _)) =>
+      case Some(CacheItem(_, Some(data), _, _)) =>
         (data \ key).toOption.flatMap { keyData =>
           Json.fromJson[A](keyData) match {
             case jsSuccess: JsSuccess[A] => Some(jsSuccess.value)

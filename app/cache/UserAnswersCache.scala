@@ -18,13 +18,12 @@ package cache
 
 import config.AppConfig
 import models.UserAnswers
-import play.modules.reactivemongo.ReactiveMongoComponent
-import uk.gov.hmrc.cache.repository.CacheMongoRepository
+import uk.gov.hmrc.mongo.MongoComponent
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class UserAnswersCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
+class UserAnswersCache @Inject()(appConfig: AppConfig, mongo: MongoComponent)
                                 (override implicit val ec: ExecutionContext) extends
   CacheMongoRepository("user-answers", appConfig.mongoSessionTtl)(mongo.mongoConnector.db, ec) with
   SessionCache[UserAnswers] {

@@ -18,18 +18,18 @@ package cache
 
 import config.AppConfig
 import models.responses.retrieve.ContactDetails
-import play.modules.reactivemongo.ReactiveMongoComponent
+import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.cache.repository.CacheMongoRepository
-
 import javax.inject.Inject
+
 import scala.concurrent.ExecutionContext
 
-class ContactDetailsCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
+class ContactDetailsCache @Inject()(appConfig: AppConfig, mongo: MongoComponent)
                                    (override implicit val ec: ExecutionContext) extends
   CacheMongoRepository("contact-details-cache", appConfig.mongoSessionContactDetailsTtl)(mongo.mongoConnector.db, ec) with
   SessionCache[ContactDetails] {
 
-  override val key: String = "contactDetails"
+    override val key: String = "contactDetails"
 
 }
 
