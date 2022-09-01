@@ -18,13 +18,11 @@ package cache
 
 import config.AppConfig
 import models.DutyDefermentAccountLink
-import uk.gov.hmrc.mongo.MongoComponent
-import uk.gov.hmrc.mongo.cache.SessionCacheRepository
-
 import javax.inject.Inject
+import uk.gov.hmrc.mongo.play.PlayMongoComponent
 import scala.concurrent.ExecutionContext
 
-class AccountLinkCache @Inject()(appConfig: AppConfig, mongo: MongoComponent)
+class AccountLinkCache @Inject()(appConfig: AppConfig, mongo: PlayMongoComponent)
                                 (override implicit val ec: ExecutionContext) extends
   CacheMongoRepository("account-link-cache", appConfig.mongoAccountLinkTtl)(mongo.mongoConnector.db, ec) with
   SessionCache[DutyDefermentAccountLink] {
