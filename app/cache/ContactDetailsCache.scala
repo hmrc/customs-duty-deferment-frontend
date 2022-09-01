@@ -19,12 +19,14 @@ package cache
 import config.AppConfig
 import models.responses.retrieve.ContactDetails
 import javax.inject.Inject
+import uk.gov.hmrc.cache.repository.CacheMongoRepository
 import uk.gov.hmrc.mongo.play.PlayMongoComponent
+
 import scala.concurrent.ExecutionContext
 
 class ContactDetailsCache @Inject()(appConfig: AppConfig, mongo: PlayMongoComponent)
                                    (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("contact-details-cache", appConfig.mongoSessionContactDetailsTtl)(mongo.mongoConnector.db, ec) with
+  CacheMongoRepository("contact-details-cache", appConfig.mongoSessionContactDetailsTtl)(mongo.database, ec) with
   SessionCache[ContactDetails] {
 
     override val key: String = "contactDetails"

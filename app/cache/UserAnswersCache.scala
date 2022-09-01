@@ -18,14 +18,15 @@ package cache
 
 import config.AppConfig
 import models.UserAnswers
-import uk.gov.hmrc.mongo.MongoComponent
-
 import javax.inject.Inject
+import uk.gov.hmrc.cache.repository.CacheMongoRepository
+import uk.gov.hmrc.mongo.play.PlayMongoComponent
+
 import scala.concurrent.ExecutionContext
 
-class UserAnswersCache @Inject()(appConfig: AppConfig, mongo: MongoComponent)
+class UserAnswersCache @Inject()(appConfig: AppConfig, mongo: PlayMongoComponent)
                                 (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("user-answers", appConfig.mongoSessionTtl)(mongo.mongoConnector.db, ec) with
+  CacheMongoRepository("user-answers", appConfig.mongoSessionTtl)(mongo.database, ec) with
   SessionCache[UserAnswers] {
 
   override val key: String = "userAnswers"
