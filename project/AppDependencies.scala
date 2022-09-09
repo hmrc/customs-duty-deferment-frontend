@@ -8,6 +8,7 @@ object AppDependencies {
     "uk.gov.hmrc" %% "play-conditional-form-mapping" % "1.11.0-play-28",
     "org.typelevel" %% "cats-core" % "2.3.0",
     "uk.gov.hmrc" %% "mongo-caching" % "7.2.0-play-28",
+    "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28" % "0.71.0",
     "uk.gov.hmrc" %% "emailaddress" % "3.6.0"
   )
 
