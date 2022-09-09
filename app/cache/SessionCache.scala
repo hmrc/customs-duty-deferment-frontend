@@ -16,38 +16,26 @@
 
 package cache
 
+import cats.implicits.toFunctorOps
 import play.api.libs.json._
-import uk.gov.hmrc.cache.model.Cache
-import uk.gov.hmrc.cache.repository.CacheMongoRepository
+import uk.gov.hmrc.mongo.cache.{DataKey, MongoCacheRepository}
 
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 trait SessionCache[A] {
-  this: CacheMongoRepository =>
+  this: MongoCacheRepository[String] =>
 
   val key: String
   implicit val ec: ExecutionContext
 
-  def store(id: String, a: A)(implicit writes: Writes[A]): Future[Boolean] = {
-    createOrUpdate(id, key, Json.toJson(a)) map (_ => true)
-  }
+  def store(id: String, a: A)(implicit writes: Writes[A]): Future[Boolean] =
+    put(id)(DataKey(key), a).as(true)
 
-  def remove(id: String): Future[Boolean] = {
-    removeById(id).map(_.ok)
-  }
+  def remove(id: String): Future[Boolean] =
+    delete(id)(DataKey(key)).as(true)
 
-  def retrieve(id: String)(implicit reads: Reads[A]): Future[Option[A]] = {
-    findById(id).map {
-      case Some(Cache(_, Some(data), _, _)) =>
-        (data \ key).toOption.flatMap { keyData =>
-          Json.fromJson[A](keyData) match {
-            case jsSuccess: JsSuccess[A] => Some(jsSuccess.value)
-            case _: JsError => None
-          }
-        }
-      case _ => None
-    }
-  }
+  def retrieve(id: String)(implicit reads: Reads[A]): Future[Option[A]] =
+    get[A](id)(DataKey(key))
 }

@@ -16,13 +16,10 @@
 
 package cache
 
-import cache.TestCache.ttl
 import play.api.Configuration
 import play.api.libs.json.{Json, OFormat}
-import play.modules.reactivemongo.ReactiveMongoComponent
-import uk.gov.hmrc.cache.repository.CacheMongoRepository
-import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 import uk.gov.hmrc.mongo.cache.{CacheIdType, MongoCacheRepository}
+import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -34,14 +31,7 @@ object Test {
   implicit val formats: OFormat[Test] = Json.format[Test]
 }
 
-class TestCache @Inject()(mongo: ReactiveMongoComponent)
-                         (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("test", ttl)(mongo.mongoConnector.db, ec) with
-  SessionCache[Test] {
-  override val key: String = "test"
-}
-
-class HmrcMongoTestCache @Inject()(
+class TestCache @Inject()(
                                     mongoComponent: MongoComponent,
                                     configuration: Configuration,
                                     timestampSupport: TimestampSupport
@@ -51,10 +41,6 @@ class HmrcMongoTestCache @Inject()(
   ttl = 900.seconds,
   timestampSupport = timestampSupport,
   cacheIdType = CacheIdType.SimpleCacheId
-) with HmrcMongoSessionCache[Test] {
+) with SessionCache[Test] {
   override val key: String = "test"
-}
-
-object TestCache {
-  protected val ttl = 900
 }
