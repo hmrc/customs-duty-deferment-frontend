@@ -16,16 +16,20 @@
 
 package cache
 
+import models.UserAnswers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import util.SpecBase
 
-class SessionCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+
+class UserAnswersCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
 
   private val id = "session-123"
-  private val test: Test = Test("john doe", 123)
+  private val test: UserAnswers = UserAnswers("id", lastUpdated = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS))
   private val app = application().build()
-  private val testCache = app.injector.instanceOf[TestCache]
+  private val testCache = app.injector.instanceOf[UserAnswersCache]
 
   override def beforeEach(): Unit =
     testCache.collection.drop().toFuture().futureValue
