@@ -18,16 +18,27 @@ package cache
 
 import config.AppConfig
 import models.DutyDefermentAccountLink
-import play.modules.reactivemongo.ReactiveMongoComponent
-import uk.gov.hmrc.cache.repository.CacheMongoRepository
+import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
+import uk.gov.hmrc.mongo.cache.{CacheIdType, MongoCacheRepository}
 
-import javax.inject.Inject
+import javax.inject.{Singleton, Inject}
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
 
-class AccountLinkCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
+@Singleton
+class AccountLinkCache @Inject()(
+                                  appConfig: AppConfig,
+                                  mongoComponent: MongoComponent,
+                                  timestampSupport: TimestampSupport
+                                )
                                 (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("account-link-cache", appConfig.mongoAccountLinkTtl)(mongo.mongoConnector.db, ec) with
-  SessionCache[DutyDefermentAccountLink] {
+  MongoCacheRepository(
+    mongoComponent = mongoComponent,
+    collectionName = "account-link-cache",
+    ttl = appConfig.mongoAccountLinkTtl.seconds,
+    timestampSupport = timestampSupport,
+    cacheIdType = CacheIdType.SimpleCacheId
+  ) with SessionCache[DutyDefermentAccountLink] {
 
   override val key: String = "dutyDefermentAccountLink"
 }

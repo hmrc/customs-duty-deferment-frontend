@@ -18,18 +18,27 @@ package cache
 
 import config.AppConfig
 import models.UserAnswers
-import play.modules.reactivemongo.ReactiveMongoComponent
-import uk.gov.hmrc.cache.repository.CacheMongoRepository
+import uk.gov.hmrc.mongo.cache.{CacheIdType, MongoCacheRepository}
+import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
 
-class UserAnswersCache @Inject()(appConfig: AppConfig, mongo: ReactiveMongoComponent)
-                                (override implicit val ec: ExecutionContext) extends
-  CacheMongoRepository("user-answers", appConfig.mongoSessionTtl)(mongo.mongoConnector.db, ec) with
-  SessionCache[UserAnswers] {
+@Singleton
+class UserAnswersCache @Inject()(
+                                  appConfig: AppConfig,
+                                  mongoComponent: MongoComponent,
+                                  timestampSupport: TimestampSupport
+                                )(override implicit val ec: ExecutionContext) extends
+  MongoCacheRepository(
+    mongoComponent = mongoComponent,
+    collectionName = "user-answers",
+    ttl = appConfig.mongoSessionTtl.seconds,
+    timestampSupport = timestampSupport,
+    cacheIdType = CacheIdType.SimpleCacheId
+  ) with SessionCache[UserAnswers] {
 
   override val key: String = "userAnswers"
-
 }
 
