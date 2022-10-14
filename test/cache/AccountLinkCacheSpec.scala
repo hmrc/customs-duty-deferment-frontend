@@ -17,6 +17,7 @@
 package cache
 
 import models.{AccountStatusOpen, DefermentAccountAvailable, DutyDefermentAccountLink}
+import org.junit.Assert.assertEquals
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
@@ -25,7 +26,9 @@ class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
 
   private val id = "session-123"
 
-  private val test: DutyDefermentAccountLink = DutyDefermentAccountLink("dan", "linkId", AccountStatusOpen, DefermentAccountAvailable)
+  private val test: DutyDefermentAccountLink = DutyDefermentAccountLink(
+    "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable)
+
   private val app = application().build()
   private val testCache = app.injector.instanceOf[AccountLinkCache]
 
@@ -43,6 +46,12 @@ class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
       testCache.store(id, test).futureValue
       val retrieved = testCache.retrieve(id).futureValue
       retrieved.value mustBe test
+    }
+
+    ".get call when data not found from cache returns none" in {
+      testCache.store(id+1, test).futureValue
+      val retrieved = testCache.retrieve(id).futureValue
+      assertEquals(None, retrieved)
     }
 
     ".get call after data removed from cache returns none" in {
