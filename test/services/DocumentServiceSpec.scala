@@ -45,8 +45,12 @@ class DocumentServiceSpec extends SpecBase {
         result.requestedStatements mustBe Seq(requestedFile)
       }
     }
-  }
 
+    "compare file returns success response when the same" in new Setup {
+      val result = currentFile.compare(currentFile)
+      result mustBe 0
+    }
+  }
 
   trait Setup {
     val mockSDESConnector: SDESConnector = mock[SDESConnector]
