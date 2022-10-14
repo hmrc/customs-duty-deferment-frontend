@@ -134,6 +134,19 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
   }
 
+  "isValidCountryName throws invalid country name error" in new Setup {
+
+    val newApp: Application = application(Some(userAnswers)).overrides(
+      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+      inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+    ).build()
+
+    running(newApp) {
+      val result = route(newApp, invalidCountryCodeRequest).value
+      status(result) mustBe 400
+    }
+  }
+
   trait Setup {
     val userAnswers: UserAnswers =
       emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
