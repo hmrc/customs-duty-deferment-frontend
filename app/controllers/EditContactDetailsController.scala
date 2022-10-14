@@ -22,8 +22,7 @@ import connectors.CustomsFinancialsApiConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import javax.inject.Inject
 import mappings.EditContactDetailsFormProvider
-import models.responses.retrieve.ContactDetails
-import models.{ContactDetailsUserAnswers, DataRequest, EditContactDetailsUserAnswers}
+import models.{DataRequest, EditContactDetailsUserAnswers}
 import pages.EditContactDetailsPage
 import play.api.Logger
 import play.api.data.Form
@@ -53,7 +52,6 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
   extends FrontendController(mcc) with I18nSupport {
 
   private val log = Logger(this.getClass)
-
   private def form: Form[EditContactDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =

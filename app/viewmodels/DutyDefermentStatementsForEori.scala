@@ -20,15 +20,13 @@ import models.{DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
 import utils.OrderedByEoriHistory
 
-case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory, currentStatements: Seq[DutyDefermentStatementFile], requestedStatements: Seq[DutyDefermentStatementFile])
+case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
+  currentStatements: Seq[DutyDefermentStatementFile], requestedStatements: Seq[DutyDefermentStatementFile])
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
-
-  val groups: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(currentStatementsByPeriod)
-
   private val requestedStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(requestedStatements)
-
+  val groups: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(currentStatementsByPeriod)
   val groupsRequested: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(requestedStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
@@ -51,5 +49,4 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory, currentState
         .sortWith(_.defermentStatementType < _.defermentStatementType))
     }
   }
-
 }
