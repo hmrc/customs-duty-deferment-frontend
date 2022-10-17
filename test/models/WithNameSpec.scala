@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import scala.language.implicitConversions
+import util.SpecBase
 
-trait Page
+class WithNameSpec extends SpecBase {
 
-object Page {
-  implicit def toString(page: Page): String = page.toString
+  "WithName" should {
+    "successfully overwrites name" in {
+      val testData = "Test Name"
+      val withName: WithName = new WithName(testData)
+      withName.toString mustBe testData
+    }
+  }
 }

@@ -102,6 +102,20 @@ class DutyDeferementStatementFileSpec extends SpecBase {
           val result = currentFile.compare(differentFile)
           result mustBe 0
         }
+
+        "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
+
+          val differentFile: DutyDefermentStatementFile =
+            DutyDefermentStatementFile(
+              "", "", 0L,
+              DutyDefermentStatementFileMetadata(
+                2019, 1, 1, 2020, 1, 1, FileFormat.UnknownFileFormat,
+                DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+            )
+
+            val result = currentFile.compare(differentFile)
+            result mustBe -1
+          }
       }
 
       trait Setup {
@@ -115,7 +129,8 @@ class DutyDeferementStatementFileSpec extends SpecBase {
             "someFilename",
             "downloadUrl",
             10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
           )
 
         val requestedFile: DutyDefermentStatementFile =
@@ -123,7 +138,8 @@ class DutyDeferementStatementFileSpec extends SpecBase {
             "someRequestedFilename",
             "downloadUrl",
             10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
+            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
           )
 
         val app: Application = application().overrides(

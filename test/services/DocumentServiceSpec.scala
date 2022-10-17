@@ -63,7 +63,8 @@ class DocumentServiceSpec extends SpecBase {
         "someFilename",
         "downloadUrl",
         10L,
-        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
     )
 
     val requestedFile: DutyDefermentStatementFile =
@@ -71,7 +72,8 @@ class DocumentServiceSpec extends SpecBase {
         "someRequestedFilename",
         "downloadUrl",
         10L,
-        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
+        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
     )
 
     val app: Application = application().overrides(
