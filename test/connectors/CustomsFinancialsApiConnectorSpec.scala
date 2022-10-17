@@ -26,7 +26,6 @@ import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
-
 import scala.concurrent.Future
 
 class CustomsFinancialsApiConnectorSpec extends SpecBase {

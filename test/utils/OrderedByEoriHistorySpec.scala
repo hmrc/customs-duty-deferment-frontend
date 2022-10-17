@@ -31,9 +31,6 @@
  */
 package utils
 
-import java.time.LocalDate
-
-import models.EoriHistory
 import util.SpecBase
 import viewmodels.DutyDefermentStatementsForEori
 
