@@ -19,7 +19,6 @@ package models
 import connectors.SDESConnector
 import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
-import org.mockito.MockitoSugar.mock
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.HeaderCarrier
