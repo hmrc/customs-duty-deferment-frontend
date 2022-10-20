@@ -21,7 +21,6 @@ import play.api.data.{Forms, Mapping}
 import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.voa.play.form.ConditionalMappings.isAnyOf
 import uk.gov.voa.play.form.MandatoryOptionalMapping
-
 import scala.util.matching.Regex
 
 trait Constraints {
