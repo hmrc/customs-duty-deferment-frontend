@@ -24,6 +24,11 @@ import util.SpecBase
 class ContactDetailsCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
 
   private val id = "session-123"
+  private val app = application().build()
+  private val testCache = app.injector.instanceOf[ContactDetailsCache]
+
+  override def beforeEach(): Unit =
+    testCache.collection.drop().toFuture().futureValue
 
   private val test: ContactDetails = ContactDetails(
     contactName = Some("contactName"),
@@ -37,11 +42,6 @@ class ContactDetailsCacheSpec extends SpecBase with BeforeAndAfterEach with Opti
     faxNumber = Some("faxNumber"),
     email = Some("email")
   )
-  private val app = application().build()
-  private val testCache = app.injector.instanceOf[ContactDetailsCache]
-
-  override def beforeEach(): Unit =
-    testCache.collection.drop().toFuture().futureValue
 
   "Session Cache" must {
 
@@ -54,6 +54,12 @@ class ContactDetailsCacheSpec extends SpecBase with BeforeAndAfterEach with Opti
       testCache.store(id, test).futureValue
       val retrieved = testCache.retrieve(id).futureValue
       retrieved.value mustBe test
+    }
+
+    ".get call when data not found from cache returns none" in {
+      testCache.store(id+1, test).futureValue
+      val retrieved = testCache.retrieve(id).futureValue
+      retrieved mustBe None
     }
 
     ".get call after data removed from cache returns none" in {

@@ -17,7 +17,7 @@
 package controllers
 
 import cache.UserAnswersCache
-import config.{AppConfig, ErrorHandler}
+import config.AppConfig
 import models.UserAnswers
 import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.i18n.{Messages, MessagesApi}
@@ -29,7 +29,6 @@ import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_success_address
 import views.html.contact_details.edit_success_contact
-
 import scala.concurrent.Future
 
 class ConfirmContactDetailsControllerSpec extends SpecBase {

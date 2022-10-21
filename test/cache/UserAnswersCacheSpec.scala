@@ -47,6 +47,12 @@ class UserAnswersCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
       retrieved.value mustBe test
     }
 
+    ".get call when data not found from cache returns none" in {
+      testCache.store(id+1, test).futureValue
+      val retrieved = testCache.retrieve(id).futureValue
+      retrieved mustBe None
+    }
+
     ".get call after data removed from cache returns none" in {
       val storeResult = testCache.store(id, test).futureValue
       storeResult mustBe true
