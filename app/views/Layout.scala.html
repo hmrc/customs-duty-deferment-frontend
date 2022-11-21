@@ -24,7 +24,6 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
 @import views.html.helper.CSPNonce
-@import views.html.components.help_and_support_message
 @import views.html.partials.countrypickerscript
 
 @this(appConfig: AppConfig,
@@ -72,10 +71,6 @@
 
     @mainContent = {
         @contentBlock
-
-        @if(helpAndSupport) {
-            @help_and_support_message()
-        }
 
         @if(deskpro) {
             @hmrcReportTechnicalIssueHelper()
