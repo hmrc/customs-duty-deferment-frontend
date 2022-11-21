@@ -131,13 +131,6 @@ cf.error.not-found.message.go-to-home-page-text1=Neu gallwch
 cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
 # ----------------------------------------------------------
 
-# Help and Support
-# ----------------------------------------------------------
-cf.help-and-support.title=Help a chymorth
-cf.account.help-support.message=Os ydych yn profi anawsterau, ffoniwch
-cf.account.help-support.duty-deferment.numbers=0300 059 4243
-cf.account.help-support.duty-deferment.office-hours=Ar agor 09:00 i 12:00, a 14:00 i 16:00, o ddydd Llun i ddydd Gwener (ar gau ar wyliau banc).
-# ----------------------------------------------------------
 accountDetails.title=Manylion y cyfrif gohirio tollau
 accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.change=Newid
