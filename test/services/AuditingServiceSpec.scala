@@ -68,11 +68,11 @@ class AuditingServiceSpec extends SpecBase {
 
     val expectedAuditSource = "customs-duty-deferment-frontend"
     val eori = "EORI"
-    val AUDIT_DUTY_DEFERMENT_TRANSACTION = "DUTYDEFERMENTSTATEMENTS"
+    val AUDIT_DUTY_DEFERMENT_TRANSACTION = "Display duty deferment statements"
     val AUDIT_VAT_CERTIFICATES_TRANSACTION = "Display VAT certificates"
     val AUDIT_POSTPONED_VAT_STATEMENTS_TRANSACTION = "Display postponed VAT statements"
     val AUDIT_SECURITY_STATEMENTS_TRANSACTION = "Display security statements"
-    val AUDIT_TYPE = "SDESCALL"
+    val AUDIT_TYPE = "DisplayDutyDefermentStatements"
 
     val mockConfig: AppConfig = mock[AppConfig]
     when(mockConfig.appName).thenReturn("customs-duty-deferment-frontend")

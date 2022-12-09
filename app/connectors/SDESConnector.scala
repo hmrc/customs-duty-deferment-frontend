@@ -30,8 +30,8 @@ class SDESConnector @Inject()(http: HttpClient,
                               auditingService: AuditingService,
                               appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
 
-  val AUDIT_TYPE = "SDESCALL"
-  val AUDIT_DUTY_DEFERMENT_TRANSACTION = "DUTYDEFERMENTSTATEMENTS"
+  val AUDIT_TYPE = "DisplayDutyDefermentStatements"
+  val AUDIT_DUTY_DEFERMENT_TRANSACTION = "x§Display duty deferment statements"
 
   def getDutyDefermentStatements(eori: String, dan: String)(implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
     val sdesDutyDefermentStatementListUrl: String = appConfig.sdesApi + "/files-available/list/DutyDefermentStatement"
