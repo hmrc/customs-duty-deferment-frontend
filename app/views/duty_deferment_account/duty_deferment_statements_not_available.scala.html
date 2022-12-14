@@ -23,8 +23,7 @@
         h1: components.h1,
         link: components.link,
         span: components.span,
-        p: components.p,
-        p3: components.p3
+        p: components.p
 )
 
 @(accountNumber: String, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -43,7 +42,11 @@
     @missing_documents_guidance("statement")
 
     @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
-
-    @p3(Some("historic-statement-request-link"), anchor = link(linkMessage = "cf.duty-deferment-account.historic.request",
-        location = appConfig.historicRequestUrl(linkId)))
+    
+    @link(
+        pId = Some("historic-statement-request-link"),
+        linkMessage = "cf.duty-deferment-account.historic.request",
+        pClass = "govuk-body govuk-!-margin-bottom-9",
+        location = appConfig.historicRequestUrl(linkId)
+    )
 }
