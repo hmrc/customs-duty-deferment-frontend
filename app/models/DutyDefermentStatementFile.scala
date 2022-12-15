@@ -32,13 +32,6 @@ case class DutyDefermentStatementFile(filename: String,
   val fileFormat: FileFormat = metadata.fileFormat
   val monthAndYear: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, 1)
 
-  def auditModelFor(eori: String): AuditModel = {
-    val downloadStatementAuditData = DownloadStatementAuditData.apply(metadata, eori)
-    val data = downloadStatementAuditData.auditData
-    val auditModel = AuditModel("DownloadStatement", metadata.fileRole.transactionName, Json.toJson(data))
-    auditModel
-  }
-
   def downloadLinkAriaLabel()(implicit messages: Messages): String = {
     lazy val endDateMonthAndYear = Formatters.dateAsMonthAndYear(endDate)
     lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(endDate)

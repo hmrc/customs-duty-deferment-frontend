@@ -30,23 +30,6 @@ import services.{AuditingService, DocumentService}
 class DutyDeferementStatementFileSpec extends SpecBase {
 
     "getDutyDefermentStatements" should {
-      "return the correct requested and current statements" in new Setup {
-        when(mockSDESConnector.getDutyDefermentStatements(any,any)(any))
-          .thenReturn(Future.successful(Seq(currentFile, requestedFile)))
-
-        when(mockAuditingService.audit(any)(any))
-          .thenReturn(Future.successful(AuditResult.Success))
-
-        running(app) {
-          val result = await(service.getDutyDefermentStatements(EoriHistory(
-            "someEori", None, None), "someDan"))
-
-          result.eoriHistory mustBe EoriHistory("someEori", None, None)
-          result.currentStatements mustBe Seq(currentFile)
-          result.requestedStatements mustBe Seq(requestedFile)
-        }
-      }
-
       "compare file returns success response when the same" in new Setup {
         val result = currentFile.compare(currentFile)
         result mustBe 0
