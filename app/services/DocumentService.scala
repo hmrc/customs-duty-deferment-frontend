@@ -38,7 +38,6 @@ class DocumentService @Inject()(sdesConnector: SDESConnector,
 
   private def auditFiles(files: Seq[DutyDefermentStatementFile], eori: String)(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] =
     files.map { file =>
-      auditingService.audit(file.auditModelFor(eori))
       file
     }
 }
