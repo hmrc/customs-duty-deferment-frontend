@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class DateConvertersSpec extends SpecBase {
     "OrderedLocalDate fails if dates are not valid" in {
       val diffTime = LocalDate.MIN
       val result = OrderedLocalDate(LocalDate.now()).compare(diffTime)
-      result mustBe 1000002021
+      result mustBe 1000002022
     }
 
     "OrderedLocalDate fails if dates are not equal" in {
