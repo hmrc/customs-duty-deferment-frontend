@@ -133,7 +133,7 @@ cf.accounts.view-customs-account=view your customs financial accounts
 # ----------------------------------------------------------
 
 accountDetails.title = Duty deferment account details
-accountDetails.heading = Contact details for duty deferment account {0}
+accountDetails.heading = Payment details for duty deferment account {0}
 accountDetails.change=Change
 
 accountDetails.details.heading = Contact details
