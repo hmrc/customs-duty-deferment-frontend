@@ -132,7 +132,7 @@ cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer
 # ----------------------------------------------------------
 
 accountDetails.title=Manylion y cyfrif gohirio tollau
-accountDetails.heading=Manylion talu ar gyfer cyfrif gohirio tollau {0}
+accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.change=Newid
 
 accountDetails.details.heading=Manylion cyswllt
