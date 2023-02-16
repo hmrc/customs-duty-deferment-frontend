@@ -35,7 +35,7 @@ class ShowSpec extends SpecBase {
       }
     }
 
-    "have a back to accounts link on top" in new Setup {
+    "when you click on the back link redirect to you contact details" in new Setup {
       running(app) {
         val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details" )
         val result = route(app, request).value
@@ -64,5 +64,4 @@ class ShowSpec extends SpecBase {
 
     override def messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   }
-
 }
