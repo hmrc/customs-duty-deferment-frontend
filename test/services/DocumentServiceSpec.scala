@@ -19,14 +19,10 @@ package services
 import connectors.SDESConnector
 import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
-import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, FileFormat}
-import play.api.test.Helpers._
+import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileFormat}
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
-
-import scala.concurrent.Future
 
 class DocumentServiceSpec extends SpecBase {
 

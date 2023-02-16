@@ -19,12 +19,9 @@ package models
 import connectors.SDESConnector
 import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
-import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
-import scala.concurrent.Future
 import services.{AuditingService, DocumentService}
 
 class DutyDeferementStatementFileSpec extends SpecBase {
