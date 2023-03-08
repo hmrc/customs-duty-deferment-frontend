@@ -135,7 +135,6 @@ accountDetails.title=Manylion y cyfrif gohirio tollau
 accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.change=Newid
 
-accountDetails.details.heading=Manylion cyswllt
 accountDetails.details.guidance=Byddwn ond yn defnyddio’r manylion hyn i gysylltu â chi os oes problem gyda’r cyfrif gohirio hwn.
 accountDetails.details.name=Enw
 accountDetails.details.address=Cyfeiriad
@@ -148,7 +147,6 @@ accountDetails.direct.debit.warning.link.pre = Os nad ydych wedi defnyddio’r c
 accountDetails.direct.debit.warning.link = drefnu Debyd Uniongyrchol newydd
 accountDetails.direct.debit.warning.link.fullStop =.
 accountDetails.details.error.message=Mae’n ddrwg gennym, ni allwn ddangos y rhain ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
-accountDetails.details.error.description1=Dyma’r manylion y byddwn yn eu defnyddio os bydd angen i ni gysylltu â chi ynghylch y cyfrif gohirio tollau hwn. Anfonir hysbysiadau datganiad at y
 accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
 accountDetails.details.error.advice1=Gallwch
 accountDetails.details.error.advice2=fwrw golwg dros neu newid eich manylion debyd uniongyrchol
