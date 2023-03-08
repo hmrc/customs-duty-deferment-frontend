@@ -136,7 +136,6 @@ accountDetails.title = Duty deferment account details
 accountDetails.heading = Contact details for duty deferment account {0}
 accountDetails.change=Change
 
-accountDetails.details.heading = Contact details
 accountDetails.details.guidance = We will only use these details to contact you if there is an issue with this deferment account.
 accountDetails.details.name = Name
 accountDetails.details.address = Address
@@ -149,7 +148,6 @@ accountDetails.direct.debit.warning.link.pre = If you have not used this account
 accountDetails.direct.debit.warning.link = set up a new Direct Debit
 accountDetails.direct.debit.warning.link.fullStop = .
 accountDetails.details.error.message = Sorry, we are unable to show these at the moment. Please try again later.
-accountDetails.details.error.description1 = These are the details we will use if we need to contact you about this duty deferment account. Statement notifications will be sent to the
 accountDetails.details.error.description2 = email address used to register for CDS
 accountDetails.details.error.advice1 = You can
 accountDetails.details.error.advice2 = view or change your Direct Debit details

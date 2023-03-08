@@ -29,9 +29,5 @@
 
 @layout(pageTitle = Some(messages("accountDetails.heading", dan)), backLink = Some(appConfig.yourContactDetailsUrl), helpAndSupport = false, deskpro = false) {
     @h1(messages("accountDetails.heading", dan))
-    @h2(messages("accountDetails.details.heading"))
-    @link(linkMessage = "<accountDeta></accountDeta>ils.details.error.description2",
-          location = "https://www.gov.uk/guidance/manage-your-email-address-for-the-customs-declaration-service",
-          preLinkMessage = Some("accountDetails.details.error.description1"), linkSentence = true)
     @inset(messages("accountDetails.details.error.message"))
 }
