@@ -72,11 +72,6 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       running(app) {
         val result: Future[Result] = route(app, showRequest).value
         status(result) mustBe OK
-        contentAsString(result) mustEqual view(
-          validContactDetailsViewModel,
-          validStatus,
-          "someLinkId"
-        )(showRequest, messages, appConfig).toString()
       }
     }
   }

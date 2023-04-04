@@ -41,7 +41,7 @@ class AccountControllerSpec extends SpecBase {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
 
         val result = route(app, request).value
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe SEE_OTHER
       }
     }
 

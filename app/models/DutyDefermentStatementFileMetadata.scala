@@ -33,7 +33,7 @@ case class DutyDefermentStatementFileMetadata(periodStartYear: Int,
                                               statementRequestId: Option[String]) {
   def toMap: Map[String, String] = {
     val fieldNames: Seq[String] = getClass.getDeclaredFields.map(_.getName)
-    val fieldValues: Seq[String] = productIterator.to.map(_.toString)
+    val fieldValues: Seq[String] = productIterator.map(_.toString).toSeq
     fieldNames.zip(fieldValues).toMap
   }
 }
