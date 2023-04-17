@@ -28,8 +28,9 @@
     } { file =>
         <a id="@{idPrefix}-download-link" class="file-link govuk-link" href="@{
             file.downloadURL
-        }" aria-label="@{file.downloadLinkAriaLabel()}" download>
-            @fileFormat (@{Formatters.fileSize(file.fileSize)})
+        }" download>
+            <span>@fileFormat (@{Formatters.fileSize(file.fileSize)})</span>
+            <span class="govuk-visually-hidden">@{file.downloadLinkAriaLabel()}</span>
         </a>
     }
 }
