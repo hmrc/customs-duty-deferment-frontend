@@ -30,7 +30,7 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
 
   private val log = Logger(this.getClass)
 
-  private def countryCode: String => String = _.split(":")(1).trim
+  private def countryCode: String => String = _.split(":")(1).trim.dropRight(1)
 
   private val countriesFilename = appConfig.countriesFilename
 
@@ -38,9 +38,8 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
     def fromJsonFile: List[Country] =
       Json.parse(env.classLoader.getResourceAsStream(countriesFilename)) match {
         case JsArray(cs) =>
-          cs.toList.collect {
-            case JsArray(Seq(c: JsString, cc: JsString)) =>
-              Country(c.value, countryCode(cc.value))
+          cs.toList.map {
+            country => Country(country(0).toString().stripPrefix("\"").stripSuffix("\""), countryCode(country(1).toString()))
           }
         case _ =>
           log.error("Could not read JSON array of countries from : " + countriesFilename)
