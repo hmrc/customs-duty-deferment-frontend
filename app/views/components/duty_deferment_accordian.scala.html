@@ -21,11 +21,22 @@
 
 @this(govukAccordion : GovukAccordion)
 
-@(statementPeriods: Seq[DutyDefermentStatementPeriodsByMonth], historyIndex: Int)(implicit messages: Messages)
+@(
+    statementPeriods: Seq[DutyDefermentStatementPeriodsByMonth], 
+    historyIndex: Int,
+    showSection: Option[String] = None,
+    showAllSections: Option[String] = None,
+    hideSection: Option[String] = None,
+    hideAllSections: Option[String] = None
+)(implicit messages: Messages)
 
     @if(statementPeriods.nonEmpty) {
         @govukAccordion(Accordion(
             id = "accordion-default",
+            showSection = Some(messages("cf.account.detail.accordion.show-section")),
+            showAllSections = Some(messages("cf.account.detail.accordion.show-all-sections")),
+            hideSection = Some(messages("cf.account.detail.accordion.hide-section")),
+            hideAllSections = Some(messages("cf.account.detail.accordion.hide-all-sections")),
             items = statementPeriods.zipWithIndex.map { case (group, groupIndex) =>
                 Section(
                     headingContent = Text({

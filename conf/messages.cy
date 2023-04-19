@@ -23,6 +23,10 @@ cf.account.detail.no-statements=Nid oes datganiadau ar gael ar gyfer cyfrif gohi
 cf.duty-deferment-account.historic.description=Rydym ond yn dangos datganiadau ar gyfer y 6 mis diwethaf. Os oes angen, gallwch
 cf.duty-deferment-account.historic.request=ofyn am ddatganiadau hŷn
 cf.duty-deferment-account.problem-with-service.text=Mae’n ddrwg gennym, nid yw’ch datganiadau ar gael ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
+cf.account.detail.accordion.show-section=Dangos
+cf.account.detail.accordion.show-all-sections=Dangos pob adran
+cf.account.detail.accordion.hide-section=Cuddio
+cf.account.detail.accordion.hide-all-sections=Cuddio bob adran
 # ----------------------------------------------------------
 
 # Timeout Messages

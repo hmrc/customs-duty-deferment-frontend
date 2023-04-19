@@ -20,6 +20,10 @@ cf.account.detail.missing-file-type={0} for {1} to {2} unavailable
 cf.account.detail.unavailable=Unavailable
 cf.account.detail.no-statements=No statements available for deferment account {0}.
 cf.duty-deferment-account.problem-with-service.text=Sorry, your statements are not available at the moment. Please try again later.
+cf.account.detail.accordion.show-section=Show
+cf.account.detail.accordion.show-all-sections=Show all sections
+cf.account.detail.accordion.hide-section=Hide
+cf.account.detail.accordion.hide-all-sections=Hide all sections
 # ----------------------------------------------------------
 
 # BETA Banner
