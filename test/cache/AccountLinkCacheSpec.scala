@@ -27,7 +27,7 @@ class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
   private val id = "session-123"
 
   private val test: DutyDefermentAccountLink = DutyDefermentAccountLink(
-    "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable)
+    "someEori","dan", "linkId", AccountStatusOpen, DefermentAccountAvailable)
 
   private val app = application().build()
   private val testCache = app.injector.instanceOf[AccountLinkCache]
