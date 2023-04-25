@@ -52,11 +52,11 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
           contactDetails <- contactDetailsCacheService.getContactDetails(
             request.request.user.internalId,
             details.dan,
-            request.request.user.eori
+            details.eori
           )
           viewModel = ContactDetailsViewModel(details.dan, contactDetails, countriesProviderService.getCountryName)
         } yield {
-          Ok(view(viewModel, details.statusId, details.linkId))
+          Ok(view(viewModel, details.statusId, details.linkId, details.eori.contains("XI")))
         }).recover {
           case NonFatal(e) =>
             log.error(s"Unable to retrieve account details: ${e.getMessage}")

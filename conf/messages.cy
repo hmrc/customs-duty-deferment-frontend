@@ -137,6 +137,9 @@ cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer
 
 accountDetails.title=Manylion y cyfrif gohirio tollau
 accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.contact = Manylion cyswllt ar gyfer gohirio tollau
+accountDetails.account.gb = Cyfrif: {0}
+accountDetails.account.ni = Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.change=Newid
 
 accountDetails.details.guidance=Byddwn ond yn defnyddio’r manylion hyn i gysylltu â chi os oes problem gyda’r cyfrif gohirio hwn.
