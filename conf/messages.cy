@@ -136,7 +136,8 @@ cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer
 # ----------------------------------------------------------
 
 accountDetails.title=Manylion y cyfrif gohirio tollau
-accountDetails.heading=Manylion ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.heading=Manylion cyswllt ar gyfer gohirio tollau
+accountDetails.caption = Cyfrif: {0}
 accountDetails.change=Newid
 
 accountDetails.details.guidance=Byddwn ond yn defnyddio’r manylion hyn i gysylltu â chi os oes problem gyda’r cyfrif gohirio hwn.
@@ -159,7 +160,8 @@ accountDetails.details.telephone.hidden-text = Newid rhif ffôn
 accountDetails.details.email.hidden-text = Newid cyfeiriad e-bost
 accountDetails.details.address.hidden-text = Newid cyfeiriad
 
-accountDetails.edit.title=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.edit.title=Manylion personol ar gyfer gohirio tollau
+accountDetails.edit.caption=Cyfrif: {0}
 accountDetails.edit.heading=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.edit.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion cyswllt hyn.
 accountDetails.edit.name=Enw llawn
@@ -174,10 +176,11 @@ accountDetails.edit.fax=Rhif ffacs (dewisol)
 accountDetails.edit.save=Cadw newidiadau
 accountDetails.edit.back=Canslo newidiadau
 accountDetails.edit.confirm.back=Yn ôl i fanylion y cyfrif gohirio tollau
-accountDetails.edit.contact.title=Wedi llwyddo i ddiweddaru manylion cyswllt
-accountDetails.edit.address.title=Wedi llwyddo i ddiweddaru manylion cyfeiriad
-accountDetails.edit.success.message=Cyfrif Gohirio Tollau
-accountDetails.editAddress.title=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
+accountDetails.edit.contact.title=Diweddarwyd y manylion personol ar gyfer gohirio tollau yn llwyddiannus
+accountDetails.edit.address.title=Diweddarwyd manylion y cyfeiriad ar gyfer gohirio tollau yn llwyddiannus
+accountDetails.edit.success.message=Rhif y cyfrif
+accountDetails.editAddress.title=Manylion y cyfeiriad ar gyfer gohirio tollau
+accountDetails.editAddress.caption=Cyfrif: {0}
 accountDetails.editAddress.heading=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.editAddress.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion cyfeiriad hyn
 

@@ -21,6 +21,7 @@
 @this(layout: Layout,
       govukSummaryList: GovukSummaryList,
       h1: components.h1,
+      h2: components.h2,
       p: components.p,
       directDebitCard: components.direct_debit_card)
 
@@ -42,7 +43,14 @@
     helpAndSupport = false,
     deskpro = false) {
 
-    @h1(messages("accountDetails.heading", accountDetails.dan), classes = "govuk-heading-xl")
+    @h2(
+        messages("accountDetails.caption", accountDetails.dan),
+        h2Class = Some("govuk-caption-l hmrc-caption-l")
+    )
+    @h1(
+        messages("accountDetails.heading"), 
+        classes = "govuk-heading-xl"
+    )
 
     @govukSummaryList(SummaryList(
         rows = Seq(
