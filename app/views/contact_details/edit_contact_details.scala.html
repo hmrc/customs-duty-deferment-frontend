@@ -21,6 +21,7 @@
 @this(
         layout: Layout,
         h1: components.h1,
+        h2: components.h2,
         button: components.button,
         cancel_button: components.cancel_button,
         inputText: components.input_text,
@@ -40,8 +41,16 @@
 
         @errorSummary(form)
 
-        @h1(msg = messages("accountDetails.edit.title", form("dan").value.getOrElse("")),
-            classes = "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6")
+        @h2(
+            messages("accountDetails.caption", dan),
+            h2Class = Some("govuk-caption-l hmrc-caption-l")
+        )   
+
+        @h1(
+            msg = messages("accountDetails.edit.title", 
+            form("dan").value.getOrElse("")),
+            classes = "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6"
+        )
 
         @p(content = Html(messages("accountDetails.edit.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 

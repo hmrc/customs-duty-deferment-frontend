@@ -137,7 +137,8 @@ cf.accounts.view-customs-account=view your customs financial accounts
 # ----------------------------------------------------------
 
 accountDetails.title = Duty deferment account details
-accountDetails.heading = Contact details for duty deferment account {0}
+accountDetails.heading = Contact details for duty deferment
+accountDetails.caption = Account: {0}
 accountDetails.change=Change
 
 accountDetails.details.guidance = We will only use these details to contact you if there is an issue with this deferment account.
@@ -160,7 +161,8 @@ accountDetails.details.telephone.hidden-text = Change telephone number
 accountDetails.details.email.hidden-text = Change email address
 accountDetails.details.address.hidden-text = Change address
 
-accountDetails.edit.title=Contact details for duty deferment account {0}
+accountDetails.edit.title=Personal details for duty deferment
+accountDetails.edit.caption=Account: {0}
 accountDetails.edit.heading=Contact details for duty deferment account {0}
 accountDetails.edit.guidance=These contact details will only be used for this duty deferment account.
 accountDetails.edit.name=Full name
@@ -175,10 +177,11 @@ accountDetails.edit.fax=Fax number (optional)
 accountDetails.edit.save=Save changes
 accountDetails.edit.back=Cancel changes
 accountDetails.edit.confirm.back=Back to duty deferment account details
-accountDetails.edit.contact.title=Contact details successfully updated
-accountDetails.edit.address.title=Address details successfully updated
-accountDetails.edit.success.message=Duty deferment account
-accountDetails.editAddress.title=Address details for duty deferment account {0}
+accountDetails.edit.contact.title=Personal details for duty deferment successfully updated
+accountDetails.edit.address.title=Address details for duty deferment successfully updated
+accountDetails.edit.success.message=Account number
+accountDetails.editAddress.title=Address details for duty deferment
+accountDetails.editAddress.caption=Account: {0}
 accountDetails.editAddress.heading=Address details for duty deferment account {0}
 accountDetails.editAddress.guidance=These address details will only be used for this duty deferment account.
 
