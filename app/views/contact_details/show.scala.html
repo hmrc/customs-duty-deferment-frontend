@@ -25,7 +25,8 @@
       p: components.p,
       directDebitCard: components.direct_debit_card)
 
-@(accountDetails: ContactDetailsViewModel, status: CDSAccountStatusId, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(accountDetails: ContactDetailsViewModel, status: CDSAccountStatusId, linkId: String,
+    xi: Boolean = false)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @changeActionItem(editContactDetails: Boolean, hiddenText: String) = @{
     if(status != AccountCancelled) {
@@ -43,10 +44,13 @@
     helpAndSupport = false,
     deskpro = false) {
 
-    @h2(
-        messages("accountDetails.caption", accountDetails.dan),
-        h2Class = Some("govuk-caption-l hmrc-caption-l")
-    )
+    @if(xi) {
+        @h2(messages("accountDetails.caption.ni", accountDetails.dan),
+        h2Class = Some("govuk-caption-l hmrc-caption-l"))
+    } else {
+        @h2(messages("accountDetails.caption", accountDetails.dan),
+        h2Class = Some("govuk-caption-l hmrc-caption-l"))
+    }
     @h1(
         messages("accountDetails.heading"), 
         classes = "govuk-heading-xl"

@@ -60,7 +60,7 @@ class ContactDetailsEditStartController @Inject()(
           contactDetailsCacheService.getContactDetails(
             request.request.user.internalId,
             dutyDefermentDetails.dan,
-            request.request.user.eori)
+            dutyDefermentDetails.eori)
         )
         initialUserAnswers <- fromOption(
           setUserAnswers(initialContactDetails, dutyDefermentDetails, request.request.user.internalId, changeContactDetails), {

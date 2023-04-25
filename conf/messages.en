@@ -139,6 +139,7 @@ cf.accounts.view-customs-account=view your customs financial accounts
 accountDetails.title = Duty deferment account details
 accountDetails.heading = Contact details for duty deferment
 accountDetails.caption = Account: {0}
+accountDetails.caption.ni = Account: {0} (Northern Ireland)
 accountDetails.change=Change
 
 accountDetails.details.guidance = We will only use these details to contact you if there is an issue with this deferment account.
