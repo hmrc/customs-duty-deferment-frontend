@@ -16,7 +16,7 @@
 
 package viewmodels
 
-case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], linkId: String) {
+case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], linkId: String, isNiAccount: Boolean) {
 
   val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
