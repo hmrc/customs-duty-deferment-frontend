@@ -42,7 +42,8 @@ class EditAddressDetailsFormProvider @Inject()(
         "addressLine4" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line4")),
         "postCode" -> postcodeMapping,
         "countryCode" -> of[String].verifying(isValidCountryCode),
-        "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName))
+        "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName)),
+        "isNiAccount" -> of[Boolean]
       )(EditAddressDetailsUserAnswers.apply)(EditAddressDetailsUserAnswers.unapply)
     )
   }

@@ -24,9 +24,8 @@ import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.contact_details.{edit_success_contact, edit_success_address}
+import views.html.contact_details.{edit_success_address, edit_success_contact}
 import javax.inject.Inject
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmContactDetailsController @Inject()(successViewContact: edit_success_contact,
@@ -50,10 +49,8 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
         case Some(userAnswers) =>
           userAnswersCache.remove(request.identifier).map {
             removeSuccessful =>
-              if (!removeSuccessful) {
-                logger.error("Failed to remove user answers from mongo")
-              }
-              Ok(successViewAddress(userAnswers.dan))
+              if (!removeSuccessful) { logger.error("Failed to remove user answers from mongo") }
+              Ok(successViewAddress(userAnswers.dan, userAnswers.isNiAccount))
           }
         case _ =>
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")
@@ -64,21 +61,19 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
 
   def successContactDetails(): Action[AnyContent] = commonActions.async {
     implicit request => {
-      request.userAnswers.get(EditContactDetailsPage) match {
-        case Some(userAnswers) =>
-          userAnswersCache.remove(request.identifier).map {
-            removeSuccessful =>
-              if (!removeSuccessful) {
-                logger.error("Failed to remove user answers from mongo")
-              }
-              Ok(successViewContact(userAnswers.dan))
-          }
-        case None =>
-          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
-          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
+        request.userAnswers.get(EditContactDetailsPage) match {
+          case Some(userAnswers) =>
+            userAnswersCache.remove(request.identifier).map {
+              removeSuccessful =>
+                if (!removeSuccessful) { logger.error("Failed to remove user answers from mongo") }
+                Ok(successViewContact(userAnswers.dan, userAnswers.isNiAccount))
+            }
+          case None =>
+            logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+            Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
+        }
       }
     }
-  }
 
   def problem: Action[AnyContent] = identify async { implicit request =>
       Future {

@@ -23,9 +23,10 @@ case class EditContactDetailsUserAnswers(dan: String,
                                          name: Option[String],
                                          telephone: Option[String],
                                          fax: Option[String],
-                                         email: Option[String]) {
+                                         email: Option[String],
+                                         isNiAccount: Boolean) {
 
-  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails,
+  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails, isNiAccount: Boolean,
                                   getCountryNameF: String => Option[String]): ContactDetailsUserAnswers = {
     ContactDetailsUserAnswers(
       dan = dan,
@@ -39,7 +40,8 @@ case class EditContactDetailsUserAnswers(dan: String,
       countryName = getCountryNameF(initialContactDetails.countryCode),
       telephone = telephone,
       fax = fax,
-      email = email)
+      email = email,
+      isNiAccount = isNiAccount)
   }
 }
 

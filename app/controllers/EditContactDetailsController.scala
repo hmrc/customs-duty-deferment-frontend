@@ -28,7 +28,7 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
-import services.{ContactDetailsCacheService, CountriesProviderService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_contact_details
@@ -44,6 +44,7 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
                                              formProvider: EditContactDetailsFormProvider,
                                              countriesProviderService: CountriesProviderService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
+                                             accountLinkCacheService: AccountLinkCacheService,
                                              customsFinancialsApiConnector: CustomsFinancialsApiConnector)
                                             (implicit ec: ExecutionContext,
                                              errorHandler: ErrorHandler,
@@ -61,7 +62,8 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
     implicit request =>
       request.userAnswers.get(EditContactDetailsPage) match {
         case Some(contactDetails) =>
-          Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
+          Future.successful(Ok(view(contactDetails.dan, contactDetails.isNiAccount,
+            form.fill(contactDetails), countriesProviderService.countries)))
         case None =>
           log.error(s"Unable to retrieve stored account contact details")
           Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
@@ -75,14 +77,15 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
         form.fold(
           (formWithErrors: Form[EditContactDetailsUserAnswers]) => {
             Future.successful(
-              BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
+              BadRequest(view(userAnswers.dan, false,formWithErrors, countriesProviderService.countries))
             )
           },
           (updatedContactDetails: EditContactDetailsUserAnswers) => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditContactDetailsPage, updatedContactDetails))
+              eori <- accountLinkCacheService.get(request.userAnswers.id).map(_.get.eori)
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedContactDetails, eori)
             } yield updateAddressDetails
           })
       case None =>
@@ -90,14 +93,17 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
     }
   }
 
-  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers)
+  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers, eori: String)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
       initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailAnswers.dan, request.eoriNumber)
-      updatedContactDetails = editContactDetailAnswers.toContactDetailsUserAnswers(initialContactDetails, countriesProviderService.getCountryName)
+
+      updatedContactDetails = editContactDetailAnswers.toContactDetailsUserAnswers(initialContactDetails,
+        editContactDetailAnswers.isNiAccount, countriesProviderService.getCountryName)
+
       _ <- customsFinancialsApiConnector.updateContactDetails(
         dan = editContactDetailAnswers.dan,
-        eori = request.eoriNumber,
+        eori = eori,
         oldContactDetails = initialContactDetails,
         newContactDetails = updatedContactDetails
       )

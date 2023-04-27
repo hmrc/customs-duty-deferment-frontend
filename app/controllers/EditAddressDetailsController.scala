@@ -28,10 +28,11 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{ContactDetailsCacheService, CountriesProviderService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.edit_address_details
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class EditAddressDetailsController @Inject()(view: edit_address_details,
@@ -43,6 +44,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
                                              formProvider: EditAddressDetailsFormProvider,
                                              countriesProviderService: CountriesProviderService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
+                                             accountLinkCacheService: AccountLinkCacheService,
                                              customsFinancialsApiConnector: CustomsFinancialsApiConnector)
                                             (implicit ec: ExecutionContext,
                                              errorHandler: ErrorHandler,
@@ -51,7 +53,6 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
   extends FrontendController(mcc) with I18nSupport {
 
   private val log = Logger(this.getClass)
-
   private def form: Form[EditAddressDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =
@@ -61,7 +62,8 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
     implicit request =>
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(contactDetails) =>
-          Future.successful(Ok(view(contactDetails.dan, form.fill(contactDetails), countriesProviderService.countries)))
+          Future.successful(Ok(view(contactDetails.dan, contactDetails.isNiAccount,
+            form.fill(contactDetails), countriesProviderService.countries)))
         case None =>
           log.error(s"Unable to retrieve stored account contact details")
           Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
@@ -75,14 +77,15 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
         form.fold(
           (formWithErrors: Form[EditAddressDetailsUserAnswers]) => {
             Future.successful(
-              BadRequest(view(userAnswers.dan, formWithErrors, countriesProviderService.countries))
+              BadRequest(view(userAnswers.dan, false, formWithErrors, countriesProviderService.countries))
             )
           },
           (updatedAddressDetails: EditAddressDetailsUserAnswers) => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(EditAddressDetailsPage, updatedAddressDetails))
+              eori <- accountLinkCacheService.get(request.userAnswers.id).map(_.get.eori)
               _ <- userAnswersCache.store(updatedAnswers.id, updatedAnswers)
-              updateAddressDetails <- updateContactDetailsUserAnswers(updatedAddressDetails)
+              updateAddressDetails <- updateContactDetailsUserAnswers(updatedAddressDetails, eori)
             } yield updateAddressDetails
           })
       case None =>
@@ -90,14 +93,14 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
     }
   }
 
-  private def updateContactDetailsUserAnswers(editAddressAnswers: EditAddressDetailsUserAnswers)
+  private def updateContactDetailsUserAnswers(editAddressAnswers: EditAddressDetailsUserAnswers, eori: String)
                                   (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
       initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editAddressAnswers.dan, request.eoriNumber)
-      updatedAddressDetails = editAddressAnswers.toContactDetailsUserAnswers(initialContactDetails)
+      updatedAddressDetails = editAddressAnswers.toContactDetailsUserAnswers(initialContactDetails, editAddressAnswers.isNiAccount)
       _ <- customsFinancialsApiConnector.updateContactDetails(
         dan = editAddressAnswers.dan,
-        eori = request.eoriNumber,
+        eori = eori,
         oldContactDetails = initialContactDetails,
         newContactDetails = updatedAddressDetails
       )
