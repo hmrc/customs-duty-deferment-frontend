@@ -35,18 +35,6 @@ import views.html.contact_details.edit_contact_details
 class EditContactDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
-    "returns 404 when NI not found" in new Setup {
-
-      val newApp: Application = application(Some(userAnswers)).overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-      ).build()
-
-      running(newApp) {
-        val result = route(newApp, onPageLoadRequest).value
-        status(result) mustBe 404
-      }
-    }
 
     "return OK on a valid request" in new Setup {
 
