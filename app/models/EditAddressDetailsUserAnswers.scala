@@ -49,7 +49,6 @@ case class EditAddressDetailsUserAnswers(dan: String,
 }
 
 object EditAddressDetailsUserAnswers {
-
   implicit val formats: OFormat[EditAddressDetailsUserAnswers] = Json.format[EditAddressDetailsUserAnswers]
 }
 

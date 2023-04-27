@@ -26,6 +26,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.contact_details.{edit_success_address, edit_success_contact}
 import javax.inject.Inject
+import services.AccountLinkCacheService
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmContactDetailsController @Inject()(successViewContact: edit_success_contact,
@@ -34,6 +36,7 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
                                                 dataRetrievalAction: DataRetrievalAction,
                                                 resolveSessionId: SessionIdAction,
                                                 dataRequiredAction: DataRequiredAction,
+                                                accountLinkCacheService : AccountLinkCacheService,
                                                 userAnswersCache: UserAnswersCache)
                                                (implicit ec: ExecutionContext,
                                                 errorHandler: ErrorHandler,
@@ -47,10 +50,15 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
     implicit request => {
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(userAnswers) =>
-          userAnswersCache.remove(request.identifier).map {
-            removeSuccessful =>
-              if (!removeSuccessful) { logger.error("Failed to remove user answers from mongo") }
-              Ok(successViewAddress(userAnswers.dan, userAnswers.isNiAccount))
+          val result = for {
+            _ <- userAnswersCache.remove(request.identifier)
+            accLink <- accountLinkCacheService.get(request.userAnswers.id)
+            accBool = accLink.map(_.isNiAccount).get
+          } yield Ok(successViewContact(userAnswers.dan, accBool))
+
+          result.recover { case e =>
+            logger.error(s"Call to account cache failed with exception=$e")
+            InternalServerError(errorHandler.standardErrorTemplate())
           }
         case _ =>
           logger.error(s"Unable to get stored user answers whilst confirming account contact details")
@@ -63,10 +71,15 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
     implicit request => {
         request.userAnswers.get(EditContactDetailsPage) match {
           case Some(userAnswers) =>
-            userAnswersCache.remove(request.identifier).map {
-              removeSuccessful =>
-                if (!removeSuccessful) { logger.error("Failed to remove user answers from mongo") }
-                Ok(successViewContact(userAnswers.dan, userAnswers.isNiAccount))
+            val result = for {
+              _ <- userAnswersCache.remove(request.identifier)
+              accLink <- accountLinkCacheService.get(request.userAnswers.id)
+              accBool = accLink.map(_.isNiAccount).get
+            } yield Ok(successViewContact(userAnswers.dan, accBool))
+
+            result.recover { case e =>
+              logger.error(s"Call to account cache failed with exception=$e")
+              InternalServerError(errorHandler.standardErrorTemplate())
             }
           case None =>
             logger.error(s"Unable to get stored user answers whilst confirming account contact details")
