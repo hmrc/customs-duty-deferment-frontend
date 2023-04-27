@@ -4,6 +4,7 @@ service.back=Yn ôl
 # Duty Deferment Account Detail view
 # ----------------------------------------------------------
 cf.account-number=Cyfrif: {0}
+cf.account.NiAccount=Cyfrif: {0} (Gogledd Iwerddon)
 cf.account.detail.title=Datganiadau gohirio tollau
 cf.account.detail.deferment-account-heading=Datganiadau gohirio tollau
 cf.account.details.previous-eori=EORI: {0}

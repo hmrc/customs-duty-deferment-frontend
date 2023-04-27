@@ -57,7 +57,7 @@ class AccountController @Inject()(
             documentService.getDutyDefermentStatements(historicEori, accountLink.accountNumber)
           )))
       } yield {
-        val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber, statementsForEoris, accountLink.linkId)
+        val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber, statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
         Ok(account(dutyDefermentViewModel))
       }
         ).merge.recover {
