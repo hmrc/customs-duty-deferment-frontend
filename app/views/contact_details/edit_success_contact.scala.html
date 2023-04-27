@@ -23,7 +23,7 @@
         inputText: components.input_text
 )
 
-@(dan: String, xi: Boolean = false)(
+@(dan: String, isNi: Boolean = false)(
     implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(
@@ -33,13 +33,13 @@
     deskpro = false,
     welshToggle = false) {
 
-    @if(xi) {
+    @if(isNi) {
         @confirmation_panel(
             message = Some(messages("accountDetails.edit.contact.title")),
             accountDesc = Some(messages("accountDetails.edit.success.message")),
             accountNo = Some(dan),
             divClass = Some("govuk-!-margin-bottom-6"),
-            xi = Some(messages("accountDetails.edit.success.message.ni")))
+            isNi = Some(messages("accountDetails.edit.success.message.ni")))
     } else {
         @confirmation_panel(
             message = Some(messages("accountDetails.edit.contact.title")),

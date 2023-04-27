@@ -77,7 +77,8 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
         form.fold(
           (formWithErrors: Form[EditAddressDetailsUserAnswers]) => {
             Future.successful(
-              BadRequest(view(userAnswers.dan, false, formWithErrors, countriesProviderService.countries))
+              BadRequest(view(userAnswers.dan, userAnswers.isNiAccount,
+                formWithErrors, countriesProviderService.countries))
             )
           },
           (updatedAddressDetails: EditAddressDetailsUserAnswers) => {

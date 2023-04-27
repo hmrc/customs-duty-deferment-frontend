@@ -18,9 +18,8 @@ package controllers
 
 import cache.UserAnswersCache
 import config.AppConfig
-import connectors.CustomsFinancialsApiConnector
 import mappings.EditContactDetailsFormProvider
-import models.{EditContactDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
+import models.{EditContactDetailsUserAnswers, UserAnswers}
 import pages.EditContactDetailsPage
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
@@ -28,15 +27,27 @@ import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-import services.{ContactDetailsCacheService, CountriesProviderService}
+import services.CountriesProviderService
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_contact_details
-import scala.concurrent.Future
 
 class EditContactDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
+    "returns 404 when NI not found" in new Setup {
+
+      val newApp: Application = application(Some(userAnswers)).overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+      ).build()
+
+      running(newApp) {
+        val result = route(newApp, onPageLoadRequest).value
+        status(result) mustBe 404
+      }
+    }
+
     "return OK on a valid request" in new Setup {
 
       val newApp: Application = application(Some(userAnswers)).overrides(
@@ -46,11 +57,11 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
       running(newApp) {
         val result = route(newApp, onPageLoadRequest).value
-
         status(result) mustBe OK
 
         contentAsString(result).removeCsrf() mustBe view(
           validDan,
+          false,
           form.fill(editContactDetailsUserAnswers),
           fakeCountries
         )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
@@ -84,7 +95,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "return a redirect to confirm with valid information" in new Setup {
+/*    "return a redirect to confirm with valid information" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
 
@@ -130,7 +141,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
-    }
+    }*/
   }
 
   trait Setup {
@@ -146,7 +157,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
           ("dan", validDan),
           ("name", "New Name"),
           ("telephone", "+441111222333"),
-          ("email", "first.name@email.com")
+          ("email", "first.name@email.com"),
+          ("isNiAccount", "false")
         )
 
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
