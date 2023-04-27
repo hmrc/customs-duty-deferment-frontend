@@ -152,7 +152,7 @@ trait TestData extends MockitoSugar {
   )
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
   lazy val accountLink: AccountLink = AccountLink("someEori",
-    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable))
+    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), false)
 
   lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,
@@ -165,6 +165,7 @@ trait TestData extends MockitoSugar {
     dan = validDan,
     linkId = "someLinkId",
     status = AccountStatusOpen,
-    statusId = validStatus
+    statusId = validStatus,
+    isNiAccount = false
   )
 }

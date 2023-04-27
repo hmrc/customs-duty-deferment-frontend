@@ -36,7 +36,12 @@
 
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
-        @span(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+        @if(model.isNiAccount) {
+            @span(messages("cf.account.NiAccount", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+        } else {
+            @span(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+        }
+
         @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
 
         @if(model.hasRequestedStatements) {

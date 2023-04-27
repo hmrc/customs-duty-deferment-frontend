@@ -99,7 +99,7 @@ class AccountControllerSpec extends SpecBase {
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
 
-      val model: DutyDefermentAccount = DutyDefermentAccount("accountNumber", Seq(dutyDefermentStatementsForEori), "linkId")
+      val model: DutyDefermentAccount = DutyDefermentAccount("accountNumber", Seq(dutyDefermentStatementsForEori), "linkId", false)
 
       val messages: Messages = messagesApi.preferred(request)
       running(app) {

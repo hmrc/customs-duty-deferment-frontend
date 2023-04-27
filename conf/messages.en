@@ -4,6 +4,7 @@ service.back = Back
 # Duty Deferment Account Detail view
 # ----------------------------------------------------------
 cf.account-number=Account: {0}
+cf.account.NiAccount=Account: {0} (Northern Ireland)
 cf.account.detail.title=Duty deferment statements
 cf.account.detail.deferment-account-heading=Duty deferment statements
 cf.account.details.previous-eori=EORI: {0}

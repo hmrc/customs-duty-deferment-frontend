@@ -25,9 +25,10 @@ import util.SpecBase
 class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
 
   private val id = "session-123"
+  private val isNiAccount = false
 
   private val test: DutyDefermentAccountLink = DutyDefermentAccountLink("someEori",
-    "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable)
+    "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable, isNiAccount)
 
   private val app = application().build()
   private val testCache = app.injector.instanceOf[AccountLinkCache]

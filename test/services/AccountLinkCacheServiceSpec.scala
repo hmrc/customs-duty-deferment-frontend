@@ -40,7 +40,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
 
     "return NoDutyDefermentSessionAvailable when no accountStatusId present" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(AccountLink("someEori", "dan", "linkId", AccountStatusOpen, None))))
+        .thenReturn(Future.successful(Some(AccountLink("someEori", "dan", "linkId", AccountStatusOpen, None, false))))
 
       running(app) {
         val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
@@ -51,7 +51,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
     "return AccountLink on successful submission" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(AccountLink("someEori",
-          "dan", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable)))))
+          "dan", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), false))))
 
       when(mockAccountLinkCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
@@ -93,7 +93,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
     val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
     val mockAccountLinkCache: AccountLinkCache = mock[AccountLinkCache]
     val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
-      "someEori", "dan", "someLinkId", AccountStatusOpen, DefermentAccountAvailable)
+      "someEori", "dan", "someLinkId", AccountStatusOpen, DefermentAccountAvailable, false)
 
     val app: Application = application().overrides(
       inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
