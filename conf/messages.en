@@ -165,6 +165,7 @@ accountDetails.details.address.hidden-text = Change address
 
 accountDetails.edit.title=Personal details for duty deferment
 accountDetails.edit.caption=Account: {0}
+accountDetails.edit.caption.ni=Account: {0} (Northern Ireland)
 accountDetails.edit.heading=Contact details for duty deferment account {0}
 accountDetails.edit.guidance=These personal details will only be used for this duty deferment account.
 accountDetails.edit.name=Full name
@@ -182,8 +183,10 @@ accountDetails.edit.confirm.back=Back to duty deferment account details
 accountDetails.edit.contact.title=Personal details for duty deferment successfully updated
 accountDetails.edit.address.title=Address details for duty deferment successfully updated
 accountDetails.edit.success.message=Account number
+accountDetails.edit.success.message.ni=(Northern Ireland)
 accountDetails.editAddress.title=Address details for duty deferment
 accountDetails.editAddress.caption=Account: {0}
+accountDetails.editAddress.caption.ni=Account: {0} (Northern Ireland)
 accountDetails.editAddress.heading=Address details for duty deferment account {0}
 accountDetails.editAddress.guidance=These address details will only be used for this duty deferment account.
 

@@ -30,7 +30,8 @@ case class ContactDetailsUserAnswers(dan: String,
                                      countryName: Option[String],
                                      telephone: Option[String],
                                      fax: Option[String],
-                                     email: Option[String]) {
+                                     email: Option[String],
+                                     isNiAccount:  Boolean) {
 
   def withWhitespaceTrimmed: ContactDetailsUserAnswers = {
     this.copy(
@@ -66,7 +67,7 @@ object ContactDetailsUserAnswers {
 
   implicit val formats: OFormat[ContactDetailsUserAnswers] = Json.format[ContactDetailsUserAnswers]
 
-  def toAddressDetails(dan: String,
+  def toAddressDetails(dan: String, dutyDetails: DutyDefermentAccountLink,
                          contactDetails: ContactDetails,
                          getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
     EditAddressDetailsUserAnswers(
@@ -77,19 +78,20 @@ object ContactDetailsUserAnswers {
       contactDetails.addressLine4,
       contactDetails.postCode,
       contactDetails.countryCode,
-      getCountryNameF(contactDetails.countryCode)
+      getCountryNameF(contactDetails.countryCode),
+      dutyDetails.isNiAccount
     )
-
   }
 
-  def toEditContactDetails(dan: String,
+  def toEditContactDetails(dan: String, dutyDetails: DutyDefermentAccountLink,
                            contactDetails: ContactDetails): EditContactDetailsUserAnswers = {
     EditContactDetailsUserAnswers(
       dan,
       contactDetails.contactName,
       contactDetails.telephone,
       contactDetails.faxNumber,
-      contactDetails.email
+      contactDetails.email,
+      dutyDetails.isNiAccount
     )
   }
 }

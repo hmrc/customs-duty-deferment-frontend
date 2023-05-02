@@ -27,9 +27,10 @@ case class EditAddressDetailsUserAnswers(dan: String,
                                          addressLine4: Option[String],
                                          postCode: Option[String],
                                          countryCode: String,
-                                         countryName: Option[String]) {
+                                         countryName: Option[String],
+                                         isNiAccount:  Boolean) {
 
-  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails): ContactDetailsUserAnswers = {
+  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails, isNiAccount: Boolean): ContactDetailsUserAnswers = {
     ContactDetailsUserAnswers(
       dan = dan,
       name = initialContactDetails.contactName,
@@ -42,12 +43,12 @@ case class EditAddressDetailsUserAnswers(dan: String,
       countryName = countryName,
       telephone = initialContactDetails.telephone,
       fax = initialContactDetails.faxNumber,
-      email = initialContactDetails.email)
+      email = initialContactDetails.email,
+      isNiAccount = isNiAccount)
   }
 }
 
 object EditAddressDetailsUserAnswers {
-
   implicit val formats: OFormat[EditAddressDetailsUserAnswers] = Json.format[EditAddressDetailsUserAnswers]
 }
 

@@ -85,12 +85,14 @@ class ContactDetailsEditStartController @Inject()(
   private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.toEditContactDetails(
       dan = dutyDefermentDetails.dan,
-      contactDetails = initialContactDetails)
+      contactDetails = initialContactDetails,
+      dutyDetails = dutyDefermentDetails)
 
     val initialAddressUserAnswers = ContactDetailsUserAnswers.toAddressDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,
-      getCountryNameF = countriesProviderService.getCountryName)
+      getCountryNameF = countriesProviderService.getCountryName,
+      dutyDetails = dutyDefermentDetails)
 
     contactDetailsChange match {
       case true => UserAnswers(internalId, lastUpdated = dateTimeService.now())

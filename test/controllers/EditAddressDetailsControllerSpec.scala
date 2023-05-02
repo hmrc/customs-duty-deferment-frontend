@@ -18,9 +18,8 @@ package controllers
 
 import cache.UserAnswersCache
 import config.AppConfig
-import connectors.CustomsFinancialsApiConnector
 import mappings.EditAddressDetailsFormProvider
-import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
+import models.{EditAddressDetailsUserAnswers, UserAnswers}
 import pages.EditAddressDetailsPage
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
@@ -28,11 +27,9 @@ import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-import services.{ContactDetailsCacheService, CountriesProviderService}
+import services.{CountriesProviderService}
 import util.SpecBase
-import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
-import scala.concurrent.Future
 
 class EditAddressDetailsControllerSpec extends SpecBase {
 

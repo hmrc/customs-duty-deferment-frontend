@@ -26,7 +26,7 @@
       directDebitCard: components.direct_debit_card)
 
 @(accountDetails: ContactDetailsViewModel, status: CDSAccountStatusId, linkId: String,
-    xi: Boolean = false)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+    isNi: Boolean = false)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @changeActionItem(editContactDetails: Boolean, hiddenText: String) = @{
     if(status != AccountCancelled) {
@@ -44,7 +44,7 @@
     helpAndSupport = false,
     deskpro = false) {
 
-    @if(xi) {
+    @if(isNi) {
         @h2(messages("accountDetails.caption.ni", accountDetails.dan),
         h2Class = Some("govuk-caption-l hmrc-caption-l"))
     } else {

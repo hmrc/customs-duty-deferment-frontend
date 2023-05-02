@@ -30,7 +30,8 @@
         country_field: components.country_field
 
 )
-@(dan: String, form: Form[_], countries: List[Country])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(dan: String, isNi: Boolean = false, form: Form[_], countries: List[Country])(
+    implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title")),
@@ -42,10 +43,13 @@
 
         @errorSummary(form)
 
-        @h2(
-            messages("accountDetails.editAddress.caption", dan),
-            h2Class = Some("govuk-caption-l hmrc-caption-l")
-        )   
+        @if(isNi) {
+            @h2(messages("accountDetails.editAddress.caption.ni", dan),
+            h2Class = Some("govuk-caption-l hmrc-caption-l"))
+        } else {
+            @h2(messages("accountDetails.editAddress.caption", dan),
+            h2Class = Some("govuk-caption-l hmrc-caption-l"))
+        }
 
         @h1(
             msg = messages("accountDetails.editAddress.title"),
@@ -112,6 +116,4 @@
         window.location.hash = '#errors';
     }
     </script>
-
 }
-

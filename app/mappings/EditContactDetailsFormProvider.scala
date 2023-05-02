@@ -37,7 +37,8 @@ class EditContactDetailsFormProvider @Inject()(
         "name" -> optional(Forms.text).verifying(isValidNameField("accountDetails.edit.name")),
         "telephone" -> optional(Forms.text).verifying(isValidPhoneNumber("accountDetails.edit.telephone")),
         "fax" -> optional(Forms.text).verifying(isValidPhoneNumber("accountDetails.edit.fax")),
-        "email" -> optional(Forms.text).verifying(isValidEmail)
+        "email" -> optional(Forms.text).verifying(isValidEmail),
+        "isNiAccount" -> of[Boolean]
       )(EditContactDetailsUserAnswers.apply)(EditContactDetailsUserAnswers.unapply)
     )
   }

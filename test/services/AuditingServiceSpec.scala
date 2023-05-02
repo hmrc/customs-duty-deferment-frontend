@@ -101,7 +101,8 @@ class AuditingServiceSpec extends SpecBase {
       countryName = Some("Scotland"),
       telephone = Some("1234567"),
       fax = Some("7654321"),
-      email = Some("abc@de.com"))
+      email = Some("abc@de.com"),
+      isNiAccount = false)
 
     val expectedPreviousContactDetails: JsValue = Json.parse("""{
           "contactName":"John Smith",

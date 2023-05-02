@@ -164,6 +164,7 @@ accountDetails.details.address.hidden-text = Newid cyfeiriad
 
 accountDetails.edit.title=Manylion personol ar gyfer gohirio tollau
 accountDetails.edit.caption=Cyfrif: {0}
+accountDetails.edit.caption.ni=Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.edit.heading=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.edit.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion personol hyn.
 accountDetails.edit.name=Enw llawn
@@ -181,8 +182,10 @@ accountDetails.edit.confirm.back=Yn ôl i fanylion y cyfrif gohirio tollau
 accountDetails.edit.contact.title=Diweddarwyd y manylion personol ar gyfer gohirio tollau yn llwyddiannus
 accountDetails.edit.address.title=Diweddarwyd manylion y cyfeiriad ar gyfer gohirio tollau yn llwyddiannus
 accountDetails.edit.success.message=Rhif y cyfrif
+accountDetails.edit.success.message.ni=(Gogledd Iwerddon)
 accountDetails.editAddress.title=Manylion y cyfeiriad ar gyfer gohirio tollau
 accountDetails.editAddress.caption=Cyfrif: {0}
+accountDetails.editAddress.caption.ni=Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.editAddress.heading=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
 accountDetails.editAddress.guidance=Dim ond ar gyfer y cyfrif gohirio tollau hwn y defnyddir y manylion cyfeiriad hyn
 

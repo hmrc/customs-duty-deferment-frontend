@@ -69,7 +69,8 @@ trait TestData extends MockitoSugar {
     Some("United Kingdom"),
     Some("11111 222333"),
     None,
-    Some("example@email.com")
+    Some("example@email.com"),
+    false
   )
 
   val editAddressDetailsUserAnswers: EditAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
@@ -80,7 +81,8 @@ trait TestData extends MockitoSugar {
     None,
     None,
     "GB",
-    Some("United Kingdom")
+    Some("United Kingdom"),
+    false
   )
 
   val editContactDetailsUserAnswers: EditContactDetailsUserAnswers = EditContactDetailsUserAnswers(
@@ -88,7 +90,8 @@ trait TestData extends MockitoSugar {
     Some("Example Name"),
     Some("11111 222333"),
     None,
-    Some("example@email.com")
+    Some("example@email.com"),
+    false
   )
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
