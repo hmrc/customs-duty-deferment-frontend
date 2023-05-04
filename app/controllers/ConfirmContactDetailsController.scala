@@ -54,14 +54,14 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
             _ <- userAnswersCache.remove(request.identifier)
             accLink <- accountLinkCacheService.get(request.userAnswers.id)
             accBool = accLink.map(_.isNiAccount).get
-          } yield Ok(successViewContact(userAnswers.dan, accBool))
+          } yield Ok(successViewAddress(userAnswers.dan, accBool))
 
           result.recover { case e =>
             logger.error(s"Call to account cache failed with exception=$e")
             InternalServerError(errorHandler.standardErrorTemplate())
           }
         case _ =>
-          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+          logger.error(s"Unable to get stored user answers whilst confirming account address details")
           Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
       }
     }
