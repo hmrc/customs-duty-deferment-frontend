@@ -30,10 +30,10 @@
 
 @layout(pageTitle = Some(messages("service.name")), backLink = Some(appConfig.financialsHomepage)) {
 
-    <span class="govuk-caption-xl" id="account-number-heading">
+    <h2 class="govuk-caption-xl" id="account-number-heading">
         @messages("cf.account.detail.requested.deferment-account-secondary-heading")
         @{accountNumber}
-    </span>
+    </h2>
 
     @h1(msg = messages("cf.account.detail.deferment-account-heading"), id = Some("statements-heading"))
 
