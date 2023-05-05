@@ -27,7 +27,7 @@
         h1: components.h1,
         h2: components.h2,
         p: components.p,
-        span: components.span,
+        caption: components.caption,
         link: components.link,
         inset: components.inset
 )
@@ -37,9 +37,9 @@
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
         @if(model.isNiAccount) {
-            @span(messages("cf.account.NiAccount", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+            @caption(messages("cf.account.NiAccount", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
         } else {
-            @span(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
+            @caption(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
         }
 
         @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
