@@ -102,14 +102,17 @@
                 countries,
                 Some("govuk-!-width-two-thirds"))
 
+        <div class="govuk-button-group">
             @button(messages("accountDetails.edit.save"))
+
+            @cancel_button(
+                Some(routes.ShowContactDetailsController.show().url),
+                messages("accountDetails.edit.back")
+            )
+        </div>
+
         }
     }
-
-    @cancel_button(
-        Some(routes.ShowContactDetailsController.show().url),
-        messages("accountDetails.edit.back")
-    )
 
     <script @{CSPNonce.attr} type="text/javascript">
     @if(form.hasErrors){
