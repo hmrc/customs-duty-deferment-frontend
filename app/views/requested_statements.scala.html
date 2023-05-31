@@ -23,13 +23,11 @@
 @(linkId: String )(implicit messages: Messages, appConfig: AppConfig)
 
 <div id="notification-panel" class="notifications-panel">
-    <ul class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-        <li>
-            @link(linkId = Some("request-statement-link"),
-                linkMessage = "cf.account.detail.requested-certificates-available-link-text",
-                location = appConfig.requestedStatementsUrl(linkId),
-                preLinkMessage = Some("cf.account.detail.requested-certificates-available-text.pre"),
-                postLinkMessage = Some("cf.account.detail.requested-certificates-available-text.post"))
-        </li>
-    </ul>
+    <p class="govuk-body govuk-!-margin-bottom-1">
+        @link(linkId = Some("request-statement-link"),
+            linkMessage = "cf.account.detail.requested-certificates-available-link-text",
+            location = appConfig.requestedStatementsUrl(linkId),
+            preLinkMessage = Some("cf.account.detail.requested-certificates-available-text.pre"),
+            postLinkMessage = Some("cf.account.detail.requested-certificates-available-text.post"))
+    </p>
 </div>
