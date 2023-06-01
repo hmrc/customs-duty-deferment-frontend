@@ -158,10 +158,10 @@ accountDetails.details.error.message = Sorry, we are unable to show these at the
 accountDetails.details.error.description2 = email address used to register for CDS
 accountDetails.details.error.advice1 = You can
 accountDetails.details.error.advice2 = view or change your Direct Debit details
-accountDetails.details.name.hidden-text = Change name
-accountDetails.details.telephone.hidden-text = Change telephone number
-accountDetails.details.email.hidden-text = Change email address
-accountDetails.details.address.hidden-text = Change address
+accountDetails.details.name.hidden-text = name
+accountDetails.details.telephone.hidden-text = telephone number
+accountDetails.details.email.hidden-text = email address
+accountDetails.details.address.hidden-text = address
 
 accountDetails.edit.title=Personal details for duty deferment
 accountDetails.edit.caption=Account: {0}

@@ -157,10 +157,10 @@ accountDetails.details.error.message=Mae’n ddrwg gennym, ni allwn ddangos y rh
 accountDetails.details.error.description2=cyfeiriad e-bost a ddefnyddiwyd i gofrestru ar gyfer y Gwasanaeth Datgan Tollau
 accountDetails.details.error.advice1=Gallwch
 accountDetails.details.error.advice2=fwrw golwg dros neu newid eich manylion debyd uniongyrchol
-accountDetails.details.name.hidden-text = Newid enw
-accountDetails.details.telephone.hidden-text = Newid rhif ffôn
-accountDetails.details.email.hidden-text = Newid cyfeiriad e-bost
-accountDetails.details.address.hidden-text = Newid cyfeiriad
+accountDetails.details.name.hidden-text = enw
+accountDetails.details.telephone.hidden-text = rhif ffôn
+accountDetails.details.email.hidden-text = cyfeiriad e-bost
+accountDetails.details.address.hidden-text = cyfeiriad
 
 accountDetails.edit.title=Manylion personol ar gyfer gohirio tollau
 accountDetails.edit.caption=Cyfrif: {0}
