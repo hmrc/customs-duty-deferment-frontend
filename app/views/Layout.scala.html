@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcTimeoutDialog
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.timeoutdialog.TimeoutDialog
 @import views.html.partials.countrypickerscript
+@import views.html.helper.CSPNonce
 
 @this(appConfig: AppConfig,
         hmrcLayout: HmrcLayout,
@@ -39,7 +40,7 @@
         welshToggle: Boolean = true,
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
-<link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
+
 
     @phaseBannerContent = {
         @messages("feedback.before")
@@ -56,6 +57,8 @@
 
     @additionalHead = {
         @countrypickerscript()
+        <script @{CSPNonce.attr} src='@controllers.routes.Assets.versioned("javascripts/recruitmentBanner.js")'></script>
+        <link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
         @hmrcTimeoutDialog(TimeoutDialog(
         title = Some(messages("timeout.title")),
         timeout = Some(appConfig.timeout),
