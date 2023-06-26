@@ -18,7 +18,6 @@ package mappings
 
 import play.api.data.validation._
 import play.api.data.{Forms, Mapping}
-import uk.gov.hmrc.emailaddress.EmailAddress
 import uk.gov.voa.play.form.ConditionalMappings.isAnyOf
 import uk.gov.voa.play.form.MandatoryOptionalMapping
 import scala.util.matching.Regex
@@ -57,24 +56,22 @@ trait Constraints {
     case _ => Invalid(countryError)
   })
 
+  private val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
+  def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
-  def isValidEmail: Constraint[Any] = {
-    val check: String => ValidationResult = (email: String) => {
-      email match {
-        case email if email.trim.isEmpty =>
-          Invalid(ValidationError("emailAddress.edit.empty"))
-        case email if email.trim.length > 132 =>
-          Invalid(ValidationError("emailAddress.edit.too-long"))
-        case email if !EmailAddress.isValid(email.trim) =>
-          Invalid(ValidationError("emailAddress.edit.wrong-format"))
-        case _ => Valid
-      }
-    }
-    Constraint {
-      case Some(email: String) => check(email)
-      case _ => Invalid(ValidationError("emailAddress.edit.empty"))
-    }
+  def isValid(e: String): Boolean = e match{
+    case e if emailRegex.findFirstMatchIn(e).isDefined  => true
+    case _                                              => false
   }
+
+  def isValidEmail: Constraint[Any] =
+    Constraint({
+      case email if Option(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
+      case email if stripWhiteSpaces(email.toString).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
+      case email if stripWhiteSpaces(email.toString).length > 132 => Invalid(ValidationError("emailAddress.edit.too-long"))
+      case email if !isValid(stripWhiteSpaces(email.toString)) => Invalid(ValidationError("emailAddress.edit.wrong-format"))
+      case _ => Valid
+    })
 
   def isValidNameField(message: String): Constraint[Option[String]] = {
     Constraint {
