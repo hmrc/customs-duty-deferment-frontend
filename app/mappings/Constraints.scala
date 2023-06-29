@@ -29,6 +29,7 @@ trait Constraints {
   private val addressLengthLimit = 35
   private val nameLengthLimit = 50
   private val isValidPostCodeRegex: Regex = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
+  private val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
   val countryError: ValidationError = ValidationError("accountDetails.edit.address.country.invalid")
 
   def validPostcode: Constraint[String] =
@@ -57,7 +58,6 @@ trait Constraints {
     case _ => Invalid(countryError)
   })
 
-  val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
   def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
   def isValid(e: String): Boolean = e match{
