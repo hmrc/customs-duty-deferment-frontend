@@ -29,6 +29,7 @@ trait Constraints {
   private val addressLengthLimit = 35
   private val nameLengthLimit = 50
   private val isValidPostCodeRegex: Regex = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
+  private val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
   val countryError: ValidationError = ValidationError("accountDetails.edit.address.country.invalid")
 
   def validPostcode: Constraint[String] =
@@ -47,7 +48,8 @@ trait Constraints {
     )
 
   def isValidPhoneNumber(message: String): Constraint[Any] = Constraint({
-    case Some(number: String) if invalidPhoneNumberCharsRegex.findFirstIn(number.trim).nonEmpty || number.trim.length > 24 => Invalid(ValidationError(s"$message.invalid"))
+    case Some(number: String) if invalidPhoneNumberCharsRegex.findFirstIn(
+      number.trim).nonEmpty || number.trim.length > 24 => Invalid(ValidationError(s"$message.invalid"))
     case _ => Valid
   })
 
@@ -56,7 +58,6 @@ trait Constraints {
     case _ => Invalid(countryError)
   })
 
-  private val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
   def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
   def isValid(e: String): Boolean = e match{
@@ -64,47 +65,39 @@ trait Constraints {
     case _                                              => false
   }
 
-  def isValidEmail: Constraint[Any] =
-    Constraint({
-      case email if Option(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
-      case email if stripWhiteSpaces(email.toString).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
-      case email if stripWhiteSpaces(email.toString).length > 132 => Invalid(ValidationError("emailAddress.edit.too-long"))
-      case email if !isValid(stripWhiteSpaces(email.toString)) => Invalid(ValidationError("emailAddress.edit.wrong-format"))
+  def isValidEmail: Constraint[Option[String]] =
+    Constraint {
+      case None => Invalid(ValidationError("emailAddress.edit.empty"))
+      case Some(email: String) if Option(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
+      case Some(email: String) if stripWhiteSpaces(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
+      case Some(email: String) if stripWhiteSpaces(email).length > 132 => Invalid(ValidationError("emailAddress.edit.too-long"))
+      case Some(email: String) if !isValid(stripWhiteSpaces(email)) => Invalid(ValidationError("emailAddress.edit.wrong-format"))
       case _ => Valid
-    })
+    }
 
   def isValidNameField(message: String): Constraint[Option[String]] = {
     Constraint {
-      case None =>
-        Invalid(ValidationError(s"$message.empty"))
-      case Some(field: String) if field.trim.isEmpty =>
-        Invalid(ValidationError(s"$message.empty"))
-      case Some(field: String) if field.trim.length > nameLengthLimit =>
-        Invalid(ValidationError(s"$message.max"))
-      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) =>
-        Invalid(ValidationError(s"$message.invalid"))
+      case None => Invalid(ValidationError(s"$message.empty"))
+      case Some(field: String) if field.trim.isEmpty => Invalid(ValidationError(s"$message.empty"))
+      case Some(field: String) if field.trim.length > nameLengthLimit => Invalid(ValidationError(s"$message.max"))
+      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) => Invalid(ValidationError(s"$message.invalid"))
       case _ => Valid
     }
   }
 
   def validOptionalAddressField(message: String): Constraint[Option[String]] = {
     Constraint {
-      case Some(field: String) if field.trim.length > addressLengthLimit =>
-        Invalid(ValidationError(s"$message.max"))
-      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) =>
-        Invalid(ValidationError(s"$message.invalid"))
+      case Some(field: String) if field.trim.length > addressLengthLimit => Invalid(ValidationError(s"$message.max"))
+      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) => Invalid(ValidationError(s"$message.invalid"))
       case _ => Valid
     }
   }
 
   def validMandatoryAddressField(message: String): Constraint[String] = {
     Constraint {
-      case field: String if field.trim.isEmpty =>
-        Invalid(ValidationError(s"$message.empty"))
-      case field: String if field.trim.length > addressLengthLimit =>
-        Invalid(ValidationError(s"$message.max"))
-      case field: String if !field.matches(isValidAddressFieldRegex.regex) =>
-        Invalid(ValidationError(s"$message.invalid"))
+      case field: String if field.trim.isEmpty => Invalid(ValidationError(s"$message.empty"))
+      case field: String if field.trim.length > addressLengthLimit => Invalid(ValidationError(s"$message.max"))
+      case field: String if !field.matches(isValidAddressFieldRegex.regex) => Invalid(ValidationError(s"$message.invalid"))
       case _ => Valid
     }
   }

@@ -23,27 +23,46 @@ class ConstraintsSpec extends SpecBase with Constraints {
 
   "stripWhiteSpace method" should {
     "remove white space from beginning" in new SetUp {
-      stripWhiteSpaces(emailWithLeadingSpaces) mustBe emailWithLeadingSpaces.trim
+      stripWhiteSpaces(emailWithLeadingSpaces.value) mustBe emailWithLeadingSpaces.value.trim
     }
 
     "remove white space from end" in new SetUp {
-      stripWhiteSpaces(emailWithTrailingSpaces) mustBe emailWithLeadingSpaces.trim
+      stripWhiteSpaces(emailWithTrailingSpaces.value) mustBe emailWithLeadingSpaces.value.trim
     }
 
     "remove white space from front and back" in new SetUp {
-      stripWhiteSpaces(emailWithLeadingAndTrailingSpaces) mustBe emailWithLeadingSpaces.trim
+      stripWhiteSpaces(emailWithLeadingAndTrailingSpaces.value) mustBe emailWithLeadingSpaces.value.trim
     }
 
     "remove white space from single middle" in new SetUp {
-      stripWhiteSpaces(emailWithSpacesWithIn_2) mustBe email
+      stripWhiteSpaces(emailWithSpacesWithIn_2.value) mustBe email.value
     }
 
     "remove white space from multiple middle" in new SetUp {
-      stripWhiteSpaces(emailWithSpacesWithIn_5) mustBe email
+      stripWhiteSpaces(emailWithSpacesWithIn_5.value) mustBe email.value
+    }
+  }
+
+  "regex returns result" should {
+    "email is valid" in new SetUp {
+      isValid(email.value) mustBe true
+    }
+
+    "email is valid when stripped of whitespace" in new SetUp {
+      isValid(stripWhiteSpaces(emailWithLeadingAndTrailingSpaces.value)) mustBe true
+    }
+
+    "email is invalid without .com or similiar domain" in new SetUp {
+      isValid(invalidEmail_1.value) mustBe false
     }
   }
 
   "validEmail return correct result" should {
+
+    "email is valid" in new SetUp {
+      isValidEmail(email) mustBe Valid
+    }
+
     "email is valid when emailWithLeadingSpaces" in new SetUp {
       isValidEmail(emailWithLeadingSpaces) mustBe Valid
     }
@@ -105,24 +124,24 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces = "   "
-  val email = "abc@test.com"
-  val emailWithLeadingSpaces: String = spaces.concat(email)
-  val emailWithTrailingSpaces: String = email.concat(spaces)
-  val emailWithLeadingAndTrailingSpaces: String = spaces.concat(email).concat(spaces)
+  val spaces = Some("   ")
+  val email = Some("abc@test.com")
+  val emailWithLeadingSpaces = Some("   abc@test.com")
+  val emailWithTrailingSpaces = Some("abc@test.com   ")
+  val emailWithLeadingAndTrailingSpaces = Some("   abc@test.com   ")
 
-  val emailWithSpacesWithIn_1 = "abc @test.com"
-  val emailWithSpacesWithIn_2 = "abc@ test.com"
-  val emailWithSpacesWithIn_3 = "abc@te  st.com"
-  val emailWithSpacesWithIn_4 = "ab c@test.com"
-  val emailWithSpacesWithIn_5 = "ab c@tes t.com"
+  val emailWithSpacesWithIn_1 = Some("abc @test.com")
+  val emailWithSpacesWithIn_2 = Some("abc@ test.com")
+  val emailWithSpacesWithIn_3 = Some("abc@te  st.com")
+  val emailWithSpacesWithIn_4 = Some("ab c@test.com")
+  val emailWithSpacesWithIn_5 = Some("ab c@tes t.com")
 
-  val invalidEmail_1 = "first@last"
-  val invalidEmail_2 = "firstlast"
-  val invalidEmail_3 = "first.com"
-  val invalidEmail_4 = ".com"
-  val invalidEmail_5 = "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
-    "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com"
-  val invalidEmail_6 = ""
-  val invalidEmail_7 = " "
+  val invalidEmail_1 = Some("first@last")
+  val invalidEmail_2 = Some("firstlast")
+  val invalidEmail_3 = Some("first.com")
+  val invalidEmail_4 = Some(".com")
+  val invalidEmail_5 = Some("thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
+    "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com")
+  val invalidEmail_6 = Some("")
+  val invalidEmail_7 = Some(" ")
 }
