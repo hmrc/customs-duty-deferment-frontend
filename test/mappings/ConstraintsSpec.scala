@@ -48,11 +48,11 @@ class ConstraintsSpec extends SpecBase with Constraints {
       isValid(email.value) mustBe true
     }
 
-    "email is valid when stripped on whitespace" in new SetUp {
+    "email is valid when stripped of whitespace" in new SetUp {
       isValid(stripWhiteSpaces(emailWithLeadingAndTrailingSpaces.value)) mustBe true
     }
 
-    "email is invalid with .com or similiar domain" in new SetUp {
+    "email is invalid without .com or similiar domain" in new SetUp {
       isValid(invalidEmail_1.value) mustBe false
     }
   }
