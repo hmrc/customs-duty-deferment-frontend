@@ -14,33 +14,45 @@
  * limitations under the License.
  */
 
-package view
+package views.components
+
 import play.api.Application
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
-import play.api.test.Helpers
 import play.twirl.api.HtmlFormat
 import util.SpecBase
 import views.html.components.inset
 
 class InsetSpec extends SpecBase {
   "Inset Component" should {
-    "renders component correctly" in new SetUp {
+    "render component correctly" in new SetUp {
       running(app) {
         val insetView = app.injector.instanceOf[inset]
-        val output = HtmlFormat.Appendable = insetView(
-          id = "div-id",
+        val output:  HtmlFormat.Appendable = insetView(
+          id = Some("div-id"),
           msg = "Hello world!"
         )(messages(app))
-        val html = Document = Jsoup.parse(contentAsString(output))
+        val html: Document = Jsoup.parse(contentAsString(output))
 
         html.getElementById("div-id").text must include("Hello world!")
       }
     }
-  }
-}
 
-trait SetUp {
+    "render component correctly without an ID" in new SetUp {
+      running(app) {
+        val insetView = app.injector.instanceOf[inset]
+        val output:  HtmlFormat.Appendable = insetView(
+          id = None,
+          msg = "Hello world!"
+        )(messages(app))
+        val html: Document = Jsoup.parse(contentAsString(output))
+
+        html.getElementsByTag("div").text must include("Hello world!")
+      }
+    }
+  }
+  trait SetUp {
     val app: Application = application().build()
+  }
 }
