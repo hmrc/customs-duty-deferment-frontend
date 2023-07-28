@@ -14,6 +14,9 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.13.8",
     targetJvm := "jvm-11",
     PlayKeys.playDefaultPort := 9397,
+    TwirlKeys.templateImports ++= Seq(
+      "play.twirl.api.HtmlFormat",
+    ),
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     ScoverageKeys.coverageExcludedFiles := List(
       "<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*").mkString(";"),
