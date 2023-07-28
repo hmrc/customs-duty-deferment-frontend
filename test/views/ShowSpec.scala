@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package view
+package views.contact_details
 
 import config.AppConfig
 import models.DefermentAccountAvailable
