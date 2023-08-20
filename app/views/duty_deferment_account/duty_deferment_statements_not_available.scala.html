@@ -14,15 +14,18 @@
  * limitations under the License.
  *@
 
-@import views.html.components.missing_documents_guidance
 @import config.AppConfig
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.NewTabLink
 
 @this(
         layout: Layout,
         inset: components.inset,
         h1: components.h1,
+        h2: components.h2,
         link: components.link,
-        p: components.p
+        p: components.p,
+        hmrcNewTabLink: HmrcNewTabLink
 )
 
 @(accountNumber: String, linkId: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -38,14 +41,62 @@
 
     @inset(id = Some("no-statements"), msg = messages("cf.duty-deferment-account.problem-with-service.text"))
 
-    @missing_documents_guidance("statement")
+    <div id="missing-documents-guidance" class="govuk-!-padding-top-2">
+        @h2(
+            id=Some("missing-documents-guidance-heading"),
+            msg=messages("cf.common.missing-documents-guidance.cdsStatements.heading")
+        )
 
-    @p(id = Some("historic-statement-request"), content = Html(messages("cf.duty-deferment-account.historic.description")))
-    
-    @link(
-        pId = Some("historic-statement-request-link"),
-        linkMessage = "cf.duty-deferment-account.historic.request",
-        pClass = "govuk-body govuk-!-margin-bottom-9",
-        location = appConfig.historicRequestUrl(linkId)
-    )
+        @link(
+            pId = Some("missing-documents-guidance-text1"),
+            linkMessage = "cf.accounts.older-statements.description.link",
+            location = routes.RequestServiceUnavailableController.requestServiceUnavailablePage(linkId).url,
+            linkClass = "govuk-link govuk-link--no-visited-state",
+            preLinkMessage = Some("cf.accounts.older-statements.description")
+        )
+
+        @h2(
+            id=Some("chief-guidance-heading"),
+            msg=messages("cf.common.chiefStatements.heading")
+        )
+
+        @p(
+            id = Some("chief-documents-guidance-text1"),
+            classes = Some("govuk-body govuk-!-margin-bottom-9"),
+            content = Html(messages("cf.accounts.chiefStatements.description")),
+            tabLink = Some(hmrcNewTabLink(
+                    NewTabLink(
+                        language = Some(messages.lang.toString),
+                        classList = Some("govuk-link govuk-link--no-visited-state"),
+                        href=Some(appConfig.chiefDDstatementsLink),
+                        text=messages("cf.accounts.chiefStatements.description.link")
+                    )
+                )
+            )
+        )
+    </div>
+
+    <div id="dd-support-heading" class="govuk-!-padding-top-2">
+        @h2(
+            id=Some("dd-support-message-heading"),
+            msg=messages("cf.accounts.support.heading")
+        )
+
+        @p(
+            id = Some("dd-support-message"),
+            classes = Some("govuk-body govuk-!-margin-bottom-9"),
+            content = Html(messages("cf.accounts.support.message")),
+            tabLink = Some(hmrcNewTabLink(
+                    NewTabLink(
+                        language = Some(messages.lang.toString),
+                        classList = Some("govuk-link"),
+                        href=Some(appConfig.ddAccountSupportLink),
+                        text=messages("cf.account.dd.support.link")
+                    )
+                )
+            )
+        )
+    </div>
+
 }
+

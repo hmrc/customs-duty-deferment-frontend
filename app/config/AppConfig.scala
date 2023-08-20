@@ -41,6 +41,11 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   val mongoSessionContactDetailsTtl: Int = config.get[Int]("mongodb.contactDetailsTtl")
   val mongoAccountLinkTtl: Int = config.get[Int]("mongodb.accountLinkTtl")
 
+  lazy val cdsEmailEnquiries: String = config.get[String]("external-urls.cdsEmailEnquiries")
+  lazy val cdsEmailEnquiriesHref: String = config.get[String]("external-urls.cdsEmailEnquiriesHref")
+  lazy val chiefDDstatementsLink: String = config.get[String]("external-urls.chiefDDstatementsLink")
+  lazy val ddAccountSupportLink: String = config.get[String]("external-urls.ddAccountSupportLink")
+
   lazy val timeout: Int = config.get[Int]("timeout.timeout")
   lazy val countdown: Int = config.get[Int]("timeout.countdown")
 
