@@ -86,9 +86,15 @@ month.abbr.12 = Rhag
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.common.missing-documents-guidance.statement = datganiad
-cf.common.missing-documents-guidance.statements = Datganiadau
-cf.common.missing-documents-guidance.heading=Pam nad yw fy {0} ar gael?
+cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 6 mis
+cf.accounts.older-statements.description.link=llenwch ac anfon cais am ddatganiad.
+cf.accounts.older-statements.description=Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
+cf.common.chiefStatements.heading=Datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF
+cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES) (yn agor tab newydd)
+cf.accounts.chiefStatements.description=Gallwch ddefnyddio’r gwasanaeth er mwyn bwrw golwg dros, argraffu neu lawrlwytho datganiadau gohirio tollau ar gyfer datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF.
+cf.accounts.support.heading=Help a chymorth
+cf.accounts.support.message=Os oes angen help arnoch, cysylltwch â’r
+cf.account.dd.support.link=Llinell Gymorth TAW ac Ecséis (yn agor mewn tab newydd).
 cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIEF
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis
@@ -276,3 +282,12 @@ cf.customs-financials-home.recruitment-banner-heading=Helpu ni i wella’r gwasa
 cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymryd rhan bosibl yn ein hymchwil defnyddiwr
 cf.customs-financials-home.recruitment-banner.close=Cau
 cf.customs-financials-home.recruitment-banner.hidden-text.close=Y faner ‘Helpu ni i wella’r gwasanaeth hwn’
+
+#Historic request service unavailable page
+# ----------------------------------------------------------------------------
+cf.historic-request-service-unavailable.title=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
+cf.historic-request-service-unavailable.heading=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
+cf.historic-request-service-unavailable.description.1=Gallwch anfon e-bost
+cf.historic-request-service-unavailable.description.2=i gael datganiadau hŷn neu dystysgrifau ar gyfer datganiadau a wneir gan ddefnyddio’r Gwasanaeth Datganiad Tollau.
+cf.historic-request-service-unavailable.description.3=Rhowch fanylion eich rhif EORI, y math o ddatganiad neu dystysgrif sydd ei angen arnoch a’r cyfnod y mae ei angen arnoch.
+

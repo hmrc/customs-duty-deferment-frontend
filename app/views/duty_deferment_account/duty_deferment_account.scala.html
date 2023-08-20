@@ -17,7 +17,8 @@
 @import config.AppConfig
 @import viewmodels.DutyDefermentAccount
 @import views.html.components.duty_deferment_accordian
-@import views.html.components.missing_documents_guidance
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.NewTabLink
 
 @this(
         layout: Layout,
@@ -29,7 +30,8 @@
         p: components.p,
         caption: components.caption,
         link: components.link,
-        inset: components.inset
+        inset: components.inset,
+        hmrcNewTabLink: HmrcNewTabLink
 )
 
 @(model: DutyDefermentAccount)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -43,6 +45,8 @@
         }
 
         @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
+
+        @p(id = Some("direct-debit-info"), content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
 
         @if(model.hasRequestedStatements) {
             @requestedStatements(model.linkId)
@@ -77,17 +81,63 @@
             )
         }
 
-        @missing_documents_guidance("statement")
+        <div id="missing-documents-guidance" class="govuk-!-padding-top-2">
+            @h2(
+                id=Some("missing-documents-guidance-heading"),
+                msg=messages("cf.common.missing-documents-guidance.cdsStatements.heading")
+            )
 
-        @p(
-            id = Some("historic-statement-request"), 
-            content = Html(messages("cf.duty-deferment-account.historic.description"))
-        )
+            @link(
+                pId = Some("missing-documents-guidance-text1"),
+                linkMessage = "cf.accounts.older-statements.description.link",
+                location = routes.RequestServiceUnavailableController.requestServiceUnavailablePage(model.linkId).url,
+                linkClass = "govuk-link govuk-link--no-visited-state",
+                preLinkMessage = Some("cf.accounts.older-statements.description")
+            )
 
-        @link(
-            pId = Some("historic-statement-request-link"),
-            linkMessage = "cf.duty-deferment-account.historic.request",
-            pClass = "govuk-body govuk-!-margin-bottom-9",
-            location = appConfig.historicRequestUrl(model.linkId)
-        )
+            @h2(
+                id=Some("chief-guidance-heading"),
+                msg=messages("cf.common.chiefStatements.heading")
+            )
+
+
+
+            @p(
+                id = Some("chief-documents-guidance-text1"),
+                classes = Some("govuk-body govuk-!-margin-bottom-9"),
+                content = Html(messages("cf.accounts.chiefStatements.description")),
+                tabLink = Some(hmrcNewTabLink(
+                        NewTabLink(
+                        language = Some(messages.lang.toString),
+                        classList = Some("govuk-link govuk-link--no-visited-state"),
+                        href=Some(appConfig.chiefDDstatementsLink),
+                        text=messages("cf.accounts.chiefStatements.description.link")
+                        )
+                    )
+                )
+            )
+        </div>
+
+        <div id="dd-support-heading" class="govuk-!-padding-top-2">
+            @h2(
+                id=Some("dd-support-message-heading"),
+                msg=messages("cf.accounts.support.heading")
+            )
+
+            @p(
+                id = Some("dd-support-message"),
+                classes = Some("govuk-body govuk-!-margin-bottom-9"),
+                content = Html(messages("cf.accounts.support.message")),
+                tabLink = Some(hmrcNewTabLink(
+                            NewTabLink(
+                                language = Some(messages.lang.toString),
+                                classList = Some("govuk-link"),
+                                href=Some(appConfig.ddAccountSupportLink),
+                                text=messages("cf.account.dd.support.link")
+                            )
+                    )
+                )
+            )
+        </div>
+
 }
