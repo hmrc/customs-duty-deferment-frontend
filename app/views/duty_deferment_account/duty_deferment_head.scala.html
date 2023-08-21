@@ -29,7 +29,7 @@
 
     @h2(id=Some(s"statements-month-heading-0-${group.year}-${group.month}"), msg = Formatters.dateAsMonthAndYear(group.monthAndYear))
 
-<dl class="govuk-summary-list">
+<dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for((period, index) <- group.periods.zipWithIndex) {
         <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
             <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell" class="govuk-summary-list__value">
