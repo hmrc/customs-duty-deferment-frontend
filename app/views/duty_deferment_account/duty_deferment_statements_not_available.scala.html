@@ -50,7 +50,7 @@
         @link(
             pId = Some("missing-documents-guidance-text1"),
             linkMessage = "cf.accounts.older-statements.description.link",
-            location = routes.RequestServiceUnavailableController.requestServiceUnavailablePage(linkId).url,
+            location = appConfig.historicRequestUrl(linkId),
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description")
         )
@@ -62,7 +62,7 @@
 
         @p(
             id = Some("chief-documents-guidance-text1"),
-            classes = Some("govuk-body govuk-!-margin-bottom-9"),
+            classes = Some("govuk-body govuk-!-margin-bottom-7"),
             content = Html(messages("cf.accounts.chiefStatements.description")),
             tabLink = Some(hmrcNewTabLink(
                     NewTabLink(
