@@ -31,7 +31,14 @@ class ShowSpec extends SpecBase {
   "Duty Deferment Account Show Spec" should {
     "display header" in new Setup {
       running(app) {
-        view.getElementsByTag("h1").text mustBe "Contact details for duty deferment"
+        view.getElementsByTag("h1").text mustBe "Duty deferment contact details"
+      }
+    }
+
+    "display header2" in new Setup {
+      running(app) {
+        view.getElementsByTag("h2").text mustBe
+          "Help make GOV.UK better Account: someDan Support links"
       }
     }
 

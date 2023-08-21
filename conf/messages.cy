@@ -143,7 +143,7 @@ cf.accounts.view-customs-account=fwrw golwg dros eich cyfrifon ariannol ar gyfer
 # ----------------------------------------------------------
 
 accountDetails.title=Manylion y cyfrif gohirio tollau
-accountDetails.heading=Manylion cyswllt ar gyfer gohirio tollau
+accountDetails.heading=Manylion cyswllt gohirio tollau
 accountDetails.caption = Cyfrif: {0}
 accountDetails.caption.ni = Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.change=Newid
@@ -168,7 +168,7 @@ accountDetails.details.telephone.hidden-text = rhif ffôn
 accountDetails.details.email.hidden-text = cyfeiriad e-bost
 accountDetails.details.address.hidden-text = cyfeiriad
 
-accountDetails.edit.title=Manylion personol ar gyfer gohirio tollau
+accountDetails.edit.title=Manylion personol gohirio tollau
 accountDetails.edit.caption=Cyfrif: {0}
 accountDetails.edit.caption.ni=Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.edit.heading=Manylion cyswllt ar gyfer y cyfrif gohirio tollau {0}
@@ -184,12 +184,12 @@ accountDetails.edit.telephone.hint=Nodwch rifau yn unig, er enghraifft 01632 960
 accountDetails.edit.fax=Rhif ffacs (dewisol)
 accountDetails.edit.save=Cadw newidiadau
 accountDetails.edit.back=Canslo newidiadau
-accountDetails.edit.confirm.back=Yn ôl i fanylion y cyfrif gohirio tollau
+accountDetails.edit.confirm.back=Yn ôl I’ch manylion cyswllt gohirio tollau
 accountDetails.edit.contact.title=Diweddarwyd y manylion personol ar gyfer gohirio tollau yn llwyddiannus
 accountDetails.edit.address.title=Diweddarwyd manylion y cyfeiriad ar gyfer gohirio tollau yn llwyddiannus
 accountDetails.edit.success.message=Rhif y cyfrif
 accountDetails.edit.success.message.ni=(Gogledd Iwerddon)
-accountDetails.editAddress.title=Manylion y cyfeiriad ar gyfer gohirio tollau
+accountDetails.editAddress.title=Manylion cyfeiriad gohirio tollau
 accountDetails.editAddress.caption=Cyfrif: {0}
 accountDetails.editAddress.caption.ni=Cyfrif: {0} (Gogledd Iwerddon)
 accountDetails.editAddress.heading=Manylion cyfeiriad ar gyfer y cyfrif gohirio tollau {0}
@@ -223,6 +223,7 @@ accountDetails.cancel=Canslo
 accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
+accountDetails.edit.backToAccountDetails=Back to your duty deferment contact details
 
 emailAddress.edit.emailAddress=Cyfeiriad e-bost
 emailAddress.edit.continue=Yn eich blaen
@@ -231,7 +232,6 @@ emailAddress.edit.empty=Nodwch eich cyfeiriad e-bost
 emailAddress.edit.too-long=E-bost yn rhy hir
 emailAddress.edit.wrong-format=Nodwch gyfeiriad e-bost sy’n ddilys
 emailAddress.confirm.required=Dewiswch ai mai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio
-
 
 accountDetails.confirm.heading = Gwirio'ch manylion
 accountDetails.confirm.details.heading = Manylion personol
