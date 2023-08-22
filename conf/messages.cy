@@ -223,7 +223,7 @@ accountDetails.cancel=Canslo
 accountDetails.edit.error.title=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.heading=Mae’n ddrwg gennym na allwn wneud y newidiadau hyn ar hyn o bryd.
 accountDetails.edit.error.message=Rhowch gynnig arall arni yn nes ymlaen.
-accountDetails.edit.backToAccountDetails=Back to your duty deferment contact details
+accountDetails.edit.backToAccountDetails=Yn ôl I’ch manylion cyswllt gohirio tollau
 
 emailAddress.edit.emailAddress=Cyfeiriad e-bost
 emailAddress.edit.continue=Yn eich blaen
