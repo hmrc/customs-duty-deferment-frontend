@@ -144,7 +144,7 @@ cf.accounts.view-customs-account=view your customs financial accounts
 # ----------------------------------------------------------
 
 accountDetails.title = Duty deferment account details
-accountDetails.heading = Contact details for duty deferment
+accountDetails.heading = Duty deferment contact details
 accountDetails.caption = Account: {0}
 accountDetails.caption.ni = Account: {0} (Northern Ireland)
 accountDetails.change=Change
@@ -169,7 +169,7 @@ accountDetails.details.telephone.hidden-text = telephone number
 accountDetails.details.email.hidden-text = email address
 accountDetails.details.address.hidden-text = address
 
-accountDetails.edit.title=Personal details for duty deferment
+accountDetails.edit.title=Duty deferment personal details
 accountDetails.edit.caption=Account: {0}
 accountDetails.edit.caption.ni=Account: {0} (Northern Ireland)
 accountDetails.edit.heading=Contact details for duty deferment account {0}
@@ -185,12 +185,12 @@ accountDetails.edit.telephone.hint=Only enter numbers, for example 01632 960 001
 accountDetails.edit.fax=Fax number (optional)
 accountDetails.edit.save=Save changes
 accountDetails.edit.back=Cancel
-accountDetails.edit.confirm.back=Back to duty deferment account details
+accountDetails.edit.confirm.back=Back to your duty deferment contact details
 accountDetails.edit.contact.title=Personal details for duty deferment successfully updated
 accountDetails.edit.address.title=Address details for duty deferment successfully updated
 accountDetails.edit.success.message=Account number
 accountDetails.edit.success.message.ni=(Northern Ireland)
-accountDetails.editAddress.title=Address details for duty deferment
+accountDetails.editAddress.title=Duty deferment address details
 accountDetails.editAddress.caption=Account: {0}
 accountDetails.editAddress.caption.ni=Account: {0} (Northern Ireland)
 accountDetails.editAddress.heading=Address details for duty deferment account {0}
@@ -225,7 +225,7 @@ accountDetails.cancel=Cancel
 accountDetails.edit.error.title=Sorry we are unable to make these changes at the moment.
 accountDetails.edit.error.heading=Sorry we are unable to make these changes at the moment.
 accountDetails.edit.error.message=Try again later.
-accountDetails.edit.backToAccountDetails=Back to Duty deferment account details
+accountDetails.edit.backToAccountDetails=Back to your duty deferment contact details
 
 emailAddress.edit.emailAddress=Email address
 emailAddress.edit.continue=Continue
