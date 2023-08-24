@@ -29,32 +29,22 @@
 
 @layout(pageTitle = Some(messages("cf.not-subscribed-to-cds.detail.title"))) {
     @h1(messages("cf.not-subscribed-to-cds.detail.heading"))
-    @h2(messages("cf.not-subscribed-to-cds.detail.how-to-get-access-info"))
-    <p class="govuk-body">
-        @messages("cf.not-subscribed-to-cds.detail.eori-info")
-        @hmrcNewTabLink(
-            NewTabLink(
-                language = Some(messages.lang.toString),
-                classList = Some("govuk-link"),
-                href=Some(appConfig.registerCdsUrl),
-                text=messages("cf.not-subscribed-to-cds.detail.eori-link")
-            )
-        )
-        .
-    </p>
+    @h2(messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds"))
 
     <p class="govuk-body">
-        @messages("cf.not-subscribed-to-cds.detail.get-access-info")
+        @messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds-guidance-text")
+    </p>
+
+    @h2(messages("cf.not-subscribed-to-cds.details.subscribe-to-cds"))
+
+    <p class="govuk-body">
         @hmrcNewTabLink(
             NewTabLink(
                 language = Some(messages.lang.toString),
                 classList = Some("govuk-link"),
                 href=Some(appConfig.subscribeCdsUrl),
-                text=messages("cf.not-subscribed-to-cds.detail.get-access-link")
+                text=messages("cf.not-subscribed-to-cds.details.subscribe-to-cds-link-text")
             )
         )
-        .
     </p>
-
-    @p(Html(messages("cf.not-subscribed-to-cds.detail.process-application-info")))
 }
