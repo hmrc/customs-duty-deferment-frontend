@@ -54,7 +54,7 @@ class NotSubscribedToCdsSpec extends SpecBase {
 
   trait Setup {
     val deskProLinkText = "Is this page not working properly? (opens in new tab)"
-    val cdsSubscribeUrl = "/customs-enrolment-services/cds/subscribe"
+    val cdsSubscribeUrl = "https://www.tax.service.gov.uk/customs-enrolment-services/cds/subscribe"
 
     val app: Application = application().build
 

@@ -15,12 +15,10 @@
  *@
 
 @import config.AppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
-@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 
 @this(
         layout: Layout,
-        hmrcNewTabLink: HmrcNewTabLink,
+        link: components.link,
         p: components.p,
         h1: components.h1,
         h2: components.h2)
@@ -38,13 +36,11 @@
     @h2(messages("cf.not-subscribed-to-cds.details.subscribe-to-cds"))
 
     <p class="govuk-body">
-        @hmrcNewTabLink(
-            NewTabLink(
-                language = Some(messages.lang.toString),
-                classList = Some("govuk-link"),
-                href=Some(appConfig.subscribeCdsUrl),
-                text=messages("cf.not-subscribed-to-cds.details.subscribe-to-cds-link-text")
-            )
+        @link(
+            "cf.not-subscribed-to-cds.details.subscribe-to-cds-link-text",
+            appConfig.subscribeCdsUrl,
+            linkId = Some("subscribe-to-cds"),
+            pWrapped = false
         )
     </p>
 }
