@@ -21,8 +21,8 @@ import util.SpecBase
 
 class AppConfigSpec extends SpecBase {
   "AppConfig" should {
-    "retrieve correct values for the provided configuration" in {
-      val app: Application = application().build
+    "contain correct values for the provided configuration" in {
+      val app: Application = application().build()
       val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
       val linkId = "id"
 
