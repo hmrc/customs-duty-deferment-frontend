@@ -27,7 +27,7 @@ class AppConfigSpec extends SpecBase {
       val linkId = "id"
 
       appConfig.appName mustBe "customs-duty-deferment-frontend"
-      appConfig.subscribeCdsUrl mustBe "/customs-enrolment-services/cds/subscribe"
+      appConfig.subscribeCdsUrl mustBe "https://www.tax.service.gov.uk/customs-enrolment-services/cds/subscribe"
       appConfig.loginUrl mustBe "http://localhost:9553/bas-gateway/sign-in"
       appConfig.loginContinueUrl mustBe "http://localhost:9876/customs/payment-records"
       appConfig.financialsHomepage mustBe "http://localhost:9876/customs/payment-records"
