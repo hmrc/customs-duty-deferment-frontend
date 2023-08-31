@@ -105,8 +105,10 @@ class AccountControllerSpec extends SpecBase {
       running(app) {
 
         val result = route(app, request).value
+        val isHistoricStatementsEnabled: Boolean = true
+
         status(result) mustBe OK
-        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
+        contentAsString(result) mustBe view(model, isHistoricStatementsEnabled)(request, messages, appConfig).toString
       }
     }
 

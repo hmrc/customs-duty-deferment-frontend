@@ -34,6 +34,14 @@ Once these services are running, you should be able to do `sbt "run 9397"` to st
 
 The application should be run as part of the CUSTOMS_FINANCIALS_ALL profile due to it being an integral part of service.
 
+## Feature Switches
+
+Feature switches can be enabled per-environment via the `app-config-<env>` project:
+
+    ...
+    features.some-feature: true
+    ...
+
 ## Running tests
 
 There is just one test source tree in the `test` folder. Use `sbt test` to run them.

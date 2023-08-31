@@ -34,7 +34,7 @@
         hmrcNewTabLink: HmrcNewTabLink
 )
 
-@(model: DutyDefermentAccount)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(model: DutyDefermentAccount, isHistoricStatementsEnabled: Boolean)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
@@ -82,18 +82,21 @@
         }
 
         <div id="missing-documents-guidance" class="govuk-!-padding-top-9">
-            @h2(
-                id=Some("missing-documents-guidance-heading"),
-                msg=messages("cf.common.missing-documents-guidance.cdsStatements.heading")
-            )
 
-            @link(
-                pId = Some("missing-documents-guidance-text1"),
-                linkMessage = "cf.accounts.older-statements.description.link",
-                location = appConfig.historicRequestUrl(model.linkId),
-                linkClass = "govuk-link govuk-link--no-visited-state",
-                preLinkMessage = Some("cf.accounts.older-statements.description")
-            )
+            @if(isHistoricStatementsEnabled) {
+                @h2(
+                    id=Some("missing-documents-guidance-heading"),
+                    msg=messages("cf.common.missing-documents-guidance.cdsStatements.heading")
+                )
+
+                @link(
+                    pId = Some("missing-documents-guidance-text1"),
+                    linkMessage = "cf.accounts.older-statements.description.link",
+                    location = appConfig.historicRequestUrl(model.linkId),
+                    linkClass = "govuk-link govuk-link--no-visited-state",
+                    preLinkMessage = Some("cf.accounts.older-statements.description")
+                )
+            }
 
             @h2(
                 id=Some("chief-guidance-heading"),

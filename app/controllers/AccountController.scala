@@ -58,7 +58,9 @@ class AccountController @Inject()(
           )))
       } yield {
         val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber, statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
-        Ok(account(dutyDefermentViewModel))
+        val isHistoricStatementsEnabled = appConfig.historicStatementsEnabled
+
+        Ok(account(dutyDefermentViewModel, isHistoricStatementsEnabled))
       }
         ).merge.recover {
         case _ => Redirect(routes.AccountController.statementsUnavailablePage(linkId))

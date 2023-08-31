@@ -29,9 +29,12 @@ class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionC
 
   private val log = Logger(this.getClass)
 
+  //if the session id is still valid and we do not have the stored answers, then we show the new page about this page is not available
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
 
     request.maybeUserAnswers match {
+      //case None && if there is still a valid session then we re-direct it to the page of this page is not available
+      //note : case None is same as we do not have the stored answers
       case None =>
         log.error("Unable to get user answers")
         Future.successful(Left(Redirect(controllers.routes.SessionExpiredController.onPageLoad)))

@@ -35,6 +35,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val countriesFilename: String = config.get[String]("countriesFilename")
   lazy val dutyDefermentContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-contact-details-endpoint")
   lazy val dutyDefermentUpdateContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
+  lazy val historicStatementsEnabled: Boolean = config.get[Boolean]("features.historic-statements-enabaled")
   lazy val getAccountDetailsUrl: String = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
   lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
   val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
