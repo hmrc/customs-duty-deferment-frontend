@@ -249,10 +249,10 @@ cf.customs-financials-home.recruitment-banner-link-text=Sign up to be a potentia
 cf.customs-financials-home.recruitment-banner.close=Close
 cf.customs-financials-home.recruitment-banner.hidden-text.close=the help us improve this service banner
 
-#Historic request service unavailable page
+# Service unavailable page
 # ----------------------------------------------------------------------------
-cf.historic-request-service-unavailable.title=Sorry, this service is currently unavailable
-cf.historic-request-service-unavailable.heading=Sorry, this service is currently unavailable
-cf.historic-request-service-unavailable.description.1=Email
-cf.historic-request-service-unavailable.description.2=to get older statements or certificates for declarations made using the Customs Declaration Service.
-cf.historic-request-service-unavailable.description.3=Give details of your EORI number, the type of statement or certificate you need and the date range you need it for.
+cf.service-unavailable.title=Sorry, this service is currently unavailable
+cf.service-unavailable.heading=Sorry, this service is currently unavailable
+cf.service-unavailable.description.1=To get older statements or certificates for declarations made using the Customs Declaration Service,
+cf.service-unavailable.description.2=complete this form (opens in new tab).
+cf.service-unavailable.description.3=Tell us the type of statement or certificate you need and the date range you need it for.
