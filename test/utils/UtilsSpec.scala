@@ -16,12 +16,51 @@
 
 package utils
 
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import util.SpecBase
+import utils.Utils.{doubleForwardSlash, pathWithQueryString, referrerUrl, semiColon}
 
-class UtilsSpec extends SpecBase{
+class UtilsSpec extends SpecBase {
   "emptyString" should {
     "contain the empty string" in {
       Utils.emptyString mustBe empty
+    }
+  }
+
+  "semiColon" should {
+    "return correct value" in {
+      semiColon mustBe ":"
+    }
+  }
+
+  "doubleForwardSlash" should {
+    "return correct value" in {
+      doubleForwardSlash mustBe "//"
+    }
+  }
+
+  "pathWithQueryString" should {
+    "return correct value" in {
+      val path = "somePath"
+      pathWithQueryString(fakeRequest("GET", path)) mustBe s"$path"
+    }
+  }
+
+  "referrerUrl" should {
+    "return correct value when platform host has some value" in {
+      val path = "somePath"
+      val platformHost = "localhost"
+      implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
+
+      referrerUrl(Some(platformHost)) mustBe Option(s"$platformHost$path")
+    }
+
+    "return correct value when platform host value is empty" in {
+      val path = "somePath"
+      implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
+
+      referrerUrl(None) mustBe Option(s"$path")
     }
   }
 }

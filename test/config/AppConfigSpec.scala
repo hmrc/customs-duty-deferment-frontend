@@ -17,15 +17,13 @@
 package config
 
 import play.api.Application
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import util.SpecBase
 
 class AppConfigSpec extends SpecBase {
   "AppConfig" should {
-    "contain correct values for the provided configuration" in {
-      val app: Application = application().build()
-      val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-      val linkId = "id"
-
+    "contain correct values for the provided configuration" in new Setup {
       appConfig.appName mustBe "customs-duty-deferment-frontend"
       appConfig.subscribeCdsUrl mustBe "https://www.tax.service.gov.uk/customs-enrolment-services/cds/subscribe"
       appConfig.loginUrl mustBe "http://localhost:9553/bas-gateway/sign-in"
@@ -64,6 +62,23 @@ class AppConfigSpec extends SpecBase {
       appConfig.helpMakeGovUkBetterUrl mustBe
         "https://signup.take-part-in-research.service.gov.uk?" +
           "utm_campaign=CDSfinancials&utm_source=Other&utm_medium=other&t=HMRC&id=249"
+      appConfig.contactFrontEndServiceId mustBe "CDS Financials"
+      appConfig.contactFrontEndUrl mustBe "http://localhost:9250"
     }
+
+    "return correct value for deskProLinkUrlForServiceUnavailable" in new Setup {
+      val path = "test_Path"
+      implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
+
+      appConfig.deskProLinkUrlForServiceUnavailable mustBe
+        "http://localhost:9250" +
+          "/contact/report-technical-problem?newTab=true&amp;service=CDS%20FinancialsreferrerUrl=test_Path"
+    }
+  }
+
+  trait Setup {
+    val app: Application = application().build()
+    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val linkId = "id"
   }
 }
