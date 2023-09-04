@@ -19,7 +19,7 @@ package utils
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
-import utils.Utils.{doubleForwardSlash, pathWithQueryString, referrerUrl, semiColon}
+import utils.Utils._
 
 class UtilsSpec extends SpecBase {
   "emptyString" should {
@@ -44,6 +44,18 @@ class UtilsSpec extends SpecBase {
     "return correct value" in {
       val path = "somePath"
       pathWithQueryString(fakeRequest("GET", path)) mustBe s"$path"
+    }
+  }
+
+  "httpsProtocol" should {
+    "return correct value" in {
+      httpsProtocol mustBe "https"
+    }
+  }
+
+  "localhostString" should {
+    "return correct value" in {
+      localhostString mustBe "localhost"
     }
   }
 
