@@ -18,6 +18,7 @@ package controllers
 
 import config.AppConfig
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
+import navigation.Navigator
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -64,7 +65,6 @@ class AccountControllerSpec extends SpecBase {
         redirectLocation(result).value mustBe "http://localhost:9876/customs/payment-records"
       }
     }
-
 
     "redirect to statements unavailable page if a failure occurs receiving historic statements" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
@@ -153,13 +153,15 @@ class AccountControllerSpec extends SpecBase {
       val mockApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
       val mockDocumentService: DocumentService = mock[DocumentService]
+      val navigator = new Navigator()
 
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
       val app: Application = application().overrides(
         inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
         inject.bind[DocumentService].toInstance(mockDocumentService),
-        inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
+        inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
+        inject.bind[Navigator].toInstance(navigator)
       ).build()
 
       val appConfig: AppConfig = app.injector.instanceOf[AppConfig]

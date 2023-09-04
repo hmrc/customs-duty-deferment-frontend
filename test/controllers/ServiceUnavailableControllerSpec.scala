@@ -37,7 +37,7 @@ class ServiceUnavailableControllerSpec extends SpecBase {
       }
     }
 
-    "render service unavailable page for PVAT statements page" in new Setup {
+    "render service unavailable page for duty deferment statements page" in new Setup {
       running(app) {
         val request = fakeRequest(GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, "linkId_1").url)
@@ -50,7 +50,7 @@ class ServiceUnavailableControllerSpec extends SpecBase {
       }
     }
 
-    "render service unavailable page for C79 (Import VAT) statements page" in new Setup {
+    "render service unavailable page for duty deferment statements not available page" in new Setup {
       running(app) {
         val request = fakeRequest(GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, "linkId_1").url)
