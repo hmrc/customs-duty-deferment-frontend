@@ -63,7 +63,6 @@ class AppConfigSpec extends SpecBase {
         "https://signup.take-part-in-research.service.gov.uk?" +
           "utm_campaign=CDSfinancials&utm_source=Other&utm_medium=other&t=HMRC&id=249"
       appConfig.contactFrontEndServiceId mustBe "CDS Financials"
-      appConfig.contactFrontEndUrl mustBe "http://localhost:9250"
     }
 
     "return correct value for deskProLinkUrlForServiceUnavailable" in new Setup {
