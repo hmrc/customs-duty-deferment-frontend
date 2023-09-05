@@ -86,6 +86,7 @@ class AccountControllerSpec extends SpecBase {
     }
 
     "display the account page on a successful response" in new Setup {
+      appConfig.historicStatementsEnabled = false
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
@@ -112,6 +113,40 @@ class AccountControllerSpec extends SpecBase {
         val result = route(app, request).value
         status(result) mustBe OK
         contentAsString(result) mustBe view(model, Some(serviceUnavailableUrl))(request, messages, appConfig).toString
+      }
+    }
+
+    "display historic request url when feature is enabled" in new Setup {
+      appConfig.historicStatementsEnabled = true
+
+      val historicRequestUrl: String = appConfig.historicRequestUrl(accountLink.linkId)
+
+      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+        .thenReturn(Future.successful(Some(accountLink)))
+
+      when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
+        .thenReturn(Future.successful(dutyDefermentStatementsForEori))
+
+      when(mockApiConnector.deleteNotification(any, any)(any))
+        .thenReturn(Future.successful(true))
+
+      val view: duty_deferment_account = app.injector.instanceOf[duty_deferment_account]
+      val request: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url).withHeaders(
+          "X-Session-Id" -> "someSessionId")
+
+      val model: DutyDefermentAccount = DutyDefermentAccount(
+        "accountNumber",
+        Seq(dutyDefermentStatementsForEori),
+        "linkId",
+        isNiAccount = false)
+
+      val messages: Messages = messagesApi.preferred(request)
+      running(app) {
+
+        val result = route(app, request).value
+        status(result) mustBe OK
+        contentAsString(result) mustBe view(model, Some(historicRequestUrl))(request, messages, appConfig).toString
       }
     }
 
