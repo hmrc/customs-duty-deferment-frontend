@@ -18,21 +18,25 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{IdentifierAction, SessionIdAction}
+import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.request_service_unavailable
+import views.html.service_unavailable
 
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class RequestServiceUnavailableController @Inject() (val authenticate: IdentifierAction,
-                                                     resolveSessionId: SessionIdAction,
-                                                     requestServiceUnavailableView: request_service_unavailable,
-                                                     mcc: MessagesControllerComponents)
-                                                    (implicit val appConfig: AppConfig)
+class ServiceUnavailableController @Inject()(val authenticate: IdentifierAction,
+                                             resolveSessionId: SessionIdAction,
+                                             view: service_unavailable,
+                                             navigator: Navigator,
+                                             mcc: MessagesControllerComponents)
+                                            (implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
-  def requestServiceUnavailablePage(linkId: String): Action[AnyContent]= authenticate andThen resolveSessionId async { implicit req =>
-    Future.successful(Ok(requestServiceUnavailableView(linkId)))
-  }
+  def onPageLoad(id: String, linkId: String): Action[AnyContent] =
+    authenticate andThen resolveSessionId async { implicit req =>
+      Future.successful(Ok(view(
+        navigator.backLinkUrlForServiceUnavailablePage(id, linkId))))
+    }
 }

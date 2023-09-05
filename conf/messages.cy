@@ -281,11 +281,10 @@ cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymr
 cf.customs-financials-home.recruitment-banner.close=Cau
 cf.customs-financials-home.recruitment-banner.hidden-text.close=Y faner ‘Helpu ni i wella’r gwasanaeth hwn’
 
-#Historic request service unavailable page
+# Service unavailable page
 # ----------------------------------------------------------------------------
-cf.historic-request-service-unavailable.title=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
-cf.historic-request-service-unavailable.heading=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
-cf.historic-request-service-unavailable.description.1=Gallwch anfon e-bost
-cf.historic-request-service-unavailable.description.2=i gael datganiadau hŷn neu dystysgrifau ar gyfer datganiadau a wneir gan ddefnyddio’r Gwasanaeth Datganiad Tollau.
-cf.historic-request-service-unavailable.description.3=Rhowch fanylion eich rhif EORI, y math o ddatganiad neu dystysgrif sydd ei angen arnoch a’r cyfnod y mae ei angen arnoch.
-
+cf.service-unavailable.title=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
+cf.service-unavailable.heading=Mae’n ddrwg gennym, nid yw’r gwasanaeth hwn ar gael ar hyn o bryd
+cf.service-unavailable.description.1=I gael datganiadau hŷn neu dystysgrifau ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
+cf.service-unavailable.description.2= llenwch y ffurflen hon (yn agor tab newydd).
+cf.service-unavailable.description.3=Nodwch y math o ddatganiad neu dystysgrif sydd ei angen arnoch, ac ar gyfer pa gyfnod y mae ei angen arnoch.

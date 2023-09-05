@@ -22,12 +22,14 @@ import config.{AppConfig, ErrorHandler}
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
 import models.FileRole.DutyDefermentStatement
+import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DocumentService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,8 +42,10 @@ class AccountController @Inject()(
                                    documentService: DocumentService,
                                    account: duty_deferment_account,
                                    unavailable: duty_deferment_statements_not_available,
-                                   errorHandler: ErrorHandler
-                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                   errorHandler: ErrorHandler,
+                                   navigator: Navigator
+                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends
+  FrontendController(mcc) with I18nSupport {
 
   def showAccountDetails(linkId: String): Action[AnyContent] =
     (authenticate andThen resolveSessionId) async { implicit req =>
@@ -57,8 +61,12 @@ class AccountController @Inject()(
             documentService.getDutyDefermentStatements(historicEori, accountLink.accountNumber)
           )))
       } yield {
-        val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber, statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
-        Ok(account(dutyDefermentViewModel))
+        val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber,
+          statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
+        Ok(account(
+          dutyDefermentViewModel,
+          Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url))
+        )
       }
         ).merge.recover {
         case _ => Redirect(routes.AccountController.statementsUnavailablePage(linkId))
@@ -68,7 +76,10 @@ class AccountController @Inject()(
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
     (authenticate andThen resolveSessionId).async { implicit req =>
       sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
-        case Some(link) => Ok(unavailable(link.accountNumber, linkId))
+        case Some(link) => Ok(
+          unavailable(link.accountNumber,
+            linkId,
+            Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url)))
         case None => Unauthorized(errorHandler.unauthorized())
       }
     }

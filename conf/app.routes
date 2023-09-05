@@ -20,7 +20,8 @@ GET         /address-details/confirmation              controllers.ConfirmContac
 GET         /contact-details/confirmation              controllers.ConfirmContactDetailsController.successContactDetails
 GET         /contact-details/there-is-a-problem        controllers.ConfirmContactDetailsController.problem
 
-GET         /:linkId/request-service-unavailable       controllers.RequestServiceUnavailableController.requestServiceUnavailablePage(linkId: String)
+GET         /service-unavailable                       controllers.ServiceUnavailableController.onPageLoad(id: String, linkId: String)
+
 GET         /this-service-has-been-reset               controllers.SessionExpiredController.onPageLoad
 GET         /not-subscribed-for-cds                    controllers.NotSubscribedController.onPageLoad
 GET         /logout                                    controllers.LogoutController.logout
