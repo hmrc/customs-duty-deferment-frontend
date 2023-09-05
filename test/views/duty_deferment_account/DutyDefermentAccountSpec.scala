@@ -35,15 +35,22 @@ class DutyDefermentAccountSpec extends SpecBase {
         s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"
 
       view.getElementById("eori-heading").text() mustBe messages(app)("cf.account-number", accountNumber)
+
       view.getElementById("statements-heading").text() mustBe
         messages(app)("cf.account.detail.deferment-account-heading")
+
       view.getElementById("direct-debit-info").text() mustBe
         messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
+
       view.getElementById("missing-documents-guidance-heading").text() mustBe
         messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
+
       view.getElementById("chief-guidance-heading").text() mustBe messages(app)("cf.common.chiefStatements.heading")
+
       view.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
+
       view.getElementById("missing-documents-guidance-text1").text() must not be empty
+
       view.getElementById("chief-documents-guidance-text1").text() must not be empty
 
       view.html().contains("cf.accounts.older-statements.description.link")
