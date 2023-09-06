@@ -21,7 +21,7 @@ import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import controllers.actions.{IdentifierAction, SessionIdAction}
-import models.FileRole.DutyDefermentStatement
+import models.FileRole.{DutyDefermentStatement}
 import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -63,9 +63,16 @@ class AccountController @Inject()(
       } yield {
         val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber,
           statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
+
+        val historicUrl = if(appConfig.historicStatementsEnabled) {
+          appConfig.historicRequestUrl(accountLink.linkId)
+        } else {
+          routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
+        }
+
         Ok(account(
           dutyDefermentViewModel,
-          Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url))
+          Some(historicUrl))
         )
       }
         ).merge.recover {
