@@ -16,7 +16,6 @@
 
 package controllers
 
-import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import pages.{EditAddressDetailsPage, EditContactDetailsPage}
