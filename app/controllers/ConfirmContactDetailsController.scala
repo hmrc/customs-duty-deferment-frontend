@@ -16,7 +16,6 @@
 
 package controllers
 
-import cache.UserAnswersCache
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, SessionIdAction}
 import pages.{EditAddressDetailsPage, EditContactDetailsPage}
@@ -36,8 +35,7 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
                                                 dataRetrievalAction: DataRetrievalAction,
                                                 resolveSessionId: SessionIdAction,
                                                 dataRequiredAction: DataRequiredAction,
-                                                accountLinkCacheService : AccountLinkCacheService,
-                                                userAnswersCache: UserAnswersCache)
+                                                accountLinkCacheService : AccountLinkCacheService)
                                                (implicit ec: ExecutionContext,
                                                 errorHandler: ErrorHandler,
                                                 mcc: MessagesControllerComponents,
@@ -51,7 +49,6 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
       request.userAnswers.get(EditAddressDetailsPage) match {
         case Some(userAnswers) =>
           val result = for {
-            _ <- userAnswersCache.remove(request.identifier)
             accLink <- accountLinkCacheService.get(request.userAnswers.id)
             accBool = accLink.map(_.isNiAccount).get
           } yield Ok(successViewAddress(userAnswers.dan, accBool))
@@ -72,7 +69,6 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
         request.userAnswers.get(EditContactDetailsPage) match {
           case Some(userAnswers) =>
             val result = for {
-              _ <- userAnswersCache.remove(request.identifier)
               accLink <- accountLinkCacheService.get(request.userAnswers.id)
               accBool = accLink.map(_.isNiAccount).get
             } yield Ok(successViewContact(userAnswers.dan, accBool))
