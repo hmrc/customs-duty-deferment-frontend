@@ -36,8 +36,7 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
                                                 dataRetrievalAction: DataRetrievalAction,
                                                 resolveSessionId: SessionIdAction,
                                                 dataRequiredAction: DataRequiredAction,
-                                                accountLinkCacheService : AccountLinkCacheService,
-                                                userAnswersCache: UserAnswersCache)
+                                                accountLinkCacheService : AccountLinkCacheService)
                                                (implicit ec: ExecutionContext,
                                                 errorHandler: ErrorHandler,
                                                 mcc: MessagesControllerComponents,
