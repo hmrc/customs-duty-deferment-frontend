@@ -17,61 +17,66 @@
 package models
 
 import play.api.libs.json.{Json, JsValue}
-import models.{DutyDefermentStatementFileMetadata, FileFormat, FileRole, DDStatementType}
+import models.{
+  DutyDefermentStatementFileMetadata,
+  FileFormat,
+  FileRole,
+  DDStatementType
+}
 import util.SpecBase
 
 class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
   "DutyDefermentStatementFileMetadata" should {
     "serialize to JSON and deserialize back correctly" in new Setup {
-      
+
       parsedMetadata.isSuccess mustBe true
       parsedMetadata.get mustEqual metadata
     }
   }
 
   "convert to Map correctly" in new Setup {
-      
-      metadata.toMap mustBe expectedMap
-    }
+
+    metadata.toMap mustBe expectedMap
+  }
 
   trait Setup {
 
     val metadata = DutyDefermentStatementFileMetadata(
-        periodStartYear = 2023,
-        periodStartMonth = 10,
-        periodStartDay = 1,
-        periodEndYear = 2023,
-        periodEndMonth = 10,
-        periodEndDay = 31,
-        fileFormat = FileFormat.Csv,
-        fileRole = FileRole.DutyDefermentStatement,
-        defermentStatementType = DDStatementType.Weekly,
-        dutyOverLimit = Some(true),
-        dutyPaymentType = Some("BACS"),
-        dan = "DAN123456",
-        statementRequestId = Some("123456")
-      )
-
-    val expectedMap = Map(
-        "periodEndYear" -> "2023",
-        "defermentStatementType" -> "Weekly",
-        "dan" -> "DAN123456",
-        "fileRole" -> "DutyDefermentStatement",
-        "dutyPaymentType" -> "Some(BACS)",
-        "periodEndDay" -> "31",
-        "dutyOverLimit" -> "Some(true)",
-        "periodStartDay" -> "1",
-        "fileFormat" -> "CSV",
-        "periodStartMonth" -> "10",
-        "periodStartYear" -> "2023",
-        "statementRequestId" -> "Some(123456)",
-        "periodEndMonth" -> "10"  
+      periodStartYear = 2023,
+      periodStartMonth = 10,
+      periodStartDay = 1,
+      periodEndYear = 2023,
+      periodEndMonth = 10,
+      periodEndDay = 31,
+      fileFormat = FileFormat.Csv,
+      fileRole = FileRole.DutyDefermentStatement,
+      defermentStatementType = DDStatementType.Weekly,
+      dutyOverLimit = Some(true),
+      dutyPaymentType = Some("BACS"),
+      dan = "DAN123456",
+      statementRequestId = Some("123456")
     )
 
-      val json: JsValue = Json.toJson(metadata)
+    val expectedMap = Map(
+      "periodEndYear" -> "2023",
+      "defermentStatementType" -> "Weekly",
+      "dan" -> "DAN123456",
+      "fileRole" -> "DutyDefermentStatement",
+      "dutyPaymentType" -> "Some(BACS)",
+      "periodEndDay" -> "31",
+      "dutyOverLimit" -> "Some(true)",
+      "periodStartDay" -> "1",
+      "fileFormat" -> "CSV",
+      "periodStartMonth" -> "10",
+      "periodStartYear" -> "2023",
+      "statementRequestId" -> "Some(123456)",
+      "periodEndMonth" -> "10"
+    )
 
-      val parsedMetadata = Json.fromJson[DutyDefermentStatementFileMetadata](json)
+    val json: JsValue = Json.toJson(metadata)
+
+    val parsedMetadata = Json.fromJson[DutyDefermentStatementFileMetadata](json)
 
   }
 }

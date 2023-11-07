@@ -22,8 +22,8 @@ import util.SpecBase
 
 class EditAddressDetailsUserAnswersSpec extends SpecBase {
 
-    "EditAddressDetailsUserAnswers" should {
-    "convert to ContactDetailsUserAnswers correctly" in new Setup{
+  "EditAddressDetailsUserAnswers" should {
+    "convert to ContactDetailsUserAnswers correctly" in new Setup {
 
       val convertedContactDetailsUserAnswers = editAddressDetailsUserAnswers
         .toContactDetailsUserAnswers(initialContactDetails, isNiAccount = true)
@@ -33,45 +33,45 @@ class EditAddressDetailsUserAnswersSpec extends SpecBase {
   }
 
   trait Setup {
-      val initialContactDetails = ContactDetails(
-        contactName = Some("John Doe"),
-        addressLine1 = "123 Main St",
-        addressLine2 = Some("line 2"),
-        addressLine3 = Some("line 3"),
-        addressLine4 = Some("line 4"),
-        postCode = Some("12345"),
-        countryCode = "UK",
-        telephone = Some("123-456-7890"),
-        faxNumber = Some("987-654-3210"),
-        email = Some("john.doe@example.com")
-      )
+    val initialContactDetails = ContactDetails(
+      contactName = Some("John Doe"),
+      addressLine1 = "123 Main St",
+      addressLine2 = Some("line 2"),
+      addressLine3 = Some("line 3"),
+      addressLine4 = Some("line 4"),
+      postCode = Some("12345"),
+      countryCode = "UK",
+      telephone = Some("123-456-7890"),
+      faxNumber = Some("987-654-3210"),
+      email = Some("john.doe@example.com")
+    )
 
-      val editAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
-        dan = "123456",
-        addressLine1 = "123 Main St",
-        addressLine2 = Some("Apt 4B"),
-        addressLine3 = None,
-        addressLine4 = None,
-        postCode = Some("12345"),
-        countryCode = "0044",
-        countryName = Some("United Kingdom"),
-        isNiAccount = true
-      )
+    val editAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
+      dan = "123456",
+      addressLine1 = "123 Main St",
+      addressLine2 = Some("Apt 4B"),
+      addressLine3 = None,
+      addressLine4 = None,
+      postCode = Some("12345"),
+      countryCode = "0044",
+      countryName = Some("United Kingdom"),
+      isNiAccount = true
+    )
 
-      val expectedContactDetailsUserAnswers = ContactDetailsUserAnswers(
-        dan = "123456",
-        name = Some("John Doe"),
-        addressLine1 = "123 Main St",
-        addressLine2 = Some("Apt 4B"),
-        addressLine3 = None,
-        addressLine4 = None,
-        postCode = Some("12345"),
-        countryCode = "0044",
-        countryName = Some("United Kingdom"),
-        telephone = Some("123-456-7890"),
-        fax = Some("987-654-3210"),
-        email = Some("john.doe@example.com"),
-        isNiAccount = true
-      )
+    val expectedContactDetailsUserAnswers = ContactDetailsUserAnswers(
+      dan = "123456",
+      name = Some("John Doe"),
+      addressLine1 = "123 Main St",
+      addressLine2 = Some("Apt 4B"),
+      addressLine3 = None,
+      addressLine4 = None,
+      postCode = Some("12345"),
+      countryCode = "0044",
+      countryName = Some("United Kingdom"),
+      telephone = Some("123-456-7890"),
+      fax = Some("987-654-3210"),
+      email = Some("john.doe@example.com"),
+      isNiAccount = true
+    )
   }
 }
