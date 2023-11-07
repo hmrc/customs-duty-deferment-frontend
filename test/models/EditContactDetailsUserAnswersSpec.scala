@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+package models
+
 import util.SpecBase
 import models.EditContactDetailsUserAnswers
 import models.responses.retrieve.ContactDetails
