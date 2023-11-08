@@ -17,12 +17,6 @@
 package models
 
 import play.api.libs.json.{Json, JsValue}
-import models.{
-  DutyDefermentStatementFileMetadata,
-  FileFormat,
-  FileRole,
-  DDStatementType
-}
 import util.SpecBase
 
 class DutyDefermentStatementFileMetadataSpec extends SpecBase {

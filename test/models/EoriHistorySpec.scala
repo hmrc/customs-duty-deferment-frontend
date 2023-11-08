@@ -17,7 +17,6 @@
 package models
 
 import play.api.libs.json.Json
-import models.EoriHistory
 import util.SpecBase
 
 import java.time.LocalDate

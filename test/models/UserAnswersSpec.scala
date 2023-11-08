@@ -21,7 +21,6 @@ import util.SpecBase
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 import scala.util.{Success, Try}
-import models.UserAnswers
 
 class UserAnswersSpec extends SpecBase {
 

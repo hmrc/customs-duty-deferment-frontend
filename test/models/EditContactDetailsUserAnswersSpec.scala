@@ -17,7 +17,6 @@
 package models
 
 import util.SpecBase
-import models.EditContactDetailsUserAnswers
 import models.responses.retrieve.ContactDetails
 
 class EditContactDetailsUserAnswersSpec extends SpecBase {
