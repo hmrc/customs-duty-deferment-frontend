@@ -19,18 +19,35 @@ package services
 import connectors.SDESConnector
 import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
-import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileFormat}
+import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, FileFormat}
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class DocumentServiceSpec extends SpecBase {
+
+  "getDutyDefermentStatements" should {
+    "generate correct output" in new Setup {
+      when(mockSDESConnector.getDutyDefermentStatements(any, any)(any)).thenReturn(
+        Future.successful(dutyDefermentStatementFiles))
+
+      service.getDutyDefermentStatements(eoriHistory, dan).map {
+        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori.copy(requestedStatements = Seq())
+      }
+    }
+  }
 
   trait Setup {
     val mockSDESConnector: SDESConnector = mock[SDESConnector]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
+
+    val eoriHist = EoriHistory("GB123456789", None, None)
+    val dan = "1234567"
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
