@@ -18,8 +18,9 @@ package controllers
 
 import cache.UserAnswersCache
 import config.AppConfig
+import connectors.CustomsFinancialsApiConnector
 import mappings.EditAddressDetailsFormProvider
-import models.{EditAddressDetailsUserAnswers, UserAnswers}
+import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
 import pages.EditAddressDetailsPage
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
@@ -27,14 +28,17 @@ import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-import services.{CountriesProviderService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
+import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
+
+import scala.concurrent.Future
 
 class EditAddressDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
-    /*"return OK on a valid request" in new Setup {
+    "return OK on a valid request" in new Setup {
 
       val newApp: Application = application(Some(userAnswers)).overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
@@ -47,12 +51,13 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         status(result) mustBe OK
 
         contentAsString(result).removeCsrf() mustBe view(
-          validDan,
-          form.fill(editAddressDetailsUserAnswers),
-          fakeCountries
+          dan = validDan,
+          isNi = false,
+          form = form.fill(editAddressDetailsUserAnswers),
+          countries = fakeCountries
         )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
       }
-    }*/
+    }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
@@ -82,14 +87,17 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       }
     }
 
-    /*"redirect to the confirmation success page when a successful request made" in new Setup {
+    "redirect to the confirmation success page when a successful request made" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
+      val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
+      val editedUserAnswers: UserAnswers = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
-      val newApp: Application = application(Some(userAnswers)).overrides(
+      val newApp: Application = application(Some(editedUserAnswers)).overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
         inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices)
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
       ).build()
 
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
@@ -99,27 +107,31 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         .thenReturn(Future.successful(UpdateContactDetailsResponse(true)))
       when(mockContactDetailsCacheServices.updateContactDetails(any)(any))
         .thenReturn(Future.successful(true))
+      when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
 
       running(newApp) {
         val result = route(newApp, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails.url
       }
-    }*/
+    }
 
-  /*  "redirect to the confirmation problem page when a update failed" in new Setup {
+    "redirect to the confirmation problem page when a update failed" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
+      val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
 
       val newApp: Application = application(Some(userAnswers)).overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
         inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices)
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
       ).build()
 
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
+      when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
 
@@ -128,7 +140,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
-    }*/
+    }
   }
 
   "isValidCountryName throws invalid country name error" in new Setup {
