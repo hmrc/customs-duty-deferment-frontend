@@ -206,6 +206,5 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
     val messages: Messages = messagesApi.preferred(onPageLoadRequest)
-
   }
 }
