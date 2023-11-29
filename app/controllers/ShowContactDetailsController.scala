@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import config.AppConfig
-import controllers.actions.{IdentifierAction, SessionIdAction}
+import controllers.actions.{EmailAction, IdentifierAction, SessionIdAction}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -34,6 +34,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
                                              view: show,
                                              errorView: show_error,
                                              identifier: IdentifierAction,
+                                             checkEmailIsVerified: EmailAction,
                                              resolveSessionId: SessionIdAction,
                                              accountLinkCacheService: AccountLinkCacheService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
@@ -65,7 +66,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
     }
   }
 
-  def startSession(linkId: String): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
+  def startSession(linkId: String): Action[AnyContent] = identifier andThen checkEmailIsVerified andThen resolveSessionId async { implicit request =>
     accountLinkCacheService.cacheAccountLink(linkId, request.sessionId.value, request.request.user.internalId).map {
       case Left(_) => Redirect(routes.SessionExpiredController.onPageLoad)
       case Right(_) => Redirect(routes.ShowContactDetailsController.show())

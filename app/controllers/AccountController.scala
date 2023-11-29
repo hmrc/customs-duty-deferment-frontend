@@ -26,7 +26,6 @@ import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DocumentService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
@@ -34,8 +33,7 @@ import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountController @Inject()(
-                                   val authenticate: IdentifierAction,
+class AccountController @Inject()(authenticate: IdentifierAction,
                                    checkEmailIsVerified: EmailAction,
                                    apiConnector: CustomsFinancialsApiConnector,
                                    resolveSessionId: SessionIdAction,
@@ -46,11 +44,11 @@ class AccountController @Inject()(
                                    unavailable: duty_deferment_statements_not_available,
                                    errorHandler: ErrorHandler,
                                    navigator: Navigator
-                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig, hc: HeaderCarrier) extends
+                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport {
 
   def showAccountDetails(linkId: String): Action[AnyContent] =
-    (authenticate andThen resolveSessionId) async { implicit req =>
+    (authenticate andThen checkEmailIsVerified andThen resolveSessionId) async { implicit req =>
       apiConnector.deleteNotification(req.request.user.eori, DutyDefermentStatement)
       (for {
         accountLink <- fromOptionF(
@@ -83,7 +81,7 @@ class AccountController @Inject()(
     }
 
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
-    (authenticate andThen resolveSessionId).async { implicit req =>
+    (authenticate andThen checkEmailIsVerified andThen resolveSessionId).async { implicit req =>
       sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
         case Some(link) => Ok(
           unavailable(link.accountNumber,

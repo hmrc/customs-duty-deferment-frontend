@@ -16,6 +16,8 @@
 
 package controllers.actions
 
+import connectors.DataStoreConnector
+import models.{AuthenticatedRequest, UnverifiedEmail}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
@@ -27,15 +29,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class EmailAction @Inject()(dataStoreService: DataStoreService)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) extends ActionFilter[IdentifiedRequestWithSession] with I18nSupport {
-  def filter[A](request: IdentifiedRequestWithSession[A]): Future[Option[Result]] = {
+class EmailAction @Inject()(dataStoreConnector: DataStoreConnector)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) extends ActionFilter[AuthenticatedRequest] with I18nSupport {
+  def filter[A](request: AuthenticatedRequest[A]): Future[Option[Result]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-    dataStoreService.getEmail(request.eoriNumber).map {
+    dataStoreConnector.getEmail(request.user.eori).map {
       case Left(value) =>
         value match {
           case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
         }
       case Right(_) => None
-    }.recover { case _ => None } //This will allow users to access the service if ETMP return an error via SUB09
+    }.recover { case _ => None }
   }
 }

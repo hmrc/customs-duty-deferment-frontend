@@ -18,15 +18,17 @@ package controllers
 
 import config.AppConfig
 import connectors.CustomsFinancialsApiConnector
+import controllers.actions.IdentifierAction
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Logger, LoggerLike}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.email.verify_your_email
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class EmailController @Inject()(authenticate: IdentifyWithSessionAction,
+class EmailController @Inject()(authenticate: IdentifierAction,
                                 verifyEmailView: verify_your_email,
                                 customsFinancialsApiConnector: CustomsFinancialsApiConnector,
                                 implicit val mcc: MessagesControllerComponents)

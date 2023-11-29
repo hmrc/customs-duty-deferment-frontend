@@ -15,29 +15,25 @@
  *@
 
 @import config.AppConfig
-@import views.html.GovukWrapper
 
 @this(
+        layout: Layout,
         h1: components.h1,
-        p: components.p2,
-        button: components.button,
-        govukWrapper: GovukWrapper
+        p: components.p,
+        button: components.button
 )
 
 @(nextPage:String, email: Option[String])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@govukWrapper(
-        pageTitle = Some(messages("cf.verify.your.email.title"))
-) {
+@layout(pageTitle = Some(messages("cf.verify.your.email.title"))) {
 
-        @h1("cf.verify.your.email.heading", id = None, classes = "govuk-heading-xl")
+        @h1(msg = messages("cf.verify.your.email.heading"), classes = "govuk-heading-xl")
 
-        @p(messages("cf.verify.your.email.p1"))
+        @p(content = Html(messages("cf.verify.your.email.p1")))
         @if(email.isDefined){
-            @p(messages("cf.verify.your.email.p2", email.get))
+            @p(content = Html(messages("cf.verify.your.email.p2", email.get)))
         }
-        @p(messages("cf.verify.your.email.p3"))
+        @p(content = Html(messages("cf.verify.your.email.p3")))
 
-        <p class="govuk-body">@button("cf.verify.your.email.change.button", Some(nextPage))</p>
-
+        <p class="govuk-body">@button(messages("cf.verify.your.email.change.button"), Some(nextPage))</p>
 }
