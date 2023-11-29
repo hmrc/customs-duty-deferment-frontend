@@ -20,12 +20,13 @@ import cats.data.EitherT._
 import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
-import controllers.actions.{IdentifierAction, SessionIdAction}
-import models.FileRole.{DutyDefermentStatement}
+import controllers.actions.{EmailAction, IdentifierAction, SessionIdAction}
+import models.FileRole.DutyDefermentStatement
 import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DocumentService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
@@ -35,6 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AccountController @Inject()(
                                    val authenticate: IdentifierAction,
+                                   checkEmailIsVerified: EmailAction,
                                    apiConnector: CustomsFinancialsApiConnector,
                                    resolveSessionId: SessionIdAction,
                                    mcc: MessagesControllerComponents,
@@ -44,7 +46,7 @@ class AccountController @Inject()(
                                    unavailable: duty_deferment_statements_not_available,
                                    errorHandler: ErrorHandler,
                                    navigator: Navigator
-                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends
+                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig, hc: HeaderCarrier) extends
   FrontendController(mcc) with I18nSupport {
 
   def showAccountDetails(linkId: String): Action[AnyContent] =

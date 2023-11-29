@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import models._
+import models.{EmailUnverifiedResponse, _}
 import models.responses.retrieve.ContactDetails
 import play.mvc.Http.Status
 import services.AuditingService
@@ -47,5 +47,9 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
     val response = httpClient.POST[UpdateContactDetailsRequest, UpdateContactDetailsResponse](appConfig.updateAccountAddressUrl, request)
     auditingService.changeContactDetailsAuditEvent(dan, oldContactDetails, trimmed)
     response
+  }
+
+  def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
+    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/unverified-email-display").map( res => res.unVerifiedEmail)
   }
 }
