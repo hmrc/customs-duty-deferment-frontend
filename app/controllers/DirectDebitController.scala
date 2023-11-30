@@ -46,7 +46,10 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
         Redirect(appConfig.financialsHomepage)
       )
       email <- fromOptionF(
-        dateStoreConnector.getEmail(req.request.user.eori),
+        dateStoreConnector.getEmail(req.request.user.eori).map {
+          case Right(email) => Some(email)
+          case Left(_) => None
+        }.recover { case _ => None },
         InternalServerError(errorHandler.sddsErrorTemplate())
       )
       directDebitSetupUrl <- liftF(sddsConnector.startJourney(accountLink.accountNumber, email.value))

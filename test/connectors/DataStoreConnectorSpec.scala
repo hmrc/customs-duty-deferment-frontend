@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableInformation}
+import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
@@ -58,7 +58,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       running(app) {
         val result = await(connector.getEmail("someEori"))
-        result mustBe Some(Email("some@email.com"))
+        result mustBe Right(Email("some@email.com"))
       }
     }
 
@@ -70,7 +70,19 @@ class DataStoreConnectorSpec extends SpecBase {
 
       running(app) {
         val result = await(connector.getEmail("someEori"))
-        result mustBe None
+        result mustBe Left(UndeliverableEmail("some@email.com"))
+      }
+    }
+
+    "return unverifiedEmail when the request is successful and email address is not present in the response" in new Setup {
+      val emailResponse: EmailResponse = EmailResponse(None, None, None)
+
+      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+        .thenReturn(Future.successful(emailResponse))
+
+      running(app) {
+        val result = await(connector.getEmail("someEori"))
+        result mustBe Left(UnverifiedEmail)
       }
     }
 
@@ -80,7 +92,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       running(app) {
         val result = await(connector.getEmail("someEori"))
-        result mustBe None
+        result mustBe Left(UnverifiedEmail)
       }
     }
   }

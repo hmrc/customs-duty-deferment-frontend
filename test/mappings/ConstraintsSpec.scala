@@ -57,6 +57,28 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
   }
 
+  "validPostcode return correct result" should {
+
+    "postcode is valid" in new SetUp {
+      validPostcode(postcode) mustBe Valid
+    }
+  }
+
+  "return invalid" when {
+
+    "postcode is invalid when postcode has empty spaces" in new SetUp {
+      validPostcode(invalidPostcode_1) mustBe Invalid(ValidationError("accountDetails.edit.postcode.empty"))
+    }
+
+    "postcode is invalid when postcode has exceeded 8 characters" in new SetUp {
+      validPostcode(invalidPostcode_2) mustBe Invalid(ValidationError("accountDetails.edit.postcode.max"))
+    }
+
+    "postcode is invalid when postcode has invalid regex" in new SetUp {
+      validPostcode(invalidPostcode_3) mustBe Invalid(ValidationError("accountDetails.edit.postcode.invalid"))
+    }
+  }
+
   "validEmail return correct result" should {
 
     "email is valid" in new SetUp {
@@ -144,4 +166,14 @@ trait SetUp {
     "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com")
   val invalidEmail_6 = Some("")
   val invalidEmail_7 = Some(" ")
+
+  val postcode = "LS1 4AW"
+  val invalidPostcode_1 = ""
+  val invalidPostcode_2 = "LS11  4AE"
+  val invalidPostcode_3 = "12345"
+
+  val phoneNumber = "01133111122"
+  val invalidPhone_1 = "A123456"
+  val invalidPhone_2 = ""
+  val invalidPhone_3 = "01112222333344446666777722334455"
 }

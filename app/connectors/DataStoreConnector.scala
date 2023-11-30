@@ -17,9 +17,10 @@
 package connectors
 
 import config.AppConfig
-import models.{EmailResponse, EoriHistory, EoriHistoryResponse}
+import models.{EmailResponse, EmailResponses, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UnverifiedEmail}
 import play.api.http.Status.NOT_FOUND
 import uk.gov.hmrc.auth.core.retrieve.Email
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
 
 import javax.inject.Inject
@@ -35,13 +36,14 @@ class DataStoreConnector @Inject()(http: HttpClient,
       .recover { case _ => Seq(EoriHistory(eori, None, None)) }
 
 
-  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Option[Email]] = {
+  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = appConfig.customsDataStore + s"/eori/$eori/verified-email"
     http.GET[EmailResponse](dataStoreEndpoint).map {
-      case EmailResponse(Some(address), _, None) => Some(Email(address))
-      case _ => None
+      case EmailResponse(Some(address), _, None) => Right(Email(address))
+      case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
+      case _ => Left(UnverifiedEmail)
     }.recover {
-      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => None
+      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
     }
   }
 }

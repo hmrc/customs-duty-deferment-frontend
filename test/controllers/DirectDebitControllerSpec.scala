@@ -17,6 +17,7 @@
 package controllers
 
 import connectors.{DataStoreConnector, SDDSConnector, SessionCacheConnector}
+import models.UnverifiedEmail
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
@@ -47,7 +48,7 @@ class DirectDebitControllerSpec extends SpecBase {
         .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDataStoreConnector.getEmail(any)(any))
-        .thenReturn(Future.successful(None))
+        .thenReturn(Future.successful(Left(UnverifiedEmail)))
 
       running(app) {
         val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
@@ -63,7 +64,7 @@ class DirectDebitControllerSpec extends SpecBase {
         .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDataStoreConnector.getEmail(any)(any))
-        .thenReturn(Future.successful(Some(Email("some@email.com"))))
+        .thenReturn(Future.successful(Right(Email("some@email.com"))))
 
       when(mockSDDSConnector.startJourney(any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown error")))
@@ -82,7 +83,7 @@ class DirectDebitControllerSpec extends SpecBase {
         .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDataStoreConnector.getEmail(any)(any))
-        .thenReturn(Future.successful(Some(Email("some@email.com"))))
+        .thenReturn(Future.successful(Right(Email("some@email.com"))))
 
       when(mockSDDSConnector.startJourney(any, any)(any))
         .thenReturn(Future.successful("someUrl"))

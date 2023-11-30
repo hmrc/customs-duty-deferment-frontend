@@ -142,4 +142,7 @@ package object models {
       }
     }
   }
+
+  type EORI = String
+
 }

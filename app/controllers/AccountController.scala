@@ -20,8 +20,8 @@ import cats.data.EitherT._
 import cats.instances.future._
 import config.{AppConfig, ErrorHandler}
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
-import controllers.actions.{IdentifierAction, SessionIdAction}
-import models.FileRole.{DutyDefermentStatement}
+import controllers.actions.{EmailAction, IdentifierAction, SessionIdAction}
+import models.FileRole.DutyDefermentStatement
 import navigation.Navigator
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -33,8 +33,8 @@ import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountController @Inject()(
-                                   val authenticate: IdentifierAction,
+class AccountController @Inject()(authenticate: IdentifierAction,
+                                   checkEmailIsVerified: EmailAction,
                                    apiConnector: CustomsFinancialsApiConnector,
                                    resolveSessionId: SessionIdAction,
                                    mcc: MessagesControllerComponents,
@@ -48,7 +48,7 @@ class AccountController @Inject()(
   FrontendController(mcc) with I18nSupport {
 
   def showAccountDetails(linkId: String): Action[AnyContent] =
-    (authenticate andThen resolveSessionId) async { implicit req =>
+    (authenticate andThen checkEmailIsVerified andThen resolveSessionId) async { implicit req =>
       apiConnector.deleteNotification(req.request.user.eori, DutyDefermentStatement)
       (for {
         accountLink <- fromOptionF(
@@ -81,7 +81,7 @@ class AccountController @Inject()(
     }
 
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
-    (authenticate andThen resolveSessionId).async { implicit req =>
+    (authenticate andThen checkEmailIsVerified andThen resolveSessionId).async { implicit req =>
       sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
         case Some(link) => Ok(
           unavailable(link.accountNumber,

@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package services
+package models
 
-import com.google.inject.Inject
+import play.api.libs.json.{Json, OFormat}
 
-import java.time.{Instant, LocalDateTime, OffsetDateTime, ZoneId, ZoneOffset}
+case class EmailVerifiedResponse(verifiedEmail: Option[String])
 
-class DateTimeService @Inject()() {
-
-  def now(): LocalDateTime = {
-    LocalDateTime.now(ZoneId.of("Europe/London"))
-  }
-
-  def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant( Instant.now() , ZoneOffset.UTC)
-
+object EmailVerifiedResponse {
+  implicit val format: OFormat[EmailVerifiedResponse] = Json.format[EmailVerifiedResponse]
 }
+
+case class EmailUnverifiedResponse(unVerifiedEmail: Option[String])
+
+object EmailUnverifiedResponse {
+  implicit val format: OFormat[EmailUnverifiedResponse] = Json.format[EmailUnverifiedResponse]
+}
+
+sealed trait EmailResponses
+
+case object UnverifiedEmail extends EmailResponses
+
+case class UndeliverableEmail(email: String) extends EmailResponses

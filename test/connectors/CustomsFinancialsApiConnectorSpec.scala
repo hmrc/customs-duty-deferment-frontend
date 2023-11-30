@@ -17,8 +17,8 @@
 package connectors
 
 import models.FileRole.DutyDefermentStatement
-import models.{GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse}
 import models.responses.retrieve.ContactDetails
+import models.{EmailUnverifiedResponse, GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse}
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}
@@ -26,6 +26,7 @@ import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
+
 import scala.concurrent.Future
 
 class CustomsFinancialsApiConnectorSpec extends SpecBase {
@@ -75,6 +76,16 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe false
+      }
+    }
+
+    "return unverified email" in new Setup {
+      when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+        .thenReturn(Future.successful(EmailUnverifiedResponse(Some("unverified@email.com"))))
+
+      running(app) {
+        val result = await(connector.isEmailUnverified(hc))
+        result mustBe Some("unverified@email.com")
       }
     }
   }
