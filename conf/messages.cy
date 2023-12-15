@@ -296,3 +296,18 @@ cf.verify.your.email.p1=Mae angen i chi gadarnhau’r cyfeiriad e-bost rydych yn
 cf.verify.your.email.p2=Eich e-bost cofrestredig yw <strong class="bold">{0}</strong>.
 cf.verify.your.email.p3=Os nad dyma’r cyfeiriad e-bost rydych chi am ei ddefnyddio, gallwch ei newid hefyd gan ddefnyddio’r gwasanaeth hwn.
 cf.verify.your.email.change.button=Dilysu neu newid y cyfeiriad e-bost
+
+# Undeliverable Email Address
+# ------------------------------------------------------------------------
+cf.undeliverable.email.title=There''s a problem with your email address for the Customs Declaration Service
+cf.undeliverable.email.heading=There''s a problem with your email address for the Customs Declaration Service
+cf.undeliverable.email.p1=We tried to send you an email but it could not be delivered.
+cf.undeliverable.email.p2=Your registered email address is <strong class="bold">{0}</strong>.
+
+cf.undeliverable.email.verify.heading=Verify your email address
+cf.undeliverable.email.verify.text.p1=If this email address is correct, you will need to verify it to continue using the Customs Declaration Service.
+cf.undeliverable.email.change.heading=Change your email address
+cf.undeliverable.email.change.text.p1=If this email address is not correct, you can change it here.
+cf.undeliverable.email.change.text.p2=The Customs Declaration Service uses one email address for various customs-related services. If you change it, take care that other people in your company will still have access to the messages they need.
+cf.undeliverable.email.link-text=Verify or change email address
+# ------------------------------------------------------------------------

@@ -17,30 +17,36 @@
 package controllers.actions
 
 import connectors.DataStoreConnector
-import models.{AuthenticatedRequest, SignedInUser, UnverifiedEmail}
-import play.api.inject
+import models.{AuthenticatedRequest, SignedInUser, UndeliverableEmail, UnverifiedEmail}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.ServiceUnavailableException
 import util.SpecBase
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class EmailActionSpec extends SpecBase {
 
   "EmailAction" should {
     "Let requests with validated email through" in new Setup {
-      running (app) {
-        when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Right(Email("last.man@standing.co.uk"))))
+      running(app) {
+        when(mockDataStoreConnector.getEmail(any)(any)).
+          thenReturn(Future.successful(Right(Email("last.man@standing.co.uk"))))
+
         val response = await(emailAction.filter(authenticatedRequest))
         response mustBe None
       }
     }
 
     "Let request through, when getEmail throws service unavailable exception" in new Setup {
-      running(app){
-        when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.failed(new ServiceUnavailableException("")))
+      running(app) {
+        when(mockDataStoreConnector.getEmail(any)(any)).
+          thenReturn(Future.failed(new ServiceUnavailableException("")))
+
         val response = await(emailAction.filter(authenticatedRequest))
         response mustBe None
       }
@@ -48,10 +54,23 @@ class EmailActionSpec extends SpecBase {
 
     "Redirect users with unvalidated emails" in new Setup {
       running(app) {
-        when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Left(UnverifiedEmail)))
+        when(mockDataStoreConnector.getEmail(any)(any)).
+          thenReturn(Future.successful(Left(UnverifiedEmail)))
+
         val response = await(emailAction.filter(authenticatedRequest))
         response.get.header.status mustBe SEE_OTHER
         response.get.header.headers(LOCATION) must include("/verify-your-email")
+      }
+    }
+
+    "Redirect users to undelivered email page when undeliverable email response is returned" in new Setup {
+      running(app) {
+        when(mockDataStoreConnector.getEmail(any)(any)).
+          thenReturn(Future.successful(Left(UndeliverableEmail("test@test.com"))))
+
+        val response = emailAction.filter(authenticatedRequest).map(a => a.get)
+        status(response) mustBe SEE_OTHER
+        redirectLocation(response) mustBe Some(controllers.routes.EmailController.showUndeliverable().url)
       }
     }
   }
@@ -59,12 +78,13 @@ class EmailActionSpec extends SpecBase {
   trait Setup {
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
 
-    val app = application().overrides(
+    val app: Application = application().overrides(
       inject.bind[DataStoreConnector].toInstance(mockDataStoreConnector)
     ).build()
 
-    val emailAction = app.injector.instanceOf[EmailAction]
+    val emailAction: EmailAction = app.injector.instanceOf[EmailAction]
 
-    val authenticatedRequest = AuthenticatedRequest(FakeRequest("GET","/"), SignedInUser("someEori", Seq.empty, "internalId"))
+    val authenticatedRequest: AuthenticatedRequest[AnyContentAsEmpty.type] =
+      AuthenticatedRequest(FakeRequest("GET", "/"), SignedInUser("someEori", Seq.empty, "internalId"))
   }
 }

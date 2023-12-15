@@ -73,6 +73,17 @@ class AppConfigSpec extends SpecBase {
         "http://localhost:9250" +
           "/contact/report-technical-problem?newTab=true&amp;service=CDS%20FinancialsreferrerUrl=test_Path"
     }
+
+    "emailFrontendService" should {
+      "return correct url" in new Setup {
+        appConfig.emailFrontendService mustBe "http://localhost:9898/manage-email-cds"
+      }
+
+      "return the correct value" in new Setup {
+        appConfig.emailFrontendUrl mustBe "http://localhost:9898/manage-email-cds/service/customs-finance"
+      }
+
+    }
   }
 
   trait Setup {

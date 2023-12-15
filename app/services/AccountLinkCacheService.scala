@@ -32,8 +32,10 @@ class AccountLinkCacheService @Inject()(
 )(implicit executionContext: ExecutionContext) {
   def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
     sessionCacheConnector.retrieveSession(sessionId, linkId).flatMap {
-      case None => Future.successful(Left(NoDutyDefermentSessionAvailable))
-      case Some(AccountLink(_, _, _, _, None, _)) => Future.successful(Left(NoDutyDefermentSessionAvailable))
+      case None => println("^^^^^^^^^^^ I am here in None case")
+        Future.successful(Left(NoDutyDefermentSessionAvailable))
+      case Some(AccountLink(_, _, _, _, None, _)) => println("^^^^^^^^^^^ I am here in Some(AccountLink(_, _, _, _, None, _)) case")
+        Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(eori, accountNumber, _, accountStatus, Some(accountStatusId), isNiAccount)) =>
         val details = DutyDefermentAccountLink(eori, accountNumber, linkId, accountStatus, accountStatusId, isNiAccount)
         accountLinkCache.store(internalId, details).map(_ => Right(details))

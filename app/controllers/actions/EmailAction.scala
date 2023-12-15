@@ -17,7 +17,7 @@
 package controllers.actions
 
 import connectors.DataStoreConnector
-import models.{AuthenticatedRequest, UnverifiedEmail}
+import models.{AuthenticatedRequest, UnverifiedEmail, UndeliverableEmail}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
@@ -29,15 +29,24 @@ import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class EmailAction @Inject()(dataStoreConnector: DataStoreConnector)(implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi) extends ActionFilter[AuthenticatedRequest] with I18nSupport {
+class EmailAction @Inject()(dataStoreConnector: DataStoreConnector)
+                           (implicit val executionContext: ExecutionContext, val messagesApi: MessagesApi)
+  extends ActionFilter[AuthenticatedRequest]
+    with I18nSupport {
   def filter[A](request: AuthenticatedRequest[A]): Future[Option[Result]] = {
+    println("%%%%%%%%%%%%%% Filter first case")
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     dataStoreConnector.getEmail(request.user.eori).map {
       case Left(value) =>
+        println("%%%%%%%%%%%%%% Filter left case")
         value match {
           case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
+          case UndeliverableEmail(_) => Some(Redirect(controllers.routes.EmailController.showUndeliverable()))
         }
-      case Right(_) => None
-    }.recover { case _ => None }
+      case Right(_) => println("%%%%%%%%%%%%%% Filter Right case")
+        None
+    }.recover { case _ => println("%%%%%%%%%%%%%% Filter recover None")
+      None
+    }
   }
 }
