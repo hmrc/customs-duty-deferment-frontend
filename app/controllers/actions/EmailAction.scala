@@ -17,7 +17,7 @@
 package controllers.actions
 
 import connectors.DataStoreConnector
-import models.{AuthenticatedRequest, UndeliverableEmail, UnverifiedEmail}
+import models.{AuthenticatedRequest, EmailResponses, UndeliverableEmail, UnverifiedEmail}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
@@ -34,13 +34,16 @@ class EmailAction @Inject()(dataStoreConnector: DataStoreConnector)
     with I18nSupport {
   def filter[A](request: AuthenticatedRequest[A]): Future[Option[Result]] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
     dataStoreConnector.getEmail(request.user.eori).map {
-      case Left(value) =>
-        value match {
-          case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
-          case UndeliverableEmail(_) => Some(Redirect(controllers.routes.EmailController.showUndeliverable()))
-        }
+      case Left(value) => redirectBasedOnEmailResponse(value)
       case Right(_) => None
     }.recover { case _ => None }
   }
+
+  private def redirectBasedOnEmailResponse(value: EmailResponses): Option[Result] =
+    value match {
+      case UnverifiedEmail => Some(Redirect(controllers.routes.EmailController.showUnverified()))
+      case UndeliverableEmail(_) => Some(Redirect(controllers.routes.EmailController.showUndeliverable()))
+    }
 }
