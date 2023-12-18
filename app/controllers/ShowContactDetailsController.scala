@@ -34,7 +34,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
                                              view: show,
                                              errorView: show_error,
                                              identifier: IdentifierAction,
-                                             checkEmailIsVerified: EmailAction,
+                                             verifyEmail: EmailAction,
                                              resolveSessionId: SessionIdAction,
                                              accountLinkCacheService: AccountLinkCacheService,
                                              contactDetailsCacheService: ContactDetailsCacheService,
@@ -47,8 +47,7 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
 
   def show(): Action[AnyContent] = identifier andThen resolveSessionId async { implicit request =>
     accountLinkCacheService.get(request.request.user.internalId).flatMap {
-      case None => println("------- I am here on Show None case")
-        Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
+      case None => Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad))
       case Some(details) =>
         (for {
           contactDetails <- contactDetailsCacheService.getContactDetails(
@@ -67,12 +66,12 @@ class ShowContactDetailsController @Inject()(mcc: MessagesControllerComponents,
     }
   }
 
-  def startSession(linkId: String): Action[AnyContent] = identifier andThen checkEmailIsVerified andThen resolveSessionId async { implicit request =>
-    accountLinkCacheService.cacheAccountLink(linkId, request.sessionId.value, request.request.user.internalId).map {
-      case Left(_) => println("------- I am here on Left")
-        Redirect(routes.SessionExpiredController.onPageLoad)
-      case Right(_) => println("------- I am here on Right")
-        Redirect(routes.ShowContactDetailsController.show())
+  def startSession(linkId: String): Action[AnyContent] =
+    identifier andThen verifyEmail andThen resolveSessionId async { implicit request =>
+
+      accountLinkCacheService.cacheAccountLink(linkId, request.sessionId.value, request.request.user.internalId).map {
+        case Left(_) => Redirect(routes.SessionExpiredController.onPageLoad)
+        case Right(_) => Redirect(routes.ShowContactDetailsController.show())
+      }
     }
-  }
 }

@@ -82,7 +82,6 @@ class AppConfigSpec extends SpecBase {
       "return the correct value" in new Setup {
         appConfig.emailFrontendUrl mustBe "http://localhost:9898/manage-email-cds/service/customs-finance"
       }
-
     }
   }
 
