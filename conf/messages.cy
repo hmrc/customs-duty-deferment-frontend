@@ -299,15 +299,15 @@ cf.verify.your.email.change.button=Dilysu neu newid y cyfeiriad e-bost
 
 # Undeliverable Email Address
 # ------------------------------------------------------------------------
-cf.undeliverable.email.title=There''s a problem with your email address for the Customs Declaration Service
-cf.undeliverable.email.heading=There''s a problem with your email address for the Customs Declaration Service
-cf.undeliverable.email.p1=We tried to send you an email but it could not be delivered.
-cf.undeliverable.email.p2=Your registered email address is <strong class="bold">{0}</strong>.
+cf.undeliverable.email.title=Mae problem gyda’ch cyfeiriad e-bost ar gyfer y Gwasanaeth Datganiadau Tollau
+cf.undeliverable.email.heading=Mae problem gyda’ch cyfeiriad e-bost ar gyfer y Gwasanaeth Datganiadau Tollau
+cf.undeliverable.email.p1=Gwnaethom geisio anfon e-bost atoch ond nid oedd modd ei ddosbarthu.
+cf.undeliverable.email.p2=Eich e-bost cofrestredig yw <strong class="bold">{0}</strong>.
 
-cf.undeliverable.email.verify.heading=Verify your email address
-cf.undeliverable.email.verify.text.p1=If this email address is correct, you will need to verify it to continue using the Customs Declaration Service.
-cf.undeliverable.email.change.heading=Change your email address
-cf.undeliverable.email.change.text.p1=If this email address is not correct, you can change it here.
-cf.undeliverable.email.change.text.p2=The Customs Declaration Service uses one email address for various customs-related services. If you change it, take care that other people in your company will still have access to the messages they need.
-cf.undeliverable.email.link-text=Verify or change email address
+cf.undeliverable.email.verify.heading=Cadarnhau’ch cyfeiriad e-bost
+cf.undeliverable.email.verify.text.p1=Os mae’r cyfeiriad e-bost hwn yn gywir, bydd angen i chi ei gadarnhau er mwyn parhau i ddefnyddio Gwasanaeth Datganiadau Tollau.
+cf.undeliverable.email.change.heading=Newidiwch eich cyfeiriad e-bost
+cf.undeliverable.email.change.text.p1=Os nad yw’r cyfeiriad e-bost yn gywir, gallwch ei newid yma.
+cf.undeliverable.email.change.text.p2=Mae’r Gwasanaeth Datganiadau Tollau yn defnyddio un cyfeiriad e-bost ar gyfer nifer o wasanaethau sy’n gysylltiedig â thollau. Os ydych yn newid y cyfeiriad e-bost hwn, sicrhewch fod modd i bobl eraill yn eich cwmni gael y negeseuon sydd eu hangen arnynt.
+cf.undeliverable.email.link-text=Dilysu neu newid y cyfeiriad e-bost
 # ------------------------------------------------------------------------
