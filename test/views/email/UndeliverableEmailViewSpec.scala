@@ -78,5 +78,4 @@ class UndeliverableEmailViewSpec extends SpecBase {
       app.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body
     )
   }
-
 }
