@@ -87,7 +87,12 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   lazy val fixedDateTime = config.get[Boolean]("features.fixed-systemdate-for-tests")
 
-  val emailFrontendUrl: String = config.get[String]("microservice.services.customs-email-frontend.url")
+  lazy val emailFrontendService = s"${servicesConfig.baseUrl(s"customs-email-frontend")}${
+    config.get[String](
+      "microservice.services.customs-email-frontend.context")
+  }"
+
+  lazy val emailFrontendUrl: String = s"$emailFrontendService/service/customs-finance"
 
   /**
    * Creates the deskPro url that is used exclusively as of now for service unavailable page

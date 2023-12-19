@@ -17,6 +17,8 @@
 package controllers
 
 import config.AppConfig
+import connectors.DataStoreConnector
+import models.{UndeliverableEmail, UnverifiedEmail}
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
@@ -24,6 +26,8 @@ import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.{AccountLinkCacheService, ContactDetailsCacheService, NoAccountStatusId}
+import uk.gov.hmrc.auth.core.retrieve.Email
+import uk.gov.hmrc.http.HttpClient
 import util.SpecBase
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
@@ -51,7 +55,6 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-
     "redirect to session expired view when no accountLink found" in new Setup {
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(None))
 
@@ -78,6 +81,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
 
   "startSession" must {
     "redirect to session expired when no account link found" in new Setup {
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Right(Email("test@test.com"))))
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Left(NoAccountStatusId)))
 
@@ -88,7 +93,44 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "redirect to 'show' when a account link returned" in new Setup {
+    "redirect to 'show' when a verified email response and account link are returned" in new Setup {
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Right(Email("test@test.com"))))
+      when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
+        .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))
+
+      running(app) {
+        val result = route(app, startSessionRequest).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.ShowContactDetailsController.show().url
+      }
+    }
+
+    "redirect to 'verify your email' page when an unverified email response is received" in new Setup {
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Left(UnverifiedEmail)))
+
+      running(app) {
+        val result = route(app, startSessionRequest).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.EmailController.showUnverified().url
+      }
+    }
+
+    "redirect to 'Undelivered email' page when an undelivered email response is received" in new Setup {
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.successful(Left(UndeliverableEmail("test@test.com"))))
+
+      running(app) {
+        val result = route(app, startSessionRequest).value
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.EmailController.showUndeliverable().url
+      }
+    }
+
+    "redirect to 'show contact details' page when an error occurs while retrieving the email" in new Setup {
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.failed(new RuntimeException("Error occurred")))
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))
 
@@ -103,6 +145,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
   trait Setup {
     val mockContactDetailsCacheService: ContactDetailsCacheService = mock[ContactDetailsCacheService]
     val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
+    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
 
     val validContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(
       validDan,
@@ -113,7 +156,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     val app: Application = application()
       .overrides(
         bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
-        bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+        bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
+        bind[DataStoreConnector].toInstance(mockDataStoreConnector)
       ).build()
 
     val showRequest: FakeRequest[AnyContentAsEmpty.type] =
