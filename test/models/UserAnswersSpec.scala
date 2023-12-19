@@ -20,7 +20,8 @@ import java.time.LocalDateTime
 import util.SpecBase
 import play.api.libs.json._
 import queries.{Gettable, Settable}
-import scala.util.{Success, Try}
+
+import scala.util.{Failure, Success, Try}
 
 class UserAnswersSpec extends SpecBase {
 
@@ -30,6 +31,11 @@ class UserAnswersSpec extends SpecBase {
       val gettable = MockGettable[String](JsPath(List(KeyPathNode("key"))))
       val result = userAnswers.get(gettable)(Reads.StringReads)
       result mustBe Some("value")
+    }
+    "get None if value is incorrect" in new Setup {
+      val gettable = MockGettable[String](JsPath(List(KeyPathNode("key2"))))
+      val result = userAnswers.get(gettable)(Reads.StringReads)
+      result mustBe None
     }
 
     "set a value correctly" in new Setup {
@@ -43,6 +49,18 @@ class UserAnswersSpec extends SpecBase {
       updatedAnswers.get.data mustBe Json.obj("key" -> "new value")
     }
 
+    "get a failure if wrong key is used in seting a value" in new Setup {
+      val settable = MockSettable[String](
+        JsPath(Nil),
+        (_, ua) => Success(ua)
+      )
+      assertThrows[JsResultException] {
+        val updatedAnswers =
+          userAnswers.set(settable, "new value")(Writes.StringWrites)
+        updatedAnswers.get.data mustBe Json.obj("key" -> "new value")
+      }
+    }
+
     "remove a value correctly" in new Setup {
       val settable = MockSettable[String](
         JsPath(List(KeyPathNode("key"))),
@@ -52,6 +70,21 @@ class UserAnswersSpec extends SpecBase {
       updatedAnswers mustBe a[Success[_]]
       updatedAnswers.get.data mustBe Json.obj()
     }
+
+    "should not to remove if key is not found" in new Setup {
+      val settable = MockSettable[String](
+        JsPath(List(KeyPathNode("key2"))),
+        (_, ua) => Success(ua)
+      )
+      val updatedAnswers = userAnswers.remove(settable)
+      updatedAnswers mustBe a[Success[_]]
+      updatedAnswers.get.data mustBe Json.obj("key"->"value")
+    }
+
+    "implicits datatimeformat should not be null " in new Setup {
+      assert(MongoJavatimeFormats.Implicits.jatLocalDateTimeFormat != null)
+    }
+
   }
 
   trait Setup {

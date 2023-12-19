@@ -59,15 +59,29 @@ class DateConvertersSpec extends SpecBase {
     }
 
     "DutyDeferementPeriodStatements can have their Date Converter Compared successfully" in {
+
+      val currDate = LocalDate.now();
+      val prior3Days = currDate.minusDays(3)
+      val prior1Day = currDate.minusDays(1)
+
       val deferement1 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
+        currDate, currDate, currDate, Seq.empty)
 
-      val deferement2 = DutyDefermentStatementPeriod(
-        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
+      deferement1.compare(
+        DutyDefermentStatementPeriod(
+          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+          currDate, currDate, currDate, Seq.empty)) mustBe 0;
 
-      val testData: Seq[DutyDefermentStatementPeriod] = Seq(deferement2, deferement1)
+      deferement1.compare(
+        DutyDefermentStatementPeriod(
+          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+          currDate, prior3Days, prior1Day, Seq.empty)) mustBe -1;
+
+      deferement1.compare(
+        DutyDefermentStatementPeriod(
+          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+          currDate, prior1Day, currDate, Seq.empty)) mustBe 1;
     }
   }
 }
