@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UndeliverableInformation, UnverifiedEmail}
+import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail}
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
@@ -32,7 +32,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when[Future[EoriHistoryResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.successful(eoriHistoryResponse))
 
-      running(app){
+      running(app) {
         val result = await(connector.getAllEoriHistory("someEori"))
         result mustBe eoriHistoryResponse.eoriHistory
       }
@@ -42,7 +42,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when[Future[EoriHistoryResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.failed(new HttpException("Unknown Error", 500)))
 
-      running(app){
+      running(app) {
         val result = await(connector.getAllEoriHistory("defaultEori"))
         result mustBe List(EoriHistory("defaultEori", None, None))
       }
@@ -51,7 +51,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
   "getEmail" should {
     "return an email address when the request is successful and undeliverable is not present in the response" in new Setup {
-      val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, None )
+      val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, None)
 
       when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.successful(emailResponse))
@@ -63,7 +63,7 @@ class DataStoreConnectorSpec extends SpecBase {
     }
 
     "return no email address when the request is successful and undeliverable is present in the response" in new Setup {
-      val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, Some(UndeliverableInformation("someSubject")))
+      val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, Some(undelInfoOb))
 
       when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.successful(emailResponse))
@@ -103,6 +103,20 @@ class DataStoreConnectorSpec extends SpecBase {
 
     val eoriHistoryResponse: EoriHistoryResponse =
       EoriHistoryResponse(Seq(EoriHistory("someEori", None, None)))
+
+    val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent("example-id",
+      "someEvent",
+      "email@email.com",
+      "2021-05-14T10:59:45.811+01:00",
+      Some(12),
+      Some("Inbox full"),
+      "HMRC-CUS-ORG~EORINumber~GB744638982004")
+
+    val undelInfoOb: UndeliverableInformation = UndeliverableInformation("someSubject",
+      "example-id",
+      "example-group-id",
+      "2021-05-14T10:59:45.811+01:00",
+      undelInfoEventOb)
 
     val app: Application = application().overrides(
       inject.bind[HttpClient].toInstance(mockHttpClient)

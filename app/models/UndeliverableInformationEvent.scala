@@ -18,12 +18,14 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class UndeliverableInformation(subject: String,
-                                    eventId: String,
-                                    groupId: String,
-                                    timestamp: String,
-                                    event: UndeliverableInformationEvent)
+case class UndeliverableInformationEvent(id: String,
+                                         event: String,
+                                         emailAddress: String,
+                                         detected: String,
+                                         code: Option[Int],
+                                         reason: Option[String],
+                                         enrolment: String)
 
-object UndeliverableInformation {
-  implicit val format: OFormat[UndeliverableInformation] = Json.format[UndeliverableInformation]
+object UndeliverableInformationEvent {
+  implicit val format: OFormat[UndeliverableInformationEvent] = Json.format[UndeliverableInformationEvent]
 }
