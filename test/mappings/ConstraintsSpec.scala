@@ -143,6 +143,70 @@ class ConstraintsSpec extends SpecBase with Constraints {
       isValidEmail(invalidEmail_7) mustBe Invalid(List(ValidationError(List("emailAddress.edit.empty"))))
     }
   }
+
+  "Incorrect CountryCode return Invalid result" when {
+
+    "CountryCode is Invalid" in new SetUp {
+      isValidCountryCode("") mustBe Invalid(List(ValidationError(List("accountDetails.edit.address.country.invalid"))))
+    }
+  }
+
+  "incorrect Namefield return Invalid" when {
+
+    "namefield has empty value" in new SetUp {
+      isValidNameField(nameFieldMsg_01)(Some("  ")) mustBe Invalid(ValidationError(s"$nameFieldMsg_01.empty"))
+    }
+
+    "namefield size is higher than max value" in new SetUp {
+      isValidNameField(nameFieldMsg_01)(Some(nameField_02)) mustBe Invalid(ValidationError(s"$nameFieldMsg_01.max"))
+    }
+
+    "namefield validation aginst regex" in new SetUp {
+      isValidNameField(nameFieldMsg_01)(Some(nameField_03)) mustBe Invalid(ValidationError(s"$nameFieldMsg_01.invalid"))
+    }
+  }
+
+  "incorrect optional addressLine  return Invalid" when {
+
+    "address line 2 size is higher than max value" in new SetUp {
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(ValidationError(s"$addressField2Msg.max"))
+    }
+
+    "address line 2 validation aginst regex" in new SetUp {
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(ValidationError(s"$addressField2Msg.invalid"))
+    }
+  }
+
+  "incorrect mandatory addressLine  return Invalid" when {
+
+    "mandatory address line size is higher than max value" in new SetUp {
+      validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(ValidationError(s"$addressField1Msg.max"))
+    }
+
+    "mandatory address line validation aginst regex" in new SetUp {
+      validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(ValidationError(s"$addressField1Msg.invalid"))
+    }
+  }
+
+  "valid PhoneNumber return correct result" when {
+
+    "phoneNumber is valid" in new SetUp {
+      isValidPhoneNumber(phoneNumberMessage)(Some(phoneNumber)) mustBe Valid
+    }
+  }
+
+  "return invalid phone number" when {
+
+    "phoneNumber has invalid regex" in new SetUp {
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+    }
+
+    "phoneNumber has exceeded 24 characters" in new SetUp {
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+    }
+
+  }
+
 }
 
 trait SetUp {
@@ -174,6 +238,21 @@ trait SetUp {
 
   val phoneNumber = "01133111122"
   val invalidPhone_1 = "A123456"
-  val invalidPhone_2 = ""
-  val invalidPhone_3 = "01112222333344446666777722334455"
+  val invalidPhone_2 = "01112222333344446666777722334455"
+
+  val phoneNumberMessage = "accountDetails.edit.telephone"
+
+  val nameField_01="John Doe";
+  val nameField_02="John Doe Lorem ipsum dolor sit amet consectetur adipiscing";
+  val nameField_03="John Doe %";
+  val nameFieldMsg_01="accountDetails.edit.name"
+
+  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit";
+  val addressLine1_02 = "John Doe %";
+  val addressField1Msg = "accountDetails.edit.address.line1"
+
+
+  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit";
+  val addressLine2_02 = "John Doe %";
+  val addressField2Msg = "accountDetails.edit.address.line2"
 }
