@@ -59,6 +59,21 @@ class AuditingServiceSpec extends SpecBase {
       dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
       dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
+
+    "create the correct data event for logging a Failure audit event" in new Setup {
+
+      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Failure("Auditing failed",None)))
+
+      val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
+      await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
+      verify(mockAuditConnector).sendExtendedEvent(dataEventCaptor.capture)(any, any)
+      val dataEvent: ExtendedDataEvent = dataEventCaptor.value
+      dataEvent.auditSource mustBe (expectedAuditSource)
+      dataEvent.auditType mustBe ("UpdateDefermentAccountCorrespondence")
+      dataEvent.tags("transactionName") mustBe ("Update contact details")
+      dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
+      dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
+    }
   }
 
   trait Setup {

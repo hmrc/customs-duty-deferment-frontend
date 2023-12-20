@@ -31,6 +31,12 @@ class ModelsSpec extends SpecBase {
       val result02 = jsonTestData01.setObject(jpath02, jvalue02)
       result02 mustBe a[JsError]
 
+      val result03 = jsonTestData01.setObject(jpath03, jvalue03)
+      result03 mustBe JsSuccess(Json.obj("key1" -> "val1","key2" -> Json.arr("val2")))
+
+      val result04 = jsonTestData01.setObject(jpath04, jvalue04)
+      result04 mustBe a[JsError]
+
     }
 
     "remove value at specified location" in new Setup {
@@ -41,18 +47,27 @@ class ModelsSpec extends SpecBase {
       val result02 = jsonTestData02.removeObject(JsPath(List(KeyPathNode("key3"))))
       result02 mustBe a[JsError]
 
+      val result03 = jsonTestData03.removeObject(jpath03)
+      result03 mustBe JsSuccess(Json.obj("key1" -> "val1","key2"->Json.arr()))
     }
   }
 
   trait Setup {
     val jsonTestData01 = RichJsObject(Json.obj("key1" -> "val1"));
     val jsonTestData02 = RichJsObject(Json.obj("key1" -> "val1","key2" -> "val2"));
+    val jsonTestData03 = RichJsObject(Json.obj("key1" -> "val1","key2" -> Json.arr("val2")));
 
     val jpath01 = JsPath(List(KeyPathNode("key1")));
     val jvalue01: JsValue =JsString("value1")
 
     val jpath02 = JsPath(List(KeyPathNode("key2")) :+ RecursiveSearch("key1"))
     val jvalue02: JsValue = JsString("val2")
+
+    val jpath03 = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0))
+    val jvalue03: JsValue = JsString("val2")
+
+    val jpath04 = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(1))
+    val jvalue04: JsValue = JsString("val2")
 
   }
 }
