@@ -166,6 +166,14 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
   }
 
+  "correct Namefield return valid" when {
+
+    "namefield has correct value" in new SetUp {
+      isValidNameField(nameFieldMsg_01)(Some("John Doe")) mustBe Valid
+    }
+
+  }
+
   "incorrect optional addressLine  return Invalid" when {
 
     "address line 2 size is higher than max value" in new SetUp {
@@ -178,6 +186,10 @@ class ConstraintsSpec extends SpecBase with Constraints {
   }
 
   "incorrect mandatory addressLine  return Invalid" when {
+
+    "mandatory address line is empty" in new SetUp {
+      validMandatoryAddressField(addressField1Msg)("") mustBe Invalid(ValidationError(s"$addressField1Msg.empty"))
+    }
 
     "mandatory address line size is higher than max value" in new SetUp {
       validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(ValidationError(s"$addressField1Msg.max"))
