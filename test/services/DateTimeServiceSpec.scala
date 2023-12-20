@@ -37,11 +37,9 @@ class DateTimeServiceSpec extends SpecBase {
   }
 
   trait Setup {
-
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockConfig: AppConfig = mock[AppConfig]
     val dateTimeService = new DateTimeService()
-
   }
-
 }
+
