@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsSuccess, Json}
 import util.SpecBase
 
 import java.time.LocalDate
@@ -45,16 +45,32 @@ class EoriHistorySpec extends SpecBase {
       )
 
       val eoriHistory = json.as[EoriHistory]
-
       eoriHistory mustEqual expectedEoriHistory
     }
 
     "correctly determine if an EORI is historic" in new Setup {
       val currentEori = EoriHistory("EORI123", Some(LocalDate.now()), None)
-
       currentEori.isHistoricEori mustBe false
       expectedEoriHistory.isHistoricEori mustBe true
     }
+
+    "Correctly ignore invalid date and accepts correct date while parsing" in new Setup {
+
+      val expectedEoriHistory01 = EoriHistory("EORI123", Some(LocalDate.parse("2023-12-19")), None)
+      val validJson01 = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString();
+      EoriHistory.eoriHistoryFormat.reads(Json.parse(validJson01)) mustBe JsSuccess(expectedEoriHistory01)
+
+      val validJson02 = Json.obj("eori" -> "EORI123","validFrom" -> "2023-12-19T10:15:30+01:00")
+      EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
+    }
+
+    "Correctly ignore date with wrong hour and use None while parsing" in new Setup {
+
+      val expectedEoriHistory01 = EoriHistory("EORI123", None, None)
+      val validJson02 = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T25:15:30+01:00")
+      EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
+    }
+
   }
 
   trait Setup {
