@@ -37,6 +37,11 @@ class ModelsSpec extends SpecBase {
       val result04 = jsonTestData01.setObject(jpath04, jvalue04)
       result04 mustBe a[JsError]
 
+      val result05 = jsonTestData03.setObject(
+          JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0)),
+          JsString("val2"))
+      result05 mustBe JsSuccess(Json.parse(""" {"key1":"val1","key2":["val2"]} """))
+
     }
 
     "remove value at specified location" in new Setup {
