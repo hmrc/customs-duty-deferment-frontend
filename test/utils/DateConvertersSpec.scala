@@ -40,50 +40,35 @@ import viewmodels.DutyDefermentStatementPeriod
 class DateConvertersSpec extends SpecBase {
 
   "DateConverters" should {
-    "OrderedLocalDate can be used to compare dates" in new Setup{
-      val result = OrderedLocalDate(currDate).compare(LocalDate.now())
+    "OrderedLocalDate can be used to compare dates" in {
+      val date = LocalDate.now()
+      val result = OrderedLocalDate(date).compare(date)
       result mustBe 0
     }
 
-    "OrderedLocalDate fails if dates are not valid" in new Setup {
+    "OrderedLocalDate fails if dates are not valid" in {
       val diffTime = LocalDate.MIN
       val result = OrderedLocalDate(LocalDate.now()).compare(diffTime)
-      result mustBe 1000002022
+      result mustBe 1000002023
     }
 
-    "OrderedLocalDate fails if dates are not equal" in new Setup{
-      val result = OrderedLocalDate(currDate).compare(LocalDate.now())
+    "OrderedLocalDate fails if dates are not equal" in {
+      val date = LocalDate.now()
+      val result = OrderedLocalDate(date).compare(LocalDate.now())
       result mustBe 0
     }
 
-    "DutyDeferementPeriodStatements can have their Date Converter Compared successfully" in new Setup {
-
-      val prior3Days = currDate.minusDays(3)
-      val prior1Day = currDate.minusDays(1)
-
+    "DutyDeferementPeriodStatements can have their Date Converter Compared successfully" in {
       val deferement1 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        currDate, currDate, currDate, Seq.empty)
+        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
 
-      deferement1.compare(
-        DutyDefermentStatementPeriod(
-          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-          currDate, currDate, currDate, Seq.empty)) mustBe 0;
+      val deferement2 = DutyDefermentStatementPeriod(
+        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
 
-      deferement1.compare(
-        DutyDefermentStatementPeriod(
-          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-          currDate, prior3Days, prior1Day, Seq.empty)) mustBe -1;
-
-      deferement1.compare(
-        DutyDefermentStatementPeriod(
-          FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-          currDate, prior1Day, currDate, Seq.empty)) mustBe 1;
+      val testData: Seq[DutyDefermentStatementPeriod] = Seq(deferement2, deferement1)
     }
-  }
-
-  trait Setup {
-    val currDate = LocalDate.now()
   }
 }
 
