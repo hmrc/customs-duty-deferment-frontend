@@ -57,7 +57,7 @@ class EoriHistorySpec extends SpecBase {
     "Correctly ignore invalid date and accepts correct date while parsing" in new Setup {
 
       val expectedEoriHistory01 = EoriHistory("EORI123", Some(LocalDate.parse("2023-12-19")), None)
-      val validJson01 = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString();
+      val validJson01 = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString()
       EoriHistory.eoriHistoryFormat.reads(Json.parse(validJson01)) mustBe JsSuccess(expectedEoriHistory01)
 
       val validJson02 = Json.obj("eori" -> "EORI123","validFrom" -> "2023-12-19T10:15:30+01:00")

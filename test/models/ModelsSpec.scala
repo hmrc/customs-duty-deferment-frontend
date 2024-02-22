@@ -58,11 +58,11 @@ class ModelsSpec extends SpecBase {
   }
 
   trait Setup {
-    val jsonTestData01 = RichJsObject(Json.obj("key1" -> "val1"));
-    val jsonTestData02 = RichJsObject(Json.obj("key1" -> "val1", "key2" -> "val2"));
-    val jsonTestData03 = RichJsObject(Json.obj("key1" -> "val1", "key2" -> Json.arr("val2")));
+    val jsonTestData01 = RichJsObject(Json.obj("key1" -> "val1"))
+    val jsonTestData02 = RichJsObject(Json.obj("key1" -> "val1", "key2" -> "val2"))
+    val jsonTestData03 = RichJsObject(Json.obj("key1" -> "val1", "key2" -> Json.arr("val2")))
 
-    val jpath01 = JsPath(List(KeyPathNode("key1")));
+    val jpath01 = JsPath(List(KeyPathNode("key1")))
     val jvalue01: JsValue = JsString("value1")
 
     val jpath02 = JsPath(List(KeyPathNode("key2")) :+ RecursiveSearch("key1"))

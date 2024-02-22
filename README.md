@@ -2,11 +2,11 @@
 # customs-duty-deferment-frontend
 A frontend component for the CDS Financials project which aims to allow the user to view duty deferment statements.
 
-| Path                                                                   | Description                                                                                       |
-| ---------------------------------------------------------------------  | ------------------------------------------------------------------------------------------------- |
-| GET  /:linkId/account                                                  | Retrieves duty deferment statement                                                                |                
-| GET  /:linkId/contact-details                                          | Retrieves user contact details                                                                    |                
-| GET  /contact-details/edit                                             | Edit user contact details                                                                         |                
+| Path                          | Description                        |
+|-------------------------------|------------------------------------|
+| GET  /:linkId/account         | Retrieves duty deferment statement |                
+| GET  /:linkId/contact-details | Retrieves user contact details     |                
+| GET  /contact-details/edit    | Edit user contact details          |                
 
 
 ## Running the application locally

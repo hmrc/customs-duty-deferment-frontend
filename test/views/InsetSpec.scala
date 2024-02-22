@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.components
+package views
 
 import play.api.Application
 import org.jsoup.Jsoup

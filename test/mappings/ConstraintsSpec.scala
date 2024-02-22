@@ -254,17 +254,17 @@ trait SetUp {
 
   val phoneNumberMessage = "accountDetails.edit.telephone"
 
-  val nameField_01="John Doe";
-  val nameField_02="John Doe Lorem ipsum dolor sit amet consectetur adipiscing";
-  val nameField_03="John Doe %";
+  val nameField_01="John Doe"
+  val nameField_02="John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
+  val nameField_03="John Doe %"
   val nameFieldMsg_01="accountDetails.edit.name"
 
-  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit";
-  val addressLine1_02 = "John Doe %";
+  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit"
+  val addressLine1_02 = "John Doe %"
   val addressField1Msg = "accountDetails.edit.address.line1"
 
 
-  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit";
-  val addressLine2_02 = "John Doe %";
+  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit"
+  val addressLine2_02 = "John Doe %"
   val addressField2Msg = "accountDetails.edit.address.line2"
 }

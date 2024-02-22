@@ -51,7 +51,7 @@ class MetadataSpec extends SpecBase {
 
     "Reads and Writes return corresponding objects" in {
 
-      val jsonVal = Metadata.metadataWrites.writes(sampleMetadata).toString();
+      val jsonVal = Metadata.metadataWrites.writes(sampleMetadata).toString()
       val parsedObj = Metadata.metadataReads.reads(Json.parse(jsonVal))
       parsedObj mustBe JsSuccess(sampleMetadata)
     }
