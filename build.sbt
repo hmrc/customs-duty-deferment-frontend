@@ -1,9 +1,14 @@
 import scoverage.ScoverageKeys
-import uk.gov.hmrc.DefaultBuildSettings.{integrationTestSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.{integrationTestSettings,scalaSettings, targetJvm}
 
 val appName = "customs-duty-deferment-frontend"
+val testDirectory = "test"
 
 val silencerVersion = "1.17.13"
+
+lazy val scalastyleSettings = Seq(
+  scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
+  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml")
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -14,6 +19,21 @@ lazy val microservice = Project(appName, file("."))
     targetJvm := "jvm-11",
     PlayKeys.playDefaultPort := 9397,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    scalacOptions ++= Seq(
+      "-P:silencer:pathFilters=routes",
+      "-Wunused:imports",
+      "-Wunused:params",
+      "-Wunused:patvars",
+      "-Wunused:implicits",
+      "-Wunused:explicits",
+      "-Wunused:privates"),
+    Test / scalacOptions ++= Seq(
+      "-Wunused:imports",
+      "-Wunused:params",
+      "-Wunused:patvars",
+      "-Wunused:implicits",
+      "-Wunused:explicits",
+      "-Wunused:privates"),
     ScoverageKeys.coverageExcludedFiles := List(
       "<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*").mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 80,
@@ -32,3 +52,4 @@ lazy val microservice = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(integrationTestSettings() *)
   .settings(resolvers += Resolver.jcenterRepo)
+  .settings(scalastyleSettings)
