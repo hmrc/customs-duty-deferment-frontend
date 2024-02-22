@@ -100,17 +100,24 @@ class SdesFileSpec extends SpecBase {
     val pdfFileFormat: FileFormat = FileFormat("PDF")
     val pdfJsValue: JsString = JsString("PDF")
 
+    val fileSize = 10L
+    val periodStartYear = 2018
+    val periodStartMonth = 6
+    val periodStartDate = 1
+    val periodEndYear = 2018
+    val periodEndMonth = 6
+    val periodEndDate = 8
     val ddStatementFile1: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
-        10L,
-        DutyDefermentStatementFileMetadata(2018,
-          6,
-          1,
-          2018,
-          6,
-          8,
+        fileSize,
+        DutyDefermentStatementFileMetadata(periodStartYear,
+          periodStartMonth,
+          periodStartDate,
+          periodEndYear,
+          periodEndMonth,
+          periodEndDate,
           FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
       )
@@ -119,13 +126,13 @@ class SdesFileSpec extends SpecBase {
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
-        10L,
-        DutyDefermentStatementFileMetadata(2018,
-          6,
-          1,
-          2018,
-          6,
-          8,
+        fileSize,
+        DutyDefermentStatementFileMetadata(periodStartYear,
+          periodStartMonth,
+          periodStartDate,
+          periodEndYear,
+          periodEndMonth,
+          periodEndDate,
           FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
       )

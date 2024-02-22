@@ -70,11 +70,14 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
       "compare file returns success when all dates are valid" in new Setup {
 
+        val periodStartYear = 2019
+        val periodEndYear = 2020
+
           val differentFile: DutyDefermentStatementFile =
             DutyDefermentStatementFile(
               "", "", 0L,
               DutyDefermentStatementFileMetadata(
-                2019, 1, 1, 2020, 1, 1, FileFormat.Csv,
+                periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.Csv,
                 DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
             )
 
@@ -84,11 +87,14 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
         "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
 
+          val periodStartYear = 2019
+          val periodEndYear = 2020
+
           val differentFile: DutyDefermentStatementFile =
             DutyDefermentStatementFile(
               "", "", 0L,
               DutyDefermentStatementFileMetadata(
-                2019, 1, 1, 2020, 1, 1, FileFormat.UnknownFileFormat,
+                periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.UnknownFileFormat,
                 DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
             )
 
@@ -103,22 +109,31 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
         implicit val hc: HeaderCarrier = HeaderCarrier()
 
+        val startYear = 2018
+        val startMonth = 6
+        val startDate = 1
+        val endYear = 2018
+        val endMonth = 6
+        val endDate = 8
+        val fileSize = 10L
+        val dan = "123456"
+
         val currentFile: DutyDefermentStatementFile =
           DutyDefermentStatementFile(
             "someFilename",
             "downloadUrl",
-            10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+            fileSize,
+            DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
+              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, None)
           )
 
         val requestedFile: DutyDefermentStatementFile =
           DutyDefermentStatementFile(
             "someRequestedFilename",
             "downloadUrl",
-            10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
+            fileSize,
+            DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
+              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, Some("requestedId"))
           )
 
         val app: Application = application().overrides(

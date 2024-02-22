@@ -42,7 +42,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
     "return None on a failed response" in new Setup {
       when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
-        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", 404, 404)))
+        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
       running(app){
         val result = await(connector.retrieveSession("someId", "someLink"))

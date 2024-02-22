@@ -97,24 +97,34 @@ trait TestData extends MockitoSugar {
     isNiAccount = false
   )
 
+  val periodStartYear = 2018
+  val periodStartMonth = 6
+  val periodStartDate = 1
+  val periodEndYear = 2018
+  val periodEndMonth = 6
+  val periodEndDate = 8
+
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
     DutyDefermentStatementFile(
       "someFilename",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
         Weekly, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Pdf, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Pdf, DutyDefermentStatement,
         Supplementary, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
         Excise, Some(false), Some("BACS"), "123456", None))
   )
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
