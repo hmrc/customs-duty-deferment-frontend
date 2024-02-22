@@ -28,7 +28,8 @@ trait Constraints {
   private val postCodeMandatoryCountryCodes = Seq("GB", "GG", "JE", "IM")
   private val addressLengthLimit = 35
   private val nameLengthLimit = 50
-  private val isValidPostCodeRegex: Regex = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$".r
+  private val isValidPostCodeRegex: Regex = ("^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)" +
+    "|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$").r
   private val emailRegex = """^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""".r
   val countryError: ValidationError = ValidationError("accountDetails.edit.address.country.invalid")
 

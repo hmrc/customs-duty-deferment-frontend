@@ -103,9 +103,11 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
     s"$contactFrontEndBaseUrl/contact/report-technical-problem?newTab=true&amp;service=${
       urlEncode(contactFrontEndServiceId)
     }${
-      if (referrerUrl(platformHost).nonEmpty) s"referrerUrl=${
-        urlEncode(referrerUrl(platformHost).get)
-      }" else emptyString
+      if (referrerUrl(platformHost).nonEmpty) {
+        s"referrerUrl=${
+          urlEncode(referrerUrl(platformHost).get)
+        }"
+      } else emptyString
     }"
 
 }

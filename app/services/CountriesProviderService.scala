@@ -19,7 +19,7 @@ package services
 import com.google.inject.Inject
 import config.AppConfig
 import models.Country
-import play.api.libs.json.{JsArray, JsString, Json}
+import play.api.libs.json.{JsArray, Json}
 import play.api.{Environment, Logger}
 
 import javax.inject.Singleton

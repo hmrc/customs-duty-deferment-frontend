@@ -25,8 +25,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DocumentService @Inject()(sdesConnector: SDESConnector,
-                                auditingService: AuditingService)(implicit ec: ExecutionContext) {
+class DocumentService @Inject()(sdesConnector: SDESConnector)(implicit ec: ExecutionContext) {
 
   def getDutyDefermentStatements(eoriHistory: EoriHistory, dan: String)(implicit hc: HeaderCarrier): Future[DutyDefermentStatementsForEori] =
     sdesConnector.getDutyDefermentStatements(eoriHistory.eori, dan).map(auditFiles(_, eoriHistory.eori))

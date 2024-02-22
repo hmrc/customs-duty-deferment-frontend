@@ -22,11 +22,8 @@ import models.EditContactDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats._
 import play.api.data.{Form, FormError, Forms}
-import services.CountriesProviderService
 
-class EditContactDetailsFormProvider @Inject()(
-                                                countriesProviderService: CountriesProviderService
-                                              ) extends Constraints {
+class EditContactDetailsFormProvider @Inject()() extends Constraints {
 
   def apply(): Form[EditContactDetailsUserAnswers] = {
     // A hidden form component tracks countryName and is updated using JS.
