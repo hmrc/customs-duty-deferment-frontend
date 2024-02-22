@@ -24,7 +24,7 @@ class EditAddressDetailsUserAnswersSpec extends SpecBase {
   "EditAddressDetailsUserAnswers" should {
     "convert to ContactDetailsUserAnswers correctly" in new Setup {
 
-      val convertedContactDetailsUserAnswers = editAddressDetailsUserAnswers
+      val convertedContactDetailsUserAnswers: ContactDetailsUserAnswers = editAddressDetailsUserAnswers
         .toContactDetailsUserAnswers(initialContactDetails, isNiAccount = true)
 
       convertedContactDetailsUserAnswers mustBe expectedContactDetailsUserAnswers
@@ -32,7 +32,7 @@ class EditAddressDetailsUserAnswersSpec extends SpecBase {
   }
 
   trait Setup {
-    val initialContactDetails = ContactDetails(
+    val initialContactDetails: ContactDetails = ContactDetails(
       contactName = Some("John Doe"),
       addressLine1 = "123 Main St",
       addressLine2 = Some("line 2"),
@@ -45,7 +45,7 @@ class EditAddressDetailsUserAnswersSpec extends SpecBase {
       email = Some("john.doe@example.com")
     )
 
-    val editAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
+    val editAddressDetailsUserAnswers: EditAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
       dan = "123456",
       addressLine1 = "123 Main St",
       addressLine2 = Some("Apt 4B"),
@@ -57,7 +57,7 @@ class EditAddressDetailsUserAnswersSpec extends SpecBase {
       isNiAccount = true
     )
 
-    val expectedContactDetailsUserAnswers = ContactDetailsUserAnswers(
+    val expectedContactDetailsUserAnswers: ContactDetailsUserAnswers = ContactDetailsUserAnswers(
       dan = "123456",
       name = Some("John Doe"),
       addressLine1 = "123 Main St",

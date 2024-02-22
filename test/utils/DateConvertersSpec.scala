@@ -66,8 +66,6 @@ class DateConvertersSpec extends SpecBase {
       val deferement2 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
         LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
-
-      val testData: Seq[DutyDefermentStatementPeriod] = Seq(deferement2, deferement1)
     }
   }
 }

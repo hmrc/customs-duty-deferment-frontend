@@ -46,7 +46,7 @@ class DocumentServiceSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val eoriHist = EoriHistory("GB123456789", None, None)
+    val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
     val dan = "1234567"
 
     val currentFile: DutyDefermentStatementFile =

@@ -28,7 +28,7 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
     "getDutyDefermentStatements" should {
       "compare file returns success response when the same" in new Setup {
-        val result = currentFile.compare(currentFile)
+        val result: Int = currentFile.compare(currentFile)
         result mustBe 0
       }
 
@@ -78,7 +78,7 @@ class DutyDeferementStatementFileSpec extends SpecBase {
                 DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
             )
 
-          val result = currentFile.compare(differentFile)
+          val result: Int = currentFile.compare(differentFile)
           result mustBe 0
         }
 
@@ -92,7 +92,7 @@ class DutyDeferementStatementFileSpec extends SpecBase {
                 DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
             )
 
-            val result = currentFile.compare(differentFile)
+            val result: Int = currentFile.compare(differentFile)
             result mustBe -1
           }
       }

@@ -53,9 +53,9 @@ class AuditingServiceSpec extends SpecBase {
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
       verify(mockAuditConnector).sendExtendedEvent(dataEventCaptor.capture)(any, any)
       val dataEvent: ExtendedDataEvent = dataEventCaptor.value
-      dataEvent.auditSource mustBe(expectedAuditSource)
-      dataEvent.auditType mustBe("UpdateDefermentAccountCorrespondence")
-      dataEvent.tags("transactionName") mustBe ("Update contact details")
+      dataEvent.auditSource mustBe expectedAuditSource
+      dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
+      dataEvent.tags("transactionName") mustBe "Update contact details"
       dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
       dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
@@ -68,9 +68,9 @@ class AuditingServiceSpec extends SpecBase {
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
       verify(mockAuditConnector).sendExtendedEvent(dataEventCaptor.capture)(any, any)
       val dataEvent: ExtendedDataEvent = dataEventCaptor.value
-      dataEvent.auditSource mustBe (expectedAuditSource)
-      dataEvent.auditType mustBe ("UpdateDefermentAccountCorrespondence")
-      dataEvent.tags("transactionName") mustBe ("Update contact details")
+      dataEvent.auditSource mustBe expectedAuditSource
+      dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
+      dataEvent.tags("transactionName") mustBe "Update contact details"
       dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
       dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }

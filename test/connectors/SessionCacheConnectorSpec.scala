@@ -29,7 +29,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
   "retrieveSession" should {
     "return an account link on a successful response" in new Setup {
-      val link: AccountLink = AccountLink("someEori","12345", "someId", AccountStatusOpen, None, false)
+      val link: AccountLink = AccountLink("someEori","12345", "someId", AccountStatusOpen, None, isNiAccount = false)
 
       when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.successful(link))

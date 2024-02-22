@@ -24,7 +24,7 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
   "EditContactDetailsUserAnswers" should {
     "convert to ContactDetailsUserAnswers correctly" in new Setup {
 
-      val result = EditContactDetailsUserAnswers(
+      val result: ContactDetailsUserAnswers = EditContactDetailsUserAnswers(
         dan,
         name,
         telephone,
@@ -38,31 +38,31 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
           getCountryNameF
         )
 
-      result.dan mustBe (dan)
-      result.name mustBe (name)
-      result.telephone mustBe (telephone)
-      result.fax mustBe (fax)
-      result.email mustBe (email)
-      result.isNiAccount mustBe (isNiAccount)
-      result.addressLine1 mustBe (initialContactDetails.addressLine1)
-      result.addressLine2 mustBe (initialContactDetails.addressLine2)
-      result.addressLine3 mustBe (initialContactDetails.addressLine3)
-      result.addressLine4 mustBe (initialContactDetails.addressLine4)
-      result.postCode mustBe (initialContactDetails.postCode)
-      result.countryCode mustBe (initialContactDetails.countryCode)
-      result.countryName mustBe (Some("United Kingdom"))
+      result.dan mustBe dan
+      result.name mustBe name
+      result.telephone mustBe telephone
+      result.fax mustBe fax
+      result.email mustBe email
+      result.isNiAccount mustBe isNiAccount
+      result.addressLine1 mustBe initialContactDetails.addressLine1
+      result.addressLine2 mustBe initialContactDetails.addressLine2
+      result.addressLine3 mustBe initialContactDetails.addressLine3
+      result.addressLine4 mustBe initialContactDetails.addressLine4
+      result.postCode mustBe initialContactDetails.postCode
+      result.countryCode mustBe initialContactDetails.countryCode
+      result.countryName mustBe Some("United Kingdom")
     }
   }
 
   trait Setup {
     val dan = "testDan"
-    val name = Some("John Doe")
-    val telephone = Some("123-456-7890")
-    val fax = Some("987-654-3210")
-    val email = Some("john.doe@example.com")
+    val name: Some[EORI] = Some("John Doe")
+    val telephone: Some[EORI] = Some("123-456-7890")
+    val fax: Some[EORI] = Some("987-654-3210")
+    val email: Some[EORI] = Some("john.doe@example.com")
     val isNiAccount = true
 
-    val initialContactDetails = ContactDetails(
+    val initialContactDetails: ContactDetails = ContactDetails(
       contactName = Some("John Doe"),
       addressLine1 = "123 Main St",
       addressLine2 = Some("line 2"),

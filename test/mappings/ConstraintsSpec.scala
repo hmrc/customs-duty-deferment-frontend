@@ -222,26 +222,26 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces = Some("   ")
-  val email = Some("abc@test.com")
-  val emailWithLeadingSpaces = Some("   abc@test.com")
-  val emailWithTrailingSpaces = Some("abc@test.com   ")
-  val emailWithLeadingAndTrailingSpaces = Some("   abc@test.com   ")
+  val spaces: Some[String] = Some("   ")
+  val email: Some[String] = Some("abc@test.com")
+  val emailWithLeadingSpaces: Some[String] = Some("   abc@test.com")
+  val emailWithTrailingSpaces: Some[String] = Some("abc@test.com   ")
+  val emailWithLeadingAndTrailingSpaces: Some[String] = Some("   abc@test.com   ")
 
-  val emailWithSpacesWithIn_1 = Some("abc @test.com")
-  val emailWithSpacesWithIn_2 = Some("abc@ test.com")
-  val emailWithSpacesWithIn_3 = Some("abc@te  st.com")
-  val emailWithSpacesWithIn_4 = Some("ab c@test.com")
-  val emailWithSpacesWithIn_5 = Some("ab c@tes t.com")
+  val emailWithSpacesWithIn_1: Some[String] = Some("abc @test.com")
+  val emailWithSpacesWithIn_2: Some[String] = Some("abc@ test.com")
+  val emailWithSpacesWithIn_3: Some[String] = Some("abc@te  st.com")
+  val emailWithSpacesWithIn_4: Some[String] = Some("ab c@test.com")
+  val emailWithSpacesWithIn_5: Some[String] = Some("ab c@tes t.com")
 
-  val invalidEmail_1 = Some("first@last")
-  val invalidEmail_2 = Some("firstlast")
-  val invalidEmail_3 = Some("first.com")
-  val invalidEmail_4 = Some(".com")
-  val invalidEmail_5 = Some("thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
+  val invalidEmail_1: Some[String] = Some("first@last")
+  val invalidEmail_2: Some[String] = Some("firstlast")
+  val invalidEmail_3: Some[String] = Some("first.com")
+  val invalidEmail_4: Some[String] = Some(".com")
+  val invalidEmail_5: Some[String] = Some("thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
     "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com")
-  val invalidEmail_6 = Some("")
-  val invalidEmail_7 = Some(" ")
+  val invalidEmail_6: Some[String] = Some("")
+  val invalidEmail_7: Some[String] = Some(" ")
 
   val postcode = "LS1 4AW"
   val invalidPostcode_1 = ""

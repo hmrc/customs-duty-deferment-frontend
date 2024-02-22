@@ -70,7 +70,7 @@ trait TestData extends MockitoSugar {
     Some("11111 222333"),
     None,
     Some("example@email.com"),
-    false
+    isNiAccount = false
   )
 
   val editAddressDetailsUserAnswers: EditAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
@@ -82,7 +82,7 @@ trait TestData extends MockitoSugar {
     None,
     "GB",
     Some("United Kingdom"),
-    false
+    isNiAccount = false
   )
 
   val editContactDetailsUserAnswers: EditContactDetailsUserAnswers = EditContactDetailsUserAnswers(
@@ -91,7 +91,7 @@ trait TestData extends MockitoSugar {
     Some("11111 222333"),
     None,
     Some("example@email.com"),
-    false
+    isNiAccount = false
   )
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
@@ -155,7 +155,7 @@ trait TestData extends MockitoSugar {
   )
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
   lazy val accountLink: AccountLink = AccountLink("someEori",
-    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), false)
+    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
 
   lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,

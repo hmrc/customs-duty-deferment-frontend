@@ -49,7 +49,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
         contentAsString(result).removeCsrf() mustBe view(
           validDan,
-          false,
+          isNi = false,
           form.fill(editContactDetailsUserAnswers),
           fakeCountries
         )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()

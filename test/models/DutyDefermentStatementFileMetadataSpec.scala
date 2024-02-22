@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsResult, JsValue, Json}
 import util.SpecBase
 
 class DutyDefermentStatementFileMetadataSpec extends SpecBase {
@@ -36,7 +36,7 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
   trait Setup {
 
-    val metadata = DutyDefermentStatementFileMetadata(
+    val metadata: DutyDefermentStatementFileMetadata = DutyDefermentStatementFileMetadata(
       periodStartYear = 2023,
       periodStartMonth = 10,
       periodStartDay = 1,
@@ -70,7 +70,7 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
     val json: JsValue = Json.toJson(metadata)
 
-    val parsedMetadata = Json.fromJson[DutyDefermentStatementFileMetadata](json)
+    val parsedMetadata: JsResult[DutyDefermentStatementFileMetadata] = Json.fromJson[DutyDefermentStatementFileMetadata](json)
 
   }
 }

@@ -40,7 +40,7 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
                                      )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   def setup(linkId: String): Action[AnyContent] = (authenticate andThen resolveSessionId) async { implicit req =>
-    val result: EitherT[Future, Result, Result] = (for {
+    val result: EitherT[Future, Result, Result] = for {
       accountLink <- fromOptionF(
         sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
         Redirect(appConfig.financialsHomepage)
@@ -53,7 +53,7 @@ class DirectDebitController @Inject()(authenticate: IdentifierAction,
         InternalServerError(errorHandler.sddsErrorTemplate())
       )
       directDebitSetupUrl <- liftF(sddsConnector.startJourney(accountLink.accountNumber, email.value))
-    } yield Redirect(directDebitSetupUrl))
+    } yield Redirect(directDebitSetupUrl)
 
     result.merge.recover { case _ =>
       InternalServerError(errorHandler.sddsErrorTemplate())
