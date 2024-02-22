@@ -28,14 +28,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class DocumentService @Inject()(sdesConnector: SDESConnector)(implicit ec: ExecutionContext) {
 
   def getDutyDefermentStatements(eoriHistory: EoriHistory, dan: String)(implicit hc: HeaderCarrier): Future[DutyDefermentStatementsForEori] =
-    sdesConnector.getDutyDefermentStatements(eoriHistory.eori, dan).map(auditFiles(_, eoriHistory.eori))
+    sdesConnector.getDutyDefermentStatements(eoriHistory.eori, dan).map(auditFiles(_))
       .map(_.partition(_.metadata.statementRequestId.isEmpty))
       .map {
         case (current, requested) => DutyDefermentStatementsForEori(eoriHistory, current, requested)
       }
 
 
-  private def auditFiles(files: Seq[DutyDefermentStatementFile], eori: String)(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] =
+  private def auditFiles(files: Seq[DutyDefermentStatementFile])(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] =
     files.map { file =>
       file
     }

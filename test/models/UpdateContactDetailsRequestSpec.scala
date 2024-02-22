@@ -53,7 +53,7 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
         Some("11111 222333"), None, Some("example@email.com"), isNiAccount = false
       )
       val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest.apply("someDan", "someEori", invalidContactDetailsUserAnswers)
-      assert(request.postCode == None)
+      assert(request.postCode.isEmpty)
     }
   }
 }
