@@ -87,7 +87,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   private lazy val platformHost: Option[String] = config.getOptional[String]("platform.frontend.host")
 
-  lazy val fixedDateTime = config.get[Boolean]("features.fixed-systemdate-for-tests")
+  lazy val fixedDateTime: Boolean = config.get[Boolean]("features.fixed-systemdate-for-tests")
 
   lazy val emailFrontendService = s"${servicesConfig.baseUrl(s"customs-email-frontend")}${
     config.get[String](
