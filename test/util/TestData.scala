@@ -19,7 +19,10 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers, DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers, EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
+import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers,
+  DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile,
+  DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers,
+  EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
 import org.mockito.scalatest.MockitoSugar
 import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
@@ -99,17 +102,20 @@ trait TestData extends MockitoSugar {
       "someFilename",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement,
+        Weekly, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "123456", None)),
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Pdf, DutyDefermentStatement,
+        Supplementary, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
       10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None))
+      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement,
+        Excise, Some(false), Some("BACS"), "123456", None))
   )
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),

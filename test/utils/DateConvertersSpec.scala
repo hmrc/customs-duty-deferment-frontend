@@ -57,16 +57,6 @@ class DateConvertersSpec extends SpecBase {
       val result = OrderedLocalDate(date).compare(LocalDate.now())
       result mustBe 0
     }
-
-    "DutyDeferementPeriodStatements can have their Date Converter Compared successfully" in {
-      val deferement1 = DutyDefermentStatementPeriod(
-        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
-
-      val deferement2 = DutyDefermentStatementPeriod(
-        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
-    }
   }
 }
 
