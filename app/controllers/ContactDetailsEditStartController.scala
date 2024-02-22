@@ -82,7 +82,8 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink, internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
+  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink,
+                             internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.toEditContactDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,

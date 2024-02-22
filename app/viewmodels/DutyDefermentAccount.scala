@@ -22,5 +22,6 @@ case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Se
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
 
   def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
-  def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
+  def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(
+    Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
 }
