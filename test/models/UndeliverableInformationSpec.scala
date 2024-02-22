@@ -54,11 +54,12 @@ class UndeliverableInformationSpec extends SpecBase {
         |    }
         |  }""".stripMargin
 
+    val eventCode = 12
     val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent("example-id",
       "someEvent",
       "email@email.com",
       "2021-05-14T10:59:45.811+01:00",
-      Some(12),
+      Some(eventCode),
       Some("Inbox full"),
       "HMRC-CUS-ORG~EORINumber~GB744638982004")
 

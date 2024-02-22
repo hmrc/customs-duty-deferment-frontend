@@ -55,13 +55,13 @@ class DocumentServiceSpec extends SpecBase {
     val endYear = 2018
     val endMonth = 6
     val endDate = 8
-
+    val fileSize = 10L
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
-        10L,
+        fileSize,
         DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
     )
@@ -70,7 +70,7 @@ class DocumentServiceSpec extends SpecBase {
       DutyDefermentStatementFile(
         "someRequestedFilename",
         "downloadUrl",
-        10L,
+        fileSize,
         DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
     )
