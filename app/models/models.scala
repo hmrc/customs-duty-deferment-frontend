@@ -139,6 +139,7 @@ package object models {
                 }
               }
           }
+        case ( _, _) => JsError(s"Unknown Error on ${path.path} for the value $jsValue")
       }
     }
   }
