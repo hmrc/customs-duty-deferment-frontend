@@ -80,7 +80,7 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
       "auditing.enabled" -> "false",
       "microservice.metrics.graphite.enabled" -> "false",
       "metrics.enabled" -> "false")
-  
+
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(
     fakeRequest("", "")
   )
