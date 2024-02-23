@@ -19,16 +19,16 @@ package models.responses.retrieve
 import play.api.libs.json.{Json, OFormat}
 
 case class ContactDetails(contactName: Option[String],
-                            addressLine1: String,
-                            addressLine2: Option[String],
-                            addressLine3: Option[String],
-                            addressLine4: Option[String],
-                            postCode: Option[String],
-                            countryCode: String,
-                            telephone: Option[String],
-                            faxNumber: Option[String],
-                            email: Option[String])
+                          addressLine1: String,
+                          addressLine2: Option[String],
+                          addressLine3: Option[String],
+                          addressLine4: Option[String],
+                          postCode: Option[String],
+                          countryCode: String,
+                          telephone: Option[String],
+                          faxNumber: Option[String],
+                          email: Option[String])
 
-  object ContactDetails {
-    implicit val format: OFormat[ContactDetails] = Json.format[ContactDetails]
-  }
+object ContactDetails {
+  implicit val format: OFormat[ContactDetails] = Json.format[ContactDetails]
+}

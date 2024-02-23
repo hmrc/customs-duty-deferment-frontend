@@ -16,12 +16,14 @@
 
 package viewmodels
 
-case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori], linkId: String, isNiAccount: Boolean) {
+case class DutyDefermentAccount(accountNumber: String, statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
+                                linkId: String, isNiAccount: Boolean) {
 
   val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
 
   def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
+
   def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(
     Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
 }

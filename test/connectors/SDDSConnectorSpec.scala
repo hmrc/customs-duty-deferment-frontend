@@ -33,7 +33,7 @@ class SDDSConnectorSpec extends SpecBase {
       when[Future[SDDSResponse]](mockHttpClient.POST(any, any, any)(any, any, any, any))
         .thenReturn(Future.successful(response))
 
-      running(app){
+      running(app) {
         val result = await(connector.startJourney("dan", "some@email.com"))
         result mustBe "someUrl"
       }

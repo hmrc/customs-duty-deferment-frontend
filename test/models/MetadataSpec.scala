@@ -40,7 +40,7 @@ class MetadataSpec extends SpecBase {
       MetadataItem("statementRequestId", "12345")
     ))
 
-    "convert Metadata to DutyDefermentStatementFileMetadata" in  {
+    "convert Metadata to DutyDefermentStatementFileMetadata" in {
 
       val dutyDefermentStatementFileMetadata = sampleMetadata.toDutyDefermentStatementFileMetadata
 

@@ -19,9 +19,9 @@ package models.responses.retrieve
 import play.api.libs.json.{Json, OFormat}
 
 case class ResponseCommon(status: String,
-                            statusText: Option[String],
-                            processingDate: String,
-                            returnParameters: Option[List[ReturnParameter]])
+                          statusText: Option[String],
+                          processingDate: String,
+                          returnParameters: Option[List[ReturnParameter]])
 
 object ResponseCommon {
   implicit val format: OFormat[ResponseCommon] = Json.format[ResponseCommon]

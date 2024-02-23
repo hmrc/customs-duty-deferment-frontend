@@ -51,7 +51,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
             } yield result
           case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
         }
-      case _ =>  Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
+      case _ => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
     }
   } recover {
     case _: NoActiveSession =>

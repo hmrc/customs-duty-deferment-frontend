@@ -44,7 +44,7 @@ final case class UserAnswers(
 
     updatedData.flatMap {
       d =>
-        val updatedAnswers = copy (data = d)
+        val updatedAnswers = copy(data = d)
         page.cleanup(updatedAnswers)
     }
   }
@@ -60,7 +60,7 @@ final case class UserAnswers(
 
     updatedData.flatMap {
       d =>
-        val updatedAnswers = copy (data = d)
+        val updatedAnswers = copy(data = d)
         page.cleanup(updatedAnswers)
     }
   }
@@ -96,16 +96,16 @@ object UserAnswers {
   implicit lazy val reads: Reads[UserAnswers] = {
     (
       (__ \ "_id").read[String] and
-      (__ \ "data").read[JsObject] and
-      (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
-    ) (UserAnswers.apply _)
+        (__ \ "data").read[JsObject] and
+        (__ \ "lastUpdated").read(MongoJavatimeFormats.localDateTimeReads)
+      ) (UserAnswers.apply _)
   }
 
   implicit lazy val writes: OWrites[UserAnswers] = {
     (
       (__ \ "_id").write[String] and
-      (__ \ "data").write[JsObject] and
-      (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
-    ) (unlift(UserAnswers.unapply))
+        (__ \ "data").write[JsObject] and
+        (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
+      ) (unlift(UserAnswers.unapply))
   }
 }

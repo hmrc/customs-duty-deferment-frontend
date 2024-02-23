@@ -35,7 +35,7 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
                                                 dataRetrievalAction: DataRetrievalAction,
                                                 resolveSessionId: SessionIdAction,
                                                 dataRequiredAction: DataRequiredAction,
-                                                accountLinkCacheService : AccountLinkCacheService)
+                                                accountLinkCacheService: AccountLinkCacheService)
                                                (implicit ec: ExecutionContext,
                                                 errorHandler: ErrorHandler,
                                                 mcc: MessagesControllerComponents,
@@ -66,27 +66,27 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
 
   def successContactDetails(): Action[AnyContent] = commonActions.async {
     implicit request => {
-        request.userAnswers.get(EditContactDetailsPage) match {
-          case Some(userAnswers) =>
-            val result = for {
-              accLink <- accountLinkCacheService.get(request.userAnswers.id)
-              accBool = accLink.map(_.isNiAccount).get
-            } yield Ok(successViewContact(userAnswers.dan, accBool))
+      request.userAnswers.get(EditContactDetailsPage) match {
+        case Some(userAnswers) =>
+          val result = for {
+            accLink <- accountLinkCacheService.get(request.userAnswers.id)
+            accBool = accLink.map(_.isNiAccount).get
+          } yield Ok(successViewContact(userAnswers.dan, accBool))
 
-            result.recover { case e =>
-              logger.error(s"Call to account cache failed with exception=$e")
-              InternalServerError(errorHandler.standardErrorTemplate())
-            }
-          case None =>
-            logger.error(s"Unable to get stored user answers whilst confirming account contact details")
-            Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
-        }
+          result.recover { case e =>
+            logger.error(s"Call to account cache failed with exception=$e")
+            InternalServerError(errorHandler.standardErrorTemplate())
+          }
+        case None =>
+          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
       }
     }
+  }
 
   def problem: Action[AnyContent] = identify async { implicit request =>
-      Future {
-        InternalServerError(errorHandler.errorUpdatingContactDetails())
-      }
+    Future {
+      InternalServerError(errorHandler.errorUpdatingContactDetails())
+    }
   }
 }

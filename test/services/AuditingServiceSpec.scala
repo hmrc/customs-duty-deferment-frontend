@@ -62,7 +62,7 @@ class AuditingServiceSpec extends SpecBase {
 
     "create the correct data event for logging a Failure audit event" in new Setup {
 
-      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Failure("Auditing failed",None)))
+      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Failure("Auditing failed", None)))
 
       val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
@@ -119,7 +119,8 @@ class AuditingServiceSpec extends SpecBase {
       email = Some("abc@de.com"),
       isNiAccount = false)
 
-    val expectedPreviousContactDetails: JsValue = Json.parse("""{
+    val expectedPreviousContactDetails: JsValue = Json.parse(
+      """{
           "contactName":"John Smith",
           "addressLine1":"1 High Street",
           "addressLine2":"Town",

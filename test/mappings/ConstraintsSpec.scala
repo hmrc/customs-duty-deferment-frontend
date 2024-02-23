@@ -254,10 +254,10 @@ trait SetUp {
 
   val phoneNumberMessage = "accountDetails.edit.telephone"
 
-  val nameField_01="John Doe"
-  val nameField_02="John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
-  val nameField_03="John Doe %"
-  val nameFieldMsg_01="accountDetails.edit.name"
+  val nameField_01 = "John Doe"
+  val nameField_02 = "John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
+  val nameField_03 = "John Doe %"
+  val nameFieldMsg_01 = "accountDetails.edit.name"
 
   val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit"
   val addressLine1_02 = "John Doe %"

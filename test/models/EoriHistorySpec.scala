@@ -60,7 +60,7 @@ class EoriHistorySpec extends SpecBase {
       val validJson01: String = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString()
       EoriHistory.eoriHistoryFormat.reads(Json.parse(validJson01)) mustBe JsSuccess(expectedEoriHistory01)
 
-      val validJson02: JsObject = Json.obj("eori" -> "EORI123","validFrom" -> "2023-12-19T10:15:30+01:00")
+      val validJson02: JsObject = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T10:15:30+01:00")
       EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
     }
 

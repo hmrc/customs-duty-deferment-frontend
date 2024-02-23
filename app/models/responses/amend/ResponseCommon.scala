@@ -19,9 +19,9 @@ package models.responses.amend
 import play.api.libs.json.{Json, OFormat}
 
 case class ResponseCommon(status: String,
-                            statusText: Option[String],
-                            processingDate: String,
-                            returnParameters: Option[Array[ReturnParameter]])
+                          statusText: Option[String],
+                          processingDate: String,
+                          returnParameters: Option[Array[ReturnParameter]])
 
 object ResponseCommon {
   implicit val responseCommonFormat: OFormat[ResponseCommon] = Json.format[ResponseCommon]

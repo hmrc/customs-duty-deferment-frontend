@@ -47,7 +47,7 @@ class ShowSpec extends SpecBase {
 
     "when you click on the back link redirect to you contact details" in new Setup {
       running(app) {
-        val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details" )
+        val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details")
         val result = route(app, request).value
         val html = Jsoup.parse(contentAsString(result))
         html.containsLinkWithText("/customs/payment-records/your-contact-details", "link-back")
@@ -70,7 +70,7 @@ class ShowSpec extends SpecBase {
     )
 
     def view: Document = Jsoup.parse(app.injector.instanceOf[show].apply(
-      validContactDetailsViewModel, DefermentAccountAvailable,someLinkId).body)
+      validContactDetailsViewModel, DefermentAccountAvailable, someLinkId).body)
 
     override def messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   }

@@ -36,16 +36,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 class ContactDetailsEditStartController @Inject()(
-  contactDetailsCacheService: ContactDetailsCacheService,
-  dateTimeService: DateTimeService,
-  identifier: IdentifierAction,
-  resolveSessionId: SessionIdAction,
-  accountLinkCacheService: AccountLinkCacheService,
-  errorHandler: ErrorHandler,
-  countriesProviderService: CountriesProviderService,
-  appConfig: AppConfig,
-  userAnswersCache: UserAnswersCache,
-  mcc: MessagesControllerComponents
+                                                   contactDetailsCacheService: ContactDetailsCacheService,
+                                                   dateTimeService: DateTimeService,
+                                                   identifier: IdentifierAction,
+                                                   resolveSessionId: SessionIdAction,
+                                                   accountLinkCacheService: AccountLinkCacheService,
+                                                   errorHandler: ErrorHandler,
+                                                   countriesProviderService: CountriesProviderService,
+                                                   appConfig: AppConfig,
+                                                   userAnswersCache: UserAnswersCache,
+                                                   mcc: MessagesControllerComponents
                                                  )(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 

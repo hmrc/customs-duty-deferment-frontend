@@ -50,6 +50,7 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
   }
 
   private lazy val countriesNamesSet: Set[String] = countries.map(_.countryName).toSet
+
   def isValidCountryName(countryName: String): Boolean = countriesNamesSet.contains(countryName)
 
   private lazy val countriesNamesMap: Map[String, String] = countries

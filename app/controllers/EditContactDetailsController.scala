@@ -53,6 +53,7 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
   extends FrontendController(mcc) with I18nSupport {
 
   private val log = Logger(this.getClass)
+
   private def form: Form[EditContactDetailsUserAnswers] = formProvider()
 
   private val commonActions: ActionBuilder[DataRequest, AnyContent] =
@@ -95,7 +96,7 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
   }
 
   private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers, eori: String)
-                                  (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
+                                             (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
       initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailAnswers.dan, request.eoriNumber)
 

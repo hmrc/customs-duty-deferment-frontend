@@ -61,9 +61,9 @@ trait Constraints {
 
   def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
 
-  def isValid(e: String): Boolean = e match{
-    case e if emailRegex.findFirstMatchIn(e).isDefined  => true
-    case _                                              => false
+  def isValid(e: String): Boolean = e match {
+    case e if emailRegex.findFirstMatchIn(e).isDefined => true
+    case _ => false
   }
 
   def isValidEmail: Constraint[Option[String]] =

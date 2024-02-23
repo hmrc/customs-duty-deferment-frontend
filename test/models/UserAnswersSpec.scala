@@ -78,7 +78,7 @@ class UserAnswersSpec extends SpecBase {
       )
       val updatedAnswers: Try[UserAnswers] = userAnswers.remove(settable)
       updatedAnswers mustBe a[Success[_]]
-      updatedAnswers.get.data mustBe Json.obj("key"->"value")
+      updatedAnswers.get.data mustBe Json.obj("key" -> "value")
     }
 
     "implicits datatimeformat should not be null " in new Setup {
@@ -95,10 +95,11 @@ class UserAnswersSpec extends SpecBase {
     val userAnswers: UserAnswers = UserAnswers(sampleId, sampleData, sampleLocalDateTime)
 
     case class MockGettable[A](path: JsPath) extends Gettable[A]
+
     case class MockSettable[A](
-        path: JsPath,
-        cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
-    ) extends Settable[A]
+                                path: JsPath,
+                                cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
+                              ) extends Settable[A]
 
   }
 }

@@ -64,7 +64,7 @@ class DocumentServiceSpec extends SpecBase {
         fileSize,
         DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
-    )
+      )
 
     val requestedFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
@@ -73,7 +73,7 @@ class DocumentServiceSpec extends SpecBase {
         fileSize,
         DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
-    )
+      )
 
     val app: Application = application().overrides(
       inject.bind[AuditingService].toInstance(mockAuditingService),

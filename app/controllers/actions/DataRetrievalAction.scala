@@ -28,13 +28,13 @@ class DataRetrievalActionImpl @Inject()(userAnswersCache: UserAnswersCache)
 
   override protected def transform[A](request: AuthenticatedRequestWithSessionId[A]): Future[OptionalDataRequest[A]] = {
     userAnswersCache.retrieve(request.request.user.internalId).map {
-        OptionalDataRequest(
-          request.request,
-          request.request.user.internalId,
-          request.request.user.eori,
-          request.sessionId,
-          _
-        )
+      OptionalDataRequest(
+        request.request,
+        request.request.user.internalId,
+        request.request.user.eori,
+        request.sessionId,
+        _
+      )
     }
   }
 }

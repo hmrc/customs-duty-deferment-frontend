@@ -19,10 +19,12 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers,
+import models.{
+  AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers,
   DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile,
   DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers,
-  EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
+  EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers
+}
 import org.mockito.scalatest.MockitoSugar
 import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
