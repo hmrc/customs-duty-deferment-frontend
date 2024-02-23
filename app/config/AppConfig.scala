@@ -95,10 +95,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   }"
 
   lazy val emailFrontendUrl: String = s"$emailFrontendService/service/customs-finance"
-
-  /**
-   * Creates the deskPro url that is used exclusively as of now for service unavailable page
-   */
+  
   def deskProLinkUrlForServiceUnavailable(implicit request: RequestHeader): String =
     s"$contactFrontEndBaseUrl/contact/report-technical-problem?newTab=true&amp;service=${
       urlEncode(contactFrontEndServiceId)

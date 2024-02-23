@@ -1,5 +1,5 @@
 import scoverage.ScoverageKeys
-import uk.gov.hmrc.DefaultBuildSettings.{integrationTestSettings,scalaSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 
 val appName = "customs-duty-deferment-frontend"
 val testDirectory = "test"
@@ -21,6 +21,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions ++= Seq(
       "-P:silencer:pathFilters=routes",
+      "-P:silencer:pathFilters=target/.*",
       "-Wunused:imports",
       "-Wunused:params",
       "-Wunused:patvars",
@@ -39,7 +40,7 @@ lazy val microservice = Project(appName, file("."))
     ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
-    pipelineStages in Assets := Seq(gzip),
+    Assets / pipelineStages := Seq(gzip),
     // ***************
     // Use the silencer plugin to suppress warnings
     scalacOptions += "-P:silencer:pathFilters=routes",
@@ -50,6 +51,5 @@ lazy val microservice = Project(appName, file("."))
     // ***************
   )
   .configs(IntegrationTest)
-  .settings(integrationTestSettings() *)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(scalastyleSettings)

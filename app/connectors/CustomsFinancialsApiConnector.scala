@@ -22,6 +22,7 @@ import models.responses.retrieve.ContactDetails
 import play.mvc.Http.Status
 import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

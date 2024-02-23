@@ -86,7 +86,7 @@ class ConfirmContactDetailsController @Inject()(successViewContact: edit_success
 
   def problem: Action[AnyContent] = identify async { implicit request =>
       Future {
-        InternalServerError(errorHandler.errorUpdatingContactDetails)
+        InternalServerError(errorHandler.errorUpdatingContactDetails())
       }
   }
 }

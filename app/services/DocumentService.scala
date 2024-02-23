@@ -35,7 +35,7 @@ class DocumentService @Inject()(sdesConnector: SDESConnector)(implicit ec: Execu
       }
 
 
-  private def auditFiles(files: Seq[DutyDefermentStatementFile])(implicit hc: HeaderCarrier): Seq[DutyDefermentStatementFile] =
+  private def auditFiles(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementFile] =
     files.map { file =>
       file
     }
