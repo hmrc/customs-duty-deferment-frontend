@@ -107,7 +107,9 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
         s"referrerUrl=${
           urlEncode(referrerUrl(platformHost).get)
         }"
-      } else emptyString
+      } else {
+        emptyString
+      }
     }"
 
 }
