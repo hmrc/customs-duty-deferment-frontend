@@ -17,7 +17,7 @@
 package models
 
 import util.SpecBase
-import play.api.libs.json.{JsString, JsSuccess, Json, Reads, Writes}
+import play.api.libs.json.{JsSuccess, Json}
 
 
 class MetadataSpec extends SpecBase {

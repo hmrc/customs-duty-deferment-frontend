@@ -32,10 +32,8 @@
 package utils
 
 import java.time.LocalDate
-import models.{DDStatementType, FileRole}
 import util.SpecBase
 import utils.DateConverters.OrderedLocalDate
-import viewmodels.DutyDefermentStatementPeriod
 
 class DateConvertersSpec extends SpecBase {
 

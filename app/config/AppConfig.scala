@@ -37,10 +37,13 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
   lazy val countriesFilename: String = config.get[String]("countriesFilename")
   var historicStatementsEnabled: Boolean = config.get[Boolean]("features.historic-statements-enabled")
+
   lazy val dutyDefermentContactDetailsEndpoint: String =
     config.get[String]("microservice.services.customs-financials-api.duty-deferment-contact-details-endpoint")
+
   lazy val dutyDefermentUpdateContactDetailsEndpoint: String =
     config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
+
   lazy val getAccountDetailsUrl: String = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
   lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
   val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
@@ -108,5 +111,4 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
         emptyString
       }
     }"
-
 }

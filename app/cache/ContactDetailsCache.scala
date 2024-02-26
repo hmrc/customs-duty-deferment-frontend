@@ -30,8 +30,7 @@ class ContactDetailsCache @Inject()(
                                      appConfig: AppConfig,
                                      mongoComponent: MongoComponent,
                                      timestampSupport: TimestampSupport
-                                   )
-                                   (override implicit val ec: ExecutionContext) extends
+                                   )(override implicit val ec: ExecutionContext) extends
   MongoCacheRepository(
     mongoComponent = mongoComponent,
     collectionName = "contact-details-cache",
@@ -42,5 +41,3 @@ class ContactDetailsCache @Inject()(
 
   override val key: String = "contactDetails"
 }
-
-

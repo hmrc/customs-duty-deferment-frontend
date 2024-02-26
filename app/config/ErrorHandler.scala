@@ -25,11 +25,14 @@ import views.html.{ErrorTemplate, not_found}
 import views.html.contact_details.edit_update_error
 
 @Singleton
-class ErrorHandler @Inject()(errorTemplate: ErrorTemplate, notFound: not_found,
+class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
+                             notFound: not_found,
                              val messagesApi: MessagesApi,
                              editUpdateError: edit_update_error)(implicit appConfig: AppConfig) extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html =
+  override def standardErrorTemplate(pageTitle: String,
+                                     heading: String,
+                                     message: String)(implicit request: Request[_]): Html =
     errorTemplate(pageTitle, heading, message)
 
   override def notFoundTemplate(implicit request: Request[_]): Html =

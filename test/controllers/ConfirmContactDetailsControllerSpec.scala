@@ -27,74 +27,13 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.AccountLinkCacheService
 import util.SpecBase
-import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_success_address
 import views.html.contact_details.edit_success_contact
-import scala.concurrent.Future
 
 class ConfirmContactDetailsControllerSpec extends SpecBase {
 
   "success" must {
-    /*"return OK on a successful edit contact details submission" in new Setup {
-       when(mockUserAnswersCache.remove(any[String]))
-         .thenReturn(Future.successful(true))
-
-       running(app) {
-         val result = route(app, successContactDetailsRequest).value
-         status(result) mustBe OK
-         contentAsString(result).removeCsrf() mustBe viewContact(validDan)(
-           successContactDetailsRequest,
-           messages,
-           appConfig
-         ).toString().removeCsrf()
-       }
-     }
-
-     "return OK on a successful edit address details submission" in new Setup {
-       when(mockUserAnswersCache.remove(any[String]))
-         .thenReturn(Future.successful(true))
-
-       running(appAddressEdit) {
-         val result = route(appAddressEdit, successAddressDetailsRequest).value
-         status(result) mustBe OK
-         contentAsString(result).removeCsrf() mustBe viewAddress(validDan)(
-           successAddressDetailsRequest,
-           messagesAddress,
-           appConfig
-         ).toString().removeCsrf()
-       }
-     }
-
-     "return OK on a successful submission when the cache returns false for contact details" in new Setup {
-       when(mockUserAnswersCache.remove(any[String]))
-         .thenReturn(Future.successful(false))
-
-       running(app) {
-         val result = route(app, successContactDetailsRequest).value
-         status(result) mustBe OK
-         contentAsString(result).removeCsrf() mustBe viewContact(validDan)(
-           successContactDetailsRequest,
-           messages,
-           appConfig
-         ).toString().removeCsrf()
-       }
-     }
-
-     "return OK on a successful submission when the cache returns false for address details" in new Setup {
-       when(mockUserAnswersCache.remove(any[String]))
-         .thenReturn(Future.successful(false))
-
-       running(app) {
-         val result = route(appAddressEdit, successAddressDetailsRequest).value
-         status(result) mustBe OK
-         contentAsString(result).removeCsrf() mustBe viewAddress(validDan)(
-           successAddressDetailsRequest,
-           messages,
-           appConfig
-         ).toString().removeCsrf()
-       }
-     }*/
-
+    
     "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
       running(newApp) {
