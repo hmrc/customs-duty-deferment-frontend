@@ -95,7 +95,8 @@ class EditContactDetailsController @Inject()(view: edit_contact_details,
     }
   }
 
-  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers, eori: String)
+  private def updateContactDetailsUserAnswers(editContactDetailAnswers: EditContactDetailsUserAnswers,
+                                              eori: String)
                                              (implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
     (for {
       initialContactDetails <- contactDetailsCacheService.getContactDetails(request.identifier, editContactDetailAnswers.dan, request.eoriNumber)

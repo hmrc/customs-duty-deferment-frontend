@@ -26,8 +26,7 @@ import play.api.data.{Form, FormError, Forms}
 class EditContactDetailsFormProvider @Inject()() extends Constraints {
 
   def apply(): Form[EditContactDetailsUserAnswers] = {
-    // A hidden form component tracks countryName and is updated using JS.
-    // if JS is not enabled it defaults to countryNameNoJs, and this check is not performed - as they just select from a dropdown.
+
     Form(
       mapping(
         "dan" -> of[String],

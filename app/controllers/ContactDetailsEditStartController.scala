@@ -45,8 +45,7 @@ class ContactDetailsEditStartController @Inject()(
                                                    countriesProviderService: CountriesProviderService,
                                                    appConfig: AppConfig,
                                                    userAnswersCache: UserAnswersCache,
-                                                   mcc: MessagesControllerComponents
-                                                 )(implicit ec: ExecutionContext)
+                                                   mcc: MessagesControllerComponents)(implicit ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with Logging {
 
   def start(changeContactDetails: Boolean): Action[AnyContent] = (identifier andThen resolveSessionId) async {
@@ -82,8 +81,10 @@ class ContactDetailsEditStartController @Inject()(
         }
   }
 
-  private def setUserAnswers(initialContactDetails: ContactDetails, dutyDefermentDetails: DutyDefermentAccountLink,
-                             internalId: String, contactDetailsChange: Boolean): Option[UserAnswers] = {
+  private def setUserAnswers(initialContactDetails: ContactDetails,
+                             dutyDefermentDetails: DutyDefermentAccountLink,
+                             internalId: String,
+                             contactDetailsChange: Boolean): Option[UserAnswers] = {
     val initialUserAnswers = ContactDetailsUserAnswers.toEditContactDetails(
       dan = dutyDefermentDetails.dan,
       contactDetails = initialContactDetails,
