@@ -33,7 +33,7 @@ import views.html.contact_details.edit_success_contact
 class ConfirmContactDetailsControllerSpec extends SpecBase {
 
   "success" must {
-    
+
     "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
       running(newApp) {

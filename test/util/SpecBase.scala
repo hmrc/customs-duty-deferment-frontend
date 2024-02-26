@@ -33,7 +33,7 @@ import play.api.test.FakeRequest
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 
-import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.jdk.CollectionConverters._
 
 
 trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with OptionValues with TestData {
