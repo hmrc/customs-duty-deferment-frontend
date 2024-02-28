@@ -28,6 +28,12 @@ class UtilsSpec extends SpecBase {
     }
   }
 
+  "hyphen" should {
+    "return correct value" in {
+      hyphen mustBe "-"
+    }
+  }
+
   "pathWithQueryString" should {
     "return correct value" in {
       val path = "somePath"
