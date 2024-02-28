@@ -40,7 +40,12 @@ class AccountLinkCacheServiceSpec extends SpecBase {
 
     "return NoDutyDefermentSessionAvailable when no accountStatusId present" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(AccountLink("someEori", "dan", "linkId", AccountStatusOpen, None, isNiAccount = false))))
+        .thenReturn(Future.successful(Some(AccountLink("someEori",
+          "dan",
+          "linkId",
+          AccountStatusOpen,
+          None,
+          isNiAccount = false))))
 
       running(app) {
         val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))

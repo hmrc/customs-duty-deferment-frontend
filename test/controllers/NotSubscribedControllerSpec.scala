@@ -22,6 +22,7 @@ import play.api.test.Helpers._
 import util.SpecBase
 
 class NotSubscribedControllerSpec extends SpecBase {
+
   "onPageLoad" should {
     "return OK" in {
       val app: Application = application().build()

@@ -35,7 +35,9 @@ class AuditingServiceSpec extends SpecBase {
   "AuditingService" should {
 
     "create the correct data event for a user requesting duty deferment statements" in new Setup {
-      val model: AuditModel = AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
+      val model: AuditModel = AuditModel(AUDIT_TYPE,
+        AUDIT_DUTY_DEFERMENT_TRANSACTION,
+        Json.toJson(AuditEori(eori, isHistoric = false)))
       await(auditingService.audit(model))
 
       val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
@@ -62,7 +64,8 @@ class AuditingServiceSpec extends SpecBase {
 
     "create the correct data event for logging a Failure audit event" in new Setup {
 
-      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Failure("Auditing failed", None)))
+      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(
+        Future.successful(AuditResult.Failure("Auditing failed", None)))
 
       val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))

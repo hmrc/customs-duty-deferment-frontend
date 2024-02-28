@@ -26,5 +26,9 @@ class FakeDataRetrievalAction(userAnswers: Option[UserAnswers]) extends DataRetr
   override protected def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   override protected def transform[A](request: AuthenticatedRequestWithSessionId[A]): Future[OptionalDataRequest[A]] =
-    Future.successful(OptionalDataRequest(request, request.request.user.internalId, request.request.user.eori, request.sessionId, userAnswers))
+    Future.successful(OptionalDataRequest(request,
+      request.request.user.internalId,
+      request.request.user.eori,
+      request.sessionId,
+      userAnswers))
 }

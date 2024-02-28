@@ -62,14 +62,12 @@ case object AccountCancelled extends CDSAccountStatusId {
   val value: Int = 9
 }
 
-// scalastyle:off cyclomatic.complexity magic.number
 object CDSAccountStatusId {
 
   import play.api.Logger
 
   val logger: Logger = Logger(this.getClass)
 
-  //N.B. maintain this list if adding new implementations of CDSAccountStatusId
   private val values: Set[CDSAccountStatusId] = Set(
     DefermentAccountAvailable,
     ChangeOfLegalEntity,

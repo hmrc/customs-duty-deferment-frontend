@@ -42,4 +42,3 @@ class DateTimeServiceSpec extends SpecBase {
     val dateTimeService = new DateTimeService()
   }
 }
-

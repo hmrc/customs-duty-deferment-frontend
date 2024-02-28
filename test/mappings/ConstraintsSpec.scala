@@ -177,11 +177,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
   "incorrect optional addressLine  return Invalid" when {
 
     "address line 2 size is higher than max value" in new SetUp {
-      validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(ValidationError(s"$addressField2Msg.max"))
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(
+        ValidationError(s"$addressField2Msg.max"))
     }
 
     "address line 2 validation aginst regex" in new SetUp {
-      validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(ValidationError(s"$addressField2Msg.invalid"))
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(
+        ValidationError(s"$addressField2Msg.invalid"))
     }
   }
 
@@ -192,11 +194,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
 
     "mandatory address line size is higher than max value" in new SetUp {
-      validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(ValidationError(s"$addressField1Msg.max"))
+      validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(
+        ValidationError(s"$addressField1Msg.max"))
     }
 
     "mandatory address line validation aginst regex" in new SetUp {
-      validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(ValidationError(s"$addressField1Msg.invalid"))
+      validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(
+        ValidationError(s"$addressField1Msg.invalid"))
     }
   }
 
@@ -210,11 +214,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
   "return invalid phone number" when {
 
     "phoneNumber has invalid regex" in new SetUp {
-      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(
+        ValidationError(s"$phoneNumberMessage.invalid"))
     }
 
     "phoneNumber has exceeded 24 characters" in new SetUp {
-      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(
+        ValidationError(s"$phoneNumberMessage.invalid"))
     }
 
   }
@@ -238,8 +244,9 @@ trait SetUp {
   val invalidEmail_2: Some[String] = Some("firstlast")
   val invalidEmail_3: Some[String] = Some("first.com")
   val invalidEmail_4: Some[String] = Some(".com")
-  val invalidEmail_5: Some[String] = Some("thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
-    "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com")
+  val invalidEmail_5: Some[String] = Some("thisemailaddressisgreaterthan@132charactershenceinvalid" +
+    "thisemailaddressisgreaterthan@132charactershenceinvalid" +
+    "thisemailaddressisgreaterthan@132charactershenceinvalid")
   val invalidEmail_6: Some[String] = Some("")
   val invalidEmail_7: Some[String] = Some(" ")
 

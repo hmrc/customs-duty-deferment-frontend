@@ -20,11 +20,15 @@ import config.AppConfig
 import navigation.Navigator
 import play.api.Application
 import play.api.http.Status.OK
-import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty}
+import play.api.test.Helpers.{
+  GET, contentAsString, defaultAwaitTimeout,
+  route, running, status, writeableOf_AnyContentAsEmpty
+}
 import util.SpecBase
 import views.html.service_unavailable
 
 class ServiceUnavailableControllerSpec extends SpecBase {
+
   "onPageLoad" should {
     "render service unavailable page" in new Setup {
       running(app) {
@@ -53,7 +57,8 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     "render service unavailable page for duty deferment statements not available page" in new Setup {
       running(app) {
         val request = fakeRequest(GET,
-          routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, "linkId_1").url)
+          routes.ServiceUnavailableController.onPageLoad(
+            navigator.dutyDefermentStatementNAPageId, "linkId_1").url)
         val result = route(app, request).value
 
         status(result) mustBe OK

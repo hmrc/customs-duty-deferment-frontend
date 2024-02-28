@@ -44,8 +44,6 @@ class EditContactDetailsFormProvider @Inject()() extends Constraints {
     deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
   }
 
-
-  // If there are countryCode and countryName errors - this combines them
   private def deDuplicateCountryErrors(form: Form[EditContactDetailsUserAnswers]): Form[EditContactDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
@@ -56,5 +54,3 @@ class EditContactDetailsFormProvider @Inject()() extends Constraints {
     )
   }
 }
-
-

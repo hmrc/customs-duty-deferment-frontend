@@ -38,7 +38,10 @@ trait TestData extends MockitoSugar {
   protected val danWithNoContactInformation = "someDanNoContactInformation"
   protected val successUpdateResponseCommon: ResponseCommon = ResponseCommon("OK", None, "2020-10-05T09:30:47Z", None)
   protected val successUpdateContactResponse: UpdateContactDetailsResponse = UpdateContactDetailsResponse(true)
-  protected val failedUpdateResponseCommon: ResponseCommon = ResponseCommon("OK", Some("Error"), "2020-10-05T09:30:47Z", None)
+  protected val failedUpdateResponseCommon: ResponseCommon = ResponseCommon("OK",
+    Some("Error"),
+    "2020-10-05T09:30:47Z",
+    None)
   protected val failedUpdateContactResponse: UpdateContactDetailsResponse = UpdateContactDetailsResponse(false)
   protected val sessionId: SessionId = SessionId("session_1234")
   protected val fakeCountries = List()

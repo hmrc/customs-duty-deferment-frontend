@@ -21,7 +21,8 @@ import utils.DateConverters.OrderedLocalDate
 import utils.OrderedByEoriHistory
 
 case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
-  currentStatements: Seq[DutyDefermentStatementFile], requestedStatements: Seq[DutyDefermentStatementFile])
+                                          currentStatements: Seq[DutyDefermentStatementFile],
+                                          requestedStatements: Seq[DutyDefermentStatementFile])
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
@@ -30,7 +31,10 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
   val groupsRequested: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(requestedStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
-    files.groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate, file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+    files.groupBy(file => (file.metadata.fileRole,
+        file.startDate,
+        file.endDate,
+        file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
       DutyDefermentStatementPeriod(
         periodFiles.head.metadata.fileRole,
         periodFiles.head.metadata.defermentStatementType,
