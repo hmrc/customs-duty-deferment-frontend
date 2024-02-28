@@ -20,6 +20,8 @@ import play.api.data.validation._
 import play.api.data.{Forms, Mapping}
 import uk.gov.voa.play.form.ConditionalMappings.isAnyOf
 import uk.gov.voa.play.form.MandatoryOptionalMapping
+import utils.Utils.emptyString
+
 import scala.util.matching.Regex
 
 trait Constraints {
@@ -59,7 +61,7 @@ trait Constraints {
     case _ => Invalid(countryError)
   })
 
-  def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", "")
+  def stripWhiteSpaces(str: String): String = str.trim.replaceAll("\\s", emptyString)
 
   def isValid(e: String): Boolean = e match {
     case e if emailRegex.findFirstMatchIn(e).isDefined => true

@@ -21,6 +21,7 @@ import play.api.mvc.RequestHeader
 object Utils {
   val emptyString = ""
   private val questionMark = "?"
+  val hyphen = "-"
 
   def referrerUrl(platformHost: Option[String])(implicit request: RequestHeader): Option[String] =
     Some(s"${platformHost.getOrElse(emptyString)}${pathWithQueryString(request)}")

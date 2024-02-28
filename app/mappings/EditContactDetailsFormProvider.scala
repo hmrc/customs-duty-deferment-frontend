@@ -47,7 +47,9 @@ class EditContactDetailsFormProvider @Inject()() extends Constraints {
   private def deDuplicateCountryErrors(form: Form[EditContactDetailsUserAnswers]): Form[EditContactDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
-        case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")
+        case countryNameError: FormError if countryNameError.key == "countryName" =>
+          countryNameError.copy(key = "countryCode")
+
         case x: FormError => x
       }
       .distinct

@@ -14,13 +14,15 @@
  * limitations under the License.
  *@
 
+@import utils.Utils.emptyString
+
 @this()
 
 @(msg: String, id: Option[String] = None, classes: String = "govuk-link", url: String, spanClass: Option[String] = None, spanMsg: Option[String] = None)(implicit messages: Messages)
 
-<a @{id.fold("")(id => s"id=$id")} href="@url" class="@classes">
+<a @{id.fold(emptyString)(id => s"id=$id")} href="@url" class="@classes">
   @messages(msg)
-  <span @{spanClass.fold("")(spanClass => s"class=$spanClass")}>
+  <span @{spanClass.fold(emptyString)(spanClass => s"class=$spanClass")}>
     @{spanMsg.fold("")(spanMsg => s"$spanMsg")}
   </span>
 </a>

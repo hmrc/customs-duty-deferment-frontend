@@ -45,8 +45,9 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
     }.toSeq.sorted
   }
 
-  private def groupByMonthAndYear(statementPeriods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] = {
-    val monthYearSorted = statementPeriods.groupBy(_.monthAndYear).toSeq.sortWith(_._1 > _._1)
+  private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] =
+  {
+    val monthYearSorted = periods.groupBy(_.monthAndYear).toSeq.sortWith(_._1 > _._1)
     monthYearSorted.map {
       case (monthAndYear, statementPeriods) => DutyDefermentStatementPeriodsByMonth(monthAndYear, statementPeriods
         .sortWith(_.startDate > _.startDate)

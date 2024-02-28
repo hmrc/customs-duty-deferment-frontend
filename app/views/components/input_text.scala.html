@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukInput
 @import uk.gov.hmrc.govukfrontend.views.Aliases._
-
+@import utils.Utils.emptyString
 @this(govukInput: GovukInput)
 
 @(field: Field,
@@ -40,7 +40,7 @@
     errorMessage = field.error.map(e => ErrorMessage(
         content = Text(messages(e.message))
     )),
-    formGroupClasses = formGroupClasses.getOrElse(""),
+    formGroupClasses = formGroupClasses.getOrElse(emptyString),
     autocomplete = autocomplete,
     inputType = inputType,
     inputmode = inputMode,

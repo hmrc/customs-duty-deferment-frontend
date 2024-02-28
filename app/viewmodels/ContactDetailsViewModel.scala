@@ -18,6 +18,7 @@ package viewmodels
 
 import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
+import utils.Utils.emptyString
 
 case class ContactDetailsViewModel(dan: String,
                                    name: Option[String],
@@ -36,20 +37,22 @@ object ContactDetailsViewModel {
 
   implicit val formatsDutyDefermentAccountDetails: OFormat[ContactDetailsViewModel] = Json.format[ContactDetailsViewModel]
 
-  def apply(dan: String, contactDetails: ContactDetails, countryNameF: String => Option[String]): ContactDetailsViewModel = {
-      ContactDetailsViewModel(
-        dan,
-        contactDetails.contactName,
-        contactDetails.addressLine1,
-        contactDetails.addressLine2,
-        contactDetails.addressLine3,
-        contactDetails.addressLine4,
-        contactDetails.postCode,
-        contactDetails.countryCode,
-        countryNameF(contactDetails.countryCode).getOrElse(""),
-        contactDetails.telephone,
-        contactDetails.faxNumber,
-        contactDetails.email
-      )
+  def apply(dan: String,
+            contactDetails: ContactDetails,
+            countryNameF: String => Option[String]): ContactDetailsViewModel = {
+    ContactDetailsViewModel(
+      dan,
+      contactDetails.contactName,
+      contactDetails.addressLine1,
+      contactDetails.addressLine2,
+      contactDetails.addressLine3,
+      contactDetails.addressLine4,
+      contactDetails.postCode,
+      contactDetails.countryCode,
+      countryNameF(contactDetails.countryCode).getOrElse(emptyString),
+      contactDetails.telephone,
+      contactDetails.faxNumber,
+      contactDetails.email
+    )
   }
 }

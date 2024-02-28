@@ -33,7 +33,9 @@ class AccountLinkCacheServiceSpec extends SpecBase {
         .thenReturn(Future.successful(None))
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId",
+          "someSessionId",
+          "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
     }
@@ -48,7 +50,9 @@ class AccountLinkCacheServiceSpec extends SpecBase {
           isNiAccount = false))))
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId",
+          "someSessionId",
+          "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
     }
@@ -62,7 +66,9 @@ class AccountLinkCacheServiceSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId",
+          "someSessionId",
+          "someInternalId"))
         result mustBe Right(dutyDefermentAccountLink)
       }
     }

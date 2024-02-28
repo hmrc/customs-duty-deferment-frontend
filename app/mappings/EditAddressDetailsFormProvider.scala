@@ -62,7 +62,9 @@ class EditAddressDetailsFormProvider @Inject()(
   private def deDuplicateCountryErrors(form: Form[EditAddressDetailsUserAnswers]): Form[EditAddressDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
-        case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")
+        case countryNameError: FormError if countryNameError.key == "countryName" =>
+          countryNameError.copy(key = "countryCode")
+
         case x: FormError => x
       }
       .distinct
