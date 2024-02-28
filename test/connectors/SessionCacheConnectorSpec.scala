@@ -29,7 +29,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
   "retrieveSession" should {
     "return an account link on a successful response" in new Setup {
-      val link: AccountLink = AccountLink("someEori","12345", "someId", AccountStatusOpen, None, false)
+      val link: AccountLink = AccountLink("someEori", "12345", "someId", AccountStatusOpen, None, isNiAccount = false)
 
       when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
         .thenReturn(Future.successful(link))
@@ -42,9 +42,9 @@ class SessionCacheConnectorSpec extends SpecBase {
 
     "return None on a failed response" in new Setup {
       when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
-        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", 404, 404)))
+        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
-      running(app){
+      running(app) {
         val result = await(connector.retrieveSession("someId", "someLink"))
         result mustBe None
       }

@@ -20,9 +20,9 @@ import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
 case class ChangeContactDetailsAuditEvent(dutyDefermentAccountNumber: String,
-                                            eori: String,
-                                            from: ContactDetails,
-                                            to: ContactDetails)
+                                          eori: String,
+                                          from: ContactDetails,
+                                          to: ContactDetails)
 
 object ChangeContactDetailsAuditEvent {
 

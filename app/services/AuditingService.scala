@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Disabled, Failure, Success}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
+import utils.Utils.hyphen
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,7 +38,7 @@ class AuditingService @Inject()(appConfig: AppConfig,
 
   val log: LoggerLike = Logger(this.getClass)
 
-  val referrer: HeaderCarrier => String = _.headers(Seq(HeaderNames.REFERER)).headOption.fold("-")(_._2)
+  val referrer: HeaderCarrier => String = _.headers(Seq(HeaderNames.REFERER)).headOption.fold(hyphen)(_._2)
 
   def audit(auditModel: AuditModel)(implicit hc: HeaderCarrier): Future[AuditResult] = {
     val dataEvent = toExtendedDataEvent(appConfig.appName, auditModel, referrer(hc))

@@ -77,7 +77,8 @@ class DataActionSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
     when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
-      .thenReturn(Future.successful(Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some("internalId")))
+      .thenReturn(Future.successful(Enrolments(Set(Enrolment("HMRC-CUS-ORG",
+        Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some("internalId")))
     when(mockDataStoreConnector.getAllEoriHistory(any)(any))
       .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
 
@@ -85,7 +86,8 @@ class DataActionSpec extends SpecBase {
     val config: AppConfig = app.injector.instanceOf[AppConfig]
     val bodyParsers: BodyParsers.Default = app.injector.instanceOf[BodyParsers.Default]
 
-    val authAction: AuthenticatedIdentifierAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
+    val authAction: AuthenticatedIdentifierAction = new AuthenticatedIdentifierAction(mockAuthConnector,
+      config, bodyParsers, mockDataStoreConnector)
     val sessionIdAction: SessionIdAction = new SessionIdAction()(implicitly, mockErrorHandler)
     val dataRetrievalAction: DataRetrievalAction = new DataRetrievalActionImpl(mockUserAnswersCache)
     val dataRequiredAction: DataRequiredAction = new DataRequiredActionImpl()
@@ -101,8 +103,9 @@ class DataActionSpec extends SpecBase {
                 dataRetrievalAction: DataRetrievalAction,
                 dataRequiredAction: DataRequiredAction
                ) {
-    def onPageLoad(): Action[AnyContent] = (authAction andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction).async {
-      implicit request => Future.successful(Results.Ok)
+    def onPageLoad(): Action[AnyContent] = (authAction andThen resolveSessionId
+      andThen dataRetrievalAction andThen dataRequiredAction).async {
+      Future.successful(Results.Ok)
     }
   }
 

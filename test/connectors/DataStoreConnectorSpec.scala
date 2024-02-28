@@ -40,7 +40,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
     "return an empty sequence of EORI when the request fails" in new Setup {
       when[Future[EoriHistoryResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
-        .thenReturn(Future.failed(new HttpException("Unknown Error", 500)))
+        .thenReturn(Future.failed(new HttpException("Unknown Error", INTERNAL_SERVER_ERROR)))
 
       running(app) {
         val result = await(connector.getAllEoriHistory("defaultEori"))
@@ -88,7 +88,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
     "return no email when a NOT_FOUND response is returned" in new Setup {
       when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
-        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", 404, 404)))
+        .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
       running(app) {
         val result = await(connector.getEmail("someEori"))
@@ -104,11 +104,12 @@ class DataStoreConnectorSpec extends SpecBase {
     val eoriHistoryResponse: EoriHistoryResponse =
       EoriHistoryResponse(Seq(EoriHistory("someEori", None, None)))
 
+    val eventCode = 12
     val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent("example-id",
       "someEvent",
       "email@email.com",
       "2021-05-14T10:59:45.811+01:00",
-      Some(12),
+      Some(eventCode),
       Some("Inbox full"),
       "HMRC-CUS-ORG~EORINumber~GB744638982004")
 

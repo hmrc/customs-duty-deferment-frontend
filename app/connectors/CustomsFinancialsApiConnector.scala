@@ -22,6 +22,7 @@ import models.responses.retrieve.ContactDetails
 import play.mvc.Http.Status
 import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +31,8 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
                                               httpClient: HttpClient,
                                               auditingService: AuditingService)(implicit ec: ExecutionContext) {
 
-  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
+  def deleteNotification(eori: String,
+                         fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
     httpClient.DELETE[HttpResponse](
       appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
     ).map(_.status == Status.OK).recover { case _ => false }
@@ -40,17 +42,22 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
     httpClient.POST[GetContactDetailsRequest, ContactDetails](appConfig.getAccountDetailsUrl, request)
   }
 
-  def updateContactDetails(dan: String, eori: String, oldContactDetails: ContactDetails, newContactDetails: ContactDetailsUserAnswers)
+  def updateContactDetails(dan: String,
+                           eori: String,
+                           oldContactDetails: ContactDetails,
+                           newContactDetails: ContactDetailsUserAnswers)
                           (implicit hc: HeaderCarrier): Future[UpdateContactDetailsResponse] = {
     val trimmed: ContactDetailsUserAnswers = newContactDetails.withWhitespaceTrimmed
     val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest(dan, eori, trimmed)
-    val response = httpClient.POST[UpdateContactDetailsRequest, UpdateContactDetailsResponse](appConfig.updateAccountAddressUrl, request)
+    val response = httpClient.POST[UpdateContactDetailsRequest,
+      UpdateContactDetailsResponse](appConfig.updateAccountAddressUrl, request)
     auditingService.changeContactDetailsAuditEvent(dan, oldContactDetails, trimmed)
     response
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi + "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
+    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi
+      + "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =

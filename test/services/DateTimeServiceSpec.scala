@@ -26,12 +26,12 @@ class DateTimeServiceSpec extends SpecBase {
 
   "DateTimeService" should {
     "should return the current date and time in the LocalDateTime format" in new Setup {
-      val now = dateTimeService.now()
+      val now: LocalDateTime = dateTimeService.now()
       assert(now.isInstanceOf[LocalDateTime])
     }
 
     "getTimeStamp() should return the current date and time in the OffsetDateTime format" in new Setup {
-      val timeStamp = dateTimeService.getTimeStamp
+      val timeStamp: OffsetDateTime = dateTimeService.getTimeStamp
       assert(timeStamp.isInstanceOf[OffsetDateTime])
     }
   }
@@ -42,4 +42,3 @@ class DateTimeServiceSpec extends SpecBase {
     val dateTimeService = new DateTimeService()
   }
 }
-

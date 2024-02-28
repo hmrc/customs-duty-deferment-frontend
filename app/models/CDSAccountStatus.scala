@@ -21,13 +21,27 @@ import play.api.libs.json._
 sealed trait CDSAccountStatus {
   val name: String
 }
-case object AccountStatusOpen extends CDSAccountStatus { override val name: String = "open" }
-case object AccountStatusClosed extends CDSAccountStatus { override val name: String = "closed" }
-case object AccountStatusSuspended extends CDSAccountStatus { override val name: String = "suspended" }
-case object AccountStatusPending extends CDSAccountStatus { override val name: String = "pending" }
+
+case object AccountStatusOpen extends CDSAccountStatus {
+  override val name: String = "open"
+}
+
+case object AccountStatusClosed extends CDSAccountStatus {
+  override val name: String = "closed"
+}
+
+case object AccountStatusSuspended extends CDSAccountStatus {
+  override val name: String = "suspended"
+}
+
+case object AccountStatusPending extends CDSAccountStatus {
+  override val name: String = "pending"
+}
 
 object CDSAccountStatus {
+
   import play.api.Logger
+
   val logger: Logger = Logger(this.getClass)
 
   implicit val CDSAccountStatusReads: Format[CDSAccountStatus] = new Format[CDSAccountStatus] {

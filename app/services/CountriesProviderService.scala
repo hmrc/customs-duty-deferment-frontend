@@ -19,7 +19,7 @@ package services
 import com.google.inject.Inject
 import config.AppConfig
 import models.Country
-import play.api.libs.json.{JsArray, JsString, Json}
+import play.api.libs.json.{JsArray, Json}
 import play.api.{Environment, Logger}
 
 import javax.inject.Singleton
@@ -50,6 +50,7 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
   }
 
   private lazy val countriesNamesSet: Set[String] = countries.map(_.countryName).toSet
+
   def isValidCountryName(countryName: String): Boolean = countriesNamesSet.contains(countryName)
 
   private lazy val countriesNamesMap: Map[String, String] = countries

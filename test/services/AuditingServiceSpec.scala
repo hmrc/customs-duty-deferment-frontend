@@ -35,7 +35,9 @@ class AuditingServiceSpec extends SpecBase {
   "AuditingService" should {
 
     "create the correct data event for a user requesting duty deferment statements" in new Setup {
-      val model: AuditModel = AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
+      val model: AuditModel = AuditModel(AUDIT_TYPE,
+        AUDIT_DUTY_DEFERMENT_TRANSACTION,
+        Json.toJson(AuditEori(eori, isHistoric = false)))
       await(auditingService.audit(model))
 
       val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
@@ -53,24 +55,25 @@ class AuditingServiceSpec extends SpecBase {
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
       verify(mockAuditConnector).sendExtendedEvent(dataEventCaptor.capture)(any, any)
       val dataEvent: ExtendedDataEvent = dataEventCaptor.value
-      dataEvent.auditSource mustBe(expectedAuditSource)
-      dataEvent.auditType mustBe("UpdateDefermentAccountCorrespondence")
-      dataEvent.tags("transactionName") mustBe ("Update contact details")
+      dataEvent.auditSource mustBe expectedAuditSource
+      dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
+      dataEvent.tags("transactionName") mustBe "Update contact details"
       dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
       dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
 
     "create the correct data event for logging a Failure audit event" in new Setup {
 
-      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Failure("Auditing failed",None)))
+      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(
+        Future.successful(AuditResult.Failure("Auditing failed", None)))
 
       val dataEventCaptor: Captor[ExtendedDataEvent] = ArgCaptor[ExtendedDataEvent]
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
       verify(mockAuditConnector).sendExtendedEvent(dataEventCaptor.capture)(any, any)
       val dataEvent: ExtendedDataEvent = dataEventCaptor.value
-      dataEvent.auditSource mustBe (expectedAuditSource)
-      dataEvent.auditType mustBe ("UpdateDefermentAccountCorrespondence")
-      dataEvent.tags("transactionName") mustBe ("Update contact details")
+      dataEvent.auditSource mustBe expectedAuditSource
+      dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
+      dataEvent.tags("transactionName") mustBe "Update contact details"
       dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
       dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
@@ -119,7 +122,8 @@ class AuditingServiceSpec extends SpecBase {
       email = Some("abc@de.com"),
       isNiAccount = false)
 
-    val expectedPreviousContactDetails: JsValue = Json.parse("""{
+    val expectedPreviousContactDetails: JsValue = Json.parse(
+      """{
           "contactName":"John Smith",
           "addressLine1":"1 High Street",
           "addressLine2":"Town",

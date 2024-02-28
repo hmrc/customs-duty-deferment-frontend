@@ -26,106 +26,121 @@ import services.{AuditingService, DocumentService}
 
 class DutyDeferementStatementFileSpec extends SpecBase {
 
-    "getDutyDefermentStatements" should {
-      "compare file returns success response when the same" in new Setup {
-        val result = currentFile.compare(currentFile)
-        result mustBe 0
+  "getDutyDefermentStatements" should {
+    "compare file returns success response when the same" in new Setup {
+      val result: Int = currentFile.compare(currentFile)
+      result mustBe 0
+    }
+
+    "compare file returns failure response when start month is 0" in new Setup {
+      assertThrows[java.time.DateTimeException] {
+        DutyDefermentStatementFile("", "", 0L,
+          DutyDefermentStatementFileMetadata(0, 0, 0, 0, 0, 0, FileFormat.Csv,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
       }
+    }
 
-      "compare file returns failure response when start month is 0" in new Setup {
-        assertThrows[java.time.DateTimeException] {
-            DutyDefermentStatementFile("", "", 0L,
-              DutyDefermentStatementFileMetadata(0, 0, 0, 0, 0, 0, FileFormat.Csv,
-                DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-            )
-        }
+    "compare file returns failure response when end month is 0" in new Setup {
+      assertThrows[java.time.DateTimeException] {
+        DutyDefermentStatementFile("", "", 0L,
+          DutyDefermentStatementFileMetadata(0, 1, 1, 0, 0, 1, FileFormat.Csv,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
       }
+    }
 
-      "compare file returns failure response when end month is 0" in new Setup {
-        assertThrows[java.time.DateTimeException] {
-          DutyDefermentStatementFile("", "", 0L,
-            DutyDefermentStatementFileMetadata(0, 1, 1, 0, 0, 1, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-          )
-        }
+    "compare file returns failure response when start day is 0" in new Setup {
+      assertThrows[java.time.DateTimeException] {
+        DutyDefermentStatementFile("", "", 0L,
+          DutyDefermentStatementFileMetadata(0, 1, 0, 0, 0, 0, FileFormat.Csv,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
       }
+    }
 
-      "compare file returns failure response when start day is 0" in new Setup {
-        assertThrows[java.time.DateTimeException] {
-          DutyDefermentStatementFile("", "", 0L,
-              DutyDefermentStatementFileMetadata(0, 1, 0, 0, 0, 0, FileFormat.Csv,
-                DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-            )
-        }
+    "compare file returns failure response when end day is 0" in new Setup {
+      assertThrows[java.time.DateTimeException] {
+        DutyDefermentStatementFile("", "", 0L,
+          DutyDefermentStatementFileMetadata(0, 1, 1, 0, 1, 0, FileFormat.Csv,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
       }
+    }
 
-      "compare file returns failure response when end day is 0" in new Setup {
-        assertThrows[java.time.DateTimeException] {
-          DutyDefermentStatementFile("", "", 0L,
-            DutyDefermentStatementFileMetadata(0, 1, 1, 0, 1, 0, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-          )
-        }
-      }
+    "compare file returns success when all dates are valid" in new Setup {
 
-      "compare file returns success when all dates are valid" in new Setup {
+      val periodStartYear = 2019
+      val periodEndYear = 2020
 
-          val differentFile: DutyDefermentStatementFile =
-            DutyDefermentStatementFile(
-              "", "", 0L,
-              DutyDefermentStatementFileMetadata(
-                2019, 1, 1, 2020, 1, 1, FileFormat.Csv,
-                DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-            )
+      val differentFile: DutyDefermentStatementFile =
+        DutyDefermentStatementFile(
+          "", "", 0L,
+          DutyDefermentStatementFileMetadata(
+            periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.Csv,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
 
-          val result = currentFile.compare(differentFile)
-          result mustBe 0
-        }
+      val result: Int = currentFile.compare(differentFile)
+      result mustBe 0
+    }
 
-        "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
+    "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
 
-          val differentFile: DutyDefermentStatementFile =
-            DutyDefermentStatementFile(
-              "", "", 0L,
-              DutyDefermentStatementFileMetadata(
-                2019, 1, 1, 2020, 1, 1, FileFormat.UnknownFileFormat,
-                DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
-            )
+      val periodStartYear = 2019
+      val periodEndYear = 2020
 
-            val result = currentFile.compare(differentFile)
-            result mustBe -1
-          }
-      }
+      val differentFile: DutyDefermentStatementFile =
+        DutyDefermentStatementFile(
+          "", "", 0L,
+          DutyDefermentStatementFileMetadata(
+            periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.UnknownFileFormat,
+            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        )
 
-      trait Setup {
-        val mockSDESConnector: SDESConnector = mock[SDESConnector]
-        val mockAuditingService: AuditingService = mock[AuditingService]
+      val result: Int = currentFile.compare(differentFile)
+      result mustBe -1
+    }
+  }
 
-        implicit val hc: HeaderCarrier = HeaderCarrier()
+  trait Setup {
+    val mockSDESConnector: SDESConnector = mock[SDESConnector]
+    val mockAuditingService: AuditingService = mock[AuditingService]
 
-        val currentFile: DutyDefermentStatementFile =
-          DutyDefermentStatementFile(
-            "someFilename",
-            "downloadUrl",
-            10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
-          )
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
-        val requestedFile: DutyDefermentStatementFile =
-          DutyDefermentStatementFile(
-            "someRequestedFilename",
-            "downloadUrl",
-            10L,
-            DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
-              DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
-          )
+    val startYear = 2018
+    val startMonth = 6
+    val startDate = 1
+    val endYear = 2018
+    val endMonth = 6
+    val endDate = 8
+    val fileSize = 10L
+    val dan = "123456"
 
-        val app: Application = application().overrides(
-          inject.bind[AuditingService].toInstance(mockAuditingService),
-          inject.bind[SDESConnector].toInstance(mockSDESConnector)
-        ).build()
+    val currentFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(
+        "someFilename",
+        "downloadUrl",
+        fileSize,
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
+          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, None)
+      )
 
-        val service: DocumentService = app.injector.instanceOf[DocumentService]
-      }
+    val requestedFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(
+        "someRequestedFilename",
+        "downloadUrl",
+        fileSize,
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
+          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, Some("requestedId"))
+      )
+
+    val app: Application = application().overrides(
+      inject.bind[AuditingService].toInstance(mockAuditingService),
+      inject.bind[SDESConnector].toInstance(mockSDESConnector)
+    ).build()
+
+    val service: DocumentService = app.injector.instanceOf[DocumentService]
+  }
 }

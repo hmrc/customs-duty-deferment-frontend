@@ -14,10 +14,12 @@
  * limitations under the License.
  *@
 
+@import utils.Utils.emptyString
+
 @this()
 
 @(msg: String, id: Option[String] = None)(implicit messages: Messages)
 
-<div @{id.fold("")(id => s"id=$id")}>
+<div @{id.fold(emptyString)(id => s"id=$id")}>
  <p class="govuk-body">@msg</p>
 </div>

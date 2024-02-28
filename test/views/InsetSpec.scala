@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.components
+package views
 
 import play.api.Application
 import org.jsoup.Jsoup
@@ -29,7 +29,7 @@ class InsetSpec extends SpecBase {
     "render component correctly" in new SetUp {
       running(app) {
         val insetView = app.injector.instanceOf[inset]
-        val output:  HtmlFormat.Appendable = insetView(
+        val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
           msg = "Hello world!"
         )(messages(app))
@@ -42,7 +42,7 @@ class InsetSpec extends SpecBase {
     "render component correctly without an ID" in new SetUp {
       running(app) {
         val insetView = app.injector.instanceOf[inset]
-        val output:  HtmlFormat.Appendable = insetView(
+        val output: HtmlFormat.Appendable = insetView(
           id = None,
           msg = "Hello world!"
         )(messages(app))
@@ -52,6 +52,7 @@ class InsetSpec extends SpecBase {
       }
     }
   }
+
   trait SetUp {
     val app: Application = application().build()
   }

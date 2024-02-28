@@ -17,7 +17,7 @@
 package models
 
 import util.SpecBase
-import play.api.libs.json.{JsString, JsSuccess, Json, Reads, Writes}
+import play.api.libs.json.{JsSuccess, Json}
 
 
 class MetadataSpec extends SpecBase {
@@ -40,7 +40,7 @@ class MetadataSpec extends SpecBase {
       MetadataItem("statementRequestId", "12345")
     ))
 
-    "convert Metadata to DutyDefermentStatementFileMetadata" in  {
+    "convert Metadata to DutyDefermentStatementFileMetadata" in {
 
       val dutyDefermentStatementFileMetadata = sampleMetadata.toDutyDefermentStatementFileMetadata
 
@@ -51,7 +51,7 @@ class MetadataSpec extends SpecBase {
 
     "Reads and Writes return corresponding objects" in {
 
-      val jsonVal = Metadata.metadataWrites.writes(sampleMetadata).toString();
+      val jsonVal = Metadata.metadataWrites.writes(sampleMetadata).toString()
       val parsedObj = Metadata.metadataReads.reads(Json.parse(jsonVal))
       parsedObj mustBe JsSuccess(sampleMetadata)
     }

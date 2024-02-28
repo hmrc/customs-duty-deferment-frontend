@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{JsSuccess, Json}
+import play.api.libs.json.{JsObject, JsSuccess, JsValue, Json}
 import util.SpecBase
 
 import java.time.LocalDate
@@ -26,9 +26,9 @@ class EoriHistorySpec extends SpecBase {
   "EoriHistory" should {
     "be serializable to JSON" in new Setup {
 
-      val json = Json.toJson(expectedEoriHistory)
+      val json: JsValue = Json.toJson(expectedEoriHistory)
 
-      val expectedJson = Json.obj(
+      val expectedJson: JsObject = Json.obj(
         "eori" -> "EORI123",
         "validFrom" -> "2023-01-01",
         "validUntil" -> "2023-12-31"
@@ -38,43 +38,43 @@ class EoriHistorySpec extends SpecBase {
     }
 
     "be deserializable from JSON" in new Setup {
-      val json = Json.obj(
+      val json: JsObject = Json.obj(
         "eori" -> "EORI123",
         "validFrom" -> "2023-01-01",
         "validUntil" -> "2023-12-31"
       )
 
-      val eoriHistory = json.as[EoriHistory]
+      val eoriHistory: EoriHistory = json.as[EoriHistory]
       eoriHistory mustEqual expectedEoriHistory
     }
 
     "correctly determine if an EORI is historic" in new Setup {
-      val currentEori = EoriHistory("EORI123", Some(LocalDate.now()), None)
+      val currentEori: EoriHistory = EoriHistory("EORI123", Some(LocalDate.now()), None)
       currentEori.isHistoricEori mustBe false
       expectedEoriHistory.isHistoricEori mustBe true
     }
 
     "Correctly ignore invalid date and accepts correct date while parsing" in new Setup {
 
-      val expectedEoriHistory01 = EoriHistory("EORI123", Some(LocalDate.parse("2023-12-19")), None)
-      val validJson01 = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString();
+      val expectedEoriHistory01: EoriHistory = EoriHistory("EORI123", Some(LocalDate.parse("2023-12-19")), None)
+      val validJson01: String = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString()
       EoriHistory.eoriHistoryFormat.reads(Json.parse(validJson01)) mustBe JsSuccess(expectedEoriHistory01)
 
-      val validJson02 = Json.obj("eori" -> "EORI123","validFrom" -> "2023-12-19T10:15:30+01:00")
+      val validJson02: JsObject = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T10:15:30+01:00")
       EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
     }
 
     "Correctly ignore date with wrong hour and use None while parsing" in new Setup {
 
-      val expectedEoriHistory01 = EoriHistory("EORI123", None, None)
-      val validJson02 = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T25:15:30+01:00")
+      val expectedEoriHistory01: EoriHistory = EoriHistory("EORI123", None, None)
+      val validJson02: JsObject = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T25:15:30+01:00")
       EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
     }
 
   }
 
   trait Setup {
-    val expectedEoriHistory = EoriHistory(
+    val expectedEoriHistory: EoriHistory = EoriHistory(
       "EORI123",
       Some(LocalDate.parse("2023-01-01")),
       Some(LocalDate.parse("2023-12-31"))

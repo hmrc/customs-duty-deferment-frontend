@@ -17,6 +17,7 @@
 @import config.AppConfig
 @import viewmodels.ContactDetailsViewModel
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import utils.Utils.emptyString
 
 @this(layout: Layout,
       govukSummaryList: GovukSummaryList,
@@ -63,7 +64,7 @@
                     content = Text(messages("accountDetails.details.name"))
                 ),
                 value = Value(
-                    content = Text(accountDetails.name.getOrElse(""))
+                    content = Text(accountDetails.name.getOrElse(emptyString))
                 ),
                 actions = Some(Actions(
                     items = changeActionItem(editContactDetails = true, "accountDetails.details.name.hidden-text")
@@ -78,13 +79,13 @@
                         s"""
                                     ${accountDetails.addressLine1}
                                     <br/>
-                                    ${accountDetails.addressLine2.getOrElse("")}
+                                    ${accountDetails.addressLine2.getOrElse(emptyString)}
                                     <br/>
-                                    ${accountDetails.addressLine3.getOrElse("")}
+                                    ${accountDetails.addressLine3.getOrElse(emptyString)}
                                     <br/>
-                                    ${accountDetails.addressLine4.getOrElse("")}
+                                    ${accountDetails.addressLine4.getOrElse(emptyString)}
                                     <br/>
-                                    ${accountDetails.postCode.getOrElse("")}
+                                    ${accountDetails.postCode.getOrElse(emptyString)}
                                     <br/>
                                     ${accountDetails.countryName}
                                 """)
@@ -98,7 +99,7 @@
                     content = Text(messages("accountDetails.details.telephone"))
                 ),
                 value = Value(
-                    content = Text(accountDetails.telephone.getOrElse(""))
+                    content = Text(accountDetails.telephone.getOrElse(emptyString))
                 ),
                 actions = Some(Actions(
                     items = changeActionItem(editContactDetails = true, "accountDetails.details.telephone.hidden-text")
@@ -109,7 +110,7 @@
                     content = Text(messages("accountDetails.details.email"))
                 ),
                 value = Value(
-                    content = Text(accountDetails.email.getOrElse(""))
+                    content = Text(accountDetails.email.getOrElse(emptyString))
                 ),
                 actions = Some(Actions(
                     items = changeActionItem(editContactDetails = true, "accountDetails.details.email.hidden-text")

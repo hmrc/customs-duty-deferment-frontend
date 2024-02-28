@@ -28,10 +28,11 @@ class SDESConnectorSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "return a sequence of duty deferment files on a successful response" in new Setup {
+      val fileSize = 10L
       val fileInformation: Seq[FileInformation] =
-        Seq(FileInformation("someFilename", "downloadUrl", 10L, Metadata(dutyDefermentStatementMetadata1)),
-          FileInformation("someFilename2", "downloadUrl", 10L, Metadata(dutyDefermentStatementMetadata2)),
-          FileInformation("someFilename3", "downloadUrl", 10L, Metadata(dutyDefermentStatementMetadata3))
+        Seq(FileInformation("someFilename", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata1)),
+          FileInformation("someFilename2", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata2)),
+          FileInformation("someFilename3", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata3))
         )
 
       when[Future[Seq[FileInformation]]](mockHttpClient.GET(any, any, any)(any, any, any))

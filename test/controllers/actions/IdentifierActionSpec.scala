@@ -146,7 +146,8 @@ class AuthActionSpec extends SpecBase {
         val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[AppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new MissingBearerToken), frontendAppConfig, bodyParsers, mockDataStoreConnector)
+        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new MissingBearerToken),
+          frontendAppConfig, bodyParsers, mockDataStoreConnector)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest())
 
@@ -167,7 +168,8 @@ class AuthActionSpec extends SpecBase {
         val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[AppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new BearerTokenExpired), frontendAppConfig, bodyParsers, mockDataStoreConnector)
+        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new BearerTokenExpired),
+          frontendAppConfig, bodyParsers, mockDataStoreConnector)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest())
 
@@ -188,7 +190,8 @@ class AuthActionSpec extends SpecBase {
         val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
         val frontendAppConfig = app.injector.instanceOf[AppConfig]
 
-        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientEnrolments), frontendAppConfig, bodyParsers, mockDataStoreConnector)
+        val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientEnrolments),
+          frontendAppConfig, bodyParsers, mockDataStoreConnector)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest())
 

@@ -22,25 +22,52 @@ sealed trait CDSAccountStatusId {
   val value: Int
 }
 
-case object DefermentAccountAvailable extends CDSAccountStatusId { val value: Int = 0 }
-case object ChangeOfLegalEntity extends CDSAccountStatusId { val value: Int = 1 }
-case object GuaranteeCancelledGuarantorsRequest extends CDSAccountStatusId { val value: Int = 2 }
-case object GuaranteeCancelledTradersRequest extends CDSAccountStatusId { val value: Int = 3 }
-case object DirectDebitMandateCancelled extends CDSAccountStatusId { val value: Int = 4 }
-case object DebitRejectedAccountClosedOrTransferred extends CDSAccountStatusId { val value: Int = 5 }
-case object DebitRejectedReferToDrawer extends CDSAccountStatusId { val value: Int = 6 }
-case object ReturnedMailOther extends CDSAccountStatusId { val value: Int = 7 }
-case object GuaranteeExceeded extends CDSAccountStatusId { val value: Int = 8 }
-case object AccountCancelled extends CDSAccountStatusId { val value: Int = 9 }
+case object DefermentAccountAvailable extends CDSAccountStatusId {
+  val value: Int = 0
+}
 
-// scalastyle:off cyclomatic.complexity magic.number
+case object ChangeOfLegalEntity extends CDSAccountStatusId {
+  val value: Int = 1
+}
+
+case object GuaranteeCancelledGuarantorsRequest extends CDSAccountStatusId {
+  val value: Int = 2
+}
+
+case object GuaranteeCancelledTradersRequest extends CDSAccountStatusId {
+  val value: Int = 3
+}
+
+case object DirectDebitMandateCancelled extends CDSAccountStatusId {
+  val value: Int = 4
+}
+
+case object DebitRejectedAccountClosedOrTransferred extends CDSAccountStatusId {
+  val value: Int = 5
+}
+
+case object DebitRejectedReferToDrawer extends CDSAccountStatusId {
+  val value: Int = 6
+}
+
+case object ReturnedMailOther extends CDSAccountStatusId {
+  val value: Int = 7
+}
+
+case object GuaranteeExceeded extends CDSAccountStatusId {
+  val value: Int = 8
+}
+
+case object AccountCancelled extends CDSAccountStatusId {
+  val value: Int = 9
+}
+
 object CDSAccountStatusId {
 
   import play.api.Logger
 
   val logger: Logger = Logger(this.getClass)
 
-  //N.B. maintain this list if adding new implementations of CDSAccountStatusId
   private val values: Set[CDSAccountStatusId] = Set(
     DefermentAccountAvailable,
     ChangeOfLegalEntity,

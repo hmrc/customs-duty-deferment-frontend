@@ -34,16 +34,16 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AccountController @Inject()(authenticate: IdentifierAction,
-                                   checkEmailIsVerified: EmailAction,
-                                   apiConnector: CustomsFinancialsApiConnector,
-                                   resolveSessionId: SessionIdAction,
-                                   mcc: MessagesControllerComponents,
-                                   sessionCacheConnector: SessionCacheConnector,
-                                   documentService: DocumentService,
-                                   account: duty_deferment_account,
-                                   unavailable: duty_deferment_statements_not_available,
-                                   errorHandler: ErrorHandler,
-                                   navigator: Navigator
+                                  checkEmailIsVerified: EmailAction,
+                                  apiConnector: CustomsFinancialsApiConnector,
+                                  resolveSessionId: SessionIdAction,
+                                  mcc: MessagesControllerComponents,
+                                  sessionCacheConnector: SessionCacheConnector,
+                                  documentService: DocumentService,
+                                  account: duty_deferment_account,
+                                  unavailable: duty_deferment_statements_not_available,
+                                  errorHandler: ErrorHandler,
+                                  navigator: Navigator
                                  )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport {
 
@@ -64,7 +64,7 @@ class AccountController @Inject()(authenticate: IdentifierAction,
         val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber,
           statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
 
-        val historicUrl = if(appConfig.historicStatementsEnabled) {
+        val historicUrl = if (appConfig.historicStatementsEnabled) {
           appConfig.historicRequestUrl(accountLink.linkId)
         } else {
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url

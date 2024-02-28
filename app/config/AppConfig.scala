@@ -37,8 +37,13 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
   lazy val countriesFilename: String = config.get[String]("countriesFilename")
   var historicStatementsEnabled: Boolean = config.get[Boolean]("features.historic-statements-enabled")
-  lazy val dutyDefermentContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-contact-details-endpoint")
-  lazy val dutyDefermentUpdateContactDetailsEndpoint: String = config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
+
+  lazy val dutyDefermentContactDetailsEndpoint: String =
+    config.get[String]("microservice.services.customs-financials-api.duty-deferment-contact-details-endpoint")
+
+  lazy val dutyDefermentUpdateContactDetailsEndpoint: String =
+    config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
+
   lazy val getAccountDetailsUrl: String = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
   lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
   val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
@@ -85,7 +90,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   private lazy val platformHost: Option[String] = config.getOptional[String]("platform.frontend.host")
 
-  lazy val fixedDateTime = config.get[Boolean]("features.fixed-systemdate-for-tests")
+  lazy val fixedDateTime: Boolean = config.get[Boolean]("features.fixed-systemdate-for-tests")
 
   lazy val emailFrontendService = s"${servicesConfig.baseUrl(s"customs-email-frontend")}${
     config.get[String](
@@ -94,16 +99,16 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   lazy val emailFrontendUrl: String = s"$emailFrontendService/service/customs-finance"
 
-  /**
-   * Creates the deskPro url that is used exclusively as of now for service unavailable page
-   */
   def deskProLinkUrlForServiceUnavailable(implicit request: RequestHeader): String =
     s"$contactFrontEndBaseUrl/contact/report-technical-problem?newTab=true&amp;service=${
       urlEncode(contactFrontEndServiceId)
     }${
-      if (referrerUrl(platformHost).nonEmpty) s"referrerUrl=${
-        urlEncode(referrerUrl(platformHost).get)
-      }" else emptyString
+      if (referrerUrl(platformHost).nonEmpty) {
+        s"referrerUrl=${
+          urlEncode(referrerUrl(platformHost).get)
+        }"
+      } else {
+        emptyString
+      }
     }"
-
 }

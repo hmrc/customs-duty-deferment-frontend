@@ -25,12 +25,12 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 
-
 class AccountLinkCacheService @Inject()(
-  sessionCacheConnector: SessionCacheConnector,
-  accountLinkCache: AccountLinkCache
-)(implicit executionContext: ExecutionContext) {
-  def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier): Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
+                                         sessionCacheConnector: SessionCacheConnector,
+                                         accountLinkCache: AccountLinkCache
+                                       )(implicit executionContext: ExecutionContext) {
+  def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier)
+  : Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
     sessionCacheConnector.retrieveSession(sessionId, linkId).flatMap {
       case None => Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(_, _, _, _, None, _)) => Future.successful(Left(NoDutyDefermentSessionAvailable))
@@ -50,5 +50,7 @@ class AccountLinkCacheService @Inject()(
 }
 
 sealed trait SessionCacheError
+
 case object NoAccountStatusId extends SessionCacheError
+
 case object NoDutyDefermentSessionAvailable extends SessionCacheError

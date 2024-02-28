@@ -19,6 +19,7 @@ package connectors
 import config.AppConfig
 import models.{SDDSRequest, SDDSResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

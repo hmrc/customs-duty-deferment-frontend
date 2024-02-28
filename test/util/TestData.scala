@@ -19,7 +19,12 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers, DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers, EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers}
+import models.{
+  AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers,
+  DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile,
+  DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers,
+  EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers
+}
 import org.mockito.scalatest.MockitoSugar
 import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
@@ -33,7 +38,10 @@ trait TestData extends MockitoSugar {
   protected val danWithNoContactInformation = "someDanNoContactInformation"
   protected val successUpdateResponseCommon: ResponseCommon = ResponseCommon("OK", None, "2020-10-05T09:30:47Z", None)
   protected val successUpdateContactResponse: UpdateContactDetailsResponse = UpdateContactDetailsResponse(true)
-  protected val failedUpdateResponseCommon: ResponseCommon = ResponseCommon("OK", Some("Error"), "2020-10-05T09:30:47Z", None)
+  protected val failedUpdateResponseCommon: ResponseCommon = ResponseCommon("OK",
+    Some("Error"),
+    "2020-10-05T09:30:47Z",
+    None)
   protected val failedUpdateContactResponse: UpdateContactDetailsResponse = UpdateContactDetailsResponse(false)
   protected val sessionId: SessionId = SessionId("session_1234")
   protected val fakeCountries = List()
@@ -70,7 +78,7 @@ trait TestData extends MockitoSugar {
     Some("11111 222333"),
     None,
     Some("example@email.com"),
-    false
+    isNiAccount = false
   )
 
   val editAddressDetailsUserAnswers: EditAddressDetailsUserAnswers = EditAddressDetailsUserAnswers(
@@ -82,7 +90,7 @@ trait TestData extends MockitoSugar {
     None,
     "GB",
     Some("United Kingdom"),
-    false
+    isNiAccount = false
   )
 
   val editContactDetailsUserAnswers: EditContactDetailsUserAnswers = EditContactDetailsUserAnswers(
@@ -91,25 +99,39 @@ trait TestData extends MockitoSugar {
     Some("11111 222333"),
     None,
     Some("example@email.com"),
-    false
+    isNiAccount = false
   )
+
+  val periodStartYear = 2018
+  val periodStartMonth = 6
+  val periodStartDate = 1
+  val periodEndYear = 2018
+  val periodEndMonth = 6
+  val periodEndDate = 8
+  val fileSize = 10L
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
     DutyDefermentStatementFile(
       "someFilename",
       "downloadUrl",
-      10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+      fileSize,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
+        Weekly, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
-      10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Pdf, DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "123456", None)),
+      fileSize,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Pdf, DutyDefermentStatement,
+        Supplementary, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
-      10L,
-      DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv, DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None))
+      fileSize,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
+        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
+        Excise, Some(false), Some("BACS"), "123456", None))
   )
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),
@@ -155,7 +177,7 @@ trait TestData extends MockitoSugar {
   )
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
   lazy val accountLink: AccountLink = AccountLink("someEori",
-    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), false)
+    "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
 
   lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,

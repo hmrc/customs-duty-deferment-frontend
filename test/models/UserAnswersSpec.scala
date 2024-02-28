@@ -21,36 +21,36 @@ import util.SpecBase
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 class UserAnswersSpec extends SpecBase {
 
   "UserAnswers" should {
 
     "get a value correctly" in new Setup {
-      val gettable = MockGettable[String](JsPath(List(KeyPathNode("key"))))
-      val result = userAnswers.get(gettable)(Reads.StringReads)
+      val gettable: MockGettable[String] = MockGettable[String](JsPath(List(KeyPathNode("key"))))
+      val result: Option[String] = userAnswers.get(gettable)(Reads.StringReads)
       result mustBe Some("value")
     }
     "get None if value is incorrect" in new Setup {
-      val gettable = MockGettable[String](JsPath(List(KeyPathNode("key2"))))
-      val result = userAnswers.get(gettable)(Reads.StringReads)
+      val gettable: MockGettable[String] = MockGettable[String](JsPath(List(KeyPathNode("key2"))))
+      val result: Option[String] = userAnswers.get(gettable)(Reads.StringReads)
       result mustBe None
     }
 
     "set a value correctly" in new Setup {
-      val settable = MockSettable[String](
+      val settable: MockSettable[String] = MockSettable[String](
         JsPath(List(KeyPathNode("key"))),
         (_, ua) => Success(ua)
       )
-      val updatedAnswers =
+      val updatedAnswers: Try[UserAnswers] =
         userAnswers.set(settable, "new value")(Writes.StringWrites)
       updatedAnswers mustBe a[Success[_]]
       updatedAnswers.get.data mustBe Json.obj("key" -> "new value")
     }
 
     "get a failure if wrong key is used in seting a value" in new Setup {
-      val settable = MockSettable[String](
+      val settable: MockSettable[String] = MockSettable[String](
         JsPath(Nil),
         (_, ua) => Success(ua)
       )
@@ -62,23 +62,23 @@ class UserAnswersSpec extends SpecBase {
     }
 
     "remove a value correctly" in new Setup {
-      val settable = MockSettable[String](
+      val settable: MockSettable[String] = MockSettable[String](
         JsPath(List(KeyPathNode("key"))),
         (_, ua) => Success(ua)
       )
-      val updatedAnswers = userAnswers.remove(settable)
+      val updatedAnswers: Try[UserAnswers] = userAnswers.remove(settable)
       updatedAnswers mustBe a[Success[_]]
       updatedAnswers.get.data mustBe Json.obj()
     }
 
     "should not to remove if key is not found" in new Setup {
-      val settable = MockSettable[String](
+      val settable: MockSettable[String] = MockSettable[String](
         JsPath(List(KeyPathNode("key2"))),
         (_, ua) => Success(ua)
       )
-      val updatedAnswers = userAnswers.remove(settable)
+      val updatedAnswers: Try[UserAnswers] = userAnswers.remove(settable)
       updatedAnswers mustBe a[Success[_]]
-      updatedAnswers.get.data mustBe Json.obj("key"->"value")
+      updatedAnswers.get.data mustBe Json.obj("key" -> "value")
     }
 
     "implicits datatimeformat should not be null " in new Setup {
@@ -90,15 +90,16 @@ class UserAnswersSpec extends SpecBase {
   trait Setup {
 
     val sampleId = "sampleId"
-    val sampleData = Json.obj("key" -> "value")
-    val sampleLocalDateTime = LocalDateTime.now
-    val userAnswers = UserAnswers(sampleId, sampleData, sampleLocalDateTime)
+    val sampleData: JsObject = Json.obj("key" -> "value")
+    val sampleLocalDateTime: LocalDateTime = LocalDateTime.now
+    val userAnswers: UserAnswers = UserAnswers(sampleId, sampleData, sampleLocalDateTime)
 
     case class MockGettable[A](path: JsPath) extends Gettable[A]
+
     case class MockSettable[A](
-        path: JsPath,
-        cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
-    ) extends Settable[A]
+                                path: JsPath,
+                                cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
+                              ) extends Settable[A]
 
   }
 }

@@ -24,5 +24,5 @@ case class MetadataItem(key: String, value: String)
 object MetadataItem {
   implicit val metadataItemReads: Reads[MetadataItem] =
     ((JsPath \ "metadata").read[String] and (JsPath \ "value").read[String]) (MetadataItem.apply _)
-  implicit val metadataItemWrites: Writes[MetadataItem] =  Json.writes[MetadataItem]
+  implicit val metadataItemWrites: Writes[MetadataItem] = Json.writes[MetadataItem]
 }

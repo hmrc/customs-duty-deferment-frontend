@@ -48,7 +48,7 @@ class UserAnswersCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
     }
 
     ".get call when data not found from cache returns none" in {
-      testCache.store(id+1, test).futureValue
+      testCache.store(id + 1, test).futureValue
       val retrieved = testCache.retrieve(id).futureValue
       retrieved mustBe None
     }

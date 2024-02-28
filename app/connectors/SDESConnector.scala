@@ -22,7 +22,7 @@ import models._
 import play.api.libs.json.Json
 import services.AuditingService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

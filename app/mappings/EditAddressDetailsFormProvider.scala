@@ -31,15 +31,16 @@ class EditAddressDetailsFormProvider @Inject()(
                                               ) extends Constraints {
 
   def apply(): Form[EditAddressDetailsUserAnswers] = {
-    // A hidden form component tracks countryName and is updated using JS.
-    // if JS is not enabled it defaults to countryNameNoJs, and this check is not performed - as they just select from a dropdown.
     Form(
       mapping(
         "dan" -> of[String],
         "addressLine1" -> of[String].verifying(validMandatoryAddressField("accountDetails.edit.address.line1")),
-        "addressLine2" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line2")),
-        "addressLine3" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line3")),
-        "addressLine4" -> optional(Forms.text).verifying(validOptionalAddressField("accountDetails.edit.address.line4")),
+        "addressLine2" -> optional(Forms.text).verifying(
+          validOptionalAddressField("accountDetails.edit.address.line2")),
+        "addressLine3" -> optional(Forms.text).verifying(
+          validOptionalAddressField("accountDetails.edit.address.line3")),
+        "addressLine4" -> optional(Forms.text).verifying(
+          validOptionalAddressField("accountDetails.edit.address.line4")),
         "postCode" -> postcodeMapping,
         "countryCode" -> of[String].verifying(isValidCountryCode),
         "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName)),
@@ -58,17 +59,15 @@ class EditAddressDetailsFormProvider @Inject()(
     deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
   }
 
-
-  // If there are countryCode and countryName errors - this combines them
   private def deDuplicateCountryErrors(form: Form[EditAddressDetailsUserAnswers]): Form[EditAddressDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
-        case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")
+        case countryNameError: FormError if countryNameError.key == "countryName" =>
+          countryNameError.copy(key = "countryCode")
+
         case x: FormError => x
       }
       .distinct
     )
   }
 }
-
-

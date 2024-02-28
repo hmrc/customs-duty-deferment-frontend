@@ -32,10 +32,8 @@
 package utils
 
 import java.time.LocalDate
-import models.{DDStatementType, FileRole}
 import util.SpecBase
 import utils.DateConverters.OrderedLocalDate
-import viewmodels.DutyDefermentStatementPeriod
 
 class DateConvertersSpec extends SpecBase {
 
@@ -57,18 +55,5 @@ class DateConvertersSpec extends SpecBase {
       val result = OrderedLocalDate(date).compare(LocalDate.now())
       result mustBe 0
     }
-
-    "DutyDeferementPeriodStatements can have their Date Converter Compared successfully" in {
-      val deferement1 = DutyDefermentStatementPeriod(
-        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
-
-      val deferement2 = DutyDefermentStatementPeriod(
-        FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-        LocalDate.now(), LocalDate.now(), LocalDate.now(), Seq.empty)
-
-      val testData: Seq[DutyDefermentStatementPeriod] = Seq(deferement2, deferement1)
-    }
   }
 }
-

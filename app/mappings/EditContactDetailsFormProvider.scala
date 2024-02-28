@@ -22,15 +22,11 @@ import models.EditContactDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats._
 import play.api.data.{Form, FormError, Forms}
-import services.CountriesProviderService
 
-class EditContactDetailsFormProvider @Inject()(
-                                                countriesProviderService: CountriesProviderService
-                                              ) extends Constraints {
+class EditContactDetailsFormProvider @Inject()() extends Constraints {
 
   def apply(): Form[EditContactDetailsUserAnswers] = {
-    // A hidden form component tracks countryName and is updated using JS.
-    // if JS is not enabled it defaults to countryNameNoJs, and this check is not performed - as they just select from a dropdown.
+
     Form(
       mapping(
         "dan" -> of[String],
@@ -48,17 +44,15 @@ class EditContactDetailsFormProvider @Inject()(
     deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
   }
 
-
-  // If there are countryCode and countryName errors - this combines them
   private def deDuplicateCountryErrors(form: Form[EditContactDetailsUserAnswers]): Form[EditContactDetailsUserAnswers] = {
     form.copy(errors = form.errors
       .map {
-        case countryNameError: FormError if countryNameError.key == "countryName" => countryNameError.copy(key = "countryCode")
+        case countryNameError: FormError if countryNameError.key == "countryName" =>
+          countryNameError.copy(key = "countryCode")
+
         case x: FormError => x
       }
       .distinct
     )
   }
 }
-
-

@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsResult, JsValue, Json}
 import util.SpecBase
 
 class DutyDefermentStatementFileMetadataSpec extends SpecBase {
@@ -36,13 +36,20 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
   trait Setup {
 
-    val metadata = DutyDefermentStatementFileMetadata(
-      periodStartYear = 2023,
-      periodStartMonth = 10,
-      periodStartDay = 1,
-      periodEndYear = 2023,
-      periodEndMonth = 10,
-      periodEndDay = 31,
+    val periodStartYear = 2023
+    val periodStartMonth = 10
+    val periodStartDay = 1
+    val periodEndYear = 2023
+    val periodEndMonth = 10
+    val periodEndDay = 31
+
+    val metadata: DutyDefermentStatementFileMetadata = DutyDefermentStatementFileMetadata(
+      periodStartYear = periodStartYear,
+      periodStartMonth = periodStartMonth,
+      periodStartDay = periodStartDay,
+      periodEndYear = periodEndYear,
+      periodEndMonth = periodEndMonth,
+      periodEndDay = periodEndDay,
       fileFormat = FileFormat.Csv,
       fileRole = FileRole.DutyDefermentStatement,
       defermentStatementType = DDStatementType.Weekly,
@@ -70,7 +77,7 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
     val json: JsValue = Json.toJson(metadata)
 
-    val parsedMetadata = Json.fromJson[DutyDefermentStatementFileMetadata](json)
+    val parsedMetadata: JsResult[DutyDefermentStatementFileMetadata] = Json.fromJson[DutyDefermentStatementFileMetadata](json)
 
   }
 }

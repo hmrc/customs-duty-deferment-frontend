@@ -61,7 +61,11 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
       when(mockContactDetailsCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      implicit val dataRequest: DataRequest[AnyContent] = DataRequest(FakeRequest(), "identifier", "eori", SessionId("session"), emptyUserAnswers)
+      implicit val dataRequest: DataRequest[AnyContent] = DataRequest(FakeRequest(),
+        "identifier",
+        "eori",
+        SessionId("session"),
+        emptyUserAnswers)
 
       running(app) {
         val result = await(service.updateContactDetails(contactDetailsUserAnswers))

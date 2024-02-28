@@ -177,11 +177,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
   "incorrect optional addressLine  return Invalid" when {
 
     "address line 2 size is higher than max value" in new SetUp {
-      validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(ValidationError(s"$addressField2Msg.max"))
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(
+        ValidationError(s"$addressField2Msg.max"))
     }
 
     "address line 2 validation aginst regex" in new SetUp {
-      validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(ValidationError(s"$addressField2Msg.invalid"))
+      validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(
+        ValidationError(s"$addressField2Msg.invalid"))
     }
   }
 
@@ -192,11 +194,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
 
     "mandatory address line size is higher than max value" in new SetUp {
-      validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(ValidationError(s"$addressField1Msg.max"))
+      validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(
+        ValidationError(s"$addressField1Msg.max"))
     }
 
     "mandatory address line validation aginst regex" in new SetUp {
-      validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(ValidationError(s"$addressField1Msg.invalid"))
+      validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(
+        ValidationError(s"$addressField1Msg.invalid"))
     }
   }
 
@@ -210,11 +214,13 @@ class ConstraintsSpec extends SpecBase with Constraints {
   "return invalid phone number" when {
 
     "phoneNumber has invalid regex" in new SetUp {
-      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(
+        ValidationError(s"$phoneNumberMessage.invalid"))
     }
 
     "phoneNumber has exceeded 24 characters" in new SetUp {
-      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(ValidationError(s"$phoneNumberMessage.invalid"))
+      isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(
+        ValidationError(s"$phoneNumberMessage.invalid"))
     }
 
   }
@@ -222,26 +228,27 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces = Some("   ")
-  val email = Some("abc@test.com")
-  val emailWithLeadingSpaces = Some("   abc@test.com")
-  val emailWithTrailingSpaces = Some("abc@test.com   ")
-  val emailWithLeadingAndTrailingSpaces = Some("   abc@test.com   ")
+  val spaces: Some[String] = Some("   ")
+  val email: Some[String] = Some("abc@test.com")
+  val emailWithLeadingSpaces: Some[String] = Some("   abc@test.com")
+  val emailWithTrailingSpaces: Some[String] = Some("abc@test.com   ")
+  val emailWithLeadingAndTrailingSpaces: Some[String] = Some("   abc@test.com   ")
 
-  val emailWithSpacesWithIn_1 = Some("abc @test.com")
-  val emailWithSpacesWithIn_2 = Some("abc@ test.com")
-  val emailWithSpacesWithIn_3 = Some("abc@te  st.com")
-  val emailWithSpacesWithIn_4 = Some("ab c@test.com")
-  val emailWithSpacesWithIn_5 = Some("ab c@tes t.com")
+  val emailWithSpacesWithIn_1: Some[String] = Some("abc @test.com")
+  val emailWithSpacesWithIn_2: Some[String] = Some("abc@ test.com")
+  val emailWithSpacesWithIn_3: Some[String] = Some("abc@te  st.com")
+  val emailWithSpacesWithIn_4: Some[String] = Some("ab c@test.com")
+  val emailWithSpacesWithIn_5: Some[String] = Some("ab c@tes t.com")
 
-  val invalidEmail_1 = Some("first@last")
-  val invalidEmail_2 = Some("firstlast")
-  val invalidEmail_3 = Some("first.com")
-  val invalidEmail_4 = Some(".com")
-  val invalidEmail_5 = Some("thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid" +
-    "thisemailaddressisgreaterthan@132charactershenceinvalidthisemailaddressisgreaterthan@132charactershenceinvalid.com")
-  val invalidEmail_6 = Some("")
-  val invalidEmail_7 = Some(" ")
+  val invalidEmail_1: Some[String] = Some("first@last")
+  val invalidEmail_2: Some[String] = Some("firstlast")
+  val invalidEmail_3: Some[String] = Some("first.com")
+  val invalidEmail_4: Some[String] = Some(".com")
+  val invalidEmail_5: Some[String] = Some("thisemailaddressisgreaterthan@132charactershenceinvalid" +
+    "thisemailaddressisgreaterthan@132charactershenceinvalid" +
+    "thisemailaddressisgreaterthan@132charactershenceinvalid")
+  val invalidEmail_6: Some[String] = Some("")
+  val invalidEmail_7: Some[String] = Some(" ")
 
   val postcode = "LS1 4AW"
   val invalidPostcode_1 = ""
@@ -254,17 +261,17 @@ trait SetUp {
 
   val phoneNumberMessage = "accountDetails.edit.telephone"
 
-  val nameField_01="John Doe";
-  val nameField_02="John Doe Lorem ipsum dolor sit amet consectetur adipiscing";
-  val nameField_03="John Doe %";
-  val nameFieldMsg_01="accountDetails.edit.name"
+  val nameField_01 = "John Doe"
+  val nameField_02 = "John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
+  val nameField_03 = "John Doe %"
+  val nameFieldMsg_01 = "accountDetails.edit.name"
 
-  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit";
-  val addressLine1_02 = "John Doe %";
+  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit"
+  val addressLine1_02 = "John Doe %"
   val addressField1Msg = "accountDetails.edit.address.line1"
 
 
-  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit";
-  val addressLine2_02 = "John Doe %";
+  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit"
+  val addressLine2_02 = "John Doe %"
   val addressField2Msg = "accountDetails.edit.address.line2"
 }

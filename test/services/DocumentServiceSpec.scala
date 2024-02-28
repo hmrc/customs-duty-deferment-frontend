@@ -46,26 +46,34 @@ class DocumentServiceSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val eoriHist = EoriHistory("GB123456789", None, None)
+    val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
     val dan = "1234567"
+
+    val startYear = 2018
+    val startMonth = 6
+    val startDate = 1
+    val endYear = 2018
+    val endMonth = 6
+    val endDate = 8
+    val fileSize = 10L
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
-        10L,
-        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+        fileSize,
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
-    )
+      )
 
     val requestedFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someRequestedFilename",
         "downloadUrl",
-        10L,
-        DutyDefermentStatementFileMetadata(2018, 6, 1, 2018, 6, 8, FileFormat.Csv,
+        fileSize,
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
-    )
+      )
 
     val app: Application = application().overrides(
       inject.bind[AuditingService].toInstance(mockAuditingService),

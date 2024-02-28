@@ -41,7 +41,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     authorised().retrieve(Retrievals.allEnrolments and Retrievals.internalId) {
-      case allEnrolments ~ Some(internalId) => {
+      case allEnrolments ~ Some(internalId) =>
         allEnrolments.getEnrolment("HMRC-CUS-ORG").flatMap(_.getIdentifier("EORINumber")) match {
           case Some(eori) =>
             for {
@@ -51,7 +51,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
             } yield result
           case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
         }
-      }
+      case _ => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
     }
   } recover {
     case _: NoActiveSession =>

@@ -23,7 +23,7 @@ class EditContactDetailsSpec extends SpecBase {
 
   "EditContactDetailsUserAnswers" should {
     "EditContactDetailsUserAnswers can be created" in new Setup {
-      val someDetails = new EditContactDetailsUserAnswers (
+      val someDetails = new EditContactDetailsUserAnswers(
         dan = "someDan",
         name = Option("someName"),
         telephone = Option("1234567"),
@@ -39,16 +39,16 @@ class EditContactDetailsSpec extends SpecBase {
   trait Setup {
 
     val userAnswers = new EditContactDetailsUserAnswers(
-      "someDan",Some("someName"),Some("1234567"),Some("fax"),Some("abc@def.com"),false)
+      "someDan", Some("someName"), Some("1234567"), Some("fax"), Some("abc@def.com"), false)
 
-    val contactDetails = new ContactDetails(Some("someName"),"address1",Some("address2"),Some("address3"),
-      Some("address4"),Some("somePostCode"),"GB",Some("1335678"),Some("fax"),Some("abc@def.com"))
+    val contactDetails = new ContactDetails(Some("someName"), "address1", Some("address2"), Some("address3"),
+      Some("address4"), Some("somePostCode"), "GB", Some("1335678"), Some("fax"), Some("abc@def.com"))
 
     val contactDetailsUserAnswers = new ContactDetailsUserAnswers("someName", Some("name"),
-      "address1",Some("address2"),Some("address3"), Some("address4"), Some("somePostCode"),
-      "GB",Option("someCountry"),Some("1335678"),Some("fax"),Some("abc@def.com"),false)
+      "address1", Some("address2"), Some("address3"), Some("address4"), Some("somePostCode"),
+      "GB", Option("someCountry"), Some("1335678"), Some("fax"), Some("abc@def.com"), false)
 
-    val editContact = new EditContactDetailsUserAnswers (
+    val editContact = new EditContactDetailsUserAnswers(
       dan = "someDan",
       name = Option("someName"),
       telephone = Option("1234567"),

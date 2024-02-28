@@ -28,7 +28,7 @@ case class EditAddressDetailsUserAnswers(dan: String,
                                          postCode: Option[String],
                                          countryCode: String,
                                          countryName: Option[String],
-                                         isNiAccount:  Boolean) {
+                                         isNiAccount: Boolean) {
 
   def toContactDetailsUserAnswers(initialContactDetails: ContactDetails, isNiAccount: Boolean): ContactDetailsUserAnswers = {
     ContactDetailsUserAnswers(

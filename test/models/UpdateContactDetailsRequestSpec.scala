@@ -15,6 +15,7 @@
  */
 
 package models
+
 import util.SpecBase
 
 
@@ -27,10 +28,10 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
       val validContactDetailsUserAnswers: ContactDetailsUserAnswers = ContactDetailsUserAnswers(
         validDan, Some("Example Name"), "Example Road", None,
         None, None, Some("SW1A 2BQ"), "GB", Some("United Kingdom"),
-        Some("11111 222333"), None, Some("example@email.com"), false
+        Some("11111 222333"), None, Some("example@email.com"), isNiAccount = false
       )
       val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest.apply("someDan", "someEori", validContactDetailsUserAnswers)
-      assert(request.postCode == Some("SW1A 2BQ"))
+      assert(request.postCode.contains("SW1A 2BQ"))
     }
 
     "with WhitespaceTrimmed method  should trim whitespaces of data in ContactDetailsUserAnswers" in {
@@ -38,11 +39,11 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
       val validContactDetailsUserAnswers: ContactDetailsUserAnswers = ContactDetailsUserAnswers(
         validDan, Some("Example Name"), "Example Road 01 ", Option("Example Road 02    "),
         Option("Example Road 03 "), Option("Example Road 04 "), Some("SW1A 2BQ "), "GB", Some("United Kingdom"),
-        Some("11111 222333"), Some("11111 222334 "), Some("example@email.com"), false
+        Some("11111 222333"), Some("11111 222334 "), Some("example@email.com"), isNiAccount = false
       )
       val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest.apply("someDan", "someEori", validContactDetailsUserAnswers.withWhitespaceTrimmed)
-      assert(request.postCode == Some("SW1A 2BQ"))
-      assert(request.addressLine2 == Some("Example Road 02"))
+      assert(request.postCode.contains("SW1A 2BQ"))
+      assert(request.addressLine2.contains("Example Road 02"))
     }
 
     "apply method returns UpdateContactDetailsRequest for null postcode" in {
@@ -50,10 +51,10 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
       val invalidContactDetailsUserAnswers: ContactDetailsUserAnswers = ContactDetailsUserAnswers(
         validDan, Some("Example Name"), "Example Road", None,
         None, None, Some(""), "GB", Some("United Kingdom"),
-        Some("11111 222333"), None, Some("example@email.com"), false
+        Some("11111 222333"), None, Some("example@email.com"), isNiAccount = false
       )
       val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest.apply("someDan", "someEori", invalidContactDetailsUserAnswers)
-      assert(request.postCode == None)
+      assert(request.postCode.isEmpty)
     }
   }
 }

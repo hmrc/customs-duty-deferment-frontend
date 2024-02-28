@@ -21,16 +21,16 @@ import play.api.data.{FormError, Mapping}
 import uk.gov.voa.play.form._
 
 case class ConditionalMapping[T](
-  condition: Condition,
-  wrapped: Mapping[T],
-  elseValue: (String, Map[String, String]) => T,
-  constraints: Seq[Constraint[T]] = Nil,
-  keys: Set[String] = Set()
-) extends Mapping[T] {
+                                  condition: Condition,
+                                  wrapped: Mapping[T],
+                                  elseValue: (String, Map[String, String]) => T,
+                                  constraints: Seq[Constraint[T]] = Nil,
+                                  keys: Set[String] = Set()
+                                ) extends Mapping[T] {
 
   override val format: Option[(String, Seq[Any])] = wrapped.format
 
-  val key = wrapped.key
+  val key: String = wrapped.key
 
   def verifying(addConstraints: Constraint[T]*): Mapping[T] =
     this.copy(constraints = constraints ++ addConstraints.toSeq)

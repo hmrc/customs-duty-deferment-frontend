@@ -20,8 +20,8 @@ import models.AccountDetails
 import play.api.libs.json.{Json, OFormat}
 
 case class ResponseDetail(eori: String,
-                            accountDetails: AccountDetails,
-                            contactDetails: ContactDetails)
+                          accountDetails: AccountDetails,
+                          contactDetails: ContactDetails)
 
 object ResponseDetail {
   implicit val format: OFormat[ResponseDetail] = Json.format[ResponseDetail]
