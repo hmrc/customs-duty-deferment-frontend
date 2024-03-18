@@ -17,7 +17,6 @@
 package util
 
 import com.codahale.metrics.MetricRegistry
-import com.kenshoo.play.metrics.Metrics
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import org.jsoup.nodes.Document
@@ -32,7 +31,7 @@ import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
-
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import scala.jdk.CollectionConverters._
 
 
@@ -88,7 +87,6 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
 
 class FakeMetrics extends Metrics {
   override val defaultRegistry: MetricRegistry = new MetricRegistry
-  override val toJson: String = "{}"
 }
 
 object TestImplicits {

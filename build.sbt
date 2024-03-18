@@ -4,11 +4,11 @@ import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 val appName = "customs-duty-deferment-frontend"
 val testDirectory = "test"
 val bootstrap = "7.22.0"
-val scala2_13_8 = "2.13.8"
-val silencerVersion = "1.17.13"
+val scala2_13_12 = "2.13.12"
+val silencerVersion = "1.7.15"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala2_13_8
+ThisBuild / scalaVersion := scala2_13_12
 
 lazy val scalastyleSettings = Seq(
   scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
@@ -19,7 +19,7 @@ lazy val microservice = Project(appName, file("."))
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .settings(
     majorVersion := 0,
-    scalaVersion := scala2_13_8,
+    scalaVersion := scala2_13_12,
     targetJvm := "jvm-11",
     PlayKeys.playDefaultPort := 9397,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
