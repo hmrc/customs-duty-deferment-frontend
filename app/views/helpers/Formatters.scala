@@ -68,8 +68,8 @@ trait CurrencyFormatters {
 
 trait FileFormatters {
   def fileSize(size: Long): String = size match {
-    case kb: Long if 1000 until 1000000 contains kb => s"${kb / 1000}KB"
-    case mb: Long if mb >= 1000000 => f"${mb / 1000000.0}%.1fMB"
+    case kb if kb >= 1000 && kb < 1000000 => s"${kb / 1000}KB"
+    case mb if mb >= 1000000 => f"${mb / 1000000.0}%.1fMB"
     case _ => "1KB"
   }
 }
