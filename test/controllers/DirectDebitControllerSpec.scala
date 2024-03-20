@@ -59,6 +59,22 @@ class DirectDebitControllerSpec extends SpecBase {
       }
     }
 
+    "return 500 when get email throws exception" in new Setup {
+      when(mockSessionCacheConnector.retrieveSession(any, any)(any))
+        .thenReturn(Future.successful(Some(accountLink)))
+
+      when(mockDataStoreConnector.getEmail(any)(any))
+        .thenReturn(Future.failed(new RuntimeException("Unknown error")))
+
+      running(app) {
+        val request = FakeRequest(GET, routes.DirectDebitController.setup("someLink").url)
+          .withHeaders("X-Session-Id" -> "someSessionId")
+
+        val result = route(app, request).value
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
     "return 500 when an error is thrown from SDDS" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
