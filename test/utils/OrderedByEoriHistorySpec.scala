@@ -31,8 +31,11 @@
  */
 package utils
 
+import models.{DDStatementType, FileRole}
 import util.SpecBase
-import viewmodels.DutyDefermentStatementsForEori
+import viewmodels.{DutyDefermentStatementPeriod, DutyDefermentStatementsForEori}
+
+import java.time.LocalDate
 
 class OrderedByEoriHistorySpec extends SpecBase {
 
@@ -49,6 +52,31 @@ class OrderedByEoriHistorySpec extends SpecBase {
     "compare returns no yield GetOrElse(1)" in {
       val result = dutyDefermentStatementsForEori.compare(dutyDefermentStatementsForEori)
       result mustBe 1
+    }
+
+    "compare DutyDefermentPeriod with another period" in {
+      val year = 2023
+      val month = 1
+      val dayOfMonth01 = 1
+      val dayOfMonth02 = 2
+      val dayOfMonth30 = 30
+      val dayOfMonth31 = 31
+
+      val startDate01 = LocalDate.of(year, month, dayOfMonth01)
+      val startDate02 = LocalDate.of(year, month, dayOfMonth02)
+      val endDate01 = LocalDate.of(year, month, dayOfMonth30)
+      val endDate02 = LocalDate.of(year, month, dayOfMonth31)
+
+      val period1 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+        startDate01, startDate01, endDate01)
+      val period2 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
+        startDate02, startDate02, endDate02)
+      val period3 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Excise, startDate01,
+        startDate01, endDate02)
+
+      period1.compare(period1) mustBe 0
+      period1.compare(period2) mustBe 1
+      period1.compare(period3) mustBe 1
     }
   }
 }

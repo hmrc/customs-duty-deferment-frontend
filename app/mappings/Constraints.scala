@@ -71,7 +71,7 @@ trait Constraints {
   def isValidEmail: Constraint[Option[String]] =
     Constraint {
       case None => Invalid(ValidationError("emailAddress.edit.empty"))
-      case Some(email: String) if Option(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
+      case Some(email: String) if email.isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
       case Some(email: String) if stripWhiteSpaces(email).isEmpty => Invalid(ValidationError("emailAddress.edit.empty"))
       case Some(email: String) if stripWhiteSpaces(email).length > 132 => Invalid(
         ValidationError("emailAddress.edit.too-long"))
