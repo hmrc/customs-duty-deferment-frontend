@@ -49,7 +49,7 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
 
       view.html().contains(messages(app)("cf.accounts.older-statements.description.link"))
       view.html().contains(messages(app)("cf.accounts.older-statements.description"))
-      view.html().contains(serviceUnavailableUrl)
+      view.html().contains(serviceUnavailableUrl.get)
     }
   }
 

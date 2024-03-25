@@ -79,6 +79,16 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         result mustBe false
       }
     }
+
+    "return false when the API is failing with exception" in new Setup {
+      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
+        .thenReturn(Future.failed(new RuntimeException("Failure")))
+
+      running(app) {
+        val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
+        result mustBe false
+      }
+    }
   }
 
   "isEmailVerified" should {

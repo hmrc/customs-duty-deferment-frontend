@@ -108,6 +108,30 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
+    "redirect the user to unauthorised controller when InternalID is empty" in {
+      val mockAuthConnector = mock[AuthConnector]
+      val mockDataStoreConnector = mock[DataStoreConnector]
+
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
+        .thenReturn(Future.successful(
+          Enrolments(Set(Enrolment("HMRC-CUS-ORG",
+            Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ None)
+        )
+
+      val app = application().overrides().build()
+      val config = app.injector.instanceOf[AppConfig]
+      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+
+      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
+      val controller = new Harness(authAction)
+
+      running(app) {
+        val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
+      }
+    }
+
     "continue journey on successful response from auth" in {
       val mockAuthConnector = mock[AuthConnector]
       val mockDataStoreConnector = mock[DataStoreConnector]
