@@ -69,11 +69,11 @@ trait CurrencyFormatters {
 trait FileFormatters {
 
   val kbThreshold = 1000
-  val mgThreshold = 1000000
+  val mbThreshold = 1000000
 
   def fileSize(size: Long): String = size match {
-    case kb if kb >= kbThreshold && kb < mgThreshold => s"${kb / kbThreshold}KB"
-    case mb if mb >= mgThreshold => f"${mb / mgThreshold.toDouble}%.1fMB"
+    case kb if kb >= kbThreshold && kb < mbThreshold => s"${kb / kbThreshold}KB"
+    case mb if mb >= mbThreshold => f"${mb / mbThreshold.toDouble}%.1fMB"
     case _ => "1KB"
   }
 }
