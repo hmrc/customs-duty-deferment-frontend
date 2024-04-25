@@ -25,8 +25,10 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import utils.Utils.emptyString
-import viewmodels.DutyDefermentAccount
+import viewmodels.{DutyDefermentAccount, DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth}
 import views.html.duty_deferment_account.duty_deferment_account
+
+import java.time.LocalDate
 
 class DutyDefermentAccountSpec extends SpecBase {
   "DutyDefermentAccount view" should {
@@ -45,7 +47,8 @@ class DutyDefermentAccountSpec extends SpecBase {
       view.getElementById("missing-documents-guidance-heading").text() mustBe
         messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
 
-      view.getElementById("chief-guidance-heading").text() mustBe messages(app)("cf.common.chiefStatements.heading")
+      view.getElementById("chief-guidance-heading").text() mustBe
+        messages(app)("cf.common.chiefStatements.heading")
 
       view.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
 
@@ -57,6 +60,48 @@ class DutyDefermentAccountSpec extends SpecBase {
       view.html().contains("cf.accounts.older-statements.description")
       view.html().contains("cf.accounts.chiefStatements.description")
       view.html().contains(serviceUnavailableUrl.getOrElse(emptyString))
+    }
+  }
+
+  "DutyDefermentAccount" should {
+    "Return a max of 5 statements when number of months is greater than 5" in new Setup {
+
+      val emptyPeriods: Seq[DutyDefermentStatementPeriod] = Seq.empty
+      val testStatement = DutyDefermentStatementPeriodsByMonth(LocalDate.now(), emptyPeriods)
+
+      val testStatements: Seq[DutyDefermentStatementPeriodsByMonth] = Seq(
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement)
+
+      val result = model.dropOldMonths(testStatements)
+      result.size mustBe 5
+    }
+
+    "Return a number below 5 when the number of statements is below 5" in new Setup {
+
+      val emptyPeriods: Seq[DutyDefermentStatementPeriod] = Seq.empty
+      val testStatement = DutyDefermentStatementPeriodsByMonth(LocalDate.now(), emptyPeriods)
+
+      val testStatements: Seq[DutyDefermentStatementPeriodsByMonth] = Seq(
+        testStatement,
+        testStatement)
+
+      val result = model.dropOldMonths(testStatements)
+      result.size mustBe 2
+
+    }
+
+    "Return correct month when applied to DutyDeferementAccount monthsToDisplay" in new Setup {
+      val numMonths = 6
+      val now: Int = LocalDate.now().minusMonths(numMonths).getMonthValue
+
+      now mustBe model.monthsToDisplay.getMonthValue
     }
   }
 
