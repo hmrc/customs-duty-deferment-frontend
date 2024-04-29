@@ -193,4 +193,11 @@ trait TestData extends MockitoSugar {
     statusId = validStatus,
     isNiAccount = false
   )
+
+  protected val YEAR_2027 = 2027
+  protected val MONTH_12 = 12
+  protected val DAY_20 = 20
+  protected val HOUR_12 = 12
+  protected val MINUTES_30 = 30
+
 }
