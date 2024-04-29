@@ -68,15 +68,15 @@
                 @if(statement.groups.head.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
                     @dutyDeferementHead(statement.groups.head)
 
-                        @if(statement.groups.size > 1 && statement.groups.size <= 6) {
-                            @accordian(statement.groups.tail, 0)
-                        } else if (statement.groups.size > 1 && statement.groups.size > 6) {
-                            @accordian(model.dropOldMonths(statement.groups.tail),0)
+                    @for(entry <- statement.groups.tail) {
+                        @if(entry.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
+                            @accordian(Seq(entry), 0)
                         }
-                    } else {
-                        @inset(msg = messages("cf.account.detail.no-statements", model.accountNumber),
-                        )
                     }
+                } else {
+                    @inset(msg = messages("cf.account.detail.no-statements", model.accountNumber),
+                    )
+                }
             }
 
             @for((statementsForEori, historyIndex) <- model.tailingStatements.zipWithIndex) {
