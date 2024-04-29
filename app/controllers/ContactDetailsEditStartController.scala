@@ -97,9 +97,9 @@ class ContactDetailsEditStartController @Inject()(
       dutyDetails = dutyDefermentDetails)
 
     contactDetailsChange match {
-      case true => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+      case true => UserAnswers(internalId, lastUpdated = dateTimeService.systemDateTime())
         .set(EditContactDetailsPage, initialUserAnswers).toOption
-      case _ => UserAnswers(internalId, lastUpdated = dateTimeService.now())
+      case _ => UserAnswers(internalId, lastUpdated = dateTimeService.systemDateTime())
         .set(EditAddressDetailsPage, initialAddressUserAnswers).toOption
     }
   }

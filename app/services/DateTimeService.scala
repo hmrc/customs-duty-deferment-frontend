@@ -17,15 +17,28 @@
 package services
 
 import com.google.inject.Inject
+import config.AppConfig
+import utils.Constants._
 
-import java.time.{Instant, LocalDateTime, OffsetDateTime, ZoneId, ZoneOffset}
+import java.time._
 
-class DateTimeService @Inject()() {
+class DateTimeService @Inject()(appConfig: AppConfig) {
+
+  def systemDateTime(): LocalDateTime = {
+    if (appConfig.fixedDateTime) {
+      LocalDateTime.of(
+        LocalDate.of(FIXED_DATE_TIME_YEAR, FIXED_DATE_TIME_MONTH_OF_YEAR, FIXED_DATE_TIME_DAY_OF_MONTH),
+        LocalTime.of(FIXED_DATE_TIME_HOUR_OF_DAY, FIXED_DATE_TIME_MINUTES_OF_HOUR)
+      )
+    } else {
+      now()
+    }
+  }
 
   def now(): LocalDateTime = {
     LocalDateTime.now(ZoneId.of("Europe/London"))
   }
 
-  def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant( Instant.now() , ZoneOffset.UTC)
+  def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)
 
 }
