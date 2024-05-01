@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package viewmodel
+package viewmodels
 
 import config.AppConfig
 import org.jsoup.Jsoup
@@ -24,8 +24,6 @@ import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
-import utils.Utils.emptyString
-import viewmodels.{DutyDefermentAccount, DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth}
 import views.html.duty_deferment_account.duty_deferment_account
 
 import java.time.LocalDate
