@@ -24,14 +24,15 @@ case class DutyDefermentAccount(accountNumber: String,
 
   val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
+  private val amtMonthsHistory: Int = 6
+  private val monthsLength = 5
 
   def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
 
-  private val amtMonthsHistory: Int = 6
   val monthsToDisplay: LocalDate = LocalDate.now().minusMonths(amtMonthsHistory)
 
-  def dropOldMonths(months: Seq[DutyDefermentStatementPeriodsByMonth]):
-  Seq[viewmodels.DutyDefermentStatementPeriodsByMonth] = months.dropRight(months.length - 5)
+  def dropOldMonths(months: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] =
+    months.dropRight(months.length - monthsLength)
 
   def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(
     Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))

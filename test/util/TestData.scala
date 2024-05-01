@@ -199,5 +199,4 @@ trait TestData extends MockitoSugar {
   protected val DAY_20 = 20
   protected val HOUR_12 = 12
   protected val MINUTES_30 = 30
-
 }

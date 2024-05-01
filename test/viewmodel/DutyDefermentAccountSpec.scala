@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.duty_deferment_account
+package viewmodel
 
 import config.AppConfig
 import org.jsoup.Jsoup
@@ -25,39 +25,52 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import utils.Utils.emptyString
-import viewmodels.DutyDefermentAccount
+import viewmodels.{DutyDefermentAccount, DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth}
 import views.html.duty_deferment_account.duty_deferment_account
 
+import java.time.LocalDate
+
 class DutyDefermentAccountSpec extends SpecBase {
-  "DutyDefermentAccount view" should {
-    "display correct title and guidance" in new Setup {
-      view.title() mustBe
-        s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"
 
-      view.getElementById("eori-heading").text() mustBe messages(app)("cf.account-number", accountNumber)
+  "DutyDefermentAccount" should {
+    "Return a max of 5 statements when number of months is greater than 5" in new Setup {
 
-      view.getElementById("statements-heading").text() mustBe
-        messages(app)("cf.account.detail.deferment-account-heading")
+      val emptyPeriods: Seq[DutyDefermentStatementPeriod] = Seq.empty
+      val testStatement = DutyDefermentStatementPeriodsByMonth(LocalDate.now(), emptyPeriods)
 
-      view.getElementById("direct-debit-info").text() mustBe
-        messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
+      val testStatements: Seq[DutyDefermentStatementPeriodsByMonth] = Seq(
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement,
+        testStatement)
 
-      view.getElementById("missing-documents-guidance-heading").text() mustBe
-        messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
+      val result = model.dropOldMonths(testStatements)
+      result.size mustBe 5
+    }
 
-      view.getElementById("chief-guidance-heading").text() mustBe
-        messages(app)("cf.common.chiefStatements.heading")
+    "Return a number below 5 when the number of statements is below 5" in new Setup {
 
-      view.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
+      val emptyPeriods: Seq[DutyDefermentStatementPeriod] = Seq.empty
+      val testStatement = DutyDefermentStatementPeriodsByMonth(LocalDate.now(), emptyPeriods)
 
-      view.getElementById("missing-documents-guidance-text1").text() must not be empty
+      val testStatements: Seq[DutyDefermentStatementPeriodsByMonth] = Seq(
+        testStatement,
+        testStatement)
 
-      view.getElementById("chief-documents-guidance-text1").text() must not be empty
+      val result = model.dropOldMonths(testStatements)
+      result.size mustBe 2
 
-      view.html().contains("cf.accounts.older-statements.description.link")
-      view.html().contains("cf.accounts.older-statements.description")
-      view.html().contains("cf.accounts.chiefStatements.description")
-      view.html().contains(serviceUnavailableUrl.getOrElse(emptyString))
+    }
+
+    "Return correct month when applied to DutyDeferementAccount monthsToDisplay" in new Setup {
+      val numMonths = 6
+      val now: Int = LocalDate.now().minusMonths(numMonths).getMonthValue
+
+      now mustBe model.monthsToDisplay.getMonthValue
     }
   }
 
