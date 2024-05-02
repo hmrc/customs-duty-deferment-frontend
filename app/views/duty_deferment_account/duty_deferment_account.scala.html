@@ -64,10 +64,18 @@
                         msg = messages("cf.account.details.previous-eori", statement.eoriHistory.eori)
                     )
                 }
-                @dutyDeferementHead(statement.groups.head)
 
-                @if(statement.groups.size > 1) {
-                    @accordian(statement.groups.tail, 0)
+                @if(statement.groups.head.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
+                    @dutyDeferementHead(statement.groups.head)
+
+                    @for(entry <- statement.groups.tail) {
+                        @if(entry.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
+                            @accordian(Seq(entry), 0)
+                        }
+                    }
+                } else {
+                    @inset(msg = messages("cf.account.detail.no-statements", model.accountNumber),
+                    )
                 }
             }
 
@@ -104,8 +112,6 @@
                 msg=messages("cf.common.chiefStatements.heading"),
                 h2Class=Some("govuk-!-margin-top-6")
             )
-
-
 
             @p(
                 id = Some("chief-documents-guidance-text1"),

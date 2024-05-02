@@ -18,9 +18,11 @@ package services
 
 import config.AppConfig
 import org.scalatest.matchers.should.Matchers._
+import play.api.test.Helpers.running
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import java.time.{LocalDateTime, OffsetDateTime}
+
+import java.time.{LocalDate, LocalDateTime, LocalTime, OffsetDateTime}
 
 class DateTimeServiceSpec extends SpecBase {
 
@@ -34,11 +36,25 @@ class DateTimeServiceSpec extends SpecBase {
       val timeStamp: OffsetDateTime = dateTimeService.getTimeStamp
       assert(timeStamp.isInstanceOf[OffsetDateTime])
     }
+
+    "return the fixed date if fixedDateTime is enabled" in {
+
+      val app = application().configure("features.fixed-systemdate-for-tests" -> true).build()
+      val service = app.injector.instanceOf[DateTimeService]
+
+      running(app) {
+        service.systemDateTime() mustBe
+          LocalDateTime.of(
+            LocalDate.of(YEAR_2027, MONTH_12, DAY_20),
+            LocalTime.of(HOUR_12, MINUTES_30)
+          )
+      }
+    }
   }
 
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockConfig: AppConfig = mock[AppConfig]
-    val dateTimeService = new DateTimeService()
+    val dateTimeService = new DateTimeService(mockConfig)
   }
 }

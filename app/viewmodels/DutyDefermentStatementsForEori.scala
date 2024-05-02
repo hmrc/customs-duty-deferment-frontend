@@ -26,9 +26,7 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
-  private val requestedStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(requestedStatements)
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(currentStatementsByPeriod)
-  val groupsRequested: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(requestedStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
     files.groupBy(file => (file.metadata.fileRole,
