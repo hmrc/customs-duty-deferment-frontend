@@ -1,4 +1,4 @@
-service.name=Bwrw golwg dros eich cyfrifon ariannol ar gyfer y tollau
+service.name=Rheoli tollau mewnforio a chyfrifon TAW
 service.back=Yn ôl
 
 # Duty Deferment Account Detail view

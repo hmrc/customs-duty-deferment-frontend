@@ -1,4 +1,4 @@
-service.name=View your customs financial accounts
+service.name=Manage import duties and VAT accounts
 service.back = Back
 
 # Duty Deferment Account Detail view
