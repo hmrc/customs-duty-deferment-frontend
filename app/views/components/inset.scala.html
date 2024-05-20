@@ -18,8 +18,8 @@
 
 @this()
 
-@(msg: String, id: Option[String] = None)(implicit messages: Messages)
+@(msg: String, id: Option[String] = None,  classes: Option[String] = None)(implicit messages: Messages)
 
-<div @{id.fold(emptyString)(id => s"id=$id")}>
+<div class="@{classes.fold("govuk-!-padding-top-7 govuk-!-padding-bottom-9")(classes => s"$classes")}" @{id.fold(emptyString)(id => s"id=$id")}>
  <p class="govuk-body">@msg</p>
 </div>

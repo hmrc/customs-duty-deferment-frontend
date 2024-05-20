@@ -28,32 +28,51 @@ class InsetSpec extends SpecBase {
   "Inset Component" should {
     "render component correctly" in new SetUp {
       running(app) {
-        val insetView = app.injector.instanceOf[inset]
         val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
-          msg = "Hello world!"
+          msg = "Hello world!",
+          classes = None
         )(messages(app))
         val html: Document = Jsoup.parse(contentAsString(output))
 
         html.getElementById("div-id").text must include("Hello world!")
+        html.getElementById("div-id").hasClass("govuk-!-padding-top-7") mustBe true
+        html.getElementById("div-id").hasClass("govuk-!-padding-bottom-9") mustBe true
       }
     }
 
     "render component correctly without an ID" in new SetUp {
       running(app) {
-        val insetView = app.injector.instanceOf[inset]
         val output: HtmlFormat.Appendable = insetView(
           id = None,
-          msg = "Hello world!"
+          msg = "Hello world!",
+          classes = None
         )(messages(app))
         val html: Document = Jsoup.parse(contentAsString(output))
 
         html.getElementsByTag("div").text must include("Hello world!")
+        html.getElementsByTag("div").hasClass("govuk-!-padding-top-7") mustBe true
+        html.getElementsByTag("div").hasClass("govuk-!-padding-bottom-9") mustBe true
+      }
+    }
+
+    "render component correctly with custom classes" in new SetUp {
+      running(app) {
+        val output: HtmlFormat.Appendable = insetView(
+          id = Some("div-id"),
+          msg = "Hello world!",
+          classes = Some("custom-class")
+        )(messages(app))
+        val html: Document = Jsoup.parse(contentAsString(output))
+
+        html.getElementById("div-id").text must include("Hello world!")
+        html.getElementById("div-id").hasClass("custom-class") mustBe true
       }
     }
   }
 
   trait SetUp {
     val app: Application = application().build()
+    val insetView = app.injector.instanceOf[inset]
   }
 }
