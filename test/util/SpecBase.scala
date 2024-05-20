@@ -35,7 +35,11 @@ import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import scala.jdk.CollectionConverters._
 
 
-trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with OptionValues with TestData {
+trait SpecBase extends AnyWordSpecLike
+  with Matchers
+  with MockitoSugar
+  with OptionValues
+  with TestData {
 
   implicit class DocumentHelper(document: Document) {
     def containsLink(link: String): Boolean = {

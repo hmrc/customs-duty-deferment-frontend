@@ -16,11 +16,32 @@
 
 package viewmodels
 
-import java.time.LocalDate
+import config.AppConfig
+import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
+import utils.Utils.emptyString
 
+import java.time.LocalDate
+import views.html.requested_statements
+import views.html.components.{h2, link, p}
+
+case class CurrentStatementRow(currentStatements: Seq[String] = Seq(),
+                               noStatementMsg: Option[String] = None)
+case class GuidanceRow(h2Heading: HtmlFormat.Appendable,
+                       link: Option[HtmlFormat.Appendable] = None,
+                       paragraph: Option[HtmlFormat.Appendable] = None)
+case class DutyDefermentAccountViewModel(accountNumberMsg: String,
+                                         ddStatementHeading: String,
+                                         directDebitInfoMsg: String,
+                                         requestedStatement: Option[HtmlFormat.Appendable] = None,
+                                         currentStatements: CurrentStatementRow,
+                                         statOlderThanSixMonths: GuidanceRow,
+                                         chiefDeclaration: GuidanceRow,
+                                         helpAndSupport: GuidanceRow)
 case class DutyDefermentAccount(accountNumber: String,
                                 statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
-                                linkId: String, isNiAccount: Boolean) {
+                                linkId: String,
+                                isNiAccount: Boolean) {
 
   val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
   val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
@@ -36,4 +57,25 @@ case class DutyDefermentAccount(accountNumber: String,
 
   def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(
     Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
+}
+
+object DutyDefermentAccountViewModel {
+
+  def apply(accountNumber: String,
+            statementsForAllEoris: Seq[DutyDefermentStatementsForEori],
+            linkId: String,
+            isNiAccount: Boolean,
+            serviceUnavailableUrl: String)
+           (implicit appConfig: AppConfig, messages: Messages): DutyDefermentAccountViewModel =  {
+    DutyDefermentAccountViewModel(
+      emptyString,
+      emptyString,
+      emptyString,
+      None,
+      CurrentStatementRow(),
+      GuidanceRow(h2Heading = new h2().apply(emptyString, None, None)),
+      GuidanceRow(h2Heading = new h2().apply(emptyString, None, None)),
+      GuidanceRow(h2Heading = new h2().apply(emptyString, None, None))
+    )
+  }
 }
