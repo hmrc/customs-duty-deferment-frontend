@@ -36,8 +36,8 @@ class InsetSpec extends SpecBase {
         val html: Document = Jsoup.parse(contentAsString(output))
 
         html.getElementById("div-id").text must include("Hello world!")
-        html.getElementById("div-id").hasClass("govuk-!-padding-top-7") mustBe true
-        html.getElementById("div-id").hasClass("govuk-!-padding-bottom-9") mustBe true
+        html.getElementById("div-id").hasClass("govuk-!-margin-top-7") mustBe true
+        html.getElementById("div-id").hasClass("govuk-!-margin-bottom-9") mustBe true
       }
     }
 
@@ -51,8 +51,8 @@ class InsetSpec extends SpecBase {
         val html: Document = Jsoup.parse(contentAsString(output))
 
         html.getElementsByTag("div").text must include("Hello world!")
-        html.getElementsByTag("div").hasClass("govuk-!-padding-top-7") mustBe true
-        html.getElementsByTag("div").hasClass("govuk-!-padding-bottom-9") mustBe true
+        html.getElementsByTag("div").hasClass("govuk-!-margin-top-7") mustBe true
+        html.getElementsByTag("div").hasClass("govuk-!-margin-bottom-9") mustBe true
       }
     }
 
