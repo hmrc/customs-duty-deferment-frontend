@@ -33,7 +33,7 @@ class InsetSpec extends SpecBase {
           msg = "Hello world!",
           classes = None
         )(messages(app))
-        val html: Document = Jsoup.parse(contentAsString(output))
+        val html = parseHtml(output)
 
         html.getElementById("div-id").text must include("Hello world!")
         html.getElementById("div-id").hasClass("govuk-!-margin-top-7") mustBe true
@@ -48,7 +48,7 @@ class InsetSpec extends SpecBase {
           msg = "Hello world!",
           classes = None
         )(messages(app))
-        val html: Document = Jsoup.parse(contentAsString(output))
+        val html = parseHtml(output)
 
         html.getElementsByTag("div").text must include("Hello world!")
         html.getElementsByTag("div").hasClass("govuk-!-margin-top-7") mustBe true
@@ -63,7 +63,7 @@ class InsetSpec extends SpecBase {
           msg = "Hello world!",
           classes = Some("custom-class")
         )(messages(app))
-        val html: Document = Jsoup.parse(contentAsString(output))
+        val html = parseHtml(output)
 
         html.getElementById("div-id").text must include("Hello world!")
         html.getElementById("div-id").hasClass("custom-class") mustBe true
@@ -74,5 +74,9 @@ class InsetSpec extends SpecBase {
   trait SetUp {
     val app: Application = application().build()
     val insetView = app.injector.instanceOf[inset]
+
+    def parseHtml(output: HtmlFormat.Appendable): Document = {
+      Jsoup.parse(contentAsString(output))
+    }
   }
 }
