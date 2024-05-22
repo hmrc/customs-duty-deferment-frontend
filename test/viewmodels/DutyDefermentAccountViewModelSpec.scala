@@ -24,7 +24,8 @@ import play.twirl.api.Html
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
-import views.html.components.{h2, link, p}
+import views.html.components.{caption, h1, h2, link, p}
+import views.html.requested_statements
 
 class DutyDefermentAccountViewModelSpec extends SpecBase {
 
@@ -39,16 +40,36 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori),
+            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
-        shouldContainAccountNumberMsg(viewModel)
+        shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(app, viewModel)
         shouldContainDirectDebitInfoMsg(app, viewModel)
         shouldNotContainRequestedStatementsMsg(app, viewModel)
-        shouldContainNoStatementsAvailableMsg(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(app, viewModel)
+        shouldContainHelpAndSupportGuidance(app, viewModel)
+      }
+
+      "current statements are available and is a NI account" in new Setup {
+        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+        implicit val msgs: Messages = messages(app)
+
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
+            linkId,
+            isNiAccount = true,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel, isNiAccount = true)
+        shouldContainDDStatementHeading(app, viewModel)
+        shouldContainDirectDebitInfoMsg(app, viewModel)
+        shouldNotContainRequestedStatementsMsg(app, viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(app, viewModel)
         shouldContainHelpAndSupportGuidance(app, viewModel)
@@ -66,10 +87,32 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
-        shouldContainAccountNumberMsg(viewModel)
+        shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(app, viewModel)
         shouldContainDirectDebitInfoMsg(app, viewModel)
         shouldNotContainRequestedStatementsMsg(app, viewModel)
+        shouldContainNoStatementsAvailableMsg(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(app, viewModel)
+        shouldContainHelpAndSupportGuidance(app, viewModel)
+      }
+
+      "requested statements are available but current statements are unavailable" in new Setup {
+        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+        implicit val msgs: Messages = messages(app)
+
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori.copy(currentStatements = Seq())),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber,viewModel)
+        shouldContainDDStatementHeading(app, viewModel)
+        shouldContainDirectDebitInfoMsg(app, viewModel)
+        shouldContainRequestedStatementsMsg(app, viewModel, linkId)
         shouldContainNoStatementsAvailableMsg(app, viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(app, viewModel)
@@ -84,24 +127,40 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     val linkId = "test_link_id"
   }
 
-  private def shouldContainAccountNumberMsg(viewModel: DutyDefermentAccountViewModel): Assertion = {
+  private def shouldContainAccountNumberMsg(accountNumber: String,
+                                             viewModel: DutyDefermentAccountViewModel,
+                                            isNiAccount: Boolean = false)
+                                           (implicit messages: Messages): Assertion = {
 
-    viewModel.accountNumberMsg mustBe accNumber
+    if(isNiAccount) {
+      viewModel.accountNumberMsg mustBe new caption().apply(
+        messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    } else {
+      viewModel.accountNumberMsg mustBe new caption().apply(
+        messages("cf.account-number", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    }
   }
 
   private def shouldContainDDStatementHeading(app: Application,
-                                              viewModel: DutyDefermentAccountViewModel): Assertion = {
-    viewModel.ddStatementHeading mustBe messages(app)("cf.account.detail.deferment-account-heading")
+                                              viewModel: DutyDefermentAccountViewModel)
+                                             (implicit msgs: Messages): Assertion = {
+    viewModel.ddStatementHeading mustBe new h1()
+      .apply(msgs("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
   }
 
   private def shouldContainDirectDebitInfoMsg(app: Application,
-                                              viewModel: DutyDefermentAccountViewModel): Assertion = {
-    viewModel.directDebitInfoMsg mustBe messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
+                                              viewModel: DutyDefermentAccountViewModel)
+                                             (implicit msgs: Messages): Assertion = {
+    viewModel.directDebitInfoMsg mustBe new p()
+      .apply(id = Some("direct-debit-info"),
+        content = Html(msgs("cf.account.detail.direct-debit.duty-vat-and-excise")))
   }
 
   private def shouldContainRequestedStatementsMsg(app: Application,
-                                                  viewModel: DutyDefermentAccountViewModel): Assertion = {
-    viewModel.requestedStatement must not be empty
+                                                  viewModel: DutyDefermentAccountViewModel,
+                                                  linkId: String)
+                                                 (implicit messages: Messages, appConfig: AppConfig): Assertion = {
+    viewModel.requestedStatement mustBe Some(new requested_statements(new link()).apply(linkId))
   }
 
   private def shouldNotContainRequestedStatementsMsg(app: Application,
@@ -112,7 +171,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   private def shouldContainNoStatementsAvailableMsg(app: Application,
                                                     viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.currentStatements.noStatementMsg.nonEmpty mustBe true
-    viewModel.currentStatements.noStatementMsg mustBe messages(app)("cf.account.detail.no-statements", accNumber)
+    viewModel.currentStatements.noStatementMsg mustBe Some(messages(app)("cf.account.detail.no-statements", accNumber))
   }
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(app: Application,
