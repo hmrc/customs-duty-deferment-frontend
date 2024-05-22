@@ -19,15 +19,29 @@ package viewmodels
 import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
+import uk.gov.hmrc.govukfrontend.views.html.components.GovukAccordion
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
-import utils.Utils.emptyString
 
 import java.time.LocalDate
 import views.html.requested_statements
-import views.html.components.{h1, h2, link, p, caption}
+import views.html.components.{caption, h1, h2, link, p, inset, duty_deferment_accordian}
+import views.html.duty_deferment_account.duty_deferment_head
 
-case class CurrentStatementRow(currentStatements: Seq[String] = Seq(),
+case class DDHeadWithEntry(ddHead: HtmlFormat.Appendable,
+                           entries: Seq[HtmlFormat.Appendable] = Seq())
+
+case class DDHeadWithEntriesOrNoStatements(ddHeadWithEntry: Option[DDHeadWithEntry] = None,
+                                           noStatementsMsg: Option[HtmlFormat.Appendable] = None)
+
+case class FirstPopulatedStatement(historicEoriHeading: Option[HtmlFormat.Appendable] = None,
+                                   ddHeadWithEntriesOrNoStatements: DDHeadWithEntriesOrNoStatements)
+
+case class TailingStatement(historicEoriHeadingMsg: Option[HtmlFormat.Appendable] = None,
+                            accordian: HtmlFormat.Appendable)
+
+case class CurrentStatementRow(firstPopulatedStatements: Option[FirstPopulatedStatement] = None,
+                               tailingStatements: Seq[TailingStatement] = Seq(),
                                noStatementMsg: Option[String] = None)
 
 case class GuidanceRow(h2Heading: HtmlFormat.Appendable,
@@ -76,46 +90,43 @@ object DutyDefermentAccountViewModel {
     val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
     val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
     val amtMonthsHistory: Int = 6
-    val monthsLength = 5
-
-    def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
-
     val monthsToDisplay: LocalDate = LocalDate.now().minusMonths(amtMonthsHistory)
 
-    def dropOldMonths(months: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] =
-      months.dropRight(months.length - monthsLength)
+    def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
 
     def tailingStatements: Seq[DutyDefermentStatementsForEori] = firstPopulatedStatement.fold(
       Seq.empty[DutyDefermentStatementsForEori])(value => statementsForAllEoris.filterNot(_ == value))
 
-    DutyDefermentAccountViewModel(accountNumberMsg = accountNumberMsg(accountNumber, isNiAccount),
+    DutyDefermentAccountViewModel(
+      accountNumberMsg = accountNumberMsg(accountNumber, isNiAccount),
       ddStatementHeading = ddStatementHeadingMsg,
       directDebitInfoMsg = directDebitMessage,
       requestedStatement = requestedStatements(linkId, hasRequestedStatements),
-      currentStatements = currentStatements(accountNumber, hasCurrentStatements),
+      currentStatements = currentStatements(
+        accountNumber, hasCurrentStatements, monthsToDisplay, firstPopulatedStatement, tailingStatements),
       statOlderThanSixMonths = statOlderThanSixMonths(serviceUnavailableUrl),
       chiefDeclaration = chiefDeclaration,
       helpAndSupport = helpAndSupport)
   }
 
- private def accountNumberMsg(accountNumber: String,
-                              isNiAccount: Boolean)(implicit messages: Messages):HtmlFormat.Appendable =
-   if(isNiAccount) {
-    new caption().apply(messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
- } else {
-     new caption().apply(messages("cf.account-number", accountNumber), Some("eori-heading"), "govuk-caption-xl")
- }
-
-  private def directDebitMessage(implicit messages: Messages):HtmlFormat.Appendable = {
-    new p().apply(
-      id = Some("direct-debit-info"),
-      content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
-  }
+  private def accountNumberMsg(accountNumber: String,
+                               isNiAccount: Boolean)(implicit messages: Messages): HtmlFormat.Appendable =
+    if (isNiAccount) {
+      new caption().apply(messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    } else {
+      new caption().apply(messages("cf.account-number", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    }
 
   private def ddStatementHeadingMsg(implicit messages: Messages): HtmlFormat.Appendable = {
     new h1().apply(
       msg = messages("cf.account.detail.deferment-account-heading"),
       Some("statements-heading"))
+  }
+
+  private def directDebitMessage(implicit messages: Messages): HtmlFormat.Appendable = {
+    new p().apply(
+      id = Some("direct-debit-info"),
+      content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
   }
 
   private def requestedStatements(linkId: String, hasRequestedStatements: Boolean)
@@ -128,12 +139,78 @@ object DutyDefermentAccountViewModel {
   }
 
   private def currentStatements(accountNumber: String,
-                                hasCurrentStatements: Boolean)
+                                hasCurrentStatements: Boolean,
+                                monthsToDisplay: LocalDate,
+                                firstPopulatedStatements: Option[DutyDefermentStatementsForEori],
+                                tailingStatements: Seq[DutyDefermentStatementsForEori])
                                (implicit messages: Messages): CurrentStatementRow = {
     if (hasCurrentStatements) {
-      CurrentStatementRow(Seq(), None)
+      CurrentStatementRow(
+        firstPopulatedStatements = populatedStatements(firstPopulatedStatements, monthsToDisplay, accountNumber),
+        tailingStatements = prepareTailingStatements(tailingStatements))
     } else {
-      CurrentStatementRow(Seq(), Some(messages("cf.account.detail.no-statements", accountNumber)))
+      CurrentStatementRow(noStatementMsg = Some(messages("cf.account.detail.no-statements", accountNumber)))
+    }
+  }
+
+  private def populatedStatements(statements: Option[DutyDefermentStatementsForEori],
+                                  monthsToDisplay: LocalDate,
+                                  accountNumber: String)
+                                 (implicit messages: Messages): Option[FirstPopulatedStatement] = {
+    statements.fold[Option[FirstPopulatedStatement]](None) {
+      statement => {
+        val historicEoriHeading: Option[HtmlFormat.Appendable] = if (statement.eoriHistory.isHistoricEori) {
+          Some(new h2().apply(id = Some("historic-eori-0"),
+            msg = messages("cf.account.details.previous-eori", statement.eoriHistory.eori)))
+        } else {
+          None
+        }
+
+        val headWithEntriesOrNoStatement = if (statement.groups.head.monthAndYear.compareTo(monthsToDisplay) > 0) {
+          val ddHead = new duty_deferment_head(new h2(), new p()).apply(statement.groups.head)
+          val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
+            entry =>
+              if (entry.monthAndYear.compareTo(monthsToDisplay) > 0) {
+                new duty_deferment_accordian(new GovukAccordion()).apply(Seq(entry), 0)
+              } else {
+                new duty_deferment_accordian(new GovukAccordion()).apply(Seq(), 0)
+              }
+          }
+
+          DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
+        } else {
+          DDHeadWithEntriesOrNoStatements(
+            noStatementsMsg =
+              Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))
+        }
+
+        Some(FirstPopulatedStatement(historicEoriHeading, headWithEntriesOrNoStatement))
+      }
+    }
+  }
+
+  private def prepareTailingStatements(statements: Seq[DutyDefermentStatementsForEori])
+                                      (implicit messages: Messages): Seq[TailingStatement] = {
+    statements.zipWithIndex.map {
+      stat =>
+        val statementsForEori = stat._1
+        val historyIndex = stat._2
+
+        val historicEoriHeading =
+          if (statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
+            Some(new h2().apply(
+              id = Some(s"historic-eori-${historyIndex + 1}"),
+              msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
+            ))
+          } else {
+            None
+          }
+
+        val accordian = new duty_deferment_accordian(
+          new GovukAccordion()).apply(statementsForEori.groups, historyIndex + 1)
+
+        TailingStatement(historicEoriHeading, accordian)
+
     }
   }
 

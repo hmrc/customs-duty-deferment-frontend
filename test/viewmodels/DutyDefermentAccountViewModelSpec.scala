@@ -24,7 +24,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
-import views.html.components.{caption, h1, h2, link, p}
+import views.html.components.{caption, h1, h2, inset, link, p}
 import views.html.requested_statements
 
 class DutyDefermentAccountViewModelSpec extends SpecBase {
@@ -46,12 +46,13 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
-        shouldContainDDStatementHeading(app, viewModel)
-        shouldContainDirectDebitInfoMsg(app, viewModel)
-        shouldNotContainRequestedStatementsMsg(app, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldNotContainRequestedStatementsMsg(viewModel)
+        shouldContainCurrentStatementSection(viewModel, accNumber)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
-        shouldContainChiefStatementGuidance(app, viewModel)
-        shouldContainHelpAndSupportGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
       }
 
       "current statements are available and is a NI account" in new Setup {
@@ -67,12 +68,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
         shouldContainAccountNumberMsg(accNumber, viewModel, isNiAccount = true)
-        shouldContainDDStatementHeading(app, viewModel)
-        shouldContainDirectDebitInfoMsg(app, viewModel)
-        shouldNotContainRequestedStatementsMsg(app, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
-        shouldContainChiefStatementGuidance(app, viewModel)
-        shouldContainHelpAndSupportGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
       }
 
       "current statements are unavailable" in new Setup {
@@ -88,13 +89,13 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
-        shouldContainDDStatementHeading(app, viewModel)
-        shouldContainDirectDebitInfoMsg(app, viewModel)
-        shouldNotContainRequestedStatementsMsg(app, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(app, viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
-        shouldContainChiefStatementGuidance(app, viewModel)
-        shouldContainHelpAndSupportGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
       }
 
       "requested statements are available but current statements are unavailable" in new Setup {
@@ -109,14 +110,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
 
-        shouldContainAccountNumberMsg(accNumber,viewModel)
-        shouldContainDDStatementHeading(app, viewModel)
-        shouldContainDirectDebitInfoMsg(app, viewModel)
-        shouldContainRequestedStatementsMsg(app, viewModel, linkId)
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel, linkId)
         shouldContainNoStatementsAvailableMsg(app, viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
-        shouldContainChiefStatementGuidance(app, viewModel)
-        shouldContainHelpAndSupportGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
       }
     }
   }
@@ -128,11 +129,11 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   }
 
   private def shouldContainAccountNumberMsg(accountNumber: String,
-                                             viewModel: DutyDefermentAccountViewModel,
+                                            viewModel: DutyDefermentAccountViewModel,
                                             isNiAccount: Boolean = false)
                                            (implicit messages: Messages): Assertion = {
 
-    if(isNiAccount) {
+    if (isNiAccount) {
       viewModel.accountNumberMsg mustBe new caption().apply(
         messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
     } else {
@@ -141,31 +142,39 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     }
   }
 
-  private def shouldContainDDStatementHeading(app: Application,
-                                              viewModel: DutyDefermentAccountViewModel)
+  private def shouldContainDDStatementHeading(viewModel: DutyDefermentAccountViewModel)
                                              (implicit msgs: Messages): Assertion = {
     viewModel.ddStatementHeading mustBe new h1()
       .apply(msgs("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
   }
 
-  private def shouldContainDirectDebitInfoMsg(app: Application,
-                                              viewModel: DutyDefermentAccountViewModel)
+  private def shouldContainDirectDebitInfoMsg(viewModel: DutyDefermentAccountViewModel)
                                              (implicit msgs: Messages): Assertion = {
     viewModel.directDebitInfoMsg mustBe new p()
       .apply(id = Some("direct-debit-info"),
         content = Html(msgs("cf.account.detail.direct-debit.duty-vat-and-excise")))
   }
 
-  private def shouldContainRequestedStatementsMsg(app: Application,
-                                                  viewModel: DutyDefermentAccountViewModel,
+  private def shouldContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel,
                                                   linkId: String)
                                                  (implicit messages: Messages, appConfig: AppConfig): Assertion = {
     viewModel.requestedStatement mustBe Some(new requested_statements(new link()).apply(linkId))
   }
 
-  private def shouldNotContainRequestedStatementsMsg(app: Application,
-                                                     viewModel: DutyDefermentAccountViewModel): Assertion = {
+  private def shouldNotContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.requestedStatement mustBe empty
+  }
+
+  private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel,
+                                                   accountNumber: String)
+                                                  (implicit messages: Messages): Assertion = {
+    viewModel.currentStatements.noStatementMsg.isEmpty mustBe true
+    viewModel.currentStatements.tailingStatements mustBe Seq()
+    viewModel.currentStatements.firstPopulatedStatements mustBe
+      Some(FirstPopulatedStatement(
+        ddHeadWithEntriesOrNoStatements =
+          DDHeadWithEntriesOrNoStatements(
+            noStatementsMsg = Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))))
   }
 
   private def shouldContainNoStatementsAvailableMsg(app: Application,
@@ -191,8 +200,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       )
   }
 
-  private def shouldContainChiefStatementGuidance(app: Application,
-                                                  viewModel: DutyDefermentAccountViewModel)
+  private def shouldContainChiefStatementGuidance(viewModel: DutyDefermentAccountViewModel)
                                                  (implicit appConfig: AppConfig, msgs: Messages): Assertion = {
     viewModel.chiefDeclaration mustBe
       GuidanceRow(
@@ -217,8 +225,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         )(msgs)))
   }
 
-  private def shouldContainHelpAndSupportGuidance(app: Application,
-                                                  viewModel: DutyDefermentAccountViewModel)
+  private def shouldContainHelpAndSupportGuidance(viewModel: DutyDefermentAccountViewModel)
                                                  (implicit appConfig: AppConfig, msgs: Messages): Assertion = {
     viewModel.helpAndSupport mustBe
       GuidanceRow(
