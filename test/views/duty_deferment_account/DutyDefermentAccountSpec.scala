@@ -25,7 +25,7 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import utils.Utils.emptyString
-import viewmodels.DutyDefermentAccount
+import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.duty_deferment_account
 
 class DutyDefermentAccountSpec extends SpecBase {
@@ -71,13 +71,13 @@ class DutyDefermentAccountSpec extends SpecBase {
     implicit val msg: Messages = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
-    val model: DutyDefermentAccount = DutyDefermentAccount(
+    val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
       Seq(dutyDefermentStatementsForEori),
       "linkId",
-      isNiAccount = false)
+      isNiAccount = false,
+      serviceUnavailableUrl.get)
 
-    val view: Document = Jsoup.parse(
-      app.injector.instanceOf[duty_deferment_account].apply(model, serviceUnavailableUrl).body)
+    val view: Document = Jsoup.parse(app.injector.instanceOf[duty_deferment_account].apply(model).body)
   }
 }

@@ -17,14 +17,11 @@
 package viewmodels
 
 import config.AppConfig
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
-import views.html.duty_deferment_account.duty_deferment_account
 
 import java.time.LocalDate
 
@@ -88,7 +85,7 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false)
 
-    val view: Document = Jsoup.parse(
-      app.injector.instanceOf[duty_deferment_account].apply(model, serviceUnavailableUrl).body)
+   /* val view: Document = Jsoup.parse(
+      app.injector.instanceOf[duty_deferment_account].apply(model, serviceUnavailableUrl).body)*/
   }
 }

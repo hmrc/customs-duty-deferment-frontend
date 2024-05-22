@@ -27,7 +27,7 @@ import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import viewmodels.DutyDefermentAccount
+import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
 import scala.concurrent.Future
@@ -101,18 +101,20 @@ class AccountControllerSpec extends SpecBase {
         FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url).withHeaders(
           "X-Session-Id" -> "someSessionId")
 
-      val model: DutyDefermentAccount = DutyDefermentAccount(
+      val messages: Messages = messagesApi.preferred(request)
+
+      val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
         "accountNumber",
         Seq(dutyDefermentStatementsForEori),
         "linkId",
-        isNiAccount = false)
+        isNiAccount = false,
+        serviceUnavailableUrl)(appConfig, messages)
 
-      val messages: Messages = messagesApi.preferred(request)
       running(app) {
 
         val result = route(app, request).value
         status(result) mustBe OK
-        contentAsString(result) mustBe view(model, Some(serviceUnavailableUrl))(request, messages, appConfig).toString
+        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
       }
     }
 
@@ -135,18 +137,19 @@ class AccountControllerSpec extends SpecBase {
         FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url).withHeaders(
           "X-Session-Id" -> "someSessionId")
 
-      val model: DutyDefermentAccount = DutyDefermentAccount(
+      val messages: Messages = messagesApi.preferred(request)
+
+      val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
         "accountNumber",
         Seq(dutyDefermentStatementsForEori),
         "linkId",
-        isNiAccount = false)
+        isNiAccount = false,
+        historicRequestUrl)(appConfig, messages)
 
-      val messages: Messages = messagesApi.preferred(request)
       running(app) {
-
         val result = route(app, request).value
         status(result) mustBe OK
-        contentAsString(result) mustBe view(model, Some(historicRequestUrl))(request, messages, appConfig).toString
+        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
       }
     }
 
