@@ -35,111 +35,32 @@ class DutyDefermentAccountSpec extends SpecBase {
     "display correct title and guidance" in new Setup {
       val viewDoc: Document = view(model)
 
-      viewDoc.title() mustBe
-        s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"
-
-      viewDoc.getElementById("eori-heading").text() mustBe messages(app)("cf.account-number", accountNumber)
-
-      viewDoc.getElementById("statements-heading").text() mustBe
-        messages(app)("cf.account.detail.deferment-account-heading")
-
-      viewDoc.getElementById("direct-debit-info").text() mustBe
-        messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
-
-      viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
-        messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
-
-      viewDoc.getElementById("chief-guidance-heading").text() mustBe
-        messages(app)("cf.common.chiefStatements.heading")
-
-      viewDoc.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
-
-      viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
-
-      viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
-
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
       viewDoc.getElementById("request-statement-link").text() must not be empty
-
-      viewDoc.html().contains("cf.accounts.older-statements.description.link")
-      viewDoc.html().contains("cf.accounts.older-statements.description")
-      viewDoc.html().contains("cf.accounts.chiefStatements.description")
-      viewDoc.html().contains(serviceUnavailableUrl)
     }
 
     "display correct title and guidance when there is no current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentStatements)
 
-      viewDoc.title() mustBe
-        s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"
-
-      viewDoc.getElementById("eori-heading").text() mustBe messages(app)("cf.account-number", accountNumber)
-
-      viewDoc.getElementById("statements-heading").text() mustBe
-        messages(app)("cf.account.detail.deferment-account-heading")
-
-      viewDoc.getElementById("direct-debit-info").text() mustBe
-        messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
-
-      viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
-        messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
-
-      viewDoc.getElementById("chief-guidance-heading").text() mustBe
-        messages(app)("cf.common.chiefStatements.heading")
-
-      viewDoc.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
-
-      viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
-
-      viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
       viewDoc.getElementById("request-statement-link").text() must not be empty
-
-      viewDoc.html().contains("cf.accounts.older-statements.description.link")
-      viewDoc.html().contains("cf.accounts.older-statements.description")
-      viewDoc.html().contains("cf.accounts.chiefStatements.description")
       viewDoc.html().contains(msg("cf.account.detail.no-statements", accountNumber))
-      viewDoc.html().contains(serviceUnavailableUrl)
     }
 
     "display correct title and guidance when there is no requested and current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentAndRequestedStatements)
 
-      viewDoc.title() mustBe
-        s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"
-
-      viewDoc.getElementById("eori-heading").text() mustBe messages(app)("cf.account-number", accountNumber)
-
-      viewDoc.getElementById("statements-heading").text() mustBe
-        messages(app)("cf.account.detail.deferment-account-heading")
-
-      viewDoc.getElementById("direct-debit-info").text() mustBe
-        messages(app)("cf.account.detail.direct-debit.duty-vat-and-excise")
-
-      viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
-        messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
-
-      viewDoc.getElementById("chief-guidance-heading").text() mustBe
-        messages(app)("cf.common.chiefStatements.heading")
-
-      viewDoc.getElementById("dd-support-message-heading").text() mustBe messages(app)("cf.accounts.support.heading")
-
-      viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
-
-      viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
       Option(viewDoc.getElementById("request-statement-link")) mustBe empty
-
-      viewDoc.html().contains("cf.accounts.older-statements.description.link")
-      viewDoc.html().contains("cf.accounts.older-statements.description")
-      viewDoc.html().contains("cf.accounts.chiefStatements.description")
       viewDoc.html().contains(msg("cf.account.detail.no-statements", accountNumber))
-      viewDoc.html().contains(serviceUnavailableUrl)
     }
   }
 
   private def shouldDisplayCorrectCommonGuidanceAndText(viewDoc: Document,
-                                                  messages: Messages,
-                                                  accountNumber: String,
+                                                        messages: Messages,
+                                                        accountNumber: String,
                                                         serviceUnavailableUrl: String): Assertion = {
     viewDoc.title() mustBe
       s"${messages("cf.account.detail.title")} - ${messages("service.name")} - GOV.UK"
@@ -152,21 +73,20 @@ class DutyDefermentAccountSpec extends SpecBase {
     viewDoc.getElementById("direct-debit-info").text() mustBe
       messages("cf.account.detail.direct-debit.duty-vat-and-excise")
 
+    viewDoc.getElementById("missing-documents-guidance-heading").text() must not be empty
+    viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
     viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
       messages("cf.common.missing-documents-guidance.cdsStatements.heading")
 
+    viewDoc.getElementById("chief-guidance-heading").text() must not be empty
+    viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
     viewDoc.getElementById("chief-guidance-heading").text() mustBe
       messages("cf.common.chiefStatements.heading")
 
     viewDoc.getElementById("dd-support-message-heading").text() mustBe messages("cf.accounts.support.heading")
+    viewDoc.getElementById("dd-support-message-heading").text() must not be empty
+    viewDoc.getElementById("dd-support-message").text() must not be empty
 
-    viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
-
-    viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
-
-    viewDoc.html().contains("cf.accounts.older-statements.description.link") mustBe true
-    viewDoc.html().contains("cf.accounts.older-statements.description") mustBe true
-    viewDoc.html().contains("cf.accounts.chiefStatements.description") mustBe true
     viewDoc.html().contains(serviceUnavailableUrl) mustBe true
   }
 
