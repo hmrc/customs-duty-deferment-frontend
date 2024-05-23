@@ -29,7 +29,9 @@ import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.duty_deferment_account
 
 class DutyDefermentAccountSpec extends SpecBase {
+
   "DutyDefermentAccount view" should {
+
     "display correct title and guidance" in new Setup {
       view.title() mustBe
         s"${messages(app)("cf.account.detail.title")} - ${messages(app)("service.name")} - GOV.UK"

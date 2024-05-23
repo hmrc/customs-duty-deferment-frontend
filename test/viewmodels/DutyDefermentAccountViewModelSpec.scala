@@ -92,7 +92,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainNoStatementsAvailableMsg(app, viewModel)
+        shouldContainNoStatementsAvailableMsg(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
@@ -114,7 +114,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel, linkId)
-        shouldContainNoStatementsAvailableMsg(app, viewModel)
+        shouldContainNoStatementsAvailableMsg(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
@@ -124,7 +124,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
 
   trait Setup {
     val app: Application = application().build()
-
     val linkId = "test_link_id"
   }
 
@@ -132,7 +131,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
                                             viewModel: DutyDefermentAccountViewModel,
                                             isNiAccount: Boolean = false)
                                            (implicit messages: Messages): Assertion = {
-
     if (isNiAccount) {
       viewModel.accountNumberMsg mustBe new caption().apply(
         messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
@@ -174,13 +172,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       Some(FirstPopulatedStatement(
         ddHeadWithEntriesOrNoStatements =
           DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg = Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))))
+            noStatementsMsg = Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber)))
+          )))
   }
 
-  private def shouldContainNoStatementsAvailableMsg(app: Application,
-                                                    viewModel: DutyDefermentAccountViewModel): Assertion = {
+  private def shouldContainNoStatementsAvailableMsg(viewModel: DutyDefermentAccountViewModel)
+                                                   (implicit messages: Messages): Assertion = {
     viewModel.currentStatements.noStatementMsg.nonEmpty mustBe true
-    viewModel.currentStatements.noStatementMsg mustBe Some(messages(app)("cf.account.detail.no-statements", accNumber))
+    viewModel.currentStatements.noStatementMsg mustBe
+      Some(new inset().apply(messages("cf.account.detail.no-statements", accNumber)))
   }
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(app: Application,
