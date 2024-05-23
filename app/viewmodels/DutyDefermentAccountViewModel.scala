@@ -89,12 +89,12 @@ object DutyDefermentAccountViewModel {
   }
 
   private def accountNumberMsg(accountNumber: String,
-                               isNiAccount: Boolean)(implicit messages: Messages): HtmlFormat.Appendable =
-    if (isNiAccount) {
-      new caption().apply(messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
-    } else {
-      new caption().apply(messages("cf.account-number", accountNumber), Some("eori-heading"), "govuk-caption-xl")
-    }
+                               isNiAccount: Boolean)(implicit messages: Messages): HtmlFormat.Appendable = {
+
+    val accNumberMsgKey = if (isNiAccount) "cf.account.NiAccount" else "cf.account-number"
+
+    new caption().apply(messages(accNumberMsgKey, accountNumber), Some("eori-heading"), "govuk-caption-xl")
+  }
 
   private def ddStatementHeadingMsg(implicit messages: Messages): HtmlFormat.Appendable = {
     new h1().apply(
@@ -148,6 +148,7 @@ object DutyDefermentAccountViewModel {
 
         val headWithEntriesOrNoStatement = if (statement.groups.head.monthAndYear.compareTo(monthsToDisplay) > 0) {
           val ddHead = new duty_deferment_head(new h2(), new p()).apply(statement.groups.head)
+
           val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
             entry =>
               if (entry.monthAndYear.compareTo(monthsToDisplay) > 0) {
@@ -172,9 +173,9 @@ object DutyDefermentAccountViewModel {
   private def prepareTailingStatements(statements: Seq[DutyDefermentStatementsForEori])
                                       (implicit messages: Messages): Seq[TailingStatement] = {
     statements.zipWithIndex.map {
-      stat =>
-        val statementsForEori = stat._1
-        val historyIndex = stat._2
+      statement =>
+        val statementsForEori = statement._1
+        val historyIndex = statement._2
 
         val historicEoriHeading =
           if (statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
@@ -186,11 +187,10 @@ object DutyDefermentAccountViewModel {
             None
           }
 
-        val accordian = new duty_deferment_accordian(
-          new GovukAccordion()).apply(statementsForEori.groups, historyIndex + 1)
+        val accordian = new duty_deferment_accordian(new GovukAccordion())
+          .apply(statementsForEori.groups, historyIndex + 1)
 
         TailingStatement(historicEoriHeading, accordian)
-
     }
   }
 
