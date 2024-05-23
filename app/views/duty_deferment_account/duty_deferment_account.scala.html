@@ -24,7 +24,9 @@
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
         @model.accountNumberMsg
+
         @model.ddStatementHeading
+
         @model.directDebitInfoMsg
 
         @model.requestedStatement.map(identity)

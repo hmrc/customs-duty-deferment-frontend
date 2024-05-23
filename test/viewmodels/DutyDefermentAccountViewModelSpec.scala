@@ -244,5 +244,4 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     val app: Application = application().build()
     val linkId = "test_link_id"
   }
-
 }
