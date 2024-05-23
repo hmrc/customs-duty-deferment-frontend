@@ -122,11 +122,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     }
   }
 
-  trait Setup {
-    val app: Application = application().build()
-    val linkId = "test_link_id"
-  }
-
   private def shouldContainAccountNumberMsg(accountNumber: String,
                                             viewModel: DutyDefermentAccountViewModel,
                                             isNiAccount: Boolean = false)
@@ -219,9 +214,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
               classList = Some("govuk-link govuk-link--no-visited-state"),
               href = Some(appConfig.chiefDDstatementsLink),
               text = msgs("cf.accounts.chiefStatements.description.link")
-            )
-          )
-          )
+            )))
         )(msgs)))
   }
 
@@ -243,10 +236,13 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
               classList = Some("govuk-link"),
               href = Some(appConfig.ddAccountSupportLink),
               text = msgs("cf.account.dd.support.link")
-            )
-          )
-          )
+            )))
         )(msgs)))
+  }
+
+  trait Setup {
+    val app: Application = application().build()
+    val linkId = "test_link_id"
   }
 
 }
