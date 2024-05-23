@@ -32,16 +32,16 @@
         @model.currentStatements.firstPopulatedStatements.map { statement =>
             @statement.historicEoriHeading.map(identity)
             @statement.ddHeadWithEntriesOrNoStatements.ddHeadWithEntry.map { headWithEntry =>
-                    headWithEntry.ddHead
-                    headWithEntry.entries.map(_)
+                    @headWithEntry.ddHead
+                    @headWithEntry.entries.map(identity)
                 }
 
             @statement.ddHeadWithEntriesOrNoStatements.noStatementsMsg.map(identity)
         }
 
         @model.currentStatements.tailingStatements.map { statement =>
-            statement.historicEoriHeadingMsg.map(identity)
-            statement.accordian
+            @statement.historicEoriHeadingMsg.map(identity)
+            @statement.accordian
         }
 
         @model.currentStatements.noStatementMsg.map(identity)

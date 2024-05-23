@@ -42,7 +42,7 @@ case class TailingStatement(historicEoriHeadingMsg: Option[HtmlFormat.Appendable
 
 case class CurrentStatementRow(firstPopulatedStatements: Option[FirstPopulatedStatement] = None,
                                tailingStatements: Seq[TailingStatement] = Seq(),
-                               noStatementMsg: Option[String] = None)
+                               noStatementMsg: Option[HtmlFormat.Appendable] = None)
 
 case class GuidanceRow(h2Heading: HtmlFormat.Appendable,
                        link: Option[HtmlFormat.Appendable] = None,
@@ -149,7 +149,8 @@ object DutyDefermentAccountViewModel {
         firstPopulatedStatements = populatedStatements(firstPopulatedStatements, monthsToDisplay, accountNumber),
         tailingStatements = prepareTailingStatements(tailingStatements))
     } else {
-      CurrentStatementRow(noStatementMsg = Some(messages("cf.account.detail.no-statements", accountNumber)))
+      CurrentStatementRow(noStatementMsg =
+        Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))
     }
   }
 
