@@ -46,6 +46,8 @@ trait TestData extends MockitoSugar {
   protected val sessionId: SessionId = SessionId("session_1234")
   protected val fakeCountries = List()
   protected val emptyUserAnswers: UserAnswers = UserAnswers("someInternalId")
+  protected val accNumber = "12345678"
+  protected val testServiceUnavailableUrl = "test_url"
 
   protected val validAccountContactDetails: ContactDetails = ContactDetails(
     Some("Mr First Name"),

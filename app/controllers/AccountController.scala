@@ -27,7 +27,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DocumentService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import viewmodels.{DutyDefermentAccount, DutyDefermentStatementsForEori}
+import viewmodels.{DutyDefermentAccountViewModel, DutyDefermentStatementsForEori}
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
 import javax.inject.Inject
@@ -61,19 +61,17 @@ class AccountController @Inject()(authenticate: IdentifierAction,
             documentService.getDutyDefermentStatements(historicEori, accountLink.accountNumber)
           )))
       } yield {
-        val dutyDefermentViewModel = DutyDefermentAccount(accountLink.accountNumber,
-          statementsForEoris, accountLink.linkId, accountLink.isNiAccount)
 
-        val historicUrl = if (appConfig.historicStatementsEnabled) {
+        val historicUrl: String = if (appConfig.historicStatementsEnabled) {
           appConfig.historicRequestUrl(accountLink.linkId)
         } else {
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
         }
 
-        Ok(account(
-          dutyDefermentViewModel,
-          Some(historicUrl))
-        )
+        val dutyDefermentViewModel = DutyDefermentAccountViewModel(accountLink.accountNumber,
+          statementsForEoris, accountLink.linkId, accountLink.isNiAccount, historicUrl)
+
+        Ok(account(dutyDefermentViewModel))
       }
         ).merge.recover {
         case _ => Redirect(routes.AccountController.statementsUnavailablePage(linkId))

@@ -15,140 +15,50 @@
  *@
 
 @import config.AppConfig
-@import viewmodels.DutyDefermentAccount
-@import views.html.components.duty_deferment_accordian
-@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
-@import uk.gov.hmrc.hmrcfrontend.views.Aliases.NewTabLink
-@import utils.Utils.emptyString
+@import viewmodels.DutyDefermentAccountViewModel
 
-@this(
-        layout: Layout,
-        accordian: duty_deferment_accordian,
-        dutyDeferementHead: duty_deferment_head,
-        requestedStatements: requested_statements,
-        h1: components.h1,
-        h2: components.h2,
-        p: components.p,
-        caption: components.caption,
-        link: components.link,
-        inset: components.inset,
-        hmrcNewTabLink: HmrcNewTabLink
-)
+@this(layout: Layout)
 
-@(
-    model: DutyDefermentAccount,
-    serviceUnavailableUrl: Option[String] = None
-)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(model: DutyDefermentAccountViewModel)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
     @layout(pageTitle = Some(messages("cf.account.detail.title")), backLink = Some(appConfig.financialsHomepage)) {
 
-        @if(model.isNiAccount) {
-            @caption(messages("cf.account.NiAccount", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
-        } else {
-            @caption(messages("cf.account-number", model.accountNumber), Some("eori-heading"), "govuk-caption-xl")
-        }
+        @model.accountNumberMsg
 
-        @h1(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
+        @model.ddStatementHeading
 
-        @p(id = Some("direct-debit-info"), content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
+        @model.directDebitInfoMsg
 
-        @if(model.hasRequestedStatements) {
-            @requestedStatements(model.linkId)
-        }
+        @model.requestedStatement.map(identity)
 
-        @if(model.hasCurrentStatements) {
-            @model.firstPopulatedStatement.map { statement =>
-                @if(statement.eoriHistory.isHistoricEori) {
-                    @h2(
-                        id = Some("historic-eori-0"),
-                        msg = messages("cf.account.details.previous-eori", statement.eoriHistory.eori)
-                    )
+        @model.currentStatements.firstPopulatedStatements.map { statement =>
+            @statement.historicEoriHeading.map(identity)
+            @statement.ddHeadWithEntriesOrNoStatements.ddHeadWithEntry.map { headWithEntry =>
+                    @headWithEntry.ddHead
+                    @headWithEntry.entries.map(identity)
                 }
 
-                @if(statement.groups.head.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
-                    @dutyDeferementHead(statement.groups.head)
-
-                    @for(entry <- statement.groups.tail) {
-                        @if(entry.monthAndYear.compareTo(model.monthsToDisplay) > 0) {
-                            @accordian(Seq(entry), 0)
-                        }
-                    }
-                } else {
-                    @inset(msg = messages("cf.account.detail.no-statements", model.accountNumber),
-                    )
-                }
-            }
-
-            @for((statementsForEori, historyIndex) <- model.tailingStatements.zipWithIndex) {
-                @if(statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
-                    @h2(
-                        id = Some(s"historic-eori-${historyIndex + 1}"),
-                        msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
-                    )
-                }
-                @accordian(statementsForEori.groups, historyIndex + 1)
-            }
-        } else {
-            @inset(msg = messages("cf.account.detail.no-statements", model.accountNumber),
-            )
+            @statement.ddHeadWithEntriesOrNoStatements.noStatementsMsg.map(identity)
         }
+
+        @model.currentStatements.tailingStatements.map { statement =>
+            @statement.historicEoriHeadingMsg.map(identity)
+            @statement.accordian
+        }
+
+        @model.currentStatements.noStatementMsg.map(identity)
 
         <div id="missing-documents-guidance" class="govuk-!-padding-top-9">
-            @h2(
-                id=Some("missing-documents-guidance-heading"),
-                msg=messages("cf.common.missing-documents-guidance.cdsStatements.heading")
-            )
+            @model.statOlderThanSixMonths.h2Heading
+            @model.statOlderThanSixMonths.link.map(identity)
 
-            @link(
-                pId = Some("missing-documents-guidance-text1"),
-                linkMessage = "cf.accounts.older-statements.description.link",
-                location = serviceUnavailableUrl.getOrElse(emptyString),
-                linkClass = "govuk-link govuk-link--no-visited-state",
-                preLinkMessage = Some("cf.accounts.older-statements.description")
-            )
-
-            @h2(
-                id=Some("chief-guidance-heading"),
-                msg=messages("cf.common.chiefStatements.heading"),
-                h2Class=Some("govuk-!-margin-top-6")
-            )
-
-            @p(
-                id = Some("chief-documents-guidance-text1"),
-                classes = Some("govuk-body govuk-!-margin-bottom-7"),
-                content = Html(messages("cf.accounts.chiefStatements.description")),
-                tabLink = Some(hmrcNewTabLink(
-                        NewTabLink(
-                        language = Some(messages.lang.toString),
-                        classList = Some("govuk-link govuk-link--no-visited-state"),
-                        href=Some(appConfig.chiefDDstatementsLink),
-                        text=messages("cf.accounts.chiefStatements.description.link")
-                        )
-                    )
-                )
-            )
+            @model.chiefDeclaration.h2Heading
+            @model.chiefDeclaration.paragraph.map(identity)
         </div>
 
         <div id="dd-support-heading" class="govuk-!-padding-top-2">
-            @h2(
-                id=Some("dd-support-message-heading"),
-                msg=messages("cf.accounts.support.heading")
-            )
-
-            @p(
-                id = Some("dd-support-message"),
-                classes = Some("govuk-body govuk-!-margin-bottom-9"),
-                content = Html(messages("cf.accounts.support.message")),
-                tabLink = Some(hmrcNewTabLink(
-                            NewTabLink(
-                                language = Some(messages.lang.toString),
-                                classList = Some("govuk-link"),
-                                href=Some(appConfig.ddAccountSupportLink),
-                                text=messages("cf.account.dd.support.link")
-                            )
-                    )
-                )
-            )
+            @model.helpAndSupport.h2Heading
+            @model.helpAndSupport.paragraph.map(identity)
         </div>
 
-}
+    }
