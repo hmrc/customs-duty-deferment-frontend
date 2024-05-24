@@ -34,9 +34,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     "populate the model correctly" when {
 
       "current statements are available" in new Setup {
-        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-        implicit val msgs: Messages = messages(app)
-
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
@@ -56,9 +53,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       }
 
       "current statements are available and is a NI account" in new Setup {
-        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-        implicit val msgs: Messages = messages(app)
-
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
@@ -77,9 +71,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       }
 
       "current statements are unavailable" in new Setup {
-        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-        implicit val msgs: Messages = messages(app)
-
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
@@ -99,9 +90,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       }
 
       "requested statements are available but current statements are unavailable" in new Setup {
-        implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-        implicit val msgs: Messages = messages(app)
-
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
@@ -243,5 +231,8 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   trait Setup {
     val app: Application = application().build()
     val linkId = "test_link_id"
+
+    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    implicit val msgs: Messages = messages(app)
   }
 }
