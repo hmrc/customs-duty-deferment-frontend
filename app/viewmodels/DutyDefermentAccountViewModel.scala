@@ -20,12 +20,11 @@ import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.html.components.GovukAccordion
-import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
-import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 
 import java.time.LocalDate
+import utils.ViewUtils._
 import views.html.requested_statements
-import views.html.components.{caption, h1, h2, link, p, inset, duty_deferment_accordian}
+import views.html.components.duty_deferment_accordian
 import views.html.duty_deferment_account.duty_deferment_head
 
 case class DDHeadWithEntry(ddHead: HtmlFormat.Appendable,
@@ -93,28 +92,24 @@ object DutyDefermentAccountViewModel {
 
     val accNumberMsgKey = if (isNiAccount) "cf.account.NiAccount" else "cf.account-number"
 
-    new caption().apply(messages(accNumberMsgKey, accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    captionComponent(messages(accNumberMsgKey, accountNumber), Some("eori-heading"), "govuk-caption-xl")
   }
 
   private def ddStatementHeadingMsg(implicit messages: Messages): HtmlFormat.Appendable = {
-    new h1().apply(
-      msg = messages("cf.account.detail.deferment-account-heading"),
-      Some("statements-heading"))
+    h1Component(msgKey = "cf.account.detail.deferment-account-heading", id = Some("statements-heading"))
   }
 
   private def directDebitMessage(implicit messages: Messages): HtmlFormat.Appendable = {
-    new p().apply(
+    pComponent(
       id = Some("direct-debit-info"),
-      content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
+      content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")
+      )
+    )
   }
 
   private def requestedStatements(linkId: String, hasRequestedStatements: Boolean)
                                  (implicit appConfig: AppConfig, messages: Messages): Option[HtmlFormat.Appendable] = {
-    if (hasRequestedStatements) {
-      Some(new requested_statements(new link()).apply(linkId))
-    } else {
-      None
-    }
+    if (hasRequestedStatements) Some(new requested_statements(emptyLinkComponent).apply(linkId)) else None
   }
 
   private def currentStatements(accountNumber: String,
@@ -129,7 +124,8 @@ object DutyDefermentAccountViewModel {
         tailingStatements = prepareTailingStatements(tailingStatements))
     } else {
       CurrentStatementRow(noStatementMsg =
-        Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))
+        Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
+      )
     }
   }
 
@@ -140,29 +136,30 @@ object DutyDefermentAccountViewModel {
     statements.fold[Option[FirstPopulatedStatement]](None) {
       statement => {
         val historicEoriHeading: Option[HtmlFormat.Appendable] = if (statement.eoriHistory.isHistoricEori) {
-          Some(new h2().apply(id = Some("historic-eori-0"),
-            msg = messages("cf.account.details.previous-eori", statement.eoriHistory.eori)))
+          Some(
+            h2Component(
+              id = Some("historic-eori-0"),
+              msg = messages("cf.account.details.previous-eori", statement.eoriHistory.eori)
+            )
+          )
         } else {
           None
         }
 
         val headWithEntriesOrNoStatement = if (statement.groups.head.monthAndYear.compareTo(monthsToDisplay) > 0) {
-          val ddHead = new duty_deferment_head(new h2(), new p()).apply(statement.groups.head)
+          val ddHead = new duty_deferment_head(emptyH2Component, emptyPComponent).apply(statement.groups.head)
 
           val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
             entry =>
-              if (entry.monthAndYear.compareTo(monthsToDisplay) > 0) {
-                new duty_deferment_accordian(new GovukAccordion()).apply(Seq(entry), 0)
-              } else {
-                new duty_deferment_accordian(new GovukAccordion()).apply(Seq(), 0)
-              }
+              val statementPeriods = if (entry.monthAndYear.compareTo(monthsToDisplay) > 0) Seq(entry) else Seq()
+              new duty_deferment_accordian(new GovukAccordion()).apply(statementPeriods, 0)
           }
 
           DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
         } else {
           DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg =
-              Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber))))
+            noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
+          )
         }
 
         Some(FirstPopulatedStatement(historicEoriHeading, headWithEntriesOrNoStatement))
@@ -179,10 +176,11 @@ object DutyDefermentAccountViewModel {
 
         val historicEoriHeading =
           if (statementsForEori.eoriHistory.isHistoricEori && statementsForEori.currentStatements.nonEmpty) {
-            Some(new h2().apply(
-              id = Some(s"historic-eori-${historyIndex + 1}"),
-              msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori)
-            ))
+            Some(
+              h2Component(
+                id = Some(s"historic-eori-${historyIndex + 1}"),
+                msg = messages("cf.account.details.previous-eori", statementsForEori.eoriHistory.eori))
+            )
           } else {
             None
           }
@@ -195,58 +193,59 @@ object DutyDefermentAccountViewModel {
   }
 
   private def statOlderThanSixMonths(serviceUnavailableUrl: String)(implicit messages: Messages): GuidanceRow = {
-    GuidanceRow(h2Heading = new h2().apply(
-      id = Some("missing-documents-guidance-heading"),
-      msg = messages("cf.common.missing-documents-guidance.cdsStatements.heading")),
+    GuidanceRow(
+      h2Heading = h2Component(
+        id = Some("missing-documents-guidance-heading"),
+        msg = messages("cf.common.missing-documents-guidance.cdsStatements.heading")),
 
-      link = Some(new link().apply(
-        pId = Some("missing-documents-guidance-text1"),
-        linkMessage = "cf.accounts.older-statements.description.link",
-        location = serviceUnavailableUrl,
-        linkClass = "govuk-link govuk-link--no-visited-state",
-        preLinkMessage = Some("cf.accounts.older-statements.description")
-      )))
-  }
-
-  private def chiefDeclaration(implicit appConfig: AppConfig,
-                               messages: Messages): GuidanceRow = {
-    GuidanceRow(h2Heading = new h2().apply(
-      id = Some("chief-guidance-heading"),
-      msg = messages("cf.common.chiefStatements.heading"),
-      h2Class = Some("govuk-!-margin-top-6")),
-
-      paragraph = Some(new p().apply(
-        id = Some("chief-documents-guidance-text1"),
-        classes = Some("govuk-body govuk-!-margin-bottom-7"),
-        content = Html(messages("cf.accounts.chiefStatements.description")),
-        tabLink = Some(new HmrcNewTabLink().apply(
-          NewTabLink(
-            language = Some(messages.lang.toString),
-            classList = Some("govuk-link govuk-link--no-visited-state"),
-            href = Some(appConfig.chiefDDstatementsLink),
-            text = messages("cf.accounts.chiefStatements.description.link")
-          )))
+      link = Some(linkComponent(
+        LinkComponentValues(
+          pId = Some("missing-documents-guidance-text1"),
+          linkMessageKey = "cf.accounts.older-statements.description.link",
+          location = serviceUnavailableUrl,
+          linkClass = "govuk-link govuk-link--no-visited-state",
+          preLinkMessageKey = Some("cf.accounts.older-statements.description"))
       ))
     )
   }
 
-  private def helpAndSupport(implicit appConfig: AppConfig, messages: Messages): GuidanceRow = {
-    GuidanceRow(h2Heading = new h2().apply(
-      id = Some("dd-support-message-heading"),
-      msg = messages("cf.accounts.support.heading")),
+  private def chiefDeclaration(implicit appConfig: AppConfig,
+                               messages: Messages): GuidanceRow = {
+    GuidanceRow(
+      h2Heading = h2Component(
+        id = Some("chief-guidance-heading"),
+        msg = messages("cf.common.chiefStatements.heading"),
+        h2Class = Some("govuk-!-margin-top-6")),
 
-      paragraph = Some(new p().apply(
+      paragraph = Some(pComponent(
+        id = Some("chief-documents-guidance-text1"),
+        classes = Some("govuk-body govuk-!-margin-bottom-7"),
+        content = Html(messages("cf.accounts.chiefStatements.description")),
+        tabLink = Some(hmrcNewTabLinkComponent(
+          language = Some(messages.lang.toString),
+          classList = Some("govuk-link govuk-link--no-visited-state"),
+          href = Some(appConfig.chiefDDstatementsLink),
+          text = messages("cf.accounts.chiefStatements.description.link")))))
+    )
+  }
+
+  private def helpAndSupport(implicit appConfig: AppConfig, messages: Messages): GuidanceRow = {
+    GuidanceRow(
+      h2Heading = h2Component(
+        id = Some("dd-support-message-heading"),
+        msg = messages("cf.accounts.support.heading")
+      ),
+
+      paragraph = Some(pComponent(
         id = Some("dd-support-message"),
         classes = Some("govuk-body govuk-!-margin-bottom-9"),
         content = Html(messages("cf.accounts.support.message")),
-        tabLink = Some(new HmrcNewTabLink().apply(
-          NewTabLink(
-            language = Some(messages.lang.toString),
-            classList = Some("govuk-link"),
-            href = Some(appConfig.ddAccountSupportLink),
-            text = messages("cf.account.dd.support.link")
-          )))
-      ))
+        tabLink = Some(hmrcNewTabLinkComponent(
+          language = Some(messages.lang.toString),
+          classList = Some("govuk-link"),
+          href = Some(appConfig.ddAccountSupportLink),
+          text = messages("cf.account.dd.support.link")
+        ))))
     )
   }
 

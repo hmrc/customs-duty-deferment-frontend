@@ -38,6 +38,13 @@ class ViewUtilsSpec extends SpecBase {
     }
   }
 
+  "emptyH2Component" should {
+
+    "return the empty h2 component" in {
+      emptyH2Component mustBe new h2()
+    }
+  }
+
   "h2Component" should {
 
     "create the component correctly with provided input" in new Setup {
@@ -49,14 +56,21 @@ class ViewUtilsSpec extends SpecBase {
     }
   }
 
+  "emptyLinkComponent" should {
+
+    "return the empty link component" in {
+      emptyLinkComponent mustBe new link()
+    }
+  }
+
   "linkComponent" should {
 
     "create the component correctly with provided input" in new Setup {
-      val result: HtmlFormat.Appendable = linkComponent(pId = Some(testId),
+      val result: HtmlFormat.Appendable = linkComponent(LinkComponentValues(pId = Some(testId),
         linkMessageKey = testMsgKey,
         location = testLocation,
         linkClass = testClass,
-        preLinkMessageKey = Some(testMsgKey))
+        preLinkMessageKey = Some(testMsgKey)))
 
       result mustBe new link().apply(linkMessage = testMsgKey,
         location = testLocation,
@@ -64,6 +78,13 @@ class ViewUtilsSpec extends SpecBase {
         preLinkMessage = Some(testMsgKey),
         pId = Some(testId)
       )
+    }
+  }
+
+  "emptyPComponent" should {
+
+    "return the empty p component" in {
+      emptyPComponent mustBe new p()
     }
   }
 

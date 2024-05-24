@@ -25,6 +25,10 @@ import views.html.components.{caption, h1, h2, inset, link, p}
 
 object ViewUtils {
 
+  val emptyH2Component: h2 = new h2()
+  val emptyPComponent: p = new p()
+  val emptyLinkComponent: link = new link()
+
   def h1Component(msgKey: String,
                   id: Option[String],
                   classes: String = "govuk-heading-xl")(implicit messages: Messages): HtmlFormat.Appendable = {
@@ -37,27 +41,18 @@ object ViewUtils {
     new h2().apply(msg = msg, id = id, h2Class = h2Class)
   }
 
-  def linkComponent(linkMessageKey: String,
-                    location: String,
-                    linkId: Option[String] = None,
-                    linkClass: String = "govuk-link",
-                    pWrapped: Boolean = true,
-                    linkSentence: Boolean = false,
-                    preLinkMessageKey: Option[String] = None,
-                    postLinkMessageKey: Option[String] = None,
-                    pId: Option[String] = None,
-                    pClass: String = "govuk-body")(implicit messages: Messages): HtmlFormat.Appendable = {
+  def linkComponent(input: LinkComponentValues)(implicit messages: Messages): HtmlFormat.Appendable = {
     new link().apply(
-      linkMessage = linkMessageKey,
-      location = location,
-      linkId = linkId,
-      linkClass = linkClass,
-      pWrapped = pWrapped,
-      linkSentence = linkSentence,
-      preLinkMessage = preLinkMessageKey,
-      postLinkMessage = postLinkMessageKey,
-      pId = pId,
-      pClass = pClass)
+      linkMessage = input.linkMessageKey,
+      location = input.location,
+      linkId = input.linkId,
+      linkClass = input.linkClass,
+      pWrapped = input.pWrapped,
+      linkSentence = input.linkSentence,
+      preLinkMessage = input.preLinkMessageKey,
+      postLinkMessage = input.postLinkMessageKey,
+      pId = input.pId,
+      pClass = input.pClass)
   }
 
   def pComponent(content: Html,
@@ -103,4 +98,15 @@ object ViewUtils {
         text = text
       ))
   }
+
+  case class LinkComponentValues(linkMessageKey: String,
+                                 location: String,
+                                 linkId: Option[String] = None,
+                                 linkClass: String = "govuk-link",
+                                 pWrapped: Boolean = true,
+                                 linkSentence: Boolean = false,
+                                 preLinkMessageKey: Option[String] = None,
+                                 postLinkMessageKey: Option[String] = None,
+                                 pId: Option[String] = None,
+                                 pClass: String = "govuk-body")
 }
