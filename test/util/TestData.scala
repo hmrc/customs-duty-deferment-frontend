@@ -110,31 +110,32 @@ trait TestData extends MockitoSugar {
   val periodEndYear = 2018
   val periodEndMonth = 6
   val periodEndDate = 8
-  val fileSize = 10L
+  val fileSizeData = 10L
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
     DutyDefermentStatementFile(
       "someFilename",
       "downloadUrl",
-      fileSize,
+      fileSizeData,
       DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
         periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
         Weekly, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
-      fileSize,
+      fileSizeData,
       DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
         periodEndMonth, periodEndDate, FileFormat.Pdf, DutyDefermentStatement,
         Supplementary, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
-      fileSize,
+      fileSizeData,
       DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
         periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
         Excise, Some(false), Some("BACS"), "123456", None))
   )
+
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),
     MetadataItem("PeriodStartMonth", "6"),
@@ -149,6 +150,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("DutyPaymentType", "BACS"),
     MetadataItem("DAN", "123456")
   )
+
   lazy val dutyDefermentStatementMetadata2: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),
     MetadataItem("PeriodStartMonth", "6"),
@@ -163,6 +165,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("DutyPaymentType", "BACS"),
     MetadataItem("DAN", "123456")
   )
+
   lazy val dutyDefermentStatementMetadata3: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", "2018"),
     MetadataItem("PeriodStartMonth", "6"),
@@ -177,6 +180,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("DutyPaymentType", "BACS"),
     MetadataItem("DAN", "123456")
   )
+
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
   lazy val accountLink: AccountLink = AccountLink("someEori",
     "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
