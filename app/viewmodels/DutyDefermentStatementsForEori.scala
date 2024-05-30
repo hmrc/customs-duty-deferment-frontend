@@ -20,19 +20,27 @@ import models.{DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
 import utils.OrderedByEoriHistory
 
+import java.time.LocalDate
+
 case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
                                           currentStatements: Seq[DutyDefermentStatementFile],
                                           requestedStatements: Seq[DutyDefermentStatementFile])
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
+  val numberOfMonths: Int = 7
+  val endDate = LocalDate.now()
+  val startDate: LocalDate = endDate.minusMonths(numberOfMonths).withDayOfMonth(1)
+
+  val groups: Seq[DutyDefermentStatementPeriodsByMonth] = filterDates(
+    startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod))
+
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
-  val groups: Seq[DutyDefermentStatementPeriodsByMonth] = groupByMonthAndYear(currentStatementsByPeriod)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
     files.groupBy(file => (file.metadata.fileRole,
-        file.startDate,
-        file.endDate,
-        file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
+      file.startDate,
+      file.endDate,
+      file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
       DutyDefermentStatementPeriod(
         periodFiles.head.metadata.fileRole,
         periodFiles.head.metadata.defermentStatementType,
@@ -43,8 +51,20 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
     }.toSeq.sorted
   }
 
-  private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] =
-  {
+  private def filterDates(startDate: LocalDate, endDate: LocalDate, periods: Seq[DutyDefermentStatementPeriodsByMonth])
+  : Seq[DutyDefermentStatementPeriodsByMonth] = {
+    periods.filter(dds => isEqualOrAfter(dds.monthAndYear, startDate) && isEqualOrBefore(dds.monthAndYear, endDate))
+  }
+
+  private def isEqualOrAfter(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+    date.isEqual(cutOffDate) || date.isAfter(cutOffDate)
+  }
+
+  private def isEqualOrBefore(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+    date.isEqual(cutOffDate) || date.isBefore(cutOffDate)
+  }
+
+  private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] = {
     val monthYearSorted = periods.groupBy(_.monthAndYear).toSeq.sortWith(_._1 > _._1)
     monthYearSorted.map {
       case (monthAndYear, statementPeriods) => DutyDefermentStatementPeriodsByMonth(monthAndYear, statementPeriods
