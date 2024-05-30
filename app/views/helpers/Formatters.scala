@@ -24,7 +24,6 @@ import java.util.Locale
 
 import play.api.i18n.Messages
 
-
 trait DateFormatters {
   def dateAsMonth(date: LocalDate)(implicit messages: Messages): String = messages(s"month.${date.getMonthValue}")
   def dateAsDayMonthAndYear(date: LocalDate)(implicit messages: Messages): String = s"${date.getDayOfMonth} ${dateAsMonth(date)} ${date.getYear}"
@@ -33,7 +32,6 @@ trait DateFormatters {
 
   def dateAsAbbrMonth(date: LocalDate)(implicit messages: Messages): String = messages(s"month.abbr.${date.getMonthValue}")
   def dateAsdMMMyyyy(date: LocalDate)(implicit messages: Messages): String = s"${date.getDayOfMonth} ${dateAsAbbrMonth(date)} ${date.getYear}"
-
 
   def timeAsHourMinutesWithAmPm(dateTime: LocalDateTime): String = DateTimeFormatter.ofPattern("hh:mm a").format(dateTime)
 
@@ -68,8 +66,8 @@ trait CurrencyFormatters {
 
 trait FileFormatters {
 
-  val kbThreshold = 1000
-  val mbThreshold = 1000000
+  private val kbThreshold = 1024
+  private val mbThreshold: Int = 1024 * 1024
 
   def fileSize(size: Long): String = size match {
     case kb if kb >= kbThreshold && kb < mbThreshold => s"${kb / kbThreshold}KB"
@@ -78,7 +76,4 @@ trait FileFormatters {
   }
 }
 
-
 object Formatters extends DateFormatters with CurrencyFormatters with FileFormatters
-
-
