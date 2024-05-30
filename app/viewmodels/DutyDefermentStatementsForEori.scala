@@ -31,10 +31,10 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
   val endDate = LocalDate.now()
   val startDate: LocalDate = endDate.minusMonths(numberOfMonths).withDayOfMonth(1)
 
+  private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
+
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] = filterDates(
     startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod))
-
-  private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
     files.groupBy(file => (file.metadata.fileRole,
