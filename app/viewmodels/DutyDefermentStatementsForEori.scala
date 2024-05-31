@@ -27,9 +27,9 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
                                           requestedStatements: Seq[DutyDefermentStatementFile])
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
-  val numberOfMonths: Int = 7
-  val endDate = LocalDate.now()
-  val startDate: LocalDate = endDate.minusMonths(numberOfMonths).withDayOfMonth(1)
+  private val numberOfMonths: Int = 7
+  private val endDate = LocalDate.now()
+  private val startDate: LocalDate = endDate.minusMonths(numberOfMonths).withDayOfMonth(1)
 
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
