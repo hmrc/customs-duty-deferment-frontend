@@ -128,7 +128,14 @@ object DutyDefermentAccountViewModel {
   private def populatedStatements(statements: Option[DutyDefermentStatementsForEori],
                                   accountNumber: String)
                                  (implicit messages: Messages): Option[FirstPopulatedStatement] = {
-    statements.fold[Option[FirstPopulatedStatement]](None) {
+
+    val headWithNoStatement = DDHeadWithEntriesOrNoStatements(
+      noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
+    )
+
+    statements.fold[Option[FirstPopulatedStatement]]{
+      Some(FirstPopulatedStatement(None, headWithNoStatement))
+    } {
       statement => {
         val historicEoriHeading: Option[HtmlFormat.Appendable] = if (statement.eoriHistory.isHistoricEori) {
           Some(
@@ -152,9 +159,7 @@ object DutyDefermentAccountViewModel {
 
           DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
         } else {
-          DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
-          )
+          headWithNoStatement
         }
 
         Some(FirstPopulatedStatement(historicEoriHeading, headWithEntriesOrNoStatement))
