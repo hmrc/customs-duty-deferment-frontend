@@ -20,6 +20,7 @@ import models.DDStatementType.Weekly
 import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileFormat}
 import models.FileRole.DutyDefermentStatement
 import util.SpecBase
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 import java.time.LocalDate
 
@@ -34,6 +35,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
         DutyDefermentStatementFile("someFilename2", "downloadUrl", fileSizeData, metaData02),
         DutyDefermentStatementFile("someFilename3", "downloadUrl", fileSizeData, metaData03)
       )
+
       val requestedStatementsTestData: Seq[DutyDefermentStatementFile] = List(
         DutyDefermentStatementFile("someFilename", "downloadUrl", fileSizeData, metaData01)
       )
@@ -44,11 +46,11 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
         requestedStatementsTestData
       )
 
-      assert(dutyDefermentStatementsForEori.currentStatements.size == 3)
-      assert(dutyDefermentStatementsForEori.requestedStatements.size == 1)
-      assert(dutyDefermentStatementsForEori.groups.size == 2)
-      assert(dutyDefermentStatementsForEori.groups.head.periods.size == 1)
-      assert(dutyDefermentStatementsForEori.groups.tail.size == 1)
+      dutyDefermentStatementsForEori.currentStatements.size shouldBe 3
+      dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
+      dutyDefermentStatementsForEori.groups.size shouldBe 2
+      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 1
+      dutyDefermentStatementsForEori.groups.tail.size shouldBe 1
     }
 
     "correctly give no statements when dates are more than 7 months" in new Setup {
@@ -56,6 +58,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       val currentStatementsTestData: Seq[DutyDefermentStatementFile] = List(
         DutyDefermentStatementFile("someFilename3", "downloadUrl", fileSizeData, metaData03)
       )
+
       val requestedStatementsTestData: Seq[DutyDefermentStatementFile] = List(
         DutyDefermentStatementFile("someFilename", "downloadUrl", fileSizeData, metaData01)
       )
@@ -66,13 +69,12 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
         requestedStatementsTestData
       )
 
-      assert(dutyDefermentStatementsForEori.currentStatements.size == 1)
-      assert(dutyDefermentStatementsForEori.requestedStatements.size == 1)
-      assert(dutyDefermentStatementsForEori.groups.size == 0)
+      dutyDefermentStatementsForEori.currentStatements.size shouldBe 1
+      dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
+      dutyDefermentStatementsForEori.groups.isEmpty shouldBe true
     }
 
   }
-
 
   trait Setup {
 

@@ -18,10 +18,12 @@ package utils
 
 import play.api.mvc.RequestHeader
 
+import java.time.LocalDate
+
 object Utils {
   val emptyString = ""
-  private val questionMark = "?"
   val hyphen = "-"
+  private val questionMark = "?"
 
   def referrerUrl(platformHost: Option[String])(implicit request: RequestHeader): Option[String] =
     Some(s"${platformHost.getOrElse(emptyString)}${pathWithQueryString(request)}")
@@ -29,5 +31,17 @@ object Utils {
   def pathWithQueryString(request: RequestHeader): String = {
     import request._
     s"$path${if (rawQueryString.nonEmpty) questionMark else emptyString}$rawQueryString"
+  }
+
+  def isEqualOrAfter(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+    date.isEqual(cutOffDate) || date.isAfter(cutOffDate)
+  }
+
+  def isEqualOrBefore(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+    date.isEqual(cutOffDate) || date.isBefore(cutOffDate)
+  }
+
+  def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate = {
+    date.minusMonths(numberOfMonths).withDayOfMonth(1)
   }
 }

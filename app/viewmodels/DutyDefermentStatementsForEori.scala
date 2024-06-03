@@ -18,7 +18,7 @@ package viewmodels
 
 import models.{DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
-import utils.OrderedByEoriHistory
+import utils.{OrderedByEoriHistory, Utils}
 
 import java.time.LocalDate
 
@@ -28,9 +28,8 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   private val numberOfMonths: Int = 7
-  private val endDate = LocalDate.now()
-  private val startDate: LocalDate = endDate.minusMonths(numberOfMonths).withDayOfMonth(1)
-
+  private val endDate: LocalDate = LocalDate.now()
+  private val startDate: LocalDate = Utils.firstDayOfPastNthMonth(endDate, numberOfMonths)
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] = filterDates(
@@ -51,17 +50,10 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
     }.toSeq.sorted
   }
 
-  private def filterDates(startDate: LocalDate, endDate: LocalDate, periods: Seq[DutyDefermentStatementPeriodsByMonth])
-  : Seq[DutyDefermentStatementPeriodsByMonth] = {
-    periods.filter(dds => isEqualOrAfter(dds.monthAndYear, startDate) && isEqualOrBefore(dds.monthAndYear, endDate))
-  }
-
-  private def isEqualOrAfter(date: LocalDate, cutOffDate: LocalDate): Boolean = {
-    date.isEqual(cutOffDate) || date.isAfter(cutOffDate)
-  }
-
-  private def isEqualOrBefore(date: LocalDate, cutOffDate: LocalDate): Boolean = {
-    date.isEqual(cutOffDate) || date.isBefore(cutOffDate)
+  private def filterDates(startDate: LocalDate,
+                          endDate: LocalDate,
+                          periods: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] = {
+    periods.filter(dds => Utils.isEqualOrAfter(dds.monthAndYear, startDate) && Utils.isEqualOrBefore(dds.monthAndYear, endDate))
   }
 
   private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] = {

@@ -133,7 +133,7 @@ object DutyDefermentAccountViewModel {
       noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
     )
 
-    statements.fold[Option[FirstPopulatedStatement]]{
+    statements.fold[Option[FirstPopulatedStatement]] {
       Some(FirstPopulatedStatement(None, headWithNoStatement))
     } {
       statement => {
@@ -148,13 +148,12 @@ object DutyDefermentAccountViewModel {
           None
         }
 
-        val headWithEntriesOrNoStatement = if (statement.groups.size > 0) {
+        val headWithEntriesOrNoStatement = if (statement.groups.nonEmpty) {
           val ddHead = new duty_deferment_head(emptyH2Component, emptyPComponent).apply(statement.groups.head)
 
           val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
             entry =>
-              val statementPeriods = Seq(entry)
-              new duty_deferment_accordian(new GovukAccordion()).apply(statementPeriods, 0)
+              new duty_deferment_accordian(new GovukAccordion()).apply(Seq(entry), 0)
           }
 
           DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))

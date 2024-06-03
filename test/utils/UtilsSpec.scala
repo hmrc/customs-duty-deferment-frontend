@@ -16,32 +16,35 @@
 
 package utils
 
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import utils.Utils._
 
+import java.time.LocalDate
+
 class UtilsSpec extends SpecBase {
-  "emptyString" should {
+  "emptyString" must {
     "contain the empty string" in {
       Utils.emptyString mustBe empty
     }
   }
 
-  "hyphen" should {
+  "hyphen" must {
     "return correct value" in {
       hyphen mustBe "-"
     }
   }
 
-  "pathWithQueryString" should {
+  "pathWithQueryString" must {
     "return correct value" in {
       val path = "somePath"
       pathWithQueryString(fakeRequest("GET", path)) mustBe s"$path"
     }
   }
 
-  "referrerUrl" should {
+  "referrerUrl" must {
     "return correct value when platform host has some value" in {
       val path = "somePath"
       val platformHost = "localhost"
@@ -57,4 +60,49 @@ class UtilsSpec extends SpecBase {
       referrerUrl(None) mustBe Option(s"$path")
     }
   }
+
+  "isEqualOrAfter" must {
+    "return true when date is equal to or after cutOffDate" in new Setup {
+      Utils.isEqualOrAfter(date03, cutOffDate) shouldBe true
+      Utils.isEqualOrAfter(date04, cutOffDate) shouldBe true
+    }
+
+    "return false when date is before cutOffDate" in new Setup {
+      Utils.isEqualOrAfter(date02, cutOffDate) shouldBe false
+    }
+  }
+
+  "isEqualOrBefore" must {
+    "isEqualOrBefore should return true when date is equal to or before cutOffDate" in new Setup {
+      Utils.isEqualOrBefore(date03, cutOffDate) shouldBe true
+      Utils.isEqualOrBefore(date02, cutOffDate) shouldBe true
+    }
+
+    "isEqualOrBefore should return false when date is after cutOffDate" in new Setup {
+      Utils.isEqualOrBefore(date04, cutOffDate) shouldBe false
+    }
+  }
+
+  "firstDayOfPastNthMonth" must {
+    "return the first day of the month 3 months ago" in new Setup {
+      Utils.firstDayOfPastNthMonth(date03, numberOfMonths) shouldBe date01
+    }
+  }
+
+  trait Setup {
+    val YEAR_2024: Int = 2024
+    val MONTH_06: Int = 6
+    val MONTH_03: Int = 3
+    val DAY_01: Int = 1
+    val DAY_02: Int = 2
+    val DAY_03: Int = 3
+    val DAY_04: Int = 4
+    val cutOffDate = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
+    val date01 = LocalDate.of(YEAR_2024, MONTH_03, DAY_01)
+    val date02 = LocalDate.of(YEAR_2024, MONTH_06, DAY_02)
+    val date03 = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
+    val date04 = LocalDate.of(YEAR_2024, MONTH_06, DAY_04)
+    val numberOfMonths = 3
+  }
+
 }
