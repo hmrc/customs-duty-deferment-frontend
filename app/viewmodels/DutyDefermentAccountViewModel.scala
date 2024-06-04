@@ -21,7 +21,6 @@ import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.html.components.GovukAccordion
 
-import java.time.LocalDate
 import utils.ViewUtils._
 import views.html.requested_statements
 import views.html.components.duty_deferment_accordian
@@ -67,8 +66,6 @@ object DutyDefermentAccountViewModel {
 
     val hasRequestedStatements: Boolean = statementsForAllEoris.exists(_.requestedStatements.nonEmpty)
     val hasCurrentStatements: Boolean = statementsForAllEoris.exists(_.currentStatements.nonEmpty)
-    val amtMonthsHistory: Int = 6
-    val monthsToDisplay: LocalDate = LocalDate.now().minusMonths(amtMonthsHistory)
 
     def firstPopulatedStatement: Option[DutyDefermentStatementsForEori] = statementsForAllEoris.find(_.groups.nonEmpty)
 
@@ -81,7 +78,7 @@ object DutyDefermentAccountViewModel {
       directDebitInfoMsg = directDebitMessage,
       requestedStatement = requestedStatements(linkId, hasRequestedStatements),
       currentStatements = currentStatements(
-        accountNumber, hasCurrentStatements, monthsToDisplay, firstPopulatedStatement, tailingStatements),
+        accountNumber, hasCurrentStatements, firstPopulatedStatement, tailingStatements),
       statOlderThanSixMonths = statOlderThanSixMonths(serviceUnavailableUrl),
       chiefDeclaration = chiefDeclaration,
       helpAndSupport = helpAndSupport)
@@ -114,13 +111,12 @@ object DutyDefermentAccountViewModel {
 
   private def currentStatements(accountNumber: String,
                                 hasCurrentStatements: Boolean,
-                                monthsToDisplay: LocalDate,
                                 firstPopulatedStatements: Option[DutyDefermentStatementsForEori],
                                 tailingStatements: Seq[DutyDefermentStatementsForEori])
                                (implicit messages: Messages): CurrentStatementRow = {
     if (hasCurrentStatements) {
       CurrentStatementRow(
-        firstPopulatedStatements = populatedStatements(firstPopulatedStatements, monthsToDisplay, accountNumber),
+        firstPopulatedStatements = populatedStatements(firstPopulatedStatements, accountNumber),
         tailingStatements = prepareTailingStatements(tailingStatements))
     } else {
       CurrentStatementRow(noStatementMsg =
@@ -130,10 +126,16 @@ object DutyDefermentAccountViewModel {
   }
 
   private def populatedStatements(statements: Option[DutyDefermentStatementsForEori],
-                                  monthsToDisplay: LocalDate,
                                   accountNumber: String)
                                  (implicit messages: Messages): Option[FirstPopulatedStatement] = {
-    statements.fold[Option[FirstPopulatedStatement]](None) {
+
+    val headWithNoStatement = DDHeadWithEntriesOrNoStatements(
+      noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
+    )
+
+    statements.fold[Option[FirstPopulatedStatement]] {
+      Some(FirstPopulatedStatement(None, headWithNoStatement))
+    } {
       statement => {
         val historicEoriHeading: Option[HtmlFormat.Appendable] = if (statement.eoriHistory.isHistoricEori) {
           Some(
@@ -146,20 +148,17 @@ object DutyDefermentAccountViewModel {
           None
         }
 
-        val headWithEntriesOrNoStatement = if (statement.groups.head.monthAndYear.compareTo(monthsToDisplay) > 0) {
+        val headWithEntriesOrNoStatement = if (statement.groups.nonEmpty) {
           val ddHead = new duty_deferment_head(emptyH2Component, emptyPComponent).apply(statement.groups.head)
 
           val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
             entry =>
-              val statementPeriods = if (entry.monthAndYear.compareTo(monthsToDisplay) > 0) Seq(entry) else Seq()
-              new duty_deferment_accordian(new GovukAccordion()).apply(statementPeriods, 0)
+              new duty_deferment_accordian(new GovukAccordion()).apply(Seq(entry), 0)
           }
 
           DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
         } else {
-          DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg = Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
-          )
+          headWithNoStatement
         }
 
         Some(FirstPopulatedStatement(historicEoriHeading, headWithEntriesOrNoStatement))
