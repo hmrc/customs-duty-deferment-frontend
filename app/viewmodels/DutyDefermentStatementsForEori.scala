@@ -25,11 +25,11 @@ import java.time.LocalDate
 
 case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
                                           currentStatements: Seq[DutyDefermentStatementFile],
-                                          requestedStatements: Seq[DutyDefermentStatementFile])
+                                          requestedStatements: Seq[DutyDefermentStatementFile],
+                                          endDate: LocalDate)
   extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
   private val numberOfMonths: Int = 7
-  private val endDate: LocalDate = LocalDate.now()
   private val startDate: LocalDate = firstDayOfPastNthMonth(endDate, numberOfMonths)
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
