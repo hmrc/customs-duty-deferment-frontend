@@ -27,7 +27,7 @@ import java.time.LocalDate
 class UtilsSpec extends SpecBase {
   "emptyString" must {
     "contain the empty string" in {
-      Utils.emptyString mustBe empty
+      emptyString mustBe empty
     }
   }
 
@@ -63,29 +63,29 @@ class UtilsSpec extends SpecBase {
 
   "isEqualOrAfter" must {
     "return true when date is equal to or after cutOffDate" in new Setup {
-      Utils.isEqualOrAfter(date03, cutOffDate) shouldBe true
-      Utils.isEqualOrAfter(date04, cutOffDate) shouldBe true
+      isEqualOrAfter(date03, cutOffDate) shouldBe true
+      isEqualOrAfter(date04, cutOffDate) shouldBe true
     }
 
     "return false when date is before cutOffDate" in new Setup {
-      Utils.isEqualOrAfter(date02, cutOffDate) shouldBe false
+      isEqualOrAfter(date02, cutOffDate) shouldBe false
     }
   }
 
   "isEqualOrBefore" must {
     "isEqualOrBefore should return true when date is equal to or before cutOffDate" in new Setup {
-      Utils.isEqualOrBefore(date03, cutOffDate) shouldBe true
-      Utils.isEqualOrBefore(date02, cutOffDate) shouldBe true
+      isEqualOrBefore(date03, cutOffDate) shouldBe true
+      isEqualOrBefore(date02, cutOffDate) shouldBe true
     }
 
     "isEqualOrBefore should return false when date is after cutOffDate" in new Setup {
-      Utils.isEqualOrBefore(date04, cutOffDate) shouldBe false
+      isEqualOrBefore(date04, cutOffDate) shouldBe false
     }
   }
 
   "firstDayOfPastNthMonth" must {
     "return the first day of the month 3 months ago" in new Setup {
-      Utils.firstDayOfPastNthMonth(date03, numberOfMonths) shouldBe date01
+      firstDayOfPastNthMonth(date03, numberOfMonths) shouldBe date01
     }
   }
 
@@ -93,15 +93,18 @@ class UtilsSpec extends SpecBase {
     val YEAR_2024: Int = 2024
     val MONTH_06: Int = 6
     val MONTH_03: Int = 3
+
     val DAY_01: Int = 1
     val DAY_02: Int = 2
     val DAY_03: Int = 3
     val DAY_04: Int = 4
+
     val cutOffDate = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
     val date01 = LocalDate.of(YEAR_2024, MONTH_03, DAY_01)
     val date02 = LocalDate.of(YEAR_2024, MONTH_06, DAY_02)
     val date03 = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
     val date04 = LocalDate.of(YEAR_2024, MONTH_06, DAY_04)
+
     val numberOfMonths = 3
   }
 

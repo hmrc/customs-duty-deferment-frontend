@@ -18,7 +18,8 @@ package viewmodels
 
 import models.{DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
-import utils.{OrderedByEoriHistory, Utils}
+import utils.Utils.{firstDayOfPastNthMonth, isEqualOrAfter, isEqualOrBefore}
+import utils.OrderedByEoriHistory
 
 import java.time.LocalDate
 
@@ -29,7 +30,7 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
 
   private val numberOfMonths: Int = 7
   private val endDate: LocalDate = LocalDate.now()
-  private val startDate: LocalDate = Utils.firstDayOfPastNthMonth(endDate, numberOfMonths)
+  private val startDate: LocalDate = firstDayOfPastNthMonth(endDate, numberOfMonths)
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] = filterDates(
@@ -53,7 +54,7 @@ case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
   private def filterDates(startDate: LocalDate,
                           endDate: LocalDate,
                           periods: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] = {
-    periods.filter(dds => Utils.isEqualOrAfter(dds.monthAndYear, startDate) && Utils.isEqualOrBefore(dds.monthAndYear, endDate))
+    periods.filter(dds => isEqualOrAfter(dds.monthAndYear, startDate) && isEqualOrBefore(dds.monthAndYear, endDate))
   }
 
   private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] = {
