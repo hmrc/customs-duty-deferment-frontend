@@ -44,6 +44,7 @@ class OrderedByEoriHistorySpec extends SpecBase {
     "compare returns no valid result" in {
       lazy val testData: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
         eoriHistory, dutyDefermentStatementFiles, dutyDefermentStatementFiles, LocalDate.now())
+
       val result = dutyDefermentStatementsForEori.compare(testData)
 
       result mustBe 1
