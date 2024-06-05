@@ -43,7 +43,8 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
         eoriHistory,
         currentStatementsTestData,
-        requestedStatementsTestData
+        requestedStatementsTestData,
+        LocalDate.now()
       )
 
       dutyDefermentStatementsForEori.currentStatements.size shouldBe 3
@@ -66,7 +67,8 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
         eoriHistory,
         currentStatementsTestData,
-        requestedStatementsTestData
+        requestedStatementsTestData,
+        LocalDate.now()
       )
 
       dutyDefermentStatementsForEori.currentStatements.size shouldBe 1

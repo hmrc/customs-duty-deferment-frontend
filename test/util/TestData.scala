@@ -30,6 +30,8 @@ import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import viewmodels.DutyDefermentStatementsForEori
 
+import java.time.LocalDate
+
 trait TestData extends MockitoSugar {
   protected val encryptedParams = "DqKW7Ib0NIgZ8WCkxMdZyFqgqr9o2YP0o/eIy/oJ6yKhcV2Y5oEWQUQ="
   protected val validEori = "someEori"
@@ -188,7 +190,8 @@ trait TestData extends MockitoSugar {
   lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,
     dutyDefermentStatementFiles,
-    dutyDefermentStatementFiles
+    dutyDefermentStatementFiles,
+    LocalDate.now()
   )
 
   lazy val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
