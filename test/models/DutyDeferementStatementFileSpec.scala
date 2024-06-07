@@ -16,13 +16,17 @@
 
 package models
 
-import connectors.SDESConnector
-import models.DDStatementType.Weekly
+import config.AppConfig
+import controllers.routes
+import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
-import play.api.{Application, inject}
+import play.api.i18n.{Messages, MessagesApi}
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import play.api.test.Helpers.GET
+import play.api.Application
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import services.{AuditingService, DocumentService}
 
 class DutyDeferementStatementFileSpec extends SpecBase {
 
@@ -103,9 +107,29 @@ class DutyDeferementStatementFileSpec extends SpecBase {
     }
   }
 
+  "downloadLinkAriaLabel" should {
+
+    "return a correct label for Supplementary statementType" in new Setup {
+      val label = currentSupplementaryFile.downloadLinkAriaLabel()(messages)
+      label.contains("supplementary") mustBe true
+      label.contains("excise") mustBe false
+    }
+
+    "return a correct label for Excise statementType" in new Setup {
+      val label = currentExciseFile.downloadLinkAriaLabel()(messages)
+      label.contains("excise") mustBe true
+      label.contains("supplementary") mustBe false
+    }
+
+    "return a correct label for Weekly statementType" in new Setup {
+      val label = currentFile.downloadLinkAriaLabel()(messages)
+      label.contains("weekly") mustBe false
+      label.contains("excise") mustBe false
+      label.contains("supplementary") mustBe false
+    }
+  }
+
   trait Setup {
-    val mockSDESConnector: SDESConnector = mock[SDESConnector]
-    val mockAuditingService: AuditingService = mock[AuditingService]
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -127,20 +151,31 @@ class DutyDeferementStatementFileSpec extends SpecBase {
           DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, None)
       )
 
-    val requestedFile: DutyDefermentStatementFile =
+    val currentSupplementaryFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
-        "someRequestedFilename",
+        "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, Some("requestedId"))
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
+          DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), dan, None)
       )
 
-    val app: Application = application().overrides(
-      inject.bind[AuditingService].toInstance(mockAuditingService),
-      inject.bind[SDESConnector].toInstance(mockSDESConnector)
-    ).build()
+    val currentExciseFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(
+        "someFilename",
+        "downloadUrl",
+        fileSize,
+        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
+          DutyDefermentStatement, Excise, Some(true), Some("BACS"), dan, None)
+      )
 
-    val service: DocumentService = app.injector.instanceOf[DocumentService]
+    val request: FakeRequest[AnyContentAsEmpty.type] =
+      FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url).withHeaders(
+        "X-Session-Id" -> "someSessionId")
+
+    val app: Application = application().overrides().build()
+    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+    val messages: Messages = messagesApi.preferred(request)
   }
 }
