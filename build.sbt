@@ -41,7 +41,8 @@ lazy val microservice = Project(appName, file("."))
       "-Wunused:privates"),
     ScoverageKeys.coverageExcludedFiles := List(
       "<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*").mkString(";"),
-    ScoverageKeys.coverageMinimumStmtTotal := 80,
+    ScoverageKeys.coverageMinimumStmtTotal := 90,
+    ScoverageKeys.coverageMinimumBranchTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     Assets / pipelineStages := Seq(gzip),
@@ -50,7 +51,6 @@ lazy val microservice = Project(appName, file("."))
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full
     )
   )
-  .configs(IntegrationTest)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(scalastyleSettings)
 
