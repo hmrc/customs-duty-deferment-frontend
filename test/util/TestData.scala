@@ -155,6 +155,23 @@ trait TestData extends MockitoSugar {
         DutyDefermentStatement, Weekly, Some(false), Some("BACS"), "123456", None))
   )
 
+  lazy val dutyDefermentStatementFiles03: Seq[DutyDefermentStatementFile] = List(
+    DutyDefermentStatementFile(
+      "someFilename",
+      "downloadUrl",
+      fileSizeData,
+      DutyDefermentStatementFileMetadata(previousMonthDate.getYear, previousMonthDate.getMonthValue, periodStartDay,
+        previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
+        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+    DutyDefermentStatementFile(
+      "someFilename2",
+      "downloadUrl",
+      fileSizeData,
+      DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
+        previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
+        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None))
+  )
+
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", previousMonthDate.getYear.toString),
     MetadataItem("PeriodStartMonth", previousMonthDate.getMonthValue.toString),
@@ -233,6 +250,13 @@ trait TestData extends MockitoSugar {
     eoriHistory02,
     dutyDefermentStatementFiles02,
     dutyDefermentStatementFiles02,
+    LocalDate.now()
+  )
+
+  lazy val dutyDefermentStatementsForEori03: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
+    eoriHistory,
+    dutyDefermentStatementFiles,
+    dutyDefermentStatementFiles03,
     LocalDate.now()
   )
 

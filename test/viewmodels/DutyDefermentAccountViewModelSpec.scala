@@ -70,11 +70,29 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainHelpAndSupportGuidance(viewModel)
       }
 
-      "DutyDeferment statements with both historic eori and current eori are available" in new Setup {
+      "DutyDeferment statements with tailing statement that has historic eori" in new Setup {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori02),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
+      "DutyDeferment statements with tailing statement that does not have historic eori" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori03),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
