@@ -46,7 +46,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainCurrentStatementSection(viewModel, accNumber)
+        shouldContainCurrentStatementSection(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
@@ -146,17 +146,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel.requestedStatement mustBe empty
   }
 
-  private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel,
-                                                   accountNumber: String)
-                                                  (implicit messages: Messages): Assertion = {
+  private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.currentStatements.noStatementMsg.isEmpty mustBe true
     viewModel.currentStatements.tailingStatements mustBe Seq()
-    viewModel.currentStatements.firstPopulatedStatements mustBe
-      Some(FirstPopulatedStatement(
-        ddHeadWithEntriesOrNoStatements =
-          DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg = Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber)))
-          )))
+    val headPopulatedSttVal = viewModel.currentStatements.firstPopulatedStatements.get.toString
+    headPopulatedSttVal.contains("Excise summary PDF") mustBe true
+    headPopulatedSttVal.contains("Download excise summary") mustBe true
+    headPopulatedSttVal.contains("Download supplementary") mustBe true
+    headPopulatedSttVal.contains("Download 1 to 8") mustBe true
   }
 
   private def shouldContainNoStatementsAvailableMsg(viewModel: DutyDefermentAccountViewModel)

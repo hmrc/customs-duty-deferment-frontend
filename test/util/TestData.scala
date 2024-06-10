@@ -106,44 +106,47 @@ trait TestData extends MockitoSugar {
     isNiAccount = false
   )
 
-  val periodStartYear = 2018
-  val periodStartMonth = 6
-  val periodStartDate = 1
-  val periodEndYear = 2018
-  val periodEndMonth = 6
-  val periodEndDate = 8
-  val fileSizeData = 10L
+
+  val todaysDate: LocalDate = LocalDate.now()
+  val previousMonthDate: LocalDate = todaysDate.minusMonths(1);
+  val periodStartYear: Int = previousMonthDate.getYear//2018
+  val periodStartMonth: Int = previousMonthDate.getMonthValue//6
+  val periodStartDay: Int = 1
+  val periodEndYear: Int = previousMonthDate.getYear
+  val periodEndMonth: Int = previousMonthDate.getMonthValue//6
+  val periodEndDay: Int = 8
+  val fileSizeData: Long = 10L
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
     DutyDefermentStatementFile(
       "someFilename",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
-        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
+        periodEndMonth, periodEndDay, FileFormat.Csv, DutyDefermentStatement,
         Weekly, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
-        periodEndMonth, periodEndDate, FileFormat.Pdf, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
+        periodEndMonth, periodEndDay, FileFormat.Pdf, DutyDefermentStatement,
         Supplementary, Some(true), Some("BACS"), "123456", None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDate, periodEndYear,
-        periodEndMonth, periodEndDate, FileFormat.Csv, DutyDefermentStatement,
+      DutyDefermentStatementFileMetadata(periodStartYear, periodStartMonth, periodStartDay, periodEndYear,
+        periodEndMonth, periodEndDay, FileFormat.Csv, DutyDefermentStatement,
         Excise, Some(false), Some("BACS"), "123456", None))
   )
 
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
-    MetadataItem("PeriodStartYear", "2018"),
-    MetadataItem("PeriodStartMonth", "6"),
+    MetadataItem("PeriodStartYear", periodStartYear.toString),
+    MetadataItem("PeriodStartMonth", periodStartMonth.toString),
     MetadataItem("PeriodStartDay", "1"),
-    MetadataItem("PeriodEndYear", "2018"),
-    MetadataItem("PeriodEndMonth", "6"),
+    MetadataItem("PeriodEndYear", periodEndYear.toString),
+    MetadataItem("PeriodEndMonth", periodEndMonth.toString),
     MetadataItem("PeriodEndDay", "8"),
     MetadataItem("FileType", "CSV"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
@@ -154,11 +157,11 @@ trait TestData extends MockitoSugar {
   )
 
   lazy val dutyDefermentStatementMetadata2: Seq[MetadataItem] = List(
-    MetadataItem("PeriodStartYear", "2018"),
-    MetadataItem("PeriodStartMonth", "6"),
+    MetadataItem("PeriodStartYear", periodStartYear.toString),
+    MetadataItem("PeriodStartMonth", periodStartMonth.toString),
     MetadataItem("PeriodStartDay", "1"),
-    MetadataItem("PeriodEndYear", "2018"),
-    MetadataItem("PeriodEndMonth", "6"),
+    MetadataItem("PeriodEndYear", periodEndYear.toString),
+    MetadataItem("PeriodEndMonth", periodEndMonth.toString),
     MetadataItem("PeriodEndDay", "8"),
     MetadataItem("FileType", "PDF"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
@@ -169,11 +172,11 @@ trait TestData extends MockitoSugar {
   )
 
   lazy val dutyDefermentStatementMetadata3: Seq[MetadataItem] = List(
-    MetadataItem("PeriodStartYear", "2018"),
-    MetadataItem("PeriodStartMonth", "6"),
+    MetadataItem("PeriodStartYear", periodStartYear.toString),
+    MetadataItem("PeriodStartMonth", periodStartMonth.toString),
     MetadataItem("PeriodStartDay", "1"),
-    MetadataItem("PeriodEndYear", "2018"),
-    MetadataItem("PeriodEndMonth", "6"),
+    MetadataItem("PeriodEndYear", periodEndYear.toString),
+    MetadataItem("PeriodEndMonth", periodEndMonth.toString),
     MetadataItem("PeriodEndDay", "8"),
     MetadataItem("FileType", "CSV"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
