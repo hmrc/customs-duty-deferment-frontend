@@ -45,13 +45,13 @@ class OrderedByEoriHistorySpec extends SpecBase {
       lazy val testData: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
         eoriHistory, dutyDefermentStatementFiles, dutyDefermentStatementFiles, LocalDate.now())
 
-      val result = dutyDefermentStatementsForEori.compare(testData)
+      val result = dutyDefermentStatementsForEori01.compare(testData)
 
       result mustBe 1
     }
 
     "compare returns no yield GetOrElse(1)" in {
-      val result = dutyDefermentStatementsForEori.compare(dutyDefermentStatementsForEori)
+      val result = dutyDefermentStatementsForEori01.compare(dutyDefermentStatementsForEori01)
       result mustBe 1
     }
 

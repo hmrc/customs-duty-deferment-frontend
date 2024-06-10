@@ -37,7 +37,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -52,11 +52,47 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainHelpAndSupportGuidance(viewModel)
       }
 
+      "current statements with historic eori are available" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori02),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
+      "DutyDeferment statements with both historic eori and current eori are available" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori02),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
       "current statements are available and is a NI account" in new Setup {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
             linkId,
             isNiAccount = true,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -93,7 +129,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(currentStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -144,6 +180,10 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
 
   private def shouldNotContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.requestedStatement mustBe empty
+  }
+
+  private def shouldContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel): Assertion = {
+    viewModel.requestedStatement.size mustBe 1
   }
 
   private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel): Assertion = {

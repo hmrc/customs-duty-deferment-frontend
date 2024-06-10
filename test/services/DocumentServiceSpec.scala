@@ -35,7 +35,7 @@ class DocumentServiceSpec extends SpecBase {
         Future.successful(dutyDefermentStatementFiles))
 
       service.getDutyDefermentStatements(eoriHistory, dan).map {
-        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori.copy(requestedStatements = Seq())
+        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
       }
     }
   }

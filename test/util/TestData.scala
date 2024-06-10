@@ -145,6 +145,16 @@ trait TestData extends MockitoSugar {
         DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None))
   )
 
+  lazy val dutyDefermentStatementFiles02: Seq[DutyDefermentStatementFile] = List(
+    DutyDefermentStatementFile(
+      "someFilename4",
+      "downloadUrl",
+      fileSizeData,
+      DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
+        secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
+        DutyDefermentStatement, Weekly, Some(false), Some("BACS"), "123456", None))
+  )
+
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", previousMonthDate.getYear.toString),
     MetadataItem("PeriodStartMonth", previousMonthDate.getMonthValue.toString),
@@ -206,15 +216,26 @@ trait TestData extends MockitoSugar {
   )
 
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
+  lazy val eoriHistory02: EoriHistory = EoriHistory("someEori",
+    Some(secondPrevMonthDate.withDayOfMonth(1)),
+    Some(secondPrevMonthDate.withDayOfMonth(DAY_28)))
   lazy val accountLink: AccountLink = AccountLink("someEori",
     "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
 
-  lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
+  lazy val dutyDefermentStatementsForEori01: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,
     dutyDefermentStatementFiles,
     dutyDefermentStatementFiles,
     LocalDate.now()
   )
+
+  lazy val dutyDefermentStatementsForEori02: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
+    eoriHistory02,
+    dutyDefermentStatementFiles02,
+    dutyDefermentStatementFiles02,
+    LocalDate.now()
+  )
+
 
   lazy val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
     eori = "someEori",
@@ -228,6 +249,7 @@ trait TestData extends MockitoSugar {
   protected val YEAR_2027 = 2027
   protected val MONTH_12 = 12
   protected val DAY_20 = 20
+  protected val DAY_28 = 28
   protected val HOUR_12 = 12
   protected val MINUTES_30 = 30
 }
