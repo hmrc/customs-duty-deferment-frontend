@@ -49,11 +49,11 @@ class DocumentServiceSpec extends SpecBase {
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
     val dan = "1234567"
 
-    val startYear = periodStartYear
-    val startMonth = periodStartMonth
+    val startYear = previousMonthDate.getYear
+    val startMonth = previousMonthDate.getMonthValue
     val startDate = 1
-    val endYear = periodEndYear
-    val endMonth = periodEndMonth
+    val endYear = previousMonthDate.getYear
+    val endMonth = previousMonthDate.getMonthValue
     val endDate = 8
     val fileSize = 10L
 
