@@ -113,6 +113,8 @@ trait TestData extends MockitoSugar {
   val periodStartDay: Int = 1
   val periodEndDay: Int = 8
   val fileSizeData: Long = 10L
+  val dan = "123456"
+  val bacs = "BACS"
 
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
     DutyDefermentStatementFile(
@@ -121,28 +123,28 @@ trait TestData extends MockitoSugar {
       fileSizeData,
       DutyDefermentStatementFileMetadata(previousMonthDate.getYear, previousMonthDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
-        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+        DutyDefermentStatement, Weekly, Some(true), Some(bacs), dan, None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
       fileSizeData,
       DutyDefermentStatementFileMetadata(previousMonthDate.getYear, previousMonthDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
-        DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), "123456", None)),
+        DutyDefermentStatement, Supplementary, Some(true), Some(bacs), dan, None)),
     DutyDefermentStatementFile(
       "someFilename3",
       "downloadUrl",
       fileSizeData,
       DutyDefermentStatementFileMetadata(previousMonthDate.getYear, previousMonthDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
-        DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None)),
+        DutyDefermentStatement, Excise, Some(false), Some(bacs), dan, None)),
     DutyDefermentStatementFile(
       "someFilename4",
       "downloadUrl",
       fileSizeData,
       DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
         secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
-        DutyDefermentStatement, Excise, Some(false), Some("BACS"), "123456", None))
+        DutyDefermentStatement, Excise, Some(false), Some(bacs), dan, None))
   )
 
   lazy val dutyDefermentStatementFiles02: Seq[DutyDefermentStatementFile] = List(
@@ -152,7 +154,7 @@ trait TestData extends MockitoSugar {
       fileSizeData,
       DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
         secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
-        DutyDefermentStatement, Weekly, Some(false), Some("BACS"), "123456", None))
+        DutyDefermentStatement, Weekly, Some(false), Some(bacs), dan, None))
   )
 
   lazy val dutyDefermentStatementFiles03: Seq[DutyDefermentStatementFile] = List(
@@ -162,14 +164,14 @@ trait TestData extends MockitoSugar {
       fileSizeData,
       DutyDefermentStatementFileMetadata(previousMonthDate.getYear, previousMonthDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
-        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)),
+        DutyDefermentStatement, Weekly, Some(true), Some(bacs), dan, None)),
     DutyDefermentStatementFile(
       "someFilename2",
       "downloadUrl",
       fileSizeData,
       DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
-        DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None))
+        DutyDefermentStatement, Weekly, Some(true), Some(bacs), dan, None))
   )
 
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
@@ -183,8 +185,8 @@ trait TestData extends MockitoSugar {
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Weekly"),
     MetadataItem("DutyOverLimit", "Y"),
-    MetadataItem("DutyPaymentType", "BACS"),
-    MetadataItem("DAN", "123456")
+    MetadataItem("DutyPaymentType", bacs),
+    MetadataItem("DAN", dan)
   )
 
   lazy val dutyDefermentStatementMetadata2: Seq[MetadataItem] = List(
@@ -198,8 +200,8 @@ trait TestData extends MockitoSugar {
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Supplementary"),
     MetadataItem("DutyOverLimit", "Y"),
-    MetadataItem("DutyPaymentType", "BACS"),
-    MetadataItem("DAN", "123456")
+    MetadataItem("DutyPaymentType", bacs),
+    MetadataItem("DAN", dan)
   )
 
   lazy val dutyDefermentStatementMetadata3: Seq[MetadataItem] = List(
@@ -213,8 +215,8 @@ trait TestData extends MockitoSugar {
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Excise"),
     MetadataItem("DutyOverLimit", "N"),
-    MetadataItem("DutyPaymentType", "BACS"),
-    MetadataItem("DAN", "123456")
+    MetadataItem("DutyPaymentType", bacs),
+    MetadataItem("DAN", dan)
   )
 
   lazy val dutyDefermentStatementMetadata4: Seq[MetadataItem] = List(
@@ -228,14 +230,16 @@ trait TestData extends MockitoSugar {
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Excise"),
     MetadataItem("DutyOverLimit", "N"),
-    MetadataItem("DutyPaymentType", "BACS"),
-    MetadataItem("DAN", "123456")
+    MetadataItem("DutyPaymentType", bacs),
+    MetadataItem("DAN", dan)
   )
 
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
+
   lazy val eoriHistory02: EoriHistory = EoriHistory("someEori",
     Some(secondPrevMonthDate.withDayOfMonth(1)),
     Some(secondPrevMonthDate.withDayOfMonth(DAY_28)))
+
   lazy val accountLink: AccountLink = AccountLink("someEori",
     "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
 

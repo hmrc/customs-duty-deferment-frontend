@@ -70,7 +70,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainHelpAndSupportGuidance(viewModel)
       }
 
-      "DutyDeferment statements with tailing statement that has historic eori" in new Setup {
+      "current statements are available for tailing statements with historic eori" in new Setup {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
@@ -88,7 +88,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainHelpAndSupportGuidance(viewModel)
       }
 
-      "DutyDeferment statements with tailing statement that does not have historic eori" in new Setup {
+      "current statements are available for tailing statements without historic eori" in new Setup {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
