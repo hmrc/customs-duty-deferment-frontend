@@ -91,7 +91,7 @@ class AccountControllerSpec extends SpecBase {
         .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
-        .thenReturn(Future.successful(dutyDefermentStatementsForEori))
+        .thenReturn(Future.successful(dutyDefermentStatementsForEori01))
 
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
@@ -105,7 +105,7 @@ class AccountControllerSpec extends SpecBase {
 
       val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
         "accountNumber",
-        Seq(dutyDefermentStatementsForEori),
+        Seq(dutyDefermentStatementsForEori01),
         "linkId",
         isNiAccount = false,
         serviceUnavailableUrl)(appConfig, messages)
@@ -127,7 +127,7 @@ class AccountControllerSpec extends SpecBase {
         .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
-        .thenReturn(Future.successful(dutyDefermentStatementsForEori))
+        .thenReturn(Future.successful(dutyDefermentStatementsForEori01))
 
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
@@ -141,7 +141,7 @@ class AccountControllerSpec extends SpecBase {
 
       val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
         "accountNumber",
-        Seq(dutyDefermentStatementsForEori),
+        Seq(dutyDefermentStatementsForEori01),
         "linkId",
         isNiAccount = false,
         historicRequestUrl)(appConfig, messages)

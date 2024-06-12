@@ -102,21 +102,21 @@ class DutyDefermentAccountSpec extends SpecBase {
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
-      Seq(dutyDefermentStatementsForEori),
+      Seq(dutyDefermentStatementsForEori01),
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl)
 
     val modelWithNoCurrentStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
-      Seq(dutyDefermentStatementsForEori.copy(currentStatements = Seq())),
+      Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl)
 
     val modelWithNoCurrentAndRequestedStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
-      Seq(dutyDefermentStatementsForEori.copy(currentStatements = Seq(), requestedStatements = Seq())),
+      Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq(), requestedStatements = Seq())),
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl)

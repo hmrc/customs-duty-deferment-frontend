@@ -37,7 +37,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -46,7 +46,61 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainCurrentStatementSection(viewModel, accNumber)
+        shouldContainCurrentStatementSection(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
+      "current statements with historic eori are available" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori02),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
+      "current statements are available for tailing statements with historic eori" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori02),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainChiefStatementGuidance(viewModel)
+        shouldContainHelpAndSupportGuidance(viewModel)
+      }
+
+      "current statements are available for tailing statements without historic eori" in new Setup {
+        val viewModel: DutyDefermentAccountViewModel =
+          DutyDefermentAccountViewModel(
+            accountNumber = accNumber,
+            Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori03),
+            linkId,
+            isNiAccount = false,
+            serviceUnavailableUrl = testServiceUnavailableUrl)
+
+        shouldContainAccountNumberMsg(accNumber, viewModel)
+        shouldContainDDStatementHeading(viewModel)
+        shouldContainDirectDebitInfoMsg(viewModel)
+        shouldContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
@@ -56,7 +110,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(requestedStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
             linkId,
             isNiAccount = true,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -93,7 +147,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
-            Seq(dutyDefermentStatementsForEori.copy(currentStatements = Seq())),
+            Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl)
@@ -146,17 +200,19 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel.requestedStatement mustBe empty
   }
 
-  private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel,
-                                                   accountNumber: String)
-                                                  (implicit messages: Messages): Assertion = {
+  private def shouldContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel): Assertion = {
+    viewModel.requestedStatement.size mustBe 1
+  }
+
+  private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.currentStatements.noStatementMsg.isEmpty mustBe true
     viewModel.currentStatements.tailingStatements mustBe Seq()
-    viewModel.currentStatements.firstPopulatedStatements mustBe
-      Some(FirstPopulatedStatement(
-        ddHeadWithEntriesOrNoStatements =
-          DDHeadWithEntriesOrNoStatements(
-            noStatementsMsg = Some(new inset().apply(msg = messages("cf.account.detail.no-statements", accountNumber)))
-          )))
+
+    val headPopulatedSttVal = viewModel.currentStatements.firstPopulatedStatements.get.toString
+    headPopulatedSttVal.contains("Excise summary PDF") mustBe true
+    headPopulatedSttVal.contains("Download excise summary") mustBe true
+    headPopulatedSttVal.contains("Download supplementary") mustBe true
+    headPopulatedSttVal.contains("Download 1 to 8") mustBe true
   }
 
   private def shouldContainNoStatementsAvailableMsg(viewModel: DutyDefermentAccountViewModel)

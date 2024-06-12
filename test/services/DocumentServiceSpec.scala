@@ -35,7 +35,7 @@ class DocumentServiceSpec extends SpecBase {
         Future.successful(dutyDefermentStatementFiles))
 
       service.getDutyDefermentStatements(eoriHistory, dan).map {
-        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori.copy(requestedStatements = Seq())
+        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
       }
     }
   }
@@ -49,11 +49,11 @@ class DocumentServiceSpec extends SpecBase {
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
     val dan = "1234567"
 
-    val startYear = 2018
-    val startMonth = 6
+    val startYear = previousMonthDate.getYear
+    val startMonth = previousMonthDate.getMonthValue
     val startDate = 1
-    val endYear = 2018
-    val endMonth = 6
+    val endYear = previousMonthDate.getYear
+    val endMonth = previousMonthDate.getMonthValue
     val endDate = 8
     val fileSize = 10L
 
