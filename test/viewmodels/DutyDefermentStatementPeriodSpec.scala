@@ -35,12 +35,14 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
 
     "correctly give unavailable message for Supplementary statement type" in new Setup {
       val unavailableText: String = period1.unavailableLinkHiddenText(FileFormat.Csv)(messages)
+
       unavailableText.contains("unavailable") mustBe true
       unavailableText.toLowerCase.contains("supplementary") mustBe true
     }
 
     "correctly give unavailable message for Excise statement type" in new Setup {
       val unavailableText: String = period2.unavailableLinkHiddenText(FileFormat.Csv)(messages)
+
       unavailableText.contains("unavailable") mustBe true
       unavailableText.toLowerCase.contains("excise") mustBe true
     }
@@ -55,15 +57,11 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   trait Setup {
     val year = previousMonthDate.getYear
     val month = previousMonthDate.getMonthValue
-    val dayOfMonth01 = 1
-    val dayOfMonth02 = 2
-    val dayOfMonth25 = 25
-    val dayOfMonth26 = 26
 
-    val startDate01 = LocalDate.of(year, month, dayOfMonth01)
-    val startDate02 = LocalDate.of(year, month, dayOfMonth02)
-    val endDate01 = LocalDate.of(year, month, dayOfMonth25)
-    val endDate02 = LocalDate.of(year, month, dayOfMonth26)
+    val startDate01 = LocalDate.of(year, month, DAY_01)
+    val startDate02 = LocalDate.of(year, month, DAY_02)
+    val endDate01 = LocalDate.of(year, month, DAY_25)
+    val endDate02 = LocalDate.of(year, month, DAY_26)
 
     val period1 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
       startDate01, startDate01, endDate01)

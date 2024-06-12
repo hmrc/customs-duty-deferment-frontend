@@ -109,7 +109,7 @@ trait TestData extends MockitoSugar {
 
   val todaysDate: LocalDate = LocalDate.now()
   val previousMonthDate: LocalDate = todaysDate.minusMonths(1);
-  val secondPrevMonthDate: LocalDate = todaysDate.minusMonths(2);
+  val twoMonthsPriorDate: LocalDate = todaysDate.minusMonths(2);
   val periodStartDay: Int = 1
   val periodEndDay: Int = 8
   val fileSizeData: Long = 10L
@@ -142,8 +142,8 @@ trait TestData extends MockitoSugar {
       "someFilename4",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
-        secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
+      DutyDefermentStatementFileMetadata(twoMonthsPriorDate.getYear, twoMonthsPriorDate.getMonthValue, periodStartDay,
+        twoMonthsPriorDate.getYear, twoMonthsPriorDate.getMonthValue, periodEndDay, FileFormat.Pdf,
         DutyDefermentStatement, Excise, Some(false), Some(bacs), dan, None))
   )
 
@@ -152,8 +152,8 @@ trait TestData extends MockitoSugar {
       "someFilename4",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
-        secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodEndDay, FileFormat.Csv,
+      DutyDefermentStatementFileMetadata(twoMonthsPriorDate.getYear, twoMonthsPriorDate.getMonthValue, periodStartDay,
+        twoMonthsPriorDate.getYear, twoMonthsPriorDate.getMonthValue, periodEndDay, FileFormat.Csv,
         DutyDefermentStatement, Weekly, Some(false), Some(bacs), dan, None))
   )
 
@@ -169,7 +169,7 @@ trait TestData extends MockitoSugar {
       "someFilename2",
       "downloadUrl",
       fileSizeData,
-      DutyDefermentStatementFileMetadata(secondPrevMonthDate.getYear, secondPrevMonthDate.getMonthValue, periodStartDay,
+      DutyDefermentStatementFileMetadata(twoMonthsPriorDate.getYear, twoMonthsPriorDate.getMonthValue, periodStartDay,
         previousMonthDate.getYear, previousMonthDate.getMonthValue, periodEndDay, FileFormat.Pdf,
         DutyDefermentStatement, Weekly, Some(true), Some(bacs), dan, None))
   )
@@ -220,11 +220,11 @@ trait TestData extends MockitoSugar {
   )
 
   lazy val dutyDefermentStatementMetadata4: Seq[MetadataItem] = List(
-    MetadataItem("PeriodStartYear", secondPrevMonthDate.getYear.toString),
-    MetadataItem("PeriodStartMonth", secondPrevMonthDate.getMonthValue.toString),
+    MetadataItem("PeriodStartYear", twoMonthsPriorDate.getYear.toString),
+    MetadataItem("PeriodStartMonth", twoMonthsPriorDate.getMonthValue.toString),
     MetadataItem("PeriodStartDay", "1"),
-    MetadataItem("PeriodEndYear", secondPrevMonthDate.getYear.toString),
-    MetadataItem("PeriodEndMonth", secondPrevMonthDate.getMonthValue.toString),
+    MetadataItem("PeriodEndYear", twoMonthsPriorDate.getYear.toString),
+    MetadataItem("PeriodEndMonth", twoMonthsPriorDate.getMonthValue.toString),
     MetadataItem("PeriodEndDay", "8"),
     MetadataItem("FileType", "PDF"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
@@ -237,8 +237,8 @@ trait TestData extends MockitoSugar {
   lazy val eoriHistory: EoriHistory = EoriHistory("someEori", None, None)
 
   lazy val eoriHistory02: EoriHistory = EoriHistory("someEori",
-    Some(secondPrevMonthDate.withDayOfMonth(1)),
-    Some(secondPrevMonthDate.withDayOfMonth(DAY_28)))
+    Some(twoMonthsPriorDate.withDayOfMonth(1)),
+    Some(twoMonthsPriorDate.withDayOfMonth(DAY_28)))
 
   lazy val accountLink: AccountLink = AccountLink("someEori",
     "accountNumber", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false)
@@ -264,7 +264,6 @@ trait TestData extends MockitoSugar {
     LocalDate.now()
   )
 
-
   lazy val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
     eori = "someEori",
     dan = validDan,
@@ -276,7 +275,11 @@ trait TestData extends MockitoSugar {
 
   protected val YEAR_2027 = 2027
   protected val MONTH_12 = 12
+  protected val DAY_01 = 1
+  protected val DAY_02 = 2
   protected val DAY_20 = 20
+  protected val DAY_25 = 25
+  protected val DAY_26 = 26
   protected val DAY_28 = 28
   protected val HOUR_12 = 12
   protected val MINUTES_30 = 30

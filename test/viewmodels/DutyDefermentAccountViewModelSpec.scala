@@ -207,6 +207,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   private def shouldContainCurrentStatementSection(viewModel: DutyDefermentAccountViewModel): Assertion = {
     viewModel.currentStatements.noStatementMsg.isEmpty mustBe true
     viewModel.currentStatements.tailingStatements mustBe Seq()
+
     val headPopulatedSttVal = viewModel.currentStatements.firstPopulatedStatements.get.toString
     headPopulatedSttVal.contains("Excise summary PDF") mustBe true
     headPopulatedSttVal.contains("Download excise summary") mustBe true
