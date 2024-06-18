@@ -45,6 +45,8 @@ lazy val microservice = Project(appName, file("."))
     ScoverageKeys.coverageMinimumBranchTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
+    scalastyleFailOnError := true,
+    scalastyleFailOnWarning := true,
     Assets / pipelineStages := Seq(gzip),
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
