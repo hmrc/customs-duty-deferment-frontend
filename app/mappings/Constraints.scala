@@ -85,13 +85,14 @@ trait Constraints {
       case None => Invalid(ValidationError(s"$message.empty"))
       case Some(field: String) if field.trim.isEmpty => Invalid(ValidationError(s"$message.empty"))
       case Some(field: String) if field.trim.length > nameLengthLimit => Invalid(ValidationError(s"$message.max"))
-      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) => Invalid(
-        ValidationError(s"$message.invalid"))
+      case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) => Invalid(ValidationError(s"$message.invalid"))
       case _ => Valid
     }
   }
 
   def validOptionalAddressField(message: String): Constraint[Option[String]] = {
+
+
     Constraint {
       case Some(field: String) if field.trim.length > addressLengthLimit => Invalid(ValidationError(s"$message.max"))
       case Some(field: String) if !field.matches(isValidAddressFieldRegex.regex) => Invalid(
@@ -109,4 +110,5 @@ trait Constraints {
       case _ => Valid
     }
   }
+
 }
