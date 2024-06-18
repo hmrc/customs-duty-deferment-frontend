@@ -81,7 +81,10 @@ class AccountController @Inject()(authenticate: IdentifierAction,
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
     (authenticate andThen checkEmailIsVerified andThen resolveSessionId).async { implicit req =>
       sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
-        case Some(link) => Ok(unavailable(link.accountNumber,linkId,Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url)))
+        case Some(link) => Ok(
+          unavailable(link.accountNumber,
+            linkId,
+            Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url)))
         case None => Unauthorized(errorHandler.unauthorized())
       }
     }
