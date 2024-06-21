@@ -106,8 +106,8 @@ cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn
 # ----------------------------------------------------------
 cf.not-subscribed-to-cds.detail.title=Heb gofrestru â’r Gwasanaeth Datgan Tollau
 cf.not-subscribed-to-cds.detail.heading=I fynd yn eich blaen, mae angen i chi danysgrifio i’r Gwasanaeth Datganiadau Tollau (CDS)
-cf.not-subscribed-to-cds.detail.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i’r CDS
-cf.not-subscribed-to-cds.detail.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch Rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
+cf.not-subscribed-to-cds.detail.already-subscribed-to-cds=Os ydych eisoes wedi tanysgrifio i CDS
+cf.not-subscribed-to-cds.detail.already-subscribed-to-cds-guidance-text=Gwiriwch eich bod wedi mewngofnodi gyda’r Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth sy’n gysylltiedig â’ch rhif Cofrestru ac Adnabod Gweithredwyr Economaidd (EORI) a’ch cyfrif CDS.
 cf.not-subscribed-to-cds.details.subscribe-to-cds=Tanysgrifio i’r CDS
 cf.not-subscribed-to-cds.details.subscribe-to-cds-link-text=Tanysgrifio i’r Gwasanaeth Datganiadau Tollau.
 # ----------------------------------------------------------
