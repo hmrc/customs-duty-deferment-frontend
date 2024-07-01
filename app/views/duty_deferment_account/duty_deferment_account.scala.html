@@ -35,7 +35,7 @@
             @statement.historicEoriHeading.map(identity)
             @statement.ddHeadWithEntriesOrNoStatements.ddHeadWithEntry.map { headWithEntry =>
                     @headWithEntry.ddHead
-                    @headWithEntry.entries.map(identity)
+                    @headWithEntry.entries
                 }
 
             @statement.ddHeadWithEntriesOrNoStatements.noStatementsMsg.map(identity)

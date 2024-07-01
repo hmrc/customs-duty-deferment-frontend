@@ -50,6 +50,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainShowAllSectionLink(viewModel)
       }
 
       "current statements with historic eori are available" in new Setup {
@@ -220,6 +221,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel.currentStatements.noStatementMsg.nonEmpty mustBe true
     viewModel.currentStatements.noStatementMsg mustBe
       Some(new inset().apply(messages("cf.account.detail.no-statements", accNumber)))
+  }
+
+  private def shouldContainShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Assertion = {
+    val htmlView = viewModel.toString
+    htmlView.contains("show-all-sections") mustBe true
+    "show-all-sections".r.findAllIn(htmlView).length mustBe 1
   }
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(app: Application,
