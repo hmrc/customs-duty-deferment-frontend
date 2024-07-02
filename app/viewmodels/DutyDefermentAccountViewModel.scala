@@ -27,7 +27,7 @@ import views.html.components.duty_deferment_accordian
 import views.html.duty_deferment_account.duty_deferment_head
 
 case class DDHeadWithEntry(ddHead: HtmlFormat.Appendable,
-                           entries: Seq[HtmlFormat.Appendable] = Seq())
+                           entries: HtmlFormat.Appendable)
 
 case class DDHeadWithEntriesOrNoStatements(ddHeadWithEntry: Option[DDHeadWithEntry] = None,
                                            noStatementsMsg: Option[HtmlFormat.Appendable] = None)
@@ -151,10 +151,8 @@ object DutyDefermentAccountViewModel {
         val headWithEntriesOrNoStatement = if (statement.groups.nonEmpty) {
           val ddHead = new duty_deferment_head(emptyH2Component, emptyPComponent).apply(statement.groups.head)
 
-          val entries: Seq[HtmlFormat.Appendable] = statement.groups.tail.map {
-            entry =>
-              new duty_deferment_accordian(new GovukAccordion()).apply(Seq(entry), 0)
-          }
+          val entries: HtmlFormat.Appendable = new duty_deferment_accordian(
+            new GovukAccordion()).apply(statement.groups.tail, 0)
 
           DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
         } else {
