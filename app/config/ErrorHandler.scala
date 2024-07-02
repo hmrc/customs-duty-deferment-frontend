@@ -20,7 +20,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.Request
 import play.twirl.api.Html
-import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
+import uk.gov.hmrc.play.bootstrap.frontend.http.LegacyFrontendErrorHandler
 import views.html.{ErrorTemplate, not_found}
 import views.html.contact_details.edit_update_error
 
@@ -28,7 +28,7 @@ import views.html.contact_details.edit_update_error
 class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
                              notFound: not_found,
                              val messagesApi: MessagesApi,
-                             editUpdateError: edit_update_error)(implicit appConfig: AppConfig) extends FrontendErrorHandler {
+                             editUpdateError: edit_update_error)(implicit appConfig: AppConfig) extends LegacyFrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String,
                                      heading: String,

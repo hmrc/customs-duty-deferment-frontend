@@ -20,8 +20,9 @@ import java.time.LocalDateTime
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 import play.api.libs.functional.syntax._
-import java.time.{Instant, ZoneOffset}
+import play.api.libs.json._
 
+import java.time.{Instant, ZoneOffset}
 import scala.util.{Failure, Success, Try}
 
 final case class UserAnswers(
@@ -106,6 +107,6 @@ object UserAnswers {
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
         (__ \ "lastUpdated").write(MongoJavatimeFormats.localDateTimeWrites)
-      ) (unlift(UserAnswers.unapply))
+      ) (ua => Tuple.fromProductTyped(ua))
   }
 }
