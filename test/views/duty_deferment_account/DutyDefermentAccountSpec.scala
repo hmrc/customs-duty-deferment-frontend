@@ -37,7 +37,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
       viewDoc.getElementById("request-statement-link").text() must not be empty
-      viewDoc.html().contains(showAllSectionText) mustBe true
+      showAllSectionText.r.findAllIn(viewDoc.html()).length mustBe 1
     }
 
     "display correct title and guidance when there is no current statements" in new Setup {
@@ -48,7 +48,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
       viewDoc.getElementById("request-statement-link").text() must not be empty
       htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
-      htmlDoc.contains(showAllSectionText) mustBe false
+      showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
 
     "display correct title and guidance when there is no requested and current statements" in new Setup {
@@ -59,7 +59,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
       Option(viewDoc.getElementById("request-statement-link")) mustBe empty
       htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
-      htmlDoc.contains(showAllSectionText) mustBe false
+      showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
   }
 
@@ -97,14 +97,15 @@ class DutyDefermentAccountSpec extends SpecBase {
 
   trait Setup {
     val app: Application = application().build()
-    val serviceUnavailableUrl: String = "service_unavailable_url"
-    val accountNumber = "1234567"
-    val linkId = "link_id"
-    val showAllSectionText = "Show all sections"
 
     implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     implicit val msg: Messages = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
+
+    val serviceUnavailableUrl: String = "service_unavailable_url"
+    val accountNumber = "1234567"
+    val linkId = "link_id"
+    val showAllSectionText: String = msg("cf.account.detail.accordion.show-all-sections")
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
