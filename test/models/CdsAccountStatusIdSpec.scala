@@ -51,22 +51,31 @@ class CdsAccountStatusIdSpec extends SpecBase {
 
       val defermentAccountAvailable: CDSAccountStatusId = DefermentAccountAvailable
       Json.toJson(defermentAccountAvailable) mustBe JsNumber(val0)
+
       val changeOfLegalEntity: CDSAccountStatusId = ChangeOfLegalEntity
       Json.toJson(changeOfLegalEntity) mustBe JsNumber(val1)
+
       val guaranteeCancelledGuarantorsRequest: CDSAccountStatusId = GuaranteeCancelledGuarantorsRequest
       Json.toJson(guaranteeCancelledGuarantorsRequest) mustBe JsNumber(val2)
+
       val guaranteeCancelledTradersRequest: CDSAccountStatusId = GuaranteeCancelledTradersRequest
       Json.toJson(guaranteeCancelledTradersRequest) mustBe JsNumber(val3)
+
       val directDebitMandateCancelled: CDSAccountStatusId = DirectDebitMandateCancelled
       Json.toJson(directDebitMandateCancelled) mustBe JsNumber(val4)
+
       val debitRejectedAccountClosedOrTransferred: CDSAccountStatusId = DebitRejectedAccountClosedOrTransferred
       Json.toJson(debitRejectedAccountClosedOrTransferred) mustBe JsNumber(val5)
+
       val debitRejectedReferToDrawer: CDSAccountStatusId = DebitRejectedReferToDrawer
       Json.toJson(debitRejectedReferToDrawer) mustBe JsNumber(val6)
+
       val returnedMailOther: CDSAccountStatusId = ReturnedMailOther
       Json.toJson(returnedMailOther) mustBe JsNumber(val7)
+
       val guaranteeExceeded: CDSAccountStatusId = GuaranteeExceeded
       Json.toJson(guaranteeExceeded) mustBe JsNumber(val8)
+
       val accountCancelled: CDSAccountStatusId = AccountCancelled
       Json.toJson(accountCancelled) mustBe JsNumber(val9)
     }

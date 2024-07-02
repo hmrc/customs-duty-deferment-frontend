@@ -28,6 +28,8 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import util.SpecBase

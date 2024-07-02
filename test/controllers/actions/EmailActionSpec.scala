@@ -25,6 +25,8 @@ import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.ServiceUnavailableException
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

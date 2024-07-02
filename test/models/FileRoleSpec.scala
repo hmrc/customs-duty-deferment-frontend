@@ -23,21 +23,23 @@ import util.SpecBase
 class FileRoleSpec extends SpecBase {
 
   "FileRole" should {
+
     "FileRole successfully applies dutyDeferementStatement" in {
       val reads: JsSuccess[FileRole] = JsSuccess(FileRole.apply("DutyDefermentStatement"))
+
       reads mustBe JsSuccess(DutyDefermentStatement)
     }
 
     "throw Exception when an unknown file role is applied" in {
       assertThrows[java.lang.Exception] {
-        val reads: JsSuccess[FileRole] = JsSuccess(FileRole.apply(""))
-        reads mustBe "Unknown file role: "
+        JsSuccess(FileRole.apply(""))
       }
     }
 
     "FileRole can successfully unapply a fileRole" in {
       val fileRole: FileRole = FileRole.apply("DutyDefermentStatement")
       val result = FileRole.unapply(fileRole)
+
       result mustBe Some("DutyDefermentStatement")
     }
   }

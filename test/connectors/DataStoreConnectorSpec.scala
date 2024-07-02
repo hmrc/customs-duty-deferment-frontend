@@ -21,6 +21,8 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, UpstreamErrorResponse}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import util.SpecBase
 
 import scala.concurrent.Future

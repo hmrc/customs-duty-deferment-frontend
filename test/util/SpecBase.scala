@@ -20,7 +20,7 @@ import com.codahale.metrics.MetricRegistry
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import org.jsoup.nodes.Document
-import org.mockito.scalatest.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{Assertion, OptionValues}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

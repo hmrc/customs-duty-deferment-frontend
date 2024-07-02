@@ -43,7 +43,7 @@ class SDESConnector @Inject()(http: HttpClientV2,
       AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
     )
 
-  http.get(url"${sdesDutyDefermentStatementListUrl}")
+    http.get(url"$sdesDutyDefermentStatementListUrl")
       .setHeader(("x-client-id" -> appConfig.xClientIdHeader), ("X-SDES-Key" -> s"$eori-$dan"))
       .execute[Seq[FileInformation]]
       .flatMap {
@@ -52,15 +52,15 @@ class SDESConnector @Inject()(http: HttpClientV2,
           Future.successful((filterFileFormats(SdesFileFormats)(res1)))
       }
 
-  /*  val response: Future[Seq[FileInformation]] = http.GET[Seq[FileInformation]](
-      sdesDutyDefermentStatementListUrl,
-      headers = Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> s"$eori-$dan")
-    )(implicitly, HeaderCarrier(), implicitly)
+    /*  val response: Future[Seq[FileInformation]] = http.GET[Seq[FileInformation]](
+        sdesDutyDefermentStatementListUrl,
+        headers = Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> s"$eori-$dan")
+      )(implicitly, HeaderCarrier(), implicitly)
 
-      val res1: Future[Seq[DutyDefermentStatementFile]] = response.map(_.map(_.toDutyDefermentStatementFile))
+        val res1: Future[Seq[DutyDefermentStatementFile]] = response.map(_.map(_.toDutyDefermentStatementFile))
 
-    val finalRes: Future[Seq[DutyDefermentStatementFile]] = res1.map(filterFileFormats(SdesFileFormats))
+      val finalRes: Future[Seq[DutyDefermentStatementFile]] = res1.map(filterFileFormats(SdesFileFormats))
 
-    finalRes*/
+      finalRes*/
   }
 }

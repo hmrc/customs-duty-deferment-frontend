@@ -17,11 +17,17 @@
 package cache
 
 import models.responses.retrieve.ContactDetails
+import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
 
-class ContactDetailsCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
+class ContactDetailsCacheSpec
+  extends SpecBase
+    with BeforeAndAfterEach
+    with OptionValues
+    with ScalaFutures
+    with IntegrationPatience {
 
   private val id = "session-123"
   private val app = application().build()

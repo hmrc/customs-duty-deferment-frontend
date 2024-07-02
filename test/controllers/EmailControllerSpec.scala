@@ -18,12 +18,14 @@ package controllers
 
 import connectors.CustomsFinancialsApiConnector
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.http.Status.OK
 import play.api.{Application, inject}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatest.matchers.should.Matchers.shouldBe
 
 import scala.concurrent.Future
 

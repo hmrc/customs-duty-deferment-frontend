@@ -16,11 +16,11 @@
 
 package utils
 
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import utils.Utils._
+import org.scalatest.matchers.should.Matchers.shouldBe
 
 import java.time.LocalDate
 

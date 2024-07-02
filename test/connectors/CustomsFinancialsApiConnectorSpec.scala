@@ -19,6 +19,8 @@ package connectors
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.ContactDetails
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse, GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}

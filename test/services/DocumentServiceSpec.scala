@@ -23,6 +23,8 @@ import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, E
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global

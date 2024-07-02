@@ -22,6 +22,7 @@ import util.SpecBase
 class CdsAccountStatusSpec extends SpecBase {
 
   "CdsAccountStatus" should {
+
     "read/write the correct values" in {
       JsString("open").as[CDSAccountStatus] mustBe AccountStatusOpen
       JsString("closed").as[CDSAccountStatus] mustBe AccountStatusClosed
@@ -31,10 +32,13 @@ class CdsAccountStatusSpec extends SpecBase {
 
       val open: CDSAccountStatus = AccountStatusOpen
       Json.toJson(open) mustBe JsString("open")
+
       val closed: CDSAccountStatus = AccountStatusClosed
       Json.toJson(closed) mustBe JsString("closed")
+
       val suspended: CDSAccountStatus = AccountStatusSuspended
       Json.toJson(suspended) mustBe JsString("suspended")
+
       val pending: CDSAccountStatus = AccountStatusPending
       Json.toJson(pending) mustBe JsString("pending")
     }

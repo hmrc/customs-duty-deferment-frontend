@@ -23,6 +23,8 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 import scala.concurrent.Future
 

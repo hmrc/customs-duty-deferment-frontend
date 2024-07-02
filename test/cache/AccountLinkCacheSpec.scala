@@ -18,6 +18,7 @@ package cache
 
 import models.{AccountStatusOpen, DefermentAccountAvailable, DutyDefermentAccountLink}
 import org.junit.Assert.assertEquals
+import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
