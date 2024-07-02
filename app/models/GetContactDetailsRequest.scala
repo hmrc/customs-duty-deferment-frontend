@@ -17,9 +17,17 @@
 package models
 
 import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, JsValue, Json, Writes}
+import play.api.libs.ws.BodyWritable
 
 case class GetContactDetailsRequest(dan: String, eori: String)
 
 object GetContactDetailsRequest {
-  implicit val format: OFormat[GetContactDetailsRequest] = Json.format[GetContactDetailsRequest]
+  implicit val format: Format[GetContactDetailsRequest] = Json.format[GetContactDetailsRequest]
+  implicit val writes: Writes[GetContactDetailsRequest] = Json.writes[GetContactDetailsRequest]
+
+  implicit def jsonBodyWritable[T](implicit
+                                   writes: Writes[T],
+                                   jsValueBodyWritable: BodyWritable[JsValue]
+                                  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
 }

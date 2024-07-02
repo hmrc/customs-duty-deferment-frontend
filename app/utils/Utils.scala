@@ -19,6 +19,7 @@ package utils
 import play.api.mvc.RequestHeader
 
 import java.time.LocalDate
+import java.net.URL
 
 object Utils {
   val emptyString = ""
@@ -44,4 +45,6 @@ object Utils {
   def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate = {
     date.minusMonths(numberOfMonths).withDayOfMonth(1)
   }
+
+  def stringToURL(urlString: String): URL = new URL(urlString)
 }

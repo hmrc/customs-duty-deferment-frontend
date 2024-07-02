@@ -21,25 +21,38 @@ import models.{EmailUnverifiedResponse, _}
 import models.responses.retrieve.ContactDetails
 import play.mvc.Http.Status
 import services.AuditingService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import java.net.URL
+import play.api.libs.json.Json
+import utils.Utils.stringToURL
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
-                                              httpClient: HttpClient,
+                                              httpClient: HttpClientV2,
                                               auditingService: AuditingService)(implicit ec: ExecutionContext) {
 
   def deleteNotification(eori: String,
                          fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
-    httpClient.DELETE[HttpResponse](
-      appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"
-    ).map(_.status == Status.OK).recover { case _ => false }
+    httpClient.delete(new URL(appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"))
+      .execute[HttpResponse]
+      .flatMap {
+        response => Future.successful(response.status == Status.OK)
+      }.recover { case _ => false }
 
   def getContactDetails(dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
     val request = GetContactDetailsRequest(dan, eori)
-    httpClient.POST[GetContactDetailsRequest, ContactDetails](appConfig.getAccountDetailsUrl, request)
+
+    httpClient.post(new URL(appConfig.getAccountDetailsUrl))
+      .withBody[GetContactDetailsRequest](request)
+      .execute[ContactDetails]
+      .flatMap {
+        response => Future.successful(response)
+      }
   }
 
   def updateContactDetails(dan: String,
@@ -49,18 +62,37 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
                           (implicit hc: HeaderCarrier): Future[UpdateContactDetailsResponse] = {
     val trimmed: ContactDetailsUserAnswers = newContactDetails.withWhitespaceTrimmed
     val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest(dan, eori, trimmed)
-    val response = httpClient.POST[UpdateContactDetailsRequest,
-      UpdateContactDetailsResponse](appConfig.updateAccountAddressUrl, request)
+
+    val response = httpClient.post(stringToURL(appConfig.updateAccountAddressUrl))
+      .withBody[UpdateContactDetailsRequest](request)
+      .execute[UpdateContactDetailsResponse]
+      .flatMap {
+        response => Future.successful(response)
+      }
+
     auditingService.changeContactDetailsAuditEvent(dan, oldContactDetails, trimmed)
+
     response
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.GET[EmailUnverifiedResponse](appConfig.customsFinancialsApi
-      + "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)
+    /*httpClient.GET[EmailUnverifiedResponse](new URL(appConfig.customsFinancialsApi)
+      + "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)*/
+
+    httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display"))
+      .execute[EmailUnverifiedResponse]
+      .flatMap {
+        response => Future.successful(response.unVerifiedEmail)
+      }
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
-    httpClient.GET[EmailVerifiedResponse](s"${appConfig.customsFinancialsApi}/subscriptions/email-display")
+    //httpClient.GET[EmailVerifiedResponse](s"${appConfig.customsFinancialsApi}/subscriptions/email-display")
+
+    httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/email-display"))
+      .execute[EmailVerifiedResponse]
+      .flatMap {
+        response => Future.successful(response)
+      }
 
 }

@@ -18,23 +18,33 @@ package connectors
 
 import config.AppConfig
 import models.{SDDSRequest, SDDSResponse}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.client.HttpClientV2
+import utils.Utils.stringToURL
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SDDSConnector @Inject()(httpClient: HttpClient,
+class SDDSConnector @Inject()(httpClient: HttpClientV2,
                               appConfig: AppConfig
                              )(implicit executionContext: ExecutionContext) {
 
-  lazy val returnUrl: String = appConfig.financialsHomepage
-  lazy val backUrl: String = appConfig.financialsHomepage
+  private lazy val returnUrl: String = appConfig.financialsHomepage
+  private lazy val backUrl: String = appConfig.financialsHomepage
 
   def startJourney(dan: String, email: String)(implicit hc: HeaderCarrier): Future[String] = {
+   httpClient.post(stringToURL(appConfig.sddsUri))
+     .withBody[SDDSRequest](SDDSRequest(returnUrl, backUrl, dan, email))
+     .execute[SDDSResponse]
+     .flatMap {
+       response => Future.successful(response.nextUrl)
+     }
+/*
     httpClient.POST[SDDSRequest, SDDSResponse](
       appConfig.sddsUri,
       SDDSRequest(returnUrl, backUrl, dan, email)
-    ).map(_.nextUrl)
+    ).map(_.nextUrl)*/
   }
 }

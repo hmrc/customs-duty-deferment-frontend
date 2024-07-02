@@ -26,7 +26,7 @@
 }
 @allErrors = @{
     elements.errors ++ args.flatMap {
-        case ('otherErrors, otherErrors: Seq[_]) => otherErrors.map(_.toString)
+        case (Symbol("otherErrors"), otherErrors: Seq[_]) => otherErrors.map(_.toString)
         case _ => Seq.empty
     }
 }

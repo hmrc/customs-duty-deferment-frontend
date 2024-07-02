@@ -58,7 +58,7 @@
 
         @p(content = Html(messages("accountDetails.editAddress.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 
-        @helper.form(routes.EditAddressDetailsController.submit, 'id -> "form", 'novalidate -> "novalidate") {
+        @helper.form(routes.EditAddressDetailsController.submit, Symbol("id") -> "form", Symbol("novalidate") -> "novalidate") {
             @CSRF.formField
 
             @inputText(

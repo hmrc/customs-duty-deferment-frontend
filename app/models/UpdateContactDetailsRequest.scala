@@ -16,7 +16,8 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat, Writes}
+import play.api.libs.ws.BodyWritable
 
 case class UpdateContactDetailsRequest(dan: String,
                                        eori: String,
@@ -56,4 +57,9 @@ object UpdateContactDetailsRequest {
   }
 
   implicit val formats: OFormat[UpdateContactDetailsRequest] = Json.format[UpdateContactDetailsRequest]
+
+  implicit def jsonBodyWritable[T](implicit
+                                   writes: Writes[T],
+                                   jsValueBodyWritable: BodyWritable[JsValue]
+                                  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
 }
