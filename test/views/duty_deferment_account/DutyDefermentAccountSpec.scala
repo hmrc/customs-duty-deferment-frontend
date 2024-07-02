@@ -37,24 +37,29 @@ class DutyDefermentAccountSpec extends SpecBase {
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
       viewDoc.getElementById("request-statement-link").text() must not be empty
+      viewDoc.html().contains(showAllSectionText) mustBe true
     }
 
     "display correct title and guidance when there is no current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentStatements)
+      val htmlDoc: String = viewDoc.html()
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
       viewDoc.getElementById("request-statement-link").text() must not be empty
-      viewDoc.html().contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(showAllSectionText) mustBe false
     }
 
     "display correct title and guidance when there is no requested and current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentAndRequestedStatements)
+      val htmlDoc: String = viewDoc.html()
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
       Option(viewDoc.getElementById("request-statement-link")) mustBe empty
-      viewDoc.html().contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(showAllSectionText) mustBe false
     }
   }
 
@@ -95,6 +100,7 @@ class DutyDefermentAccountSpec extends SpecBase {
     val serviceUnavailableUrl: String = "service_unavailable_url"
     val accountNumber = "1234567"
     val linkId = "link_id"
+    val showAllSectionText = "Show all sections"
 
     implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     implicit val msg: Messages = messages(app)
