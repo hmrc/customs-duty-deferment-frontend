@@ -146,6 +146,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
       "requested statements are available but current statements are unavailable" in new Setup {
@@ -165,6 +166,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 0
       }
     }
   }
