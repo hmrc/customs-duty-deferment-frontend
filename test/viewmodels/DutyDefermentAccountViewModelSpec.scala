@@ -50,7 +50,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
-        shouldContainShowAllSectionLink(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
       "current statements with historic eori are available" in new Setup {
@@ -69,6 +69,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
       "current statements are available for tailing statements with historic eori" in new Setup {
@@ -87,6 +88,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
       "current statements are available for tailing statements without historic eori" in new Setup {
@@ -105,6 +107,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
       "current statements are available and is a NI account" in new Setup {
@@ -123,6 +126,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
+        countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
       "current statements are unavailable" in new Setup {
@@ -223,10 +227,8 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       Some(new inset().apply(messages("cf.account.detail.no-statements", accNumber)))
   }
 
-  private def shouldContainShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Assertion = {
-    val htmlView = viewModel.toString
-    htmlView.contains("show-all-sections") mustBe true
-    "show-all-sections".r.findAllIn(htmlView).length mustBe 1
+  private def countOfShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Int = {
+    "show-all-sections".r.findAllIn(viewModel.toString).length
   }
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(app: Application,
