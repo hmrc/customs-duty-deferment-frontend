@@ -17,11 +17,12 @@
 package connectors
 
 import models._
-import play.api.test.Helpers._
-import play.api.{Application, inject}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import play.api.test.Helpers._
+import play.api.{Application, inject}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import util.SpecBase
 
 import scala.concurrent.Future
@@ -38,7 +39,11 @@ class SDESConnectorSpec extends SpecBase {
           FileInformation("someFilename4", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata4))
         )
 
-      when[Future[Seq[FileInformation]]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.setHeader(any[(String, String)]())).thenReturn(requestBuilder)
+      when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any, any))
         .thenReturn(Future.successful(fileInformation))
 
       running(app) {
@@ -49,11 +54,12 @@ class SDESConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient)
+      inject.bind[HttpClientV2].toInstance(mockHttpClient)
     ).build()
 
     val connector: SDESConnector = app.injector.instanceOf[SDESConnector]

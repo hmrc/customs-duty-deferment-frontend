@@ -8,7 +8,7 @@ object AppDependencies {
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc" %% "bootstrap-frontend-play-30" % bootstrapVersion,
-    "uk.gov.hmrc" %% "play-conditional-form-mapping-play-30" % "2.0.0" cross CrossVersion.for3Use2_13//for3Use2_13With("", ".12")
+    "uk.gov.hmrc" %% "play-conditional-form-mapping-play-30" % "2.0.0" cross CrossVersion.for3Use2_13
       excludeAll (
       ExclusionRule("org.apache.pekko", "pekko-slf4j_2.13"),
       ExclusionRule("org.apache.pekko", "pekko-serialization-jackson_2.13"),
