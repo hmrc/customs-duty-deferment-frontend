@@ -17,37 +17,38 @@
 package connectors
 
 import config.AppConfig
-import models.{EmailUnverifiedResponse, _}
 import models.responses.retrieve.ContactDetails
+import models.{EmailUnverifiedResponse, _}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.mvc.Http.Status
 import services.AuditingService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
-import java.net.URL
-import play.api.libs.json.Json
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import utils.Utils.stringToURL
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
                                               httpClient: HttpClientV2,
                                               auditingService: AuditingService)(implicit ec: ExecutionContext) {
 
   def deleteNotification(eori: String,
-                         fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] =
-    httpClient.delete(new URL(appConfig.customsFinancialsApi + s"/eori/$eori/notifications/$fileRole"))
+                         fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val endPointUrl = s"${appConfig.customsFinancialsApi}/eori/$eori/notifications/$fileRole"
+
+    httpClient.delete(url"$endPointUrl")
       .execute[HttpResponse]
       .flatMap {
         response => Future.successful(response.status == Status.OK)
       }.recover { case _ => false }
+  }
 
   def getContactDetails(dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
     val request = GetContactDetailsRequest(dan, eori)
 
-    httpClient.post(new URL(appConfig.getAccountDetailsUrl))
+    httpClient.post(url"${appConfig.getAccountDetailsUrl}")
       .withBody[GetContactDetailsRequest](request)
       .execute[ContactDetails]
       .flatMap {
