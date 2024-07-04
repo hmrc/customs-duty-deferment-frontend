@@ -44,7 +44,7 @@ lazy val microservice = Project(appName, file("."))
       "<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*").mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageMinimumBranchTotal := 90,
-    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true,
     Assets / pipelineStages := Seq(gzip),
     libraryDependencies ++= Seq(

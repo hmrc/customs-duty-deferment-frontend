@@ -17,15 +17,17 @@
 package connectors
 
 import models.{AccountLink, AccountStatusOpen}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 
-import scala.concurrent.Future
+import java.net.URL
+import scala.concurrent.{ExecutionContext, Future}
 
 class SessionCacheConnectorSpec extends SpecBase {
 
@@ -33,8 +35,10 @@ class SessionCacheConnectorSpec extends SpecBase {
     "return an account link on a successful response" in new Setup {
       val link: AccountLink = AccountLink("someEori", "12345", "someId", AccountStatusOpen, None, isNiAccount = false)
 
-      when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[AccountLink]], any[ExecutionContext]))
         .thenReturn(Future.successful(link))
+
+      when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.retrieveSession("someId", "someLink"))
@@ -43,8 +47,10 @@ class SessionCacheConnectorSpec extends SpecBase {
     }
 
     "return None on a failed response" in new Setup {
-      when[Future[AccountLink]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[AccountLink]], any[ExecutionContext]))
         .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
+
+      when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.retrieveSession("someId", "someLink"))
@@ -55,8 +61,11 @@ class SessionCacheConnectorSpec extends SpecBase {
 
   "removeSession" should {
     "return true on a successful response from the API" in new Setup {
-      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(HttpResponse(Status.OK, "")))
+
+      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.removeSession("someId"))
@@ -65,8 +74,11 @@ class SessionCacheConnectorSpec extends SpecBase {
     }
 
     "return false if the api call fails" in new Setup {
-      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("something went wrong")))
+
+      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.removeSession("someId"))
@@ -76,11 +88,13 @@ class SessionCacheConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient)
+      inject.bind[HttpClientV2].toInstance(mockHttpClient),
+      inject.bind[RequestBuilder].toInstance(requestBuilder)
     ).build()
 
     val connector: SessionCacheConnector =

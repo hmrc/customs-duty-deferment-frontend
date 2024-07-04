@@ -17,8 +17,6 @@
 package models.responses.retrieve
 
 import play.api.libs.json.{Json, OFormat}
-import play.api.libs.json.{Format, JsValue, Json, Writes}
-import play.api.libs.ws.BodyWritable
 
 case class ContactDetails(contactName: Option[String],
                           addressLine1: String,

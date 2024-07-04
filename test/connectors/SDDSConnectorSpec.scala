@@ -17,14 +17,15 @@
 package connectors
 
 import models.SDDSResponse
-import play.api.test.Helpers._
-import play.api.{Application, inject}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import play.api.test.Helpers._
+import play.api.{Application, inject}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import util.SpecBase
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SDDSConnectorSpec extends SpecBase {
 
@@ -32,8 +33,11 @@ class SDDSConnectorSpec extends SpecBase {
     "return a redirect URL on a successful response" in new Setup {
       val response: SDDSResponse = SDDSResponse("someUrl")
 
-      when[Future[SDDSResponse]](mockHttpClient.POST(any, any, any)(any, any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[SDDSResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(response))
+
+      when(mockHttpClient.post(any)(any)).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.startJourney("dan", "some@email.com"))
@@ -43,11 +47,13 @@ class SDDSConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient)
+      inject.bind[HttpClientV2].toInstance(mockHttpClient)
     ).build()
 
     val connector: SDDSConnector = app.injector.instanceOf[SDDSConnector]
