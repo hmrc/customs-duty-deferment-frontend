@@ -51,16 +51,5 @@ class SDESConnector @Inject()(http: HttpClientV2,
           val res1: Seq[DutyDefermentStatementFile] = response.map(_.toDutyDefermentStatementFile)
           Future.successful((filterFileFormats(SdesFileFormats)(res1)))
       }
-
-    /*  val response: Future[Seq[FileInformation]] = http.GET[Seq[FileInformation]](
-        sdesDutyDefermentStatementListUrl,
-        headers = Seq("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> s"$eori-$dan")
-      )(implicitly, HeaderCarrier(), implicitly)
-
-        val res1: Future[Seq[DutyDefermentStatementFile]] = response.map(_.map(_.toDutyDefermentStatementFile))
-
-      val finalRes: Future[Seq[DutyDefermentStatementFile]] = res1.map(filterFileFormats(SdesFileFormats))
-
-      finalRes*/
   }
 }

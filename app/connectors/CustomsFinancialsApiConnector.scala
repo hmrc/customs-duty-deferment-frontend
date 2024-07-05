@@ -77,9 +77,6 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    /*httpClient.GET[EmailUnverifiedResponse](new URL(appConfig.customsFinancialsApi)
-      + "/subscriptions/unverified-email-display").map(res => res.unVerifiedEmail)*/
-
     httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display"))
       .execute[EmailUnverifiedResponse]
       .flatMap {
@@ -88,8 +85,6 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
-    //httpClient.GET[EmailVerifiedResponse](s"${appConfig.customsFinancialsApi}/subscriptions/email-display")
-
     httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/email-display"))
       .execute[EmailVerifiedResponse]
       .flatMap {

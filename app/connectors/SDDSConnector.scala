@@ -35,16 +35,11 @@ class SDDSConnector @Inject()(httpClient: HttpClientV2,
   private lazy val backUrl: String = appConfig.financialsHomepage
 
   def startJourney(dan: String, email: String)(implicit hc: HeaderCarrier): Future[String] = {
-   httpClient.post(stringToURL(appConfig.sddsUri))
-     .withBody[SDDSRequest](SDDSRequest(returnUrl, backUrl, dan, email))
-     .execute[SDDSResponse]
-     .flatMap {
-       response => Future.successful(response.nextUrl)
-     }
-/*
-    httpClient.POST[SDDSRequest, SDDSResponse](
-      appConfig.sddsUri,
-      SDDSRequest(returnUrl, backUrl, dan, email)
-    ).map(_.nextUrl)*/
+    httpClient.post(stringToURL(appConfig.sddsUri))
+      .withBody[SDDSRequest](SDDSRequest(returnUrl, backUrl, dan, email))
+      .execute[SDDSResponse]
+      .flatMap {
+        response => Future.successful(response.nextUrl)
+      }
   }
 }

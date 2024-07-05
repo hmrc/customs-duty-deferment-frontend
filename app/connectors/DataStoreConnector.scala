@@ -33,17 +33,12 @@ class DataStoreConnector @Inject()(http: HttpClientV2,
                                   (implicit executionContext: ExecutionContext) {
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] =
-/*    http.GET[EoriHistoryResponse](appConfig.customsDataStore + s"/eori/$eori/eori-history")
-      .map(response => response.eoriHistory)
-      .recover { case _ => Seq(EoriHistory(eori, None, None)) }*/
-
     http.get(stringToURL(s"${appConfig.customsDataStore}/eori/$eori/eori-history"))
       .execute[EoriHistoryResponse]
       .flatMap {
         response => Future.successful(response.eoriHistory)
       }
       .recover { case _ => Seq(EoriHistory(eori, None, None)) }
-
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
@@ -57,13 +52,6 @@ class DataStoreConnector @Inject()(http: HttpClientV2,
       }.recover {
       case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
     }
-
-/*    http.GET[EmailResponse](dataStoreEndpoint).map {
-      case EmailResponse(Some(address), _, None) => Right(Email(address))
-      case EmailResponse(Some(email), _, Some(_)) => Left(UndeliverableEmail(email))
-      case _ => Left(UnverifiedEmail)
-    }.recover {
-      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
-    }*/
   }
+
 }
