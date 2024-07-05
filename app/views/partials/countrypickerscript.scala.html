@@ -16,7 +16,7 @@
 
 @import views.html.helper.CSPNonce
 
-@()(implicit request: Request[_])
+@()(implicit request: RequestHeader)
 
 @countryFilter = @{
     "country.include"

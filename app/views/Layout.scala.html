@@ -25,22 +25,21 @@
 @import views.html.partials.countrypickerscript
 @import views.html.helper.CSPNonce
 
-@this(appConfig: AppConfig,
+@this(
+        appConfig: AppConfig,
         hmrcLayout: HmrcLayout,
         govukBackLink: GovukBackLink,
         hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
         hmrcTimeoutDialog: HmrcTimeoutDialog
-
 )
 
-@(pageTitle: Option[String] = None,
+@(
+        pageTitle: Option[String] = None,
         backLink: Option[String] = None,
         helpAndSupport: Boolean = true,
         deskpro: Boolean = true,
         welshToggle: Boolean = true,
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
-
-
+)(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
     @phaseBannerContent = {
         @messages("feedback.before")
