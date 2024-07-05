@@ -24,37 +24,50 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.Layout
 import org.jsoup.nodes.Document
+import play.api.Application
 import play.twirl.api.Html
+import utils.Utils.emptyString
 
 class LayoutSpec extends SpecBase {
 
   "layout" should {
 
-    "display correct guidance" in {
-      val title = "test_title"
-      val linkUrl = "test.com"
-      val content = Html("test")
+    "display correct guidance" when {
 
-      val app = application().build()
+      "title and back link are provided" in new Setup {
+        val title = "test_title"
+        val linkUrl = "test.com"
 
-      implicit val msgs: Messages = messages(app)
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-      implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply(
+          pageTitle = Some(title),
+          backLink = Some(linkUrl)
+        )(content).body)
 
-      val layoutView = Jsoup.parse(app.injector.instanceOf[Layout].apply(
-        pageTitle = Some(title),
-        backLink = Some(linkUrl)
-      )(content).body)
+        shouldContainCorrectTitle(layoutView, title)
+        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectBackLink(layoutView, Some(linkUrl))
+        shouldContainCorrectBanners(layoutView)
+      }
 
-      shouldContainCorrectTitle(layoutView, title)
-      shouldContainCorrectServiceUrls(layoutView)
-      shouldContainCorrectBackLink(layoutView, linkUrl)
-      shouldContainCorrectBanners(layoutView)
+      "there is no value for title and back link" in new Setup {
+        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply()(content).body)
+
+        shouldContainCorrectTitle(layoutView)
+        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectBackLink(layoutView)
+        shouldContainCorrectBanners(layoutView)
+      }
     }
+
   }
 
-  private def shouldContainCorrectTitle(viewDoc: Document, title: String)(implicit msgs: Messages) = {
-    viewDoc.title() mustBe s"$title - ${msgs("service.name")} - GOV.UK"
+  private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit msgs: Messages) = {
+
+    if (title.nonEmpty) {
+      viewDoc.title() mustBe s"$title - ${msgs("service.name")} - GOV.UK"
+    } else {
+      viewDoc.title() mustBe s"${msgs("service.name")} - GOV.UK"
+    }
   }
 
   private def shouldContainCorrectServiceUrls(viewDoc: Document)(implicit appConfig: AppConfig) = {
@@ -64,9 +77,17 @@ class LayoutSpec extends SpecBase {
   }
 
   private def shouldContainCorrectBackLink(viewDoc: Document,
-                                           backLinkUrl: String) = {
-    viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
-    viewDoc.getElementsByClass("govuk-back-link").attr("href").contains(backLinkUrl) mustBe true
+                                           backLinkUrl: Option[String] = None) = {
+
+    if (backLinkUrl.isDefined) {
+      viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
+      viewDoc.getElementsByClass("govuk-back-link").attr("href")
+        .contains(backLinkUrl.get) mustBe true
+    } else {
+      viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
+      viewDoc.getElementsByClass("govuk-back-link").attr("href")
+        .contains("#") mustBe true
+    }
   }
 
   private def shouldContainCorrectBanners(viewDoc: Document) = {
@@ -76,5 +97,15 @@ class LayoutSpec extends SpecBase {
     viewDoc.getElementsByClass("hmrc-user-research-banner")
       .text() mustBe "Help make GOV.UK better Sign up to take part in research (opens in new tab)" +
       " Hide message Hide message. I do not want to take part in research"
+  }
+
+  trait Setup {
+    val app: Application = application().build()
+
+    implicit val msgs: Messages = messages(app)
+    implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
+    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+
+    val content: Html = Html("test")
   }
 }
