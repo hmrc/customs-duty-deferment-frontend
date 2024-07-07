@@ -42,7 +42,7 @@ class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
   override def notFoundTemplate(using request: RequestHeader): Future[Html] =
     Future.successful(notFound())
 
-  def unauthorized()(implicit request: RequestHeader): Html = {
+  def unauthorized()(implicit rh: RequestHeader): Html = {
     errorTemplate(
       Messages("cf.error.unauthorized.title"),
       Messages("cf.error.unauthorized.heading"),
@@ -58,14 +58,14 @@ class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
     )
   }
 
-  def sddsErrorTemplate()(implicit request: RequestHeader): Html =
+  def sddsErrorTemplate()(implicit rh: RequestHeader): Html =
     errorTemplate(
       Messages("cf.error.standard-error-sdds.title"),
       Messages("cf.error.standard-error-sdds.heading"),
       Messages("cf.error.standard-error-sdds.message")
     )
 
-  def contactDetailsErrorTemplate()(implicit request: RequestHeader): Html =
+  def contactDetailsErrorTemplate()(implicit rh: RequestHeader): Html =
     errorTemplate(
       Messages("cf.error.standard-error-contact-details.title"),
       Messages("cf.error.standard-error-contact-details.heading"),
