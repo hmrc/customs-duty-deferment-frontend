@@ -64,6 +64,8 @@ class AuditingServiceSpec extends SpecBase {
       dataEvent.auditSource mustBe expectedAuditSource
       dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
       dataEvent.tags("transactionName") mustBe "Update contact details"
+      dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
+      dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
 
     "create the correct data event for logging a Failure audit event" in new Setup {
@@ -79,6 +81,8 @@ class AuditingServiceSpec extends SpecBase {
       dataEvent.auditSource mustBe expectedAuditSource
       dataEvent.auditType mustBe "UpdateDefermentAccountCorrespondence"
       dataEvent.tags("transactionName") mustBe "Update contact details"
+      dataEvent.detail.toString() must include(expectedPreviousContactDetails.toString)
+      dataEvent.detail.toString() must include(expectedUpdatedContactDetails.toString)
     }
   }
 
@@ -127,31 +131,29 @@ class AuditingServiceSpec extends SpecBase {
 
     val expectedPreviousContactDetails: JsValue = Json.parse(
       """{
-          "contactName":"John Smith",
-          "addressLine1":"1 High Street",
-          "addressLine2":"Town",
-          "addressLine3":"The County",
-          "addressLine4":"England",
-          "postCode":"AB12 3CD",
-          "countryCode":"0044",
-          "telephone":"1234567",
-          "faxNumber":"7654321",
-          "email":"abc@de.com"
-        }""")
+        |"addressLine1":"1 High Street",
+        |"postCode":"AB12 3CD",
+        |"telephone":"1234567",
+        |"faxNumber":"7654321",
+        |"email":"abc@de.com",
+        |"addressLine4":"England",
+        |"addressLine3":"The County",
+        |"contactName":"John Smith",
+        |"countryCode":"0044",
+        |"addressLine2":"Town"}""".stripMargin)
 
     val expectedUpdatedContactDetails: JsValue = Json.parse(
       """{
-        |        "contactName":"John Smith",
         |        "addressLine1":"2 Main Street",
-        |        "addressLine2":"Town",
-        |        "addressLine3":"The County",
-        |        "addressLine4":"Highlands",
         |        "postCode":"SC12 3CD",
-        |        "countryCode":"0045",
         |        "telephone":"1234567",
         |        "faxNumber":"7654321",
-        |        "email":"abc@de.com"
-        |}""".stripMargin)
+        |        "email":"abc@de.com",
+        |        "addressLine4":"Highlands",
+        |        "addressLine3":"The County",
+        |        "contactName":"John Smith",
+        |        "countryCode":"0045",
+        |"addressLine2":"Town"}""".stripMargin)
 
     val mockAuditConnector: AuditConnector = mock[AuditConnector]
     when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(Future.successful(AuditResult.Success))
