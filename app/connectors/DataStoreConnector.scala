@@ -22,18 +22,17 @@ import play.api.http.Status.NOT_FOUND
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import utils.Utils.stringToURL
 
 class DataStoreConnector @Inject()(http: HttpClientV2,
                                    appConfig: AppConfig)
                                   (implicit executionContext: ExecutionContext) {
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] =
-    http.get(stringToURL(s"${appConfig.customsDataStore}/eori/$eori/eori-history"))
+    http.get(url"${appConfig.customsDataStore}/eori/$eori/eori-history")
       .execute[EoriHistoryResponse]
       .flatMap {
         response => Future.successful(response.eoriHistory)
@@ -43,7 +42,7 @@ class DataStoreConnector @Inject()(http: HttpClientV2,
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
 
-    http.get(stringToURL(dataStoreEndpoint))
+    http.get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .flatMap {
         case EmailResponse(Some(address), _, None) => Future.successful(Right(Email(address)))

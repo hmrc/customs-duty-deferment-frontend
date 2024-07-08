@@ -18,10 +18,9 @@ package connectors
 
 import config.AppConfig
 import models.{SDDSRequest, SDDSResponse}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import utils.Utils.stringToURL
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import javax.inject.Inject
@@ -35,7 +34,7 @@ class SDDSConnector @Inject()(httpClient: HttpClientV2,
   private lazy val backUrl: String = appConfig.financialsHomepage
 
   def startJourney(dan: String, email: String)(implicit hc: HeaderCarrier): Future[String] = {
-    httpClient.post(stringToURL(appConfig.sddsUri))
+    httpClient.post(url"${appConfig.sddsUri}")
       .withBody[SDDSRequest](SDDSRequest(returnUrl, backUrl, dan, email))
       .execute[SDDSResponse]
       .flatMap {

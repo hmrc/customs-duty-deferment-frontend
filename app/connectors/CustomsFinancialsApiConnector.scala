@@ -25,7 +25,6 @@ import services.AuditingService
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
-import utils.Utils.stringToURL
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -64,7 +63,7 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
     val trimmed: ContactDetailsUserAnswers = newContactDetails.withWhitespaceTrimmed
     val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest(dan, eori, trimmed)
 
-    val response = httpClient.post(stringToURL(appConfig.updateAccountAddressUrl))
+    val response = httpClient.post(url"${appConfig.updateAccountAddressUrl}")
       .withBody[UpdateContactDetailsRequest](request)
       .execute[UpdateContactDetailsResponse]
       .flatMap {
@@ -77,7 +76,7 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
   }
 
   def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display"))
+    httpClient.get(url"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display")
       .execute[EmailUnverifiedResponse]
       .flatMap {
         response => Future.successful(response.unVerifiedEmail)
@@ -85,7 +84,7 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
-    httpClient.get(stringToURL(s"${appConfig.customsFinancialsApi}/subscriptions/email-display"))
+    httpClient.get(url"${appConfig.customsFinancialsApi}/subscriptions/email-display")
       .execute[EmailVerifiedResponse]
       .flatMap {
         response => Future.successful(response)

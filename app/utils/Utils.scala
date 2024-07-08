@@ -45,6 +45,4 @@ object Utils {
   def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate = {
     date.minusMonths(numberOfMonths).withDayOfMonth(1)
   }
-
-  def stringToURL(urlString: String): URL = new URL(urlString)
 }
