@@ -36,10 +36,10 @@ class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
 
   override def standardErrorTemplate(pageTitle: String,
                                      heading: String,
-                                     message: String)(using request: RequestHeader): Future[Html] =
+                                     message: String)(implicit rh: RequestHeader): Future[Html] =
     Future.successful(errorTemplate(pageTitle, heading, message))
 
-  override def notFoundTemplate(using request: RequestHeader): Future[Html] =
+  override def notFoundTemplate(implicit rh: RequestHeader): Future[Html] =
     Future.successful(notFound())
 
   def unauthorized()(implicit rh: RequestHeader): Html = {
