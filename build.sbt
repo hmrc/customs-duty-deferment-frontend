@@ -21,16 +21,6 @@ lazy val microservice = Project(appName, file("."))
     targetJvm := "jvm-11",
     PlayKeys.playDefaultPort := 9397,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
-  /*  scalacOptions ++= Seq(
-      //"-P:silencer:pathFilters=routes",
-      //"-P:silencer:pathFilters=target/.*",
-      "-no-indent",
-      "-Wunused:imports",
-      "-Wunused:params",
-      //"-Wunused:patvars",
-      "-Wunused:implicits",
-      "-Wunused:explicits",
-      "-Wunused:privates"),*/
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
     Test / scalacOptions ++= Seq(
       "-Wunused:imports",
