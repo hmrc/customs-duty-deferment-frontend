@@ -25,6 +25,7 @@ import play.api.{Application, inject}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
 import util.SpecBase
+import utils.Utils.emptyString
 
 import java.net.URL
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,7 +64,7 @@ class SessionCacheConnectorSpec extends SpecBase {
     "return true on a successful response from the API" in new Setup {
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(HttpResponse(Status.OK, "")))
+        .thenReturn(Future.successful(HttpResponse(Status.OK, emptyString)))
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 

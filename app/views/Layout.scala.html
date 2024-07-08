@@ -27,6 +27,7 @@
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
 @import views.html.partials.countrypickerscript
 @import views.html.helper.CSPNonce
+@import utils.Utils.emptyString
 
 @this(
         appConfig: AppConfig,
@@ -87,7 +88,7 @@
                             signOutUrl = Some(routes.LogoutController.logout.url),
                             accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
                     ),
-        backLink = Some(BackLink(href = backLink.getOrElse(""))),
+        backLink = Some(BackLink(href = backLink.getOrElse(emptyString))),
         templateOverrides = TemplateOverrides(
                                 additionalHeadBlock = Some(additionalHead)
                             ),

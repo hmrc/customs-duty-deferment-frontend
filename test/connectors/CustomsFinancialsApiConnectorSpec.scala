@@ -29,6 +29,7 @@ import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
+import utils.Utils.emptyString
 
 import java.net.URL
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -75,7 +76,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     "return true when the response from the API returns OK" in new Setup {
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, "")))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, emptyString)))
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
@@ -88,7 +89,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     "return false when the response from the API is not OK" in new Setup {
       when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
       when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.NOT_FOUND, "")))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.NOT_FOUND, emptyString)))
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 

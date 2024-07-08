@@ -19,6 +19,7 @@ package models
 import models.FileRole.DutyDefermentStatement
 import play.api.libs.json.JsSuccess
 import util.SpecBase
+import utils.Utils.emptyString
 
 class FileRoleSpec extends SpecBase {
 
@@ -32,7 +33,7 @@ class FileRoleSpec extends SpecBase {
 
     "throw Exception when an unknown file role is applied" in {
       assertThrows[java.lang.Exception] {
-        JsSuccess(FileRole.apply(""))
+        JsSuccess(FileRole.apply(emptyString))
       }
     }
 
