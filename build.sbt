@@ -25,7 +25,6 @@ lazy val microservice = Project(appName, file("."))
     Test / scalacOptions ++= Seq(
       "-Wunused:imports",
       "-Wunused:params",
-      //"-Wunused:patvars",
       "-Wunused:implicits",
       "-Wunused:explicits",
       "-Wunused:privates"),
