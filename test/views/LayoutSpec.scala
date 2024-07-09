@@ -62,7 +62,6 @@ class LayoutSpec extends SpecBase {
   }
 
   private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit msgs: Messages) = {
-
     if (title.nonEmpty) {
       viewDoc.title() mustBe s"$title - ${msgs("service.name")} - GOV.UK"
     } else {

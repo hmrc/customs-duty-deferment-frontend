@@ -19,10 +19,7 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers, Country,
-  DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile, DutyDefermentStatementFileMetadata,
-  EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers, EoriHistory, FileFormat, MetadataItem,
-  UpdateContactDetailsResponse, UserAnswers}
+import models._
 
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito.when

@@ -23,6 +23,7 @@ import util.SpecBase
 class ChangeContactDetailsAuditEventSpec extends SpecBase {
 
   "Reads" should {
+
     "generate correct object" in new Setup {
 
       import ChangeContactDetailsAuditEvent.formats
@@ -32,6 +33,7 @@ class ChangeContactDetailsAuditEventSpec extends SpecBase {
   }
 
   "Writes" should {
+
     "write the correct contents" in new Setup {
       Json.toJson(changeContactDetailsOb) mustBe Json.parse(changeContactDetailsJsString)
     }

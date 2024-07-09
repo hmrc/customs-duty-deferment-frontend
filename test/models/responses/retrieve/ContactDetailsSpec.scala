@@ -22,6 +22,7 @@ import util.SpecBase
 class ContactDetailsSpec extends SpecBase {
 
   "Reads" should {
+
     "generate the correct object" in new Setup {
 
       import ContactDetails.format
@@ -31,6 +32,7 @@ class ContactDetailsSpec extends SpecBase {
   }
 
   "Writes" should {
+
     "generate correct contents" in new Setup {
       Json.toJson(ob) mustBe Json.parse(contactDetailsString)
     }
