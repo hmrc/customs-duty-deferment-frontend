@@ -27,6 +27,8 @@ import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 

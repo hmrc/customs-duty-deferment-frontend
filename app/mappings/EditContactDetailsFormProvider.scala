@@ -35,7 +35,7 @@ class EditContactDetailsFormProvider @Inject()() extends Constraints {
         "fax" -> optional(Forms.text).verifying(isValidPhoneNumber("accountDetails.edit.fax")),
         "email" -> optional(Forms.text).verifying(isValidEmail),
         "isNiAccount" -> of[Boolean]
-      )(EditContactDetailsUserAnswers.apply)(EditContactDetailsUserAnswers.unapply)
+      )(EditContactDetailsUserAnswers.apply)(ecd => Some(Tuple.fromProductTyped(ecd)))
     )
   }
 

@@ -22,11 +22,13 @@
       p: components.p)
 
 
-@(title: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(title: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages, appConfig: AppConfig)
 
 @layout(pageTitle = Some(title), helpAndSupport = false, deskpro = false) {
     @h1(msg = heading)
+
     @p(Html(messages(message)))
+
     @cancel_button(
         Some(routes.ShowContactDetailsController.show().url), messages("accountDetails.edit.backToAccountDetails")
     )

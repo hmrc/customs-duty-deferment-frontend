@@ -19,21 +19,31 @@
 
 @this()
 
-@(form: Form[_], field: String, label: String, countries: List[Country], inputClass: Option[String], args: (Symbol, Any)*)(implicit messages: Messages, request: Request[_])
+@(
+    form: Form[_],
+    field: String,
+    label: String,
+    countries: List[Country],
+    inputClass: Option[String],
+    args: (Symbol, Any)*
+)(
+    implicit messages: Messages,
+    request: Request[_]
+)
 
 @elements = @{
     FieldElements(form(field).id, form(field), null, args.toMap, messages)
 }
 @allErrors = @{
     elements.errors ++ args.flatMap {
-        case ('otherErrors, otherErrors: Seq[_]) => otherErrors.map(_.toString)
+        case (Symbol("otherErrors"), otherErrors: Seq[_]) => otherErrors.map(_.toString)
         case _ => Seq.empty
     }
 }
 
-@selectedValue = @{ form(field).value match { case Some(x) => x case None => "" case x => x }}
+@selectedValue = @{ form(field).value match { case Some(x) => x case None => ""}}
 
-@typedName = @{ form("countryName").value match { case Some(x) => x case None => "" case x => x }}
+@typedName = @{ form("countryName").value match { case Some(x) => x case None => ""}}
 
 <div class="govuk-form-group @inputClass @if(allErrors.nonEmpty){govuk-form-group--error}">
     <label for="@field" class="govuk-label">

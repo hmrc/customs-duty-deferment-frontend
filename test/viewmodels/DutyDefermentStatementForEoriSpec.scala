@@ -20,7 +20,7 @@ import models.DDStatementType.Weekly
 import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, FileFormat}
 import models.FileRole.DutyDefermentStatement
 import util.SpecBase
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers.shouldBe
 
 import java.time.LocalDate
 

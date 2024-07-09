@@ -20,7 +20,7 @@ import com.codahale.metrics.MetricRegistry
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import org.jsoup.nodes.Document
-import org.mockito.scalatest.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{Assertion, OptionValues}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -33,6 +33,7 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import scala.jdk.CollectionConverters._
+import utils.Utils.emptyString
 
 
 trait SpecBase extends AnyWordSpecLike
@@ -85,7 +86,7 @@ trait SpecBase extends AnyWordSpecLike
       "metrics.enabled" -> "false")
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(
-    fakeRequest("", "")
+    fakeRequest(emptyString, emptyString)
   )
 }
 

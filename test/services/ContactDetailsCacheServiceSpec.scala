@@ -25,6 +25,8 @@ import play.api.{Application, inject}
 import util.SpecBase
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.SessionId
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 import scala.concurrent.Future
 

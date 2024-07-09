@@ -36,6 +36,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
 
     "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
+
       running(newApp) {
         val result = route(newApp, successContactDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
@@ -44,6 +45,7 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
 
     "return INTERNAL_SERVER_ERROR when user answers is empty for address details" in new Setup {
       val newApp: Application = application(Some(emptyUserAnswers)).build()
+
       running(newApp) {
         val result = route(newApp, successAddressDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
@@ -68,10 +70,10 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
 
     val successContactDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successContactDetails.url)
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successContactDetails().url)
 
     val successAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
-      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successAddressDetails.url)
+      fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.successAddressDetails().url)
 
     val problemRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem.url)

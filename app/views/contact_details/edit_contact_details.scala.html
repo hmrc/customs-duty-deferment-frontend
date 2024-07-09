@@ -29,8 +29,16 @@
         p: components.p
 
 )
-@(dan: String, isNi: Boolean = false, form: Form[_], countries: List[Country])(
-    implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(
+    dan: String,
+    isNi: Boolean = false,
+    form: Form[_],
+    countries: List[Country]
+)(
+    implicit request: Request[_],
+    messages: Messages,
+    appConfig: AppConfig
+)
 
 @layout(
     pageTitle = Some(messages("accountDetails.edit.title", dan)),
@@ -57,7 +65,7 @@
 
         @p(content = Html(messages("accountDetails.edit.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 
-        @helper.form(routes.EditContactDetailsController.submit, 'id -> "form", 'novalidate -> "novalidate") {
+        @helper.form(routes.EditContactDetailsController.submit, Symbol("id") -> "form", Symbol("novalidate") -> "novalidate") {
             @CSRF.formField
 
             @inputText(

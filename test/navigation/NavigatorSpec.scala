@@ -20,7 +20,9 @@ import controllers.routes
 import util.SpecBase
 
 class NavigatorSpec extends SpecBase {
+
   "backLinkUrlForServiceUnavailablePage" should {
+
     "return correct urls for the provided input" in new Setup {
 
       navigatorOb.backLinkUrlForServiceUnavailablePage("id_not_defined") mustBe empty

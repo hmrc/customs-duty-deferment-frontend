@@ -16,8 +16,8 @@ POST        /contact-details/edit                      controllers.EditContactDe
 GET         /address-details/edit                      controllers.EditAddressDetailsController.onPageLoad
 POST        /address-details/edit                      controllers.EditAddressDetailsController.submit
 
-GET         /address-details/confirmation              controllers.ConfirmContactDetailsController.successAddressDetails
-GET         /contact-details/confirmation              controllers.ConfirmContactDetailsController.successContactDetails
+GET         /address-details/confirmation              controllers.ConfirmContactDetailsController.successAddressDetails()
+GET         /contact-details/confirmation              controllers.ConfirmContactDetailsController.successContactDetails()
 GET         /contact-details/there-is-a-problem        controllers.ConfirmContactDetailsController.problem
 
 GET         /service-unavailable                       controllers.ServiceUnavailableController.onPageLoad(id: String, linkId: String)

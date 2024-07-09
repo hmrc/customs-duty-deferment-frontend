@@ -30,6 +30,8 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
 
@@ -112,7 +114,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       running(newApp) {
         val result = route(newApp, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails.url
+        redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails().url
       }
     }
 

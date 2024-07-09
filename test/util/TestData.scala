@@ -19,13 +19,10 @@ package util
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models.{
-  AccountLink, AccountStatusOpen, CDSAccountStatusId, ContactDetailsUserAnswers,
-  DefermentAccountAvailable, DutyDefermentAccountLink, DutyDefermentStatementFile,
-  DutyDefermentStatementFileMetadata, EditAddressDetailsUserAnswers, EditContactDetailsUserAnswers,
-  EoriHistory, FileFormat, MetadataItem, UpdateContactDetailsResponse, UserAnswers
-}
-import org.mockito.scalatest.MockitoSugar
+import models._
+
+import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.Mockito.when
 import services.CountriesProviderService
 import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
 import viewmodels.DutyDefermentStatementsForEori
@@ -46,7 +43,7 @@ trait TestData extends MockitoSugar {
     None)
   protected val failedUpdateContactResponse: UpdateContactDetailsResponse = UpdateContactDetailsResponse(false)
   protected val sessionId: SessionId = SessionId("session_1234")
-  protected val fakeCountries = List()
+  protected val fakeCountries: List[Country] = List()
   protected val emptyUserAnswers: UserAnswers = UserAnswers("someInternalId")
   protected val accNumber = "12345678"
   protected val testServiceUnavailableUrl = "test_url"

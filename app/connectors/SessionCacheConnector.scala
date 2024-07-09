@@ -20,21 +20,37 @@ import config.AppConfig
 import models.AccountLink
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionCacheConnector @Inject()(httpClient: HttpClient,
+class SessionCacheConnector @Inject()(httpClient: HttpClientV2,
                                       appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
 
-  def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] =
-    httpClient.GET[AccountLink](
-      appConfig.customsSessionCacheUrl + s"/account-link/$id/$linkId"
-    ).map(Some(_)).recover { case _ => None }
+  def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
+    val endpointUrl = appConfig.customsSessionCacheUrl + s"/account-link/$id/$linkId"
 
-  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[Boolean] =
-    httpClient.DELETE[HttpResponse](
-      appConfig.customsSessionCacheUrl + "/remove/" + id
-    ).map(_.status == OK).recover { case _ => false }
+    httpClient.get(url"$endpointUrl")
+      .execute[AccountLink]
+      .flatMap {
+        response => Future.successful(Some(response))
+      }.recover {
+      case _ => None
+    }
+  }
+
+  def removeSession(id: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val endpointUrl = s"${appConfig.customsSessionCacheUrl}/remove/$id"
+
+    httpClient.delete(url"$endpointUrl")
+      .execute[HttpResponse]
+      .flatMap {
+        response => Future.successful(response.status == OK)
+      }.recover {
+      case _ => false
+    }
+  }
+
 }

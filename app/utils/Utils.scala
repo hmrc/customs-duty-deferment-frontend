@@ -19,6 +19,7 @@ package utils
 import play.api.mvc.RequestHeader
 
 import java.time.LocalDate
+import java.net.URL
 
 object Utils {
   val emptyString = ""

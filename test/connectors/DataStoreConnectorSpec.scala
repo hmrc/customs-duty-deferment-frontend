@@ -17,19 +17,25 @@
 package connectors
 
 import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpReads, UpstreamErrorResponse}
 import util.SpecBase
 
-import scala.concurrent.Future
+import java.net.URL
+import scala.concurrent.{ExecutionContext, Future}
 
 class DataStoreConnectorSpec extends SpecBase {
 
   "getAllEoriHistory" should {
     "return a sequence of eori history when the request is successful" in new Setup {
-      when[Future[EoriHistoryResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(eoriHistoryResponse))
 
       running(app) {
@@ -39,7 +45,9 @@ class DataStoreConnectorSpec extends SpecBase {
     }
 
     "return an empty sequence of EORI when the request fails" in new Setup {
-      when[Future[EoriHistoryResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new HttpException("Unknown Error", INTERNAL_SERVER_ERROR)))
 
       running(app) {
@@ -53,7 +61,9 @@ class DataStoreConnectorSpec extends SpecBase {
     "return an email address when the request is successful and undeliverable is not present in the response" in new Setup {
       val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, None)
 
-      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
       running(app) {
@@ -65,7 +75,9 @@ class DataStoreConnectorSpec extends SpecBase {
     "return no email address when the request is successful and undeliverable is present in the response" in new Setup {
       val emailResponse: EmailResponse = EmailResponse(Some("some@email.com"), None, Some(undelInfoOb))
 
-      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
       running(app) {
@@ -77,7 +89,9 @@ class DataStoreConnectorSpec extends SpecBase {
     "return unverifiedEmail when the request is successful and email address is not present in the response" in new Setup {
       val emailResponse: EmailResponse = EmailResponse(None, None, None)
 
-      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
       running(app) {
@@ -87,7 +101,9 @@ class DataStoreConnectorSpec extends SpecBase {
     }
 
     "return no email when a NOT_FOUND response is returned" in new Setup {
-      when[Future[EmailResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
       running(app) {
@@ -98,7 +114,9 @@ class DataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val eoriHistoryResponse: EoriHistoryResponse =
@@ -120,7 +138,8 @@ class DataStoreConnectorSpec extends SpecBase {
       undelInfoEventOb)
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient)
+      inject.bind[HttpClientV2].toInstance(mockHttpClient),
+      inject.bind[RequestBuilder].toInstance(requestBuilder)
     ).build()
 
     val connector: DataStoreConnector = app.injector.instanceOf[DataStoreConnector]

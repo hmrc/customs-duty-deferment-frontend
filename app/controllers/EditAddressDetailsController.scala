@@ -109,7 +109,7 @@ class EditAddressDetailsController @Inject()(view: edit_address_details,
         newContactDetails = updatedAddressDetails
       )
       _ <- contactDetailsCacheService.updateContactDetails(updatedAddressDetails)
-    } yield Redirect(routes.ConfirmContactDetailsController.successAddressDetails)).recover {
+    } yield Redirect(routes.ConfirmContactDetailsController.successAddressDetails())).recover {
       case e =>
         log.error(s"Unable to update account contact details: ${e.getMessage}")
         Redirect(routes.ConfirmContactDetailsController.problem)

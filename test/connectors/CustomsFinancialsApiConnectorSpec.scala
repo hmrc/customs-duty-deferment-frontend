@@ -18,24 +18,32 @@ package connectors
 
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.ContactDetails
-import models.{EmailUnverifiedResponse, EmailVerifiedResponse, GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse}
+import models.{EmailUnverifiedResponse, EmailVerifiedResponse, UpdateContactDetailsResponse}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.AuditingService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
+import utils.Utils.emptyString
 
+import java.net.URL
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "getContactDetails" should {
     "return contact details from the API" in new Setup {
-      when(mockHttpClient.POST[GetContactDetailsRequest, ContactDetails](any, any, any)(any, any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[ContactDetails]], any[ExecutionContext]))
         .thenReturn(Future.successful(validAccountContactDetails))
+
+      when(mockHttpClient.post(any)(any)).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.getContactDetails("someDan", "someEori"))
@@ -46,14 +54,19 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "updateContactDetails" should {
     "return a contact details response" in new Setup {
-      when(mockHttpClient.POST[UpdateContactDetailsRequest, UpdateContactDetailsResponse](any, any, any)(any, any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[UpdateContactDetailsResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(UpdateContactDetailsResponse(true)))
+
+      when(mockHttpClient.post(any[URL]())(any())).thenReturn(requestBuilder)
 
       when(mockAuditingService.changeContactDetailsAuditEvent(any, any, any)(any))
         .thenReturn(Future.successful(AuditResult.Success))
 
       running(app) {
-        val result = await(connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
+        val result = await(
+          connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
+
         result mustBe UpdateContactDetailsResponse(true)
       }
     }
@@ -61,8 +74,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "deleteNotification" should {
     "return true when the response from the API returns OK" in new Setup {
-      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, "")))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.OK, emptyString)))
+
+      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
@@ -71,8 +87,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     }
 
     "return false when the response from the API is not OK" in new Setup {
-      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
-        .thenReturn(Future.successful(HttpResponse.apply(Status.NOT_FOUND, "")))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(HttpResponse.apply(Status.NOT_FOUND, emptyString)))
+
+      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
@@ -81,8 +100,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     }
 
     "return false when the API is failing with exception" in new Setup {
-      when(mockHttpClient.DELETE[HttpResponse](any, any)(any, any, any))
+      when(requestBuilder.withBody(any())(any(), any(), any())).thenReturn(requestBuilder)
+      when(requestBuilder.execute(any[HttpReads[HttpResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new RuntimeException("Failure")))
+
+      when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
@@ -93,8 +115,10 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "isEmailVerified" should {
     "return unverified email" in new Setup {
-      when[Future[EmailUnverifiedResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(EmailUnverifiedResponse(Some("unverified@email.com"))))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         val result = await(connector.isEmailUnverified(hc))
@@ -105,8 +129,10 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   "VerifiedEmail" should {
     "return undelivered email" in new Setup {
-      when[Future[EmailVerifiedResponse]](mockHttpClient.GET(any, any, any)(any, any, any))
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(EmailVerifiedResponse(Some("test@test.com"))))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(app) {
         connector.verifiedEmail.map(_.verifiedEmail mustBe Some("test@test.com"))
@@ -116,11 +142,13 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockHttpClient: HttpClient = mock[HttpClient]
+    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
     val app: Application = application().overrides(
-      inject.bind[HttpClient].toInstance(mockHttpClient),
+      inject.bind[HttpClientV2].toInstance(mockHttpClient),
+      inject.bind[RequestBuilder].toInstance(requestBuilder),
       inject.bind[AuditingService].toInstance(mockAuditingService)
     ).build()
 

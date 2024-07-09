@@ -45,7 +45,7 @@ class EditAddressDetailsFormProvider @Inject()(
         "countryCode" -> of[String].verifying(isValidCountryCode),
         "countryName" -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName)),
         "isNiAccount" -> of[Boolean]
-      )(EditAddressDetailsUserAnswers.apply)(EditAddressDetailsUserAnswers.unapply)
+      )(EditAddressDetailsUserAnswers.apply)(ead => Some(Tuple.fromProductTyped(ead)))
     )
   }
 
