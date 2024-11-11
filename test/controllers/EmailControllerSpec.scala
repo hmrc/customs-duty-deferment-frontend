@@ -62,7 +62,6 @@ class EmailControllerSpec extends SpecBase {
     }
   }
 
-
   "showUndeliverable" must {
     "display undelivered email page" in new Setup {
 
