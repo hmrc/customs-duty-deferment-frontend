@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.CustomsFinancialsApiConnector
+import connectors.DataStoreConnector
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
 import play.api.http.Status.OK
 import play.api.{Application, inject}
@@ -41,10 +41,10 @@ class EmailControllerSpec extends SpecBase {
       when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
       running(app) {
-        val connector = app.injector.instanceOf[CustomsFinancialsApiConnector]
+        val connector = app.injector.instanceOf[DataStoreConnector]
 
-        val result: Future[Option[String]] = connector.isEmailUnverified(hc)
-        await(result) mustBe expectedResult
+        val result: Future[Option[EmailUnverifiedResponse]] = connector.retrieveUnverifiedEmail(hc)
+        await(result).map(_.unVerifiedEmail) mustBe expectedResult
       }
     }
 
@@ -61,6 +61,7 @@ class EmailControllerSpec extends SpecBase {
       }
     }
   }
+
 
   "showUndeliverable" must {
     "display undelivered email page" in new Setup {

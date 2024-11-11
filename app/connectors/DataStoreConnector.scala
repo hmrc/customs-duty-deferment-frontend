@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import models.{EmailResponse, EmailResponses, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UnverifiedEmail}
+import models._
 import play.api.http.Status.NOT_FOUND
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -27,12 +27,12 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataStoreConnector @Inject()(http: HttpClientV2,
+class DataStoreConnector @Inject()(httpClient: HttpClientV2,
                                    appConfig: AppConfig)
                                   (implicit executionContext: ExecutionContext) {
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] =
-    http.get(url"${appConfig.customsDataStore}/eori/$eori/eori-history")
+    httpClient.get(url"${appConfig.customsDataStore}/eori/$eori/eori-history")
       .execute[EoriHistoryResponse]
       .flatMap {
         response => Future.successful(response.eoriHistory)
@@ -42,7 +42,7 @@ class DataStoreConnector @Inject()(http: HttpClientV2,
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
 
-    http.get(url"$dataStoreEndpoint")
+    httpClient.get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .flatMap {
         case EmailResponse(Some(address), _, None) => Future.successful(Right(Email(address)))
@@ -53,4 +53,24 @@ class DataStoreConnector @Inject()(http: HttpClientV2,
     }
   }
 
+  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
+    val emailDisplayApiUrl = s"${appConfig.customsDataStore}/subscriptions/email-display"
+
+    httpClient
+      .get(url"$emailDisplayApiUrl")
+      .execute[EmailVerifiedResponse]
+      .flatMap {
+        response => Future.successful(response)
+      }
+  }
+
+  def retrieveUnverifiedEmail(implicit hc: HeaderCarrier): Future[Option[EmailUnverifiedResponse]] = {
+    val unverifiedEmailDisplayApiUrl = s"${appConfig.customsDataStore}/subscriptions/unverified-email-display"
+
+    httpClient
+      .get(url"$unverifiedEmailDisplayApiUrl")
+      .execute[EmailUnverifiedResponse]
+      .map(response => Some(response)) 
+      .recover { case _ => None }
+  }
 }

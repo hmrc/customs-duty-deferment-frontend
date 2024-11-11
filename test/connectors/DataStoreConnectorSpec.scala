@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{EmailResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail, UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail}
+import models._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.test.Helpers._
@@ -27,6 +27,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpReads, UpstreamErrorR
 import util.SpecBase
 
 import java.net.URL
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class DataStoreConnectorSpec extends SpecBase {
@@ -113,9 +114,38 @@ class DataStoreConnectorSpec extends SpecBase {
     }
   }
 
+  "retrieveUnverifiedEmail" should {
+    "return unverified email" in new Setup {
+      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailUnverifiedRes))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        val result = await(connector.retrieveUnverifiedEmail(hc))
+        result mustBe Some(emailUnverifiedRes) // Updated expectation to match the new return type
+      }
+    }
+  }
+
+
+  "VerifiedEmail" should {
+    "return undelivered email" in new Setup {
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailVerifiedRes))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      running(app) {
+        connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
+      }
+    }
+  }
+
   trait Setup {
     val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
+    val emailId = "test@test.com"
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -136,7 +166,11 @@ class DataStoreConnectorSpec extends SpecBase {
       "example-group-id",
       "2021-05-14T10:59:45.811+01:00",
       undelInfoEventOb)
-
+    
+    val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
+    val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
+   
+    
     val app: Application = application().overrides(
       inject.bind[HttpClientV2].toInstance(mockHttpClient),
       inject.bind[RequestBuilder].toInstance(requestBuilder)

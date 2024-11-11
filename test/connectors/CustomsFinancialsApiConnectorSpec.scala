@@ -18,7 +18,7 @@ package connectors
 
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.ContactDetails
-import models.{EmailUnverifiedResponse, EmailVerifiedResponse, UpdateContactDetailsResponse}
+import models.UpdateContactDetailsResponse
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status
@@ -32,7 +32,6 @@ import util.SpecBase
 import utils.Utils.emptyString
 
 import java.net.URL
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class CustomsFinancialsApiConnectorSpec extends SpecBase {
@@ -113,32 +112,6 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     }
   }
 
-  "isEmailVerified" should {
-    "return unverified email" in new Setup {
-      when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(EmailUnverifiedResponse(Some("unverified@email.com"))))
-
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
-
-      running(app) {
-        val result = await(connector.isEmailUnverified(hc))
-        result mustBe Some("unverified@email.com")
-      }
-    }
-  }
-
-  "VerifiedEmail" should {
-    "return undelivered email" in new Setup {
-      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(EmailVerifiedResponse(Some("test@test.com"))))
-
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
-
-      running(app) {
-        connector.verifiedEmail.map(_.verifiedEmail mustBe Some("test@test.com"))
-      }
-    }
-  }
 
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
