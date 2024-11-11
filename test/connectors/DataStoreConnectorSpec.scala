@@ -123,7 +123,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       running(app) {
         val result = await(connector.retrieveUnverifiedEmail(hc))
-        result mustBe Some(emailUnverifiedRes) // Updated expectation to match the new return type
+        result mustBe Some(emailUnverifiedRes)
       }
     }
   }
@@ -166,11 +166,10 @@ class DataStoreConnectorSpec extends SpecBase {
       "example-group-id",
       "2021-05-14T10:59:45.811+01:00",
       undelInfoEventOb)
-    
+
     val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
-   
-    
+
     val app: Application = application().overrides(
       inject.bind[HttpClientV2].toInstance(mockHttpClient),
       inject.bind[RequestBuilder].toInstance(requestBuilder)
