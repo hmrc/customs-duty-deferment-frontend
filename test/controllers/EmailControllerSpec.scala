@@ -44,7 +44,7 @@ class EmailControllerSpec extends SpecBase {
         val connector = app.injector.instanceOf[DataStoreConnector]
 
         val result: Future[Option[EmailUnverifiedResponse]] = connector.retrieveUnverifiedEmail(hc)
-        await(result).map(_.unVerifiedEmail) mustBe expectedResult
+        await(result).flatMap(_.unVerifiedEmail) mustBe expectedResult
       }
     }
 
