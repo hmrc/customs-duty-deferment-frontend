@@ -16,7 +16,10 @@
 
 package connectors
 
-import models._
+import models.{
+  EmailResponse, EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, EoriHistoryResponse,
+  UndeliverableEmail, UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail
+}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.test.Helpers._
@@ -129,7 +132,7 @@ class DataStoreConnectorSpec extends SpecBase {
   }
 
 
-  "VerifiedEmail" should {
+  "verifiedEmail" should {
     "return undelivered email" in new Setup {
       when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailVerifiedRes))

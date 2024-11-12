@@ -17,7 +17,10 @@
 package connectors
 
 import config.AppConfig
-import models._
+import models.{
+  EmailResponse, EmailResponses, EmailUnverifiedResponse, EmailVerifiedResponse,
+  EoriHistory, EoriHistoryResponse, UndeliverableEmail, UnverifiedEmail
+}
 import play.api.http.Status.NOT_FOUND
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.HttpReads.Implicits.*
@@ -31,18 +34,23 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
                                    appConfig: AppConfig)
                                   (implicit executionContext: ExecutionContext) {
 
-  def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] =
-    httpClient.get(url"${appConfig.customsDataStore}/eori/$eori/eori-history")
+  def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
+    val eoriHistoryEndPoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
+
+    httpClient
+      .get(url"$eoriHistoryEndPoint")
       .execute[EoriHistoryResponse]
       .flatMap {
         response => Future.successful(response.eoriHistory)
       }
       .recover { case _ => Seq(EoriHistory(eori, None, None)) }
+  }
 
   def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
     val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
 
-    httpClient.get(url"$dataStoreEndpoint")
+    httpClient
+      .get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .flatMap {
         case EmailResponse(Some(address), _, None) => Future.successful(Right(Email(address)))
@@ -64,13 +72,14 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
       }
   }
 
-  def retrieveUnverifiedEmail(implicit hc: HeaderCarrier): Future[Option[EmailUnverifiedResponse]] = {
+  def retrieveUnverifiedEmail(implicit hc: HeaderCarrier): Future[Option[String]] = {
     val unverifiedEmailDisplayApiUrl = s"${appConfig.customsDataStore}/subscriptions/unverified-email-display"
 
     httpClient
       .get(url"$unverifiedEmailDisplayApiUrl")
       .execute[EmailUnverifiedResponse]
-      .map(response => Some(response)) 
-      .recover { case _ => None }
+      .flatMap {
+        response => Future.successful(response.unVerifiedEmail)
+      }
   }
 }

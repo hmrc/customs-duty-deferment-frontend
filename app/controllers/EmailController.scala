@@ -40,8 +40,7 @@ class EmailController @Inject()(authenticate: IdentifierAction,
 
   def showUnverified(): Action[AnyContent] = authenticate async { implicit request =>
     dataStoreConnector.retrieveUnverifiedEmail.map {
-      case Some(emailResponse) => Ok(verifyEmailView(appConfig.emailFrontendUrl, emailResponse.unVerifiedEmail))
-      case None => Ok(verifyEmailView(appConfig.emailFrontendUrl, None))
+      email => Ok(verifyEmailView(appConfig.emailFrontendUrl, email))
     }
   }
 

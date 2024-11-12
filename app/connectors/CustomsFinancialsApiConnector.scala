@@ -18,7 +18,10 @@ package connectors
 
 import config.AppConfig
 import models.responses.retrieve.ContactDetails
-import models._
+import models.{
+  ContactDetailsUserAnswers, FileRole,
+  GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse
+}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.mvc.Http.Status
 import services.AuditingService
