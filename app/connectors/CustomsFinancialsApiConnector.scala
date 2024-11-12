@@ -18,7 +18,10 @@ package connectors
 
 import config.AppConfig
 import models.responses.retrieve.ContactDetails
-import models.{EmailUnverifiedResponse, _}
+import models.{
+  ContactDetailsUserAnswers, FileRole,
+  GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse
+}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.mvc.Http.Status
 import services.AuditingService
@@ -74,20 +77,4 @@ class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
 
     response
   }
-
-  def isEmailUnverified(implicit hc: HeaderCarrier): Future[Option[String]] = {
-    httpClient.get(url"${appConfig.customsFinancialsApi}/subscriptions/unverified-email-display")
-      .execute[EmailUnverifiedResponse]
-      .flatMap {
-        response => Future.successful(response.unVerifiedEmail)
-      }
-  }
-
-  def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] =
-    httpClient.get(url"${appConfig.customsFinancialsApi}/subscriptions/email-display")
-      .execute[EmailVerifiedResponse]
-      .flatMap {
-        response => Future.successful(response)
-      }
-
 }
