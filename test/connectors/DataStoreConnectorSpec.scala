@@ -126,7 +126,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       running(app) {
         val result = await(connector.retrieveUnverifiedEmail(hc))
-        result mustBe Some(emailUnverifiedRes)
+        result mustBe expectedResult
       }
     }
   }
@@ -149,6 +149,7 @@ class DataStoreConnectorSpec extends SpecBase {
     val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val emailId = "test@test.com"
+    val expectedResult: Option[String] = Some(emailId)
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
