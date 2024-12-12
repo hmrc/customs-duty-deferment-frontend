@@ -18,10 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class FileInformation(filename: String,
-                           downloadURL: String,
-                           fileSize: Long,
-                           metadata: Metadata) {
+case class FileInformation(filename: String, downloadURL: String, fileSize: Long, metadata: Metadata) {
 
   def toDutyDefermentStatementFile: DutyDefermentStatementFile =
     DutyDefermentStatementFile(

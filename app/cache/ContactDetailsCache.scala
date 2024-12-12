@@ -26,18 +26,19 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class ContactDetailsCache @Inject()(
-                                     appConfig: AppConfig,
-                                     mongoComponent: MongoComponent,
-                                     timestampSupport: TimestampSupport
-                                   )(override implicit val ec: ExecutionContext) extends
-  MongoCacheRepository(
-    mongoComponent = mongoComponent,
-    collectionName = "contact-details-cache",
-    ttl = appConfig.mongoSessionContactDetailsTtl.seconds,
-    timestampSupport = timestampSupport,
-    cacheIdType = CacheIdType.SimpleCacheId
-  ) with SessionCache[ContactDetails] {
+class ContactDetailsCache @Inject() (
+  appConfig: AppConfig,
+  mongoComponent: MongoComponent,
+  timestampSupport: TimestampSupport
+)(override implicit val ec: ExecutionContext)
+    extends MongoCacheRepository(
+      mongoComponent = mongoComponent,
+      collectionName = "contact-details-cache",
+      ttl = appConfig.mongoSessionContactDetailsTtl.seconds,
+      timestampSupport = timestampSupport,
+      cacheIdType = CacheIdType.SimpleCacheId
+    )
+    with SessionCache[ContactDetails] {
 
   override val key: String = "contactDetails"
 }

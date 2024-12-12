@@ -24,29 +24,28 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-
-class AccountLinkCacheService @Inject()(
-                                         sessionCacheConnector: SessionCacheConnector,
-                                         accountLinkCache: AccountLinkCache
-                                       )(implicit executionContext: ExecutionContext) {
-  def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit hc: HeaderCarrier)
-  : Future[Either[SessionCacheError, DutyDefermentAccountLink]] = {
+class AccountLinkCacheService @Inject() (
+  sessionCacheConnector: SessionCacheConnector,
+  accountLinkCache: AccountLinkCache
+)(implicit executionContext: ExecutionContext) {
+  def cacheAccountLink(linkId: String, sessionId: String, internalId: String)(implicit
+    hc: HeaderCarrier
+  ): Future[Either[SessionCacheError, DutyDefermentAccountLink]] =
     sessionCacheConnector.retrieveSession(sessionId, linkId).flatMap {
-      case None => Future.successful(Left(NoDutyDefermentSessionAvailable))
-      case Some(AccountLink(_, _, _, _, None, _)) => Future.successful(Left(NoDutyDefermentSessionAvailable))
+      case None                                                                                         =>
+        Future.successful(Left(NoDutyDefermentSessionAvailable))
+      case Some(AccountLink(_, _, _, _, None, _))                                                       =>
+        Future.successful(Left(NoDutyDefermentSessionAvailable))
       case Some(AccountLink(eori, accountNumber, _, accountStatus, Some(accountStatusId), isNiAccount)) =>
         val details = DutyDefermentAccountLink(eori, accountNumber, linkId, accountStatus, accountStatusId, isNiAccount)
         accountLinkCache.store(internalId, details).map(_ => Right(details))
     }
-  }
 
-  def get(internalId: String): Future[Option[DutyDefermentAccountLink]] = {
+  def get(internalId: String): Future[Option[DutyDefermentAccountLink]] =
     accountLinkCache.retrieve(internalId)
-  }
 
-  def remove(internalId: String): Future[Boolean] = {
+  def remove(internalId: String): Future[Boolean] =
     accountLinkCache.remove(internalId)
-  }
 }
 
 sealed trait SessionCacheError

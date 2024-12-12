@@ -33,33 +33,38 @@ import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountController @Inject()(authenticate: IdentifierAction,
-                                  checkEmailIsVerified: EmailAction,
-                                  apiConnector: CustomsFinancialsApiConnector,
-                                  resolveSessionId: SessionIdAction,
-                                  mcc: MessagesControllerComponents,
-                                  sessionCacheConnector: SessionCacheConnector,
-                                  documentService: DocumentService,
-                                  account: duty_deferment_account,
-                                  unavailable: duty_deferment_statements_not_available,
-                                  errorHandler: ErrorHandler,
-                                  navigator: Navigator
-                                 )(implicit executionContext: ExecutionContext, appConfig: AppConfig) extends
-  FrontendController(mcc) with I18nSupport {
+class AccountController @Inject() (
+  authenticate: IdentifierAction,
+  checkEmailIsVerified: EmailAction,
+  apiConnector: CustomsFinancialsApiConnector,
+  resolveSessionId: SessionIdAction,
+  mcc: MessagesControllerComponents,
+  sessionCacheConnector: SessionCacheConnector,
+  documentService: DocumentService,
+  account: duty_deferment_account,
+  unavailable: duty_deferment_statements_not_available,
+  errorHandler: ErrorHandler,
+  navigator: Navigator
+)(implicit executionContext: ExecutionContext, appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport {
 
   def showAccountDetails(linkId: String): Action[AnyContent] =
     (authenticate andThen checkEmailIsVerified andThen resolveSessionId) async { implicit req =>
       apiConnector.deleteNotification(req.request.user.eori, DutyDefermentStatement)
       (for {
-        accountLink <- fromOptionF(
-          sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
-          Redirect(appConfig.financialsHomepage)
-        )
-        historicEoris = req.request.user.allEoriHistory
-        statementsForEoris <- liftF[Future, Result, Seq[DutyDefermentStatementsForEori]](Future.sequence(
-          historicEoris.map(historicEori =>
-            documentService.getDutyDefermentStatements(historicEori, accountLink.accountNumber)
-          )))
+        accountLink        <- fromOptionF(
+                                sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),
+                                Redirect(appConfig.financialsHomepage)
+                              )
+        historicEoris       = req.request.user.allEoriHistory
+        statementsForEoris <- liftF[Future, Result, Seq[DutyDefermentStatementsForEori]](
+                                Future.sequence(
+                                  historicEoris.map(historicEori =>
+                                    documentService.getDutyDefermentStatements(historicEori, accountLink.accountNumber)
+                                  )
+                                )
+                              )
       } yield {
 
         val historicUrl: String = if (appConfig.historicStatementsEnabled) {
@@ -68,24 +73,32 @@ class AccountController @Inject()(authenticate: IdentifierAction,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
         }
 
-        val dutyDefermentViewModel = DutyDefermentAccountViewModel(accountLink.accountNumber,
-          statementsForEoris, accountLink.linkId, accountLink.isNiAccount, historicUrl)
+        val dutyDefermentViewModel = DutyDefermentAccountViewModel(
+          accountLink.accountNumber,
+          statementsForEoris,
+          accountLink.linkId,
+          accountLink.isNiAccount,
+          historicUrl
+        )
 
         Ok(account(dutyDefermentViewModel))
-      }
-        ).merge.recover {
-        case _ => Redirect(routes.AccountController.statementsUnavailablePage(linkId))
+      }).merge.recover { case _ =>
+        Redirect(routes.AccountController.statementsUnavailablePage(linkId))
       }
     }
 
   def statementsUnavailablePage(linkId: String): Action[AnyContent] =
     (authenticate andThen checkEmailIsVerified andThen resolveSessionId).async { implicit req =>
       sessionCacheConnector.retrieveSession(req.sessionId.value, linkId).map {
-        case Some(link) => Ok(
-          unavailable(link.accountNumber,
-            linkId,
-            Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url)))
-        case None => Unauthorized(errorHandler.unauthorized())
+        case Some(link) =>
+          Ok(
+            unavailable(
+              link.accountNumber,
+              linkId,
+              Some(routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url)
+            )
+          )
+        case None       => Unauthorized(errorHandler.unauthorized())
       }
     }
 }

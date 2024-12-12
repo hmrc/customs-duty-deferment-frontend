@@ -39,7 +39,7 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return the fixed date if fixedDateTime is enabled" in {
 
-      val app = application().configure("features.fixed-systemdate-for-tests" -> true).build()
+      val app     = application().configure("features.fixed-systemdate-for-tests" -> true).build()
       val service = app.injector.instanceOf[DateTimeService]
 
       running(app) {
@@ -54,7 +54,7 @@ class DateTimeServiceSpec extends SpecBase {
 
   trait Setup {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockConfig: AppConfig = mock[AppConfig]
-    val dateTimeService = new DateTimeService(mockConfig)
+    val mockConfig: AppConfig      = mock[AppConfig]
+    val dateTimeService            = new DateTimeService(mockConfig)
   }
 }

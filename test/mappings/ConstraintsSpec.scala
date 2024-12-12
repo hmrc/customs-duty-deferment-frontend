@@ -178,12 +178,14 @@ class ConstraintsSpec extends SpecBase with Constraints {
 
     "address line 2 size is higher than max value" in new SetUp {
       validOptionalAddressField(addressField2Msg)(Some(addressLine2_01)) mustBe Invalid(
-        ValidationError(s"$addressField2Msg.max"))
+        ValidationError(s"$addressField2Msg.max")
+      )
     }
 
     "address line 2 validation aginst regex" in new SetUp {
       validOptionalAddressField(addressField2Msg)(Some(addressLine2_02)) mustBe Invalid(
-        ValidationError(s"$addressField2Msg.invalid"))
+        ValidationError(s"$addressField2Msg.invalid")
+      )
     }
   }
 
@@ -195,12 +197,14 @@ class ConstraintsSpec extends SpecBase with Constraints {
 
     "mandatory address line size is higher than max value" in new SetUp {
       validMandatoryAddressField(addressField1Msg)(addressLine1_01) mustBe Invalid(
-        ValidationError(s"$addressField1Msg.max"))
+        ValidationError(s"$addressField1Msg.max")
+      )
     }
 
     "mandatory address line validation aginst regex" in new SetUp {
       validMandatoryAddressField(addressField1Msg)(addressLine1_02) mustBe Invalid(
-        ValidationError(s"$addressField1Msg.invalid"))
+        ValidationError(s"$addressField1Msg.invalid")
+      )
     }
   }
 
@@ -215,12 +219,14 @@ class ConstraintsSpec extends SpecBase with Constraints {
 
     "phoneNumber has invalid regex" in new SetUp {
       isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_1)) mustBe Invalid(
-        ValidationError(s"$phoneNumberMessage.invalid"))
+        ValidationError(s"$phoneNumberMessage.invalid")
+      )
     }
 
     "phoneNumber has exceeded 24 characters" in new SetUp {
       isValidPhoneNumber(phoneNumberMessage)(Some(invalidPhone_2)) mustBe Invalid(
-        ValidationError(s"$phoneNumberMessage.invalid"))
+        ValidationError(s"$phoneNumberMessage.invalid")
+      )
     }
 
   }
@@ -228,10 +234,10 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces: Some[String] = Some("   ")
-  val email: Some[String] = Some("abc@test.com")
-  val emailWithLeadingSpaces: Some[String] = Some("   abc@test.com")
-  val emailWithTrailingSpaces: Some[String] = Some("abc@test.com   ")
+  val spaces: Some[String]                            = Some("   ")
+  val email: Some[String]                             = Some("abc@test.com")
+  val emailWithLeadingSpaces: Some[String]            = Some("   abc@test.com")
+  val emailWithTrailingSpaces: Some[String]           = Some("abc@test.com   ")
   val emailWithLeadingAndTrailingSpaces: Some[String] = Some("   abc@test.com   ")
 
   val emailWithSpacesWithIn_1: Some[String] = Some("abc @test.com")
@@ -244,34 +250,35 @@ trait SetUp {
   val invalidEmail_2: Some[String] = Some("firstlast")
   val invalidEmail_3: Some[String] = Some("first.com")
   val invalidEmail_4: Some[String] = Some(".com")
-  val invalidEmail_5: Some[String] = Some("thisemailaddressisgreaterthan@132charactershenceinvalid" +
+  val invalidEmail_5: Some[String] = Some(
     "thisemailaddressisgreaterthan@132charactershenceinvalid" +
-    "thisemailaddressisgreaterthan@132charactershenceinvalid")
+      "thisemailaddressisgreaterthan@132charactershenceinvalid" +
+      "thisemailaddressisgreaterthan@132charactershenceinvalid"
+  )
   val invalidEmail_6: Some[String] = Some("")
   val invalidEmail_7: Some[String] = Some(" ")
 
-  val postcode = "LS1 4AW"
+  val postcode          = "LS1 4AW"
   val invalidPostcode_1 = ""
   val invalidPostcode_2 = "LS11  4AE"
   val invalidPostcode_3 = "12345"
 
-  val phoneNumber = "01133111122"
+  val phoneNumber    = "01133111122"
   val invalidPhone_1 = "A123456"
   val invalidPhone_2 = "01112222333344446666777722334455"
 
   val phoneNumberMessage = "accountDetails.edit.telephone"
 
-  val nameField_01 = "John Doe"
-  val nameField_02 = "John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
-  val nameField_03 = "John Doe %"
+  val nameField_01    = "John Doe"
+  val nameField_02    = "John Doe Lorem ipsum dolor sit amet consectetur adipiscing"
+  val nameField_03    = "John Doe %"
   val nameFieldMsg_01 = "accountDetails.edit.name"
 
-  val addressLine1_01 = "Address Line 1 Lorem ipsum dolor sit"
-  val addressLine1_02 = "John Doe %"
+  val addressLine1_01  = "Address Line 1 Lorem ipsum dolor sit"
+  val addressLine1_02  = "John Doe %"
   val addressField1Msg = "accountDetails.edit.address.line1"
 
-
-  val addressLine2_01 = "Address Line 2 Lorem ipsum dolor sit"
-  val addressLine2_02 = "John Doe %"
+  val addressLine2_01  = "Address Line 2 Lorem ipsum dolor sit"
+  val addressLine2_02  = "John Doe %"
   val addressField2Msg = "accountDetails.edit.address.line2"
 }

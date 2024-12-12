@@ -55,32 +55,47 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
   }
 
   trait Setup {
-    val year = previousMonthDate.getYear
+    val year  = previousMonthDate.getYear
     val month = previousMonthDate.getMonthValue
 
     val startDate01 = LocalDate.of(year, month, DAY_01)
     val startDate02 = LocalDate.of(year, month, DAY_02)
-    val endDate01 = LocalDate.of(year, month, DAY_25)
-    val endDate02 = LocalDate.of(year, month, DAY_26)
+    val endDate01   = LocalDate.of(year, month, DAY_25)
+    val endDate02   = LocalDate.of(year, month, DAY_26)
 
-    val period1 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Supplementary,
-      startDate01, startDate01, endDate01)
+    val period1 = DutyDefermentStatementPeriod(
+      FileRole.DutyDefermentStatement,
+      DDStatementType.Supplementary,
+      startDate01,
+      startDate01,
+      endDate01
+    )
 
-    val period2 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Excise,
-      startDate01, startDate01, endDate01)
+    val period2 = DutyDefermentStatementPeriod(
+      FileRole.DutyDefermentStatement,
+      DDStatementType.Excise,
+      startDate01,
+      startDate01,
+      endDate01
+    )
 
-    val period3 = DutyDefermentStatementPeriod(FileRole.DutyDefermentStatement, DDStatementType.Weekly,
-      startDate01, startDate01, endDate01)
+    val period3 = DutyDefermentStatementPeriod(
+      FileRole.DutyDefermentStatement,
+      DDStatementType.Weekly,
+      startDate01,
+      startDate01,
+      endDate01
+    )
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val request: FakeRequest[AnyContentAsEmpty.type] =
-      FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url).withHeaders(
-        "X-Session-Id" -> "someSessionId")
+      FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
+        .withHeaders("X-Session-Id" -> "someSessionId")
 
-    val app: Application = application().overrides().build()
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val app: Application         = application().overrides().build()
+    val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(request)
+    val messages: Messages       = messagesApi.preferred(request)
   }
 }

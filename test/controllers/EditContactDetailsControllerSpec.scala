@@ -38,10 +38,12 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     "return OK on a valid request" in new Setup {
 
-      val newApp: Application = application(Some(userAnswers)).overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-      ).build()
+      val newApp: Application = application(Some(userAnswers))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+        )
+        .build()
 
       running(newApp) {
         val result = route(newApp, onPageLoadRequest).value
@@ -110,14 +112,16 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    lazy val app: Application = application(Some(userAnswers)).overrides(
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-    ).build()
+    lazy val app: Application = application(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
+      )
+      .build()
 
-    val view: edit_contact_details = app.injector.instanceOf[edit_contact_details]
+    val view: edit_contact_details                = app.injector.instanceOf[edit_contact_details]
     val form: Form[EditContactDetailsUserAnswers] = app.injector.instanceOf[EditContactDetailsFormProvider].apply()
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(onPageLoadRequest)
+    val appConfig: AppConfig                      = app.injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi                  = app.injector.instanceOf[MessagesApi]
+    val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
   }
 }

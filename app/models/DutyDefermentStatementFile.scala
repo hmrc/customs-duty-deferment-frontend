@@ -23,32 +23,36 @@ import views.helpers.Formatters
 
 import java.time.LocalDate
 
-case class DutyDefermentStatementFile(filename: String,
-                                      downloadURL: String,
-                                      fileSize: Long,
-                                      metadata: DutyDefermentStatementFileMetadata)
-  extends Ordered[DutyDefermentStatementFile] {
+case class DutyDefermentStatementFile(
+  filename: String,
+  downloadURL: String,
+  fileSize: Long,
+  metadata: DutyDefermentStatementFileMetadata
+) extends Ordered[DutyDefermentStatementFile] {
 
-  val fileFormat: FileFormat = metadata.fileFormat
+  val fileFormat: FileFormat  = metadata.fileFormat
   val monthAndYear: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, 1)
 
   def downloadLinkAriaLabel()(implicit messages: Messages): String = {
-    lazy val endDateMonthAndYear = Formatters.dateAsMonthAndYear(endDate)
+    lazy val endDateMonthAndYear    = Formatters.dateAsMonthAndYear(endDate)
     lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(endDate)
-    lazy val startDateDay = Formatters.dateAsDay(startDate)
-    lazy val formattedFileSize = Formatters.fileSize(fileSize)
+    lazy val startDateDay           = Formatters.dateAsDay(startDate)
+    lazy val formattedFileSize      = Formatters.fileSize(fileSize)
 
     metadata.defermentStatementType match {
-      case Supplementary => messages("cf.account.detail.supplementary-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case Excise => messages("cf.account.detail.excise-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case _ => messages("cf.account.detail.download-link", fileFormat, startDateDay, endDateDayMonthAndYear, formattedFileSize)
+      case Supplementary =>
+        messages("cf.account.detail.supplementary-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
+      case Excise        =>
+        messages("cf.account.detail.excise-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
+      case _             =>
+        messages("cf.account.detail.download-link", fileFormat, startDateDay, endDateDayMonthAndYear, formattedFileSize)
     }
   }
 
   def compare(that: DutyDefermentStatementFile): Int = fileFormat.compare(that.fileFormat)
 
   val startDate: LocalDate = LocalDate.of(metadata.periodStartYear, metadata.periodStartMonth, metadata.periodStartDay)
-  val endDate: LocalDate = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
+  val endDate: LocalDate   = LocalDate.of(metadata.periodEndYear, metadata.periodEndMonth, metadata.periodEndDay)
 }
 
 object DutyDefermentStatementFile {

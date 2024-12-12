@@ -25,35 +25,40 @@ import java.util.Locale
 import play.api.i18n.Messages
 
 trait DateFormatters {
-  def dateAsMonth(date: LocalDate)(implicit messages: Messages): String = messages(s"month.${date.getMonthValue}")
-  def dateAsDayMonthAndYear(date: LocalDate)(implicit messages: Messages): String = s"${date.getDayOfMonth} ${dateAsMonth(date)} ${date.getYear}"
-  def dateAsMonthAndYear(date: LocalDate)(implicit messages: Messages): String = s"${dateAsMonth(date)} ${date.getYear}"
-  def dateAsDay(date: LocalDate): String = DateTimeFormatter.ofPattern("d").format(date)
+  def dateAsMonth(date: LocalDate)(implicit messages: Messages): String           = messages(s"month.${date.getMonthValue}")
+  def dateAsDayMonthAndYear(date: LocalDate)(implicit messages: Messages): String =
+    s"${date.getDayOfMonth} ${dateAsMonth(date)} ${date.getYear}"
+  def dateAsMonthAndYear(date: LocalDate)(implicit messages: Messages): String    = s"${dateAsMonth(date)} ${date.getYear}"
+  def dateAsDay(date: LocalDate): String                                          = DateTimeFormatter.ofPattern("d").format(date)
 
-  def dateAsAbbrMonth(date: LocalDate)(implicit messages: Messages): String = messages(s"month.abbr.${date.getMonthValue}")
-  def dateAsdMMMyyyy(date: LocalDate)(implicit messages: Messages): String = s"${date.getDayOfMonth} ${dateAsAbbrMonth(date)} ${date.getYear}"
+  def dateAsAbbrMonth(date: LocalDate)(implicit messages: Messages): String = messages(
+    s"month.abbr.${date.getMonthValue}"
+  )
+  def dateAsdMMMyyyy(date: LocalDate)(implicit messages: Messages): String  =
+    s"${date.getDayOfMonth} ${dateAsAbbrMonth(date)} ${date.getYear}"
 
-  def timeAsHourMinutesWithAmPm(dateTime: LocalDateTime): String = DateTimeFormatter.ofPattern("hh:mm a").format(dateTime)
+  def timeAsHourMinutesWithAmPm(dateTime: LocalDateTime): String =
+    DateTimeFormatter.ofPattern("hh:mm a").format(dateTime)
 
-  def updatedDateTime(dateTime: LocalDateTime)(implicit messages: Messages): String = {
-    Formatters.timeAsHourMinutesWithAmPm(dateTime).toLowerCase + " on " + Formatters.dateAsDayMonthAndYear(dateTime.toLocalDate)
-  }
+  def updatedDateTime(dateTime: LocalDateTime)(implicit messages: Messages): String =
+    Formatters.timeAsHourMinutesWithAmPm(dateTime).toLowerCase + " on " + Formatters.dateAsDayMonthAndYear(
+      dateTime.toLocalDate
+    )
 
-  def dateTimeAsIso8601(dateTime: LocalDateTime): String = {
+  def dateTimeAsIso8601(dateTime: LocalDateTime): String =
     s"${DateTimeFormatter.ISO_DATE_TIME.format(dateTime.truncatedTo(ChronoUnit.SECONDS))}Z"
-  }
 }
 
 trait CurrencyFormatters {
   def formatCurrencyAmount(amount: BigDecimal): String = {
     val numberFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.UK)
-    val outputDecimals = if (amount.isWhole) 0 else 2
+    val outputDecimals             = if (amount.isWhole) 0 else 2
     numberFormat.setMaximumFractionDigits(outputDecimals)
     numberFormat.setMinimumFractionDigits(outputDecimals)
     numberFormat.format(amount)
   }
 
-  def formatCurrencyAmountWithLeadingPlus(amount: BigDecimal): String ={
+  def formatCurrencyAmountWithLeadingPlus(amount: BigDecimal): String = {
     val formattedAmount = formatCurrencyAmount(amount)
     if (amount > 0) {
       "+" + formattedAmount
@@ -63,16 +68,15 @@ trait CurrencyFormatters {
   }
 }
 
-
 trait FileFormatters {
 
-  private val kbThreshold = 1024
+  private val kbThreshold      = 1024
   private val mbThreshold: Int = 1024 * 1024
 
   def fileSize(size: Long): String = size match {
     case kb if kb >= kbThreshold && kb < mbThreshold => s"${kb / kbThreshold}KB"
-    case mb if mb >= mbThreshold => f"${mb / mbThreshold.toDouble}%.1fMB"
-    case _ => "1KB"
+    case mb if mb >= mbThreshold                     => f"${mb / mbThreshold.toDouble}%.1fMB"
+    case _                                           => "1KB"
   }
 }
 

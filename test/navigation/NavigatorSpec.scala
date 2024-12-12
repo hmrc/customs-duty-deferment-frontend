@@ -27,17 +27,19 @@ class NavigatorSpec extends SpecBase {
 
       navigatorOb.backLinkUrlForServiceUnavailablePage("id_not_defined") mustBe empty
 
-      navigatorOb.backLinkUrlForServiceUnavailablePage(navigatorOb.dutyDefermentStatementPageId,
-        linkId1) mustBe Some(routes.AccountController.showAccountDetails(linkId1).url)
+      navigatorOb.backLinkUrlForServiceUnavailablePage(navigatorOb.dutyDefermentStatementPageId, linkId1) mustBe Some(
+        routes.AccountController.showAccountDetails(linkId1).url
+      )
 
-      navigatorOb.backLinkUrlForServiceUnavailablePage(navigatorOb.dutyDefermentStatementNAPageId,
-        linkId2) mustBe Some(routes.AccountController.statementsUnavailablePage(linkId2).url)
+      navigatorOb.backLinkUrlForServiceUnavailablePage(navigatorOb.dutyDefermentStatementNAPageId, linkId2) mustBe Some(
+        routes.AccountController.statementsUnavailablePage(linkId2).url
+      )
     }
   }
 
   trait Setup {
     val navigatorOb = new Navigator()
-    val linkId1 = "linkId1"
-    val linkId2 = "linkId2"
+    val linkId1     = "linkId1"
+    val linkId2     = "linkId2"
   }
 }

@@ -78,26 +78,25 @@ object CDSAccountStatusId {
     DebitRejectedReferToDrawer,
     ReturnedMailOther,
     GuaranteeExceeded,
-    AccountCancelled)
+    AccountCancelled
+  )
 
   implicit val CDSAccountStatusIdReads: Format[CDSAccountStatusId] = new Format[CDSAccountStatusId] {
     override def writes(accountStatusId: CDSAccountStatusId): JsValue = JsNumber(accountStatusId.value)
 
-    override def reads(json: JsValue): JsResult[CDSAccountStatusId] = {
-
+    override def reads(json: JsValue): JsResult[CDSAccountStatusId] =
       JsSuccess(
         json.asOpt[Int] match {
           case Some(statusId) =>
-            values.find(_.value == statusId).getOrElse({
+            values.find(_.value == statusId).getOrElse {
               logger.warn(s"Invalid account status id: $statusId")
               DefermentAccountAvailable
-            })
-          case None =>
+            }
+          case None           =>
             logger.warn(s"No account status id in JSON")
             DefermentAccountAvailable
         }
       )
 
-    }
   }
 }

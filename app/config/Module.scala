@@ -18,12 +18,11 @@ package config
 
 import com.google.inject.AbstractModule
 import controllers.actions.{
-  AuthenticatedIdentifierAction, DataRequiredAction,
-  DataRequiredActionImpl, DataRetrievalAction, DataRetrievalActionImpl, IdentifierAction
+  AuthenticatedIdentifierAction, DataRequiredAction, DataRequiredActionImpl, DataRetrievalAction,
+  DataRetrievalActionImpl, IdentifierAction
 }
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
-
 
 class Module extends AbstractModule {
 

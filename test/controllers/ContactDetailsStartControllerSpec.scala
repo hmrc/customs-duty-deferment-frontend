@@ -92,12 +92,11 @@ class ContactDetailsStartControllerSpec extends SpecBase {
     }
   }
 
-
   trait Setup {
     val mockContactDetailsCacheService: ContactDetailsCacheService = mock[ContactDetailsCacheService]
-    val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
-    val mockCountryProviderService: CountriesProviderService = mock[CountriesProviderService]
-    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+    val mockAccountLinkCacheService: AccountLinkCacheService       = mock[AccountLinkCacheService]
+    val mockCountryProviderService: CountriesProviderService       = mock[CountriesProviderService]
+    val mockUserAnswersCache: UserAnswersCache                     = mock[UserAnswersCache]
 
     val startEditContactDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(true).url)
@@ -105,11 +104,13 @@ class ContactDetailsStartControllerSpec extends SpecBase {
     val startEditAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(false).url)
 
-    val app: Application = application().overrides(
-      inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
-      inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
-      inject.bind[CountriesProviderService].toInstance(mockCountryProviderService),
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
+        inject.bind[CountriesProviderService].toInstance(mockCountryProviderService),
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
+      )
+      .build()
   }
 }

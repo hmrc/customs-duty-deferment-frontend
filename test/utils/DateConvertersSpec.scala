@@ -39,19 +39,19 @@ class DateConvertersSpec extends SpecBase {
 
   "DateConverters" should {
     "OrderedLocalDate can be used to compare dates" in {
-      val date = LocalDate.now()
+      val date   = LocalDate.now()
       val result = OrderedLocalDate(date).compare(date)
       result mustBe 0
     }
 
     "OrderedLocalDate fails if dates are not valid" in {
       val diffTime = LocalDate.MIN
-      val result = OrderedLocalDate(LocalDate.now()).compare(diffTime)
+      val result   = OrderedLocalDate(LocalDate.now()).compare(diffTime)
       result mustBe 1000002023
     }
 
     "OrderedLocalDate fails if dates are not equal" in {
-      val date = LocalDate.now()
+      val date   = LocalDate.now()
       val result = OrderedLocalDate(date).compare(LocalDate.now())
       result mustBe 0
     }

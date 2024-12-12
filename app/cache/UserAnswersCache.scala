@@ -26,18 +26,19 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class UserAnswersCache @Inject()(
-                                  appConfig: AppConfig,
-                                  mongoComponent: MongoComponent,
-                                  timestampSupport: TimestampSupport
-                                )(override implicit val ec: ExecutionContext) extends
-  MongoCacheRepository(
-    mongoComponent = mongoComponent,
-    collectionName = "user-answers",
-    ttl = appConfig.mongoSessionTtl.seconds,
-    timestampSupport = timestampSupport,
-    cacheIdType = CacheIdType.SimpleCacheId
-  ) with SessionCache[UserAnswers] {
+class UserAnswersCache @Inject() (
+  appConfig: AppConfig,
+  mongoComponent: MongoComponent,
+  timestampSupport: TimestampSupport
+)(override implicit val ec: ExecutionContext)
+    extends MongoCacheRepository(
+      mongoComponent = mongoComponent,
+      collectionName = "user-answers",
+      ttl = appConfig.mongoSessionTtl.seconds,
+      timestampSupport = timestampSupport,
+      cacheIdType = CacheIdType.SimpleCacheId
+    )
+    with SessionCache[UserAnswers] {
 
   override val key: String = "userAnswers"
 }

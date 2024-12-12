@@ -36,12 +36,12 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
 
   trait Setup {
 
-    val periodStartYear = 2023
+    val periodStartYear  = 2023
     val periodStartMonth = 10
-    val periodStartDay = 1
-    val periodEndYear = 2023
-    val periodEndMonth = 10
-    val periodEndDay = 31
+    val periodStartDay   = 1
+    val periodEndYear    = 2023
+    val periodEndMonth   = 10
+    val periodEndDay     = 31
 
     val metadata: DutyDefermentStatementFileMetadata = DutyDefermentStatementFileMetadata(
       periodStartYear = periodStartYear,
@@ -60,24 +60,25 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
     )
 
     val expectedMap = Map(
-      "periodEndYear" -> "2023",
+      "periodEndYear"          -> "2023",
       "defermentStatementType" -> "Weekly",
-      "dan" -> "DAN123456",
-      "fileRole" -> "DutyDefermentStatement",
-      "dutyPaymentType" -> "Some(BACS)",
-      "periodEndDay" -> "31",
-      "dutyOverLimit" -> "Some(true)",
-      "periodStartDay" -> "1",
-      "fileFormat" -> "CSV",
-      "periodStartMonth" -> "10",
-      "periodStartYear" -> "2023",
-      "statementRequestId" -> "Some(123456)",
-      "periodEndMonth" -> "10"
+      "dan"                    -> "DAN123456",
+      "fileRole"               -> "DutyDefermentStatement",
+      "dutyPaymentType"        -> "Some(BACS)",
+      "periodEndDay"           -> "31",
+      "dutyOverLimit"          -> "Some(true)",
+      "periodStartDay"         -> "1",
+      "fileFormat"             -> "CSV",
+      "periodStartMonth"       -> "10",
+      "periodStartYear"        -> "2023",
+      "statementRequestId"     -> "Some(123456)",
+      "periodEndMonth"         -> "10"
     )
 
     val json: JsValue = Json.toJson(metadata)
 
-    val parsedMetadata: JsResult[DutyDefermentStatementFileMetadata] = Json.fromJson[DutyDefermentStatementFileMetadata](json)
+    val parsedMetadata: JsResult[DutyDefermentStatementFileMetadata] =
+      Json.fromJson[DutyDefermentStatementFileMetadata](json)
 
   }
 }

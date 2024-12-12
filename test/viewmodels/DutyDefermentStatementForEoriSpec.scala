@@ -47,11 +47,11 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
         LocalDate.now()
       )
 
-      dutyDefermentStatementsForEori.currentStatements.size shouldBe 3
+      dutyDefermentStatementsForEori.currentStatements.size   shouldBe 3
       dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.size shouldBe 2
+      dutyDefermentStatementsForEori.groups.size              shouldBe 2
       dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.tail.size shouldBe 1
+      dutyDefermentStatementsForEori.groups.tail.size         shouldBe 1
     }
 
     "correctly give no statements when dates are more than 7 months" in new Setup {
@@ -71,9 +71,9 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
         LocalDate.now()
       )
 
-      dutyDefermentStatementsForEori.currentStatements.size shouldBe 1
+      dutyDefermentStatementsForEori.currentStatements.size   shouldBe 1
       dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.isEmpty shouldBe true
+      dutyDefermentStatementsForEori.groups.isEmpty           shouldBe true
     }
 
   }
@@ -81,7 +81,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
   trait Setup {
 
     val eightMonths = 8
-    val dayTen = 10
+    val dayTen      = 10
 
     val endDate = LocalDate.now
 
@@ -89,17 +89,53 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
     val startDate02 = endDate.minusMonths(2)
     val startDate03 = endDate.minusMonths(eightMonths)
 
-    val metaData01 = DutyDefermentStatementFileMetadata(startDate01.getYear, startDate01.getMonthValue, 1,
-      startDate01.getYear, startDate01.getMonthValue, dayTen, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true),
-      Some("BACS"), "123456", None)
+    val metaData01 = DutyDefermentStatementFileMetadata(
+      startDate01.getYear,
+      startDate01.getMonthValue,
+      1,
+      startDate01.getYear,
+      startDate01.getMonthValue,
+      dayTen,
+      FileFormat.Csv,
+      DutyDefermentStatement,
+      Weekly,
+      Some(true),
+      Some("BACS"),
+      "123456",
+      None
+    )
 
-    val metaData02 = DutyDefermentStatementFileMetadata(startDate02.getYear, startDate02.getMonthValue, 1,
-      startDate02.getYear, startDate02.getMonthValue, dayTen, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true),
-      Some("BACS"), "123456", None)
+    val metaData02 = DutyDefermentStatementFileMetadata(
+      startDate02.getYear,
+      startDate02.getMonthValue,
+      1,
+      startDate02.getYear,
+      startDate02.getMonthValue,
+      dayTen,
+      FileFormat.Csv,
+      DutyDefermentStatement,
+      Weekly,
+      Some(true),
+      Some("BACS"),
+      "123456",
+      None
+    )
 
-    val metaData03 = DutyDefermentStatementFileMetadata(startDate03.getYear, startDate03.getMonthValue, 1,
-      startDate03.getYear, startDate03.getMonthValue, dayTen, FileFormat.Csv, DutyDefermentStatement, Weekly, Some(true),
-      Some("BACS"), "123456", None)
+    val metaData03 = DutyDefermentStatementFileMetadata(
+      startDate03.getYear,
+      startDate03.getMonthValue,
+      1,
+      startDate03.getYear,
+      startDate03.getMonthValue,
+      dayTen,
+      FileFormat.Csv,
+      DutyDefermentStatement,
+      Weekly,
+      Some(true),
+      Some("BACS"),
+      "123456",
+      None
+    )
 
   }
 }

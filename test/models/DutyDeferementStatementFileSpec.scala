@@ -38,36 +38,100 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
     "compare file returns failure response when start month is 0" in new Setup {
       assertThrows[java.time.DateTimeException] {
-        DutyDefermentStatementFile("", "", 0L,
-          DutyDefermentStatementFileMetadata(0, 0, 0, 0, 0, 0, FileFormat.Csv,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        DutyDefermentStatementFile(
+          "",
+          "",
+          0L,
+          DutyDefermentStatementFileMetadata(
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            FileFormat.Csv,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
       }
     }
 
     "compare file returns failure response when end month is 0" in new Setup {
       assertThrows[java.time.DateTimeException] {
-        DutyDefermentStatementFile("", "", 0L,
-          DutyDefermentStatementFileMetadata(0, 1, 1, 0, 0, 1, FileFormat.Csv,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        DutyDefermentStatementFile(
+          "",
+          "",
+          0L,
+          DutyDefermentStatementFileMetadata(
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            FileFormat.Csv,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
       }
     }
 
     "compare file returns failure response when start day is 0" in new Setup {
       assertThrows[java.time.DateTimeException] {
-        DutyDefermentStatementFile("", "", 0L,
-          DutyDefermentStatementFileMetadata(0, 1, 0, 0, 0, 0, FileFormat.Csv,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        DutyDefermentStatementFile(
+          "",
+          "",
+          0L,
+          DutyDefermentStatementFileMetadata(
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            FileFormat.Csv,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
       }
     }
 
     "compare file returns failure response when end day is 0" in new Setup {
       assertThrows[java.time.DateTimeException] {
-        DutyDefermentStatementFile("", "", 0L,
-          DutyDefermentStatementFileMetadata(0, 1, 1, 0, 1, 0, FileFormat.Csv,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+        DutyDefermentStatementFile(
+          "",
+          "",
+          0L,
+          DutyDefermentStatementFileMetadata(
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            FileFormat.Csv,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
       }
     }
@@ -75,14 +139,28 @@ class DutyDeferementStatementFileSpec extends SpecBase {
     "compare file returns success when all dates are valid" in new Setup {
 
       val periodStartYear = 2019
-      val periodEndYear = 2020
+      val periodEndYear   = 2020
 
       val differentFile: DutyDefermentStatementFile =
         DutyDefermentStatementFile(
-          "", "", 0L,
+          "",
+          "",
+          0L,
           DutyDefermentStatementFileMetadata(
-            periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.Csv,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+            periodStartYear,
+            1,
+            1,
+            periodEndYear,
+            1,
+            1,
+            FileFormat.Csv,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
 
       val result: Int = currentFile.compare(differentFile)
@@ -92,14 +170,28 @@ class DutyDeferementStatementFileSpec extends SpecBase {
     "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
 
       val periodStartYear = 2019
-      val periodEndYear = 2020
+      val periodEndYear   = 2020
 
       val differentFile: DutyDefermentStatementFile =
         DutyDefermentStatementFile(
-          "", "", 0L,
+          "",
+          "",
+          0L,
           DutyDefermentStatementFileMetadata(
-            periodStartYear, 1, 1, periodEndYear, 1, 1, FileFormat.UnknownFileFormat,
-            DutyDefermentStatement, Weekly, Some(true), Some(""), "", None)
+            periodStartYear,
+            1,
+            1,
+            periodEndYear,
+            1,
+            1,
+            FileFormat.UnknownFileFormat,
+            DutyDefermentStatement,
+            Weekly,
+            Some(true),
+            Some(""),
+            "",
+            None
+          )
         )
 
       val result: Int = currentFile.compare(differentFile)
@@ -133,22 +225,35 @@ class DutyDeferementStatementFileSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val startYear = 2018
+    val startYear  = 2018
     val startMonth = 6
-    val startDate = 1
-    val endYear = 2018
-    val endMonth = 6
-    val endDate = 8
-    val fileSize = 10L
-    val dan = "123456"
+    val startDate  = 1
+    val endYear    = 2018
+    val endMonth   = 6
+    val endDate    = 8
+    val fileSize   = 10L
+    val dan        = "123456"
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endDate, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), dan, None)
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endDate,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          dan,
+          None
+        )
       )
 
     val currentSupplementaryFile: DutyDefermentStatementFile =
@@ -156,8 +261,21 @@ class DutyDeferementStatementFileSpec extends SpecBase {
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Supplementary, Some(true), Some("BACS"), dan, None)
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          Supplementary,
+          Some(true),
+          Some("BACS"),
+          dan,
+          None
+        )
       )
 
     val currentExciseFile: DutyDefermentStatementFile =
@@ -165,17 +283,30 @@ class DutyDeferementStatementFileSpec extends SpecBase {
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Excise, Some(true), Some("BACS"), dan, None)
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          Excise,
+          Some(true),
+          Some("BACS"),
+          dan,
+          None
+        )
       )
 
     val request: FakeRequest[AnyContentAsEmpty.type] =
-      FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url).withHeaders(
-        "X-Session-Id" -> "someSessionId")
+      FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
+        .withHeaders("X-Session-Id" -> "someSessionId")
 
-    val app: Application = application().overrides().build()
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val app: Application         = application().overrides().build()
+    val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(request)
+    val messages: Messages       = messagesApi.preferred(request)
   }
 }

@@ -39,14 +39,42 @@ class EditContactDetailsSpec extends SpecBase {
   trait Setup {
 
     val userAnswers = new EditContactDetailsUserAnswers(
-      "someDan", Some("someName"), Some("1234567"), Some("fax"), Some("abc@def.com"), false)
+      "someDan",
+      Some("someName"),
+      Some("1234567"),
+      Some("fax"),
+      Some("abc@def.com"),
+      false
+    )
 
-    val contactDetails = new ContactDetails(Some("someName"), "address1", Some("address2"), Some("address3"),
-      Some("address4"), Some("somePostCode"), "GB", Some("1335678"), Some("fax"), Some("abc@def.com"))
+    val contactDetails = new ContactDetails(
+      Some("someName"),
+      "address1",
+      Some("address2"),
+      Some("address3"),
+      Some("address4"),
+      Some("somePostCode"),
+      "GB",
+      Some("1335678"),
+      Some("fax"),
+      Some("abc@def.com")
+    )
 
-    val contactDetailsUserAnswers = new ContactDetailsUserAnswers("someName", Some("name"),
-      "address1", Some("address2"), Some("address3"), Some("address4"), Some("somePostCode"),
-      "GB", Option("someCountry"), Some("1335678"), Some("fax"), Some("abc@def.com"), false)
+    val contactDetailsUserAnswers = new ContactDetailsUserAnswers(
+      "someName",
+      Some("name"),
+      "address1",
+      Some("address2"),
+      Some("address3"),
+      Some("address4"),
+      Some("somePostCode"),
+      "GB",
+      Option("someCountry"),
+      Some("1335678"),
+      Some("fax"),
+      Some("abc@def.com"),
+      false
+    )
 
     val editContact = new EditContactDetailsUserAnswers(
       dan = "someDan",

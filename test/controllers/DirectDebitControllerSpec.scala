@@ -118,15 +118,16 @@ class DirectDebitControllerSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockSDDSConnector: SDDSConnector = mock[SDDSConnector]
+    val mockSDDSConnector: SDDSConnector                 = mock[SDDSConnector]
     val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
-    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
+    val mockDataStoreConnector: DataStoreConnector       = mock[DataStoreConnector]
 
-
-    val app: Application = application().overrides(
-      inject.bind[SDDSConnector].toInstance(mockSDDSConnector),
-      inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
-      inject.bind[DataStoreConnector].toInstance(mockDataStoreConnector)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[SDDSConnector].toInstance(mockSDDSConnector),
+        inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
+        inject.bind[DataStoreConnector].toInstance(mockDataStoreConnector)
+      )
+      .build()
   }
 }

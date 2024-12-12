@@ -35,12 +35,7 @@ import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import scala.jdk.CollectionConverters._
 import utils.Utils.emptyString
 
-
-trait SpecBase extends AnyWordSpecLike
-  with Matchers
-  with MockitoSugar
-  with OptionValues
-  with TestData {
+trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with OptionValues with TestData {
 
   implicit class DocumentHelper(document: Document) {
     def containsLink(link: String): Boolean = {
@@ -49,45 +44,45 @@ trait SpecBase extends AnyWordSpecLike
     }
 
     def containsLinkWithText(link: String, text: String): Boolean = {
-      val results = document.getElementsByTag("a").asScala.toList
+      val results    = document.getElementsByTag("a").asScala.toList
       val foundLinks = results.filter(_.attr("href") == link)
       if (foundLinks.nonEmpty) foundLinks.exists(_.text == text) else false
     }
 
-    def containsElementById(id: String): Assertion = {
+    def containsElementById(id: String): Assertion =
       assert(document.getElementsByAttribute("id").asScala.toList.exists(_.id() == id))
-    }
 
-    def notContainElementById(id: String): Assertion = {
+    def notContainElementById(id: String): Assertion =
       assert(!document.getElementsByAttribute("id").asScala.toList.exists(_.id() == id))
-    }
   }
 
-  def fakeRequest(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] = {
+  def fakeRequest(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(method, path)
       .withHeaders("X-Session-ID" -> "someSessionId")
-  }
 
-  def fakeRequestWithCsrf(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] = {
-    fakeRequest(method, path)
-      .withCSRFToken
+  def fakeRequestWithCsrf(method: String, path: String): FakeRequest[AnyContentAsEmpty.type] =
+    fakeRequest(method, path).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-  }
 
   def application(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
-    new GuiceApplicationBuilder().overrides(
-      bind[IdentifierAction].to[FakeIdentifierAction],
-      bind[DataRetrievalAction].to(new FakeDataRetrievalAction(userAnswers)),
-      bind[Metrics].toInstance(new FakeMetrics)
-    ).configure(
-      "play.filters.csp.nonce.enabled" -> false,
-      "auditing.enabled" -> "false",
-      "microservice.metrics.graphite.enabled" -> "false",
-      "metrics.enabled" -> "false")
+    new GuiceApplicationBuilder()
+      .overrides(
+        bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[DataRetrievalAction].to(new FakeDataRetrievalAction(userAnswers)),
+        bind[Metrics].toInstance(new FakeMetrics)
+      )
+      .configure(
+        "play.filters.csp.nonce.enabled"        -> false,
+        "auditing.enabled"                      -> "false",
+        "microservice.metrics.graphite.enabled" -> "false",
+        "metrics.enabled"                       -> "false"
+      )
 
-  def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(
-    fakeRequest(emptyString, emptyString)
-  )
+  def messages(app: Application): Messages = app.injector
+    .instanceOf[MessagesApi]
+    .preferred(
+      fakeRequest(emptyString, emptyString)
+    )
 }
 
 class FakeMetrics extends Metrics {

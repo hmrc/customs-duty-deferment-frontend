@@ -42,7 +42,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
     "display correct title and guidance when there is no current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentStatements)
-      val htmlDoc: String = viewDoc.html()
+      val htmlDoc: String   = viewDoc.html()
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
@@ -53,7 +53,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
     "display correct title and guidance when there is no requested and current statements" in new Setup {
       val viewDoc: Document = view(modelWithNoCurrentAndRequestedStatements)
-      val htmlDoc: String = viewDoc.html()
+      val htmlDoc: String   = viewDoc.html()
 
       shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
 
@@ -63,10 +63,12 @@ class DutyDefermentAccountSpec extends SpecBase {
     }
   }
 
-  private def shouldDisplayCorrectCommonGuidanceAndText(viewDoc: Document,
-                                                        messages: Messages,
-                                                        accountNumber: String,
-                                                        serviceUnavailableUrl: String): Assertion = {
+  private def shouldDisplayCorrectCommonGuidanceAndText(
+    viewDoc: Document,
+    messages: Messages,
+    accountNumber: String,
+    serviceUnavailableUrl: String
+  ): Assertion = {
     viewDoc.title() mustBe
       s"${messages("cf.account.detail.title")} - ${messages("service.name")} - GOV.UK"
 
@@ -79,18 +81,18 @@ class DutyDefermentAccountSpec extends SpecBase {
       messages("cf.account.detail.direct-debit.duty-vat-and-excise")
 
     viewDoc.getElementById("missing-documents-guidance-heading").text() must not be empty
-    viewDoc.getElementById("missing-documents-guidance-text1").text() must not be empty
+    viewDoc.getElementById("missing-documents-guidance-text1").text()   must not be empty
     viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
       messages("cf.common.missing-documents-guidance.cdsStatements.heading")
 
-    viewDoc.getElementById("chief-guidance-heading").text() must not be empty
+    viewDoc.getElementById("chief-guidance-heading").text()         must not be empty
     viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
     viewDoc.getElementById("chief-guidance-heading").text() mustBe
       messages("cf.common.chiefStatements.heading")
 
     viewDoc.getElementById("dd-support-message-heading").text() mustBe messages("cf.accounts.support.heading")
     viewDoc.getElementById("dd-support-message-heading").text() must not be empty
-    viewDoc.getElementById("dd-support-message").text() must not be empty
+    viewDoc.getElementById("dd-support-message").text()         must not be empty
 
     viewDoc.html().contains(serviceUnavailableUrl) mustBe true
   }
@@ -98,35 +100,38 @@ class DutyDefermentAccountSpec extends SpecBase {
   trait Setup {
     val app: Application = application().build()
 
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    implicit val msg: Messages = messages(app)
+    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
+    implicit val msg: Messages                                = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val serviceUnavailableUrl: String = "service_unavailable_url"
-    val accountNumber = "1234567"
-    val linkId = "link_id"
-    val showAllSectionText: String = msg("cf.account.detail.accordion.show-all-sections")
+    val accountNumber                 = "1234567"
+    val linkId                        = "link_id"
+    val showAllSectionText: String    = msg("cf.account.detail.accordion.show-all-sections")
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
       Seq(dutyDefermentStatementsForEori01),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl)
+      serviceUnavailableUrl
+    )
 
     val modelWithNoCurrentStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
       Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl)
+      serviceUnavailableUrl
+    )
 
     val modelWithNoCurrentAndRequestedStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
       Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq(), requestedStatements = Seq())),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl)
+      serviceUnavailableUrl
+    )
 
     def view(model: DutyDefermentAccountViewModel): Document =
       Jsoup.parse(app.injector.instanceOf[duty_deferment_account].apply(model).body)

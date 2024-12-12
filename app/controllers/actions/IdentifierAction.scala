@@ -29,13 +29,18 @@ import com.google.inject.Inject
 import uk.gov.hmrc.auth.core.retrieve.~
 import scala.concurrent.{ExecutionContext, Future}
 
-trait IdentifierAction extends ActionBuilder[AuthenticatedRequest, AnyContent] with ActionFunction[Request, AuthenticatedRequest]
+trait IdentifierAction
+    extends ActionBuilder[AuthenticatedRequest, AnyContent]
+    with ActionFunction[Request, AuthenticatedRequest]
 
-class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthConnector,
-                                              appConfig: AppConfig,
-                                              val parser: BodyParsers.Default,
-                                              dataStoreConnector: DataStoreConnector)(override implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions {
+class AuthenticatedIdentifierAction @Inject() (
+  override val authConnector: AuthConnector,
+  appConfig: AppConfig,
+  val parser: BodyParsers.Default,
+  dataStoreConnector: DataStoreConnector
+)(override implicit val executionContext: ExecutionContext)
+    extends IdentifierAction
+    with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -47,22 +52,18 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
             for {
               allEoriHistory <- dataStoreConnector.getAllEoriHistory(eori.value)
               cdsLoggedInUser = SignedInUser(eori.value, allEoriHistory, internalId)
-              result <- block(AuthenticatedRequest(request, cdsLoggedInUser))
+              result         <- block(AuthenticatedRequest(request, cdsLoggedInUser))
             } yield result
-          case None => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
+          case None       => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
         }
-      case _ => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
+      case _                                => Future.successful(Redirect(controllers.routes.NotSubscribedController.onPageLoad))
     }
   } recover {
-    case _: NoActiveSession =>
+    case _: NoActiveSession        =>
       Redirect(appConfig.loginUrl, Map("continue_url" -> Seq(appConfig.loginContinueUrl)))
     case _: InsufficientEnrolments =>
       Redirect(controllers.routes.NotSubscribedController.onPageLoad)
-    case _ =>
+    case _                         =>
       Redirect(controllers.routes.NotSubscribedController.onPageLoad)
   }
 }
-
-
-
-

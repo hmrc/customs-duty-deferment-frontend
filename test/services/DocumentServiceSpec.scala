@@ -33,39 +33,52 @@ class DocumentServiceSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "generate correct output" in new Setup {
-      when(mockSDESConnector.getDutyDefermentStatements(any, any)(any)).thenReturn(
-        Future.successful(dutyDefermentStatementFiles))
+      when(mockSDESConnector.getDutyDefermentStatements(any, any)(any))
+        .thenReturn(Future.successful(dutyDefermentStatementFiles))
 
-      service.getDutyDefermentStatements(eoriHistory, dan).map {
-        ddStatements => ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
+      service.getDutyDefermentStatements(eoriHistory, dan).map { ddStatements =>
+        ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
       }
     }
   }
 
   trait Setup {
-    val mockSDESConnector: SDESConnector = mock[SDESConnector]
+    val mockSDESConnector: SDESConnector     = mock[SDESConnector]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
-    val dan = "1234567"
+    val dan                   = "1234567"
 
-    val startYear = previousMonthDate.getYear
+    val startYear  = previousMonthDate.getYear
     val startMonth = previousMonthDate.getMonthValue
-    val startDate = 1
-    val endYear = previousMonthDate.getYear
-    val endMonth = previousMonthDate.getMonthValue
-    val endDate = 8
-    val fileSize = 10L
+    val startDate  = 1
+    val endYear    = previousMonthDate.getYear
+    val endMonth   = previousMonthDate.getMonthValue
+    val endDate    = 8
+    val fileSize   = 10L
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          "123456",
+          None
+        )
       )
 
     val requestedFile: DutyDefermentStatementFile =
@@ -73,14 +86,29 @@ class DocumentServiceSpec extends SpecBase {
         "someRequestedFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(startYear, startMonth, startDate, endYear, endMonth, endDate, FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", Some("requestedId"))
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          "123456",
+          Some("requestedId")
+        )
       )
 
-    val app: Application = application().overrides(
-      inject.bind[AuditingService].toInstance(mockAuditingService),
-      inject.bind[SDESConnector].toInstance(mockSDESConnector)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[AuditingService].toInstance(mockAuditingService),
+        inject.bind[SDESConnector].toInstance(mockSDESConnector)
+      )
+      .build()
 
     val service: DocumentService = app.injector.instanceOf[DocumentService]
   }

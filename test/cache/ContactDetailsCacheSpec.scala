@@ -23,14 +23,14 @@ import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
 
 class ContactDetailsCacheSpec
-  extends SpecBase
+    extends SpecBase
     with BeforeAndAfterEach
     with OptionValues
     with ScalaFutures
     with IntegrationPatience {
 
-  private val id = "session-123"
-  private val app = application().build()
+  private val id        = "session-123"
+  private val app       = application().build()
   private val testCache = app.injector.instanceOf[ContactDetailsCache]
 
   override def beforeEach(): Unit =
@@ -69,16 +69,16 @@ class ContactDetailsCacheSpec
     }
 
     ".get call after data removed from cache returns none" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult    = testCache.store(id, test).futureValue
       storeResult mustBe true
-      val removeResult = testCache.remove(id).futureValue
+      val removeResult   = testCache.remove(id).futureValue
       removeResult mustBe true
       val retrieveResult = testCache.retrieve(id).futureValue
       retrieveResult mustBe None
     }
 
     ".set and then remove value successfully" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult  = testCache.store(id, test).futureValue
       storeResult mustBe true
       val removeResult = testCache.remove(id).futureValue
       removeResult mustBe true

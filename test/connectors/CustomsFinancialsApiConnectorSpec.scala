@@ -63,8 +63,8 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(AuditResult.Success))
 
       running(app) {
-        val result = await(
-          connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
+        val result =
+          await(connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
 
         result mustBe UpdateContactDetailsResponse(true)
       }
@@ -112,18 +112,19 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     }
   }
 
-
   trait Setup {
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
-    val requestBuilder: RequestBuilder = mock[RequestBuilder]
+    implicit val hc: HeaderCarrier           = HeaderCarrier()
+    val mockHttpClient: HttpClientV2         = mock[HttpClientV2]
+    val requestBuilder: RequestBuilder       = mock[RequestBuilder]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
-    val app: Application = application().overrides(
-      inject.bind[HttpClientV2].toInstance(mockHttpClient),
-      inject.bind[RequestBuilder].toInstance(requestBuilder),
-      inject.bind[AuditingService].toInstance(mockAuditingService)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[HttpClientV2].toInstance(mockHttpClient),
+        inject.bind[RequestBuilder].toInstance(requestBuilder),
+        inject.bind[AuditingService].toInstance(mockAuditingService)
+      )
+      .build()
 
     val connector: CustomsFinancialsApiConnector =
       app.injector.instanceOf[CustomsFinancialsApiConnector]

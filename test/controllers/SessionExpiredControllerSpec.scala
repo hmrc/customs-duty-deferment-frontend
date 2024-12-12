@@ -28,12 +28,12 @@ class SessionExpiredControllerSpec extends SpecBase {
   "onPageLoad" must {
     "return OK" in {
       val app: Application = application().build()
-      val request = fakeRequest(GET, routes.SessionExpiredController.onPageLoad.url)
+      val request          = fakeRequest(GET, routes.SessionExpiredController.onPageLoad.url)
 
-      val view = app.injector.instanceOf[session_expired]
-      val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+      val view                     = app.injector.instanceOf[session_expired]
+      val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
       val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-      val messages: Messages = messagesApi.preferred(request)
+      val messages: Messages       = messagesApi.preferred(request)
 
       running(app) {
         val result = route(app, request).value

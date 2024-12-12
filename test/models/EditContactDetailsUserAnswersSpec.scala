@@ -55,12 +55,12 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
   }
 
   trait Setup {
-    val dan = "testDan"
-    val name: Some[EORI] = Some("John Doe")
+    val dan                   = "testDan"
+    val name: Some[EORI]      = Some("John Doe")
     val telephone: Some[EORI] = Some("123-456-7890")
-    val fax: Some[EORI] = Some("987-654-3210")
-    val email: Some[EORI] = Some("john.doe@example.com")
-    val isNiAccount = true
+    val fax: Some[EORI]       = Some("987-654-3210")
+    val email: Some[EORI]     = Some("john.doe@example.com")
+    val isNiAccount           = true
 
     val initialContactDetails: ContactDetails = ContactDetails(
       contactName = Some("John Doe"),

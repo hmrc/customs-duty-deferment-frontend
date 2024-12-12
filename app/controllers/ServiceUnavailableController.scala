@@ -27,16 +27,17 @@ import views.html.service_unavailable
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class ServiceUnavailableController @Inject()(val authenticate: IdentifierAction,
-                                             resolveSessionId: SessionIdAction,
-                                             view: service_unavailable,
-                                             navigator: Navigator,
-                                             mcc: MessagesControllerComponents)
-                                            (implicit val appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport {
+class ServiceUnavailableController @Inject() (
+  val authenticate: IdentifierAction,
+  resolveSessionId: SessionIdAction,
+  view: service_unavailable,
+  navigator: Navigator,
+  mcc: MessagesControllerComponents
+)(implicit val appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport {
   def onPageLoad(id: String, linkId: String): Action[AnyContent] =
     authenticate andThen resolveSessionId async { implicit req =>
-      Future.successful(Ok(view(
-        navigator.backLinkUrlForServiceUnavailablePage(id, linkId))))
+      Future.successful(Ok(view(navigator.backLinkUrlForServiceUnavailablePage(id, linkId))))
     }
 }

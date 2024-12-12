@@ -18,21 +18,23 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class DutyDefermentStatementFileMetadata(periodStartYear: Int,
-                                              periodStartMonth: Int,
-                                              periodStartDay: Int,
-                                              periodEndYear: Int,
-                                              periodEndMonth: Int,
-                                              periodEndDay: Int,
-                                              fileFormat: FileFormat,
-                                              fileRole: FileRole,
-                                              defermentStatementType: DDStatementType,
-                                              dutyOverLimit: Option[Boolean],
-                                              dutyPaymentType: Option[String],
-                                              dan: String,
-                                              statementRequestId: Option[String]) {
+case class DutyDefermentStatementFileMetadata(
+  periodStartYear: Int,
+  periodStartMonth: Int,
+  periodStartDay: Int,
+  periodEndYear: Int,
+  periodEndMonth: Int,
+  periodEndDay: Int,
+  fileFormat: FileFormat,
+  fileRole: FileRole,
+  defermentStatementType: DDStatementType,
+  dutyOverLimit: Option[Boolean],
+  dutyPaymentType: Option[String],
+  dan: String,
+  statementRequestId: Option[String]
+) {
   def toMap: Map[String, String] = {
-    val fieldNames: Seq[String] = getClass.getDeclaredFields.map(_.getName).toSeq
+    val fieldNames: Seq[String]  = getClass.getDeclaredFields.map(_.getName).toSeq
     val fieldValues: Seq[String] = productIterator.map(_.toString).toSeq
     fieldNames.zip(fieldValues).toMap
   }

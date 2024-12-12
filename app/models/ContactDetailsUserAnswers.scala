@@ -19,21 +19,23 @@ package models
 import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
-case class ContactDetailsUserAnswers(dan: String,
-                                     name: Option[String],
-                                     addressLine1: String,
-                                     addressLine2: Option[String],
-                                     addressLine3: Option[String],
-                                     addressLine4: Option[String],
-                                     postCode: Option[String],
-                                     countryCode: String,
-                                     countryName: Option[String],
-                                     telephone: Option[String],
-                                     fax: Option[String],
-                                     email: Option[String],
-                                     isNiAccount: Boolean) {
+case class ContactDetailsUserAnswers(
+  dan: String,
+  name: Option[String],
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: Option[String],
+  addressLine4: Option[String],
+  postCode: Option[String],
+  countryCode: String,
+  countryName: Option[String],
+  telephone: Option[String],
+  fax: Option[String],
+  email: Option[String],
+  isNiAccount: Boolean
+) {
 
-  def withWhitespaceTrimmed: ContactDetailsUserAnswers = {
+  def withWhitespaceTrimmed: ContactDetailsUserAnswers =
     this.copy(
       name = name.map(_.trim),
       addressLine1 = addressLine1.trim,
@@ -47,10 +49,10 @@ case class ContactDetailsUserAnswers(dan: String,
       fax = fax.map(_.trim),
       email = email.map(_.trim)
     )
-  }
 
   def toContactDetails: ContactDetails =
-    ContactDetails(name,
+    ContactDetails(
+      name,
       addressLine1,
       addressLine2,
       addressLine3,
@@ -59,7 +61,8 @@ case class ContactDetailsUserAnswers(dan: String,
       countryCode,
       telephone,
       fax,
-      email)
+      email
+    )
 
 }
 
@@ -67,9 +70,12 @@ object ContactDetailsUserAnswers {
 
   implicit val formats: OFormat[ContactDetailsUserAnswers] = Json.format[ContactDetailsUserAnswers]
 
-  def toAddressDetails(dan: String, dutyDetails: DutyDefermentAccountLink,
-                       contactDetails: ContactDetails,
-                       getCountryNameF: String => Option[String]): EditAddressDetailsUserAnswers = {
+  def toAddressDetails(
+    dan: String,
+    dutyDetails: DutyDefermentAccountLink,
+    contactDetails: ContactDetails,
+    getCountryNameF: String => Option[String]
+  ): EditAddressDetailsUserAnswers =
     EditAddressDetailsUserAnswers(
       dan,
       contactDetails.addressLine1,
@@ -81,10 +87,12 @@ object ContactDetailsUserAnswers {
       getCountryNameF(contactDetails.countryCode),
       dutyDetails.isNiAccount
     )
-  }
 
-  def toEditContactDetails(dan: String, dutyDetails: DutyDefermentAccountLink,
-                           contactDetails: ContactDetails): EditContactDetailsUserAnswers = {
+  def toEditContactDetails(
+    dan: String,
+    dutyDetails: DutyDefermentAccountLink,
+    contactDetails: ContactDetails
+  ): EditContactDetailsUserAnswers =
     EditContactDetailsUserAnswers(
       dan,
       contactDetails.contactName,
@@ -93,5 +101,4 @@ object ContactDetailsUserAnswers {
       contactDetails.email,
       dutyDetails.isNiAccount
     )
-  }
 }

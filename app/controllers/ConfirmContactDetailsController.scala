@@ -29,58 +29,54 @@ import services.AccountLinkCacheService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmContactDetailsController @Inject()(successViewContact: edit_success_contact,
-                                                successViewAddress: edit_success_address,
-                                                identify: IdentifierAction,
-                                                dataRetrievalAction: DataRetrievalAction,
-                                                resolveSessionId: SessionIdAction,
-                                                dataRequiredAction: DataRequiredAction,
-                                                accountLinkCacheService: AccountLinkCacheService)
-                                               (implicit ec: ExecutionContext,
-                                                errorHandler: ErrorHandler,
-                                                mcc: MessagesControllerComponents,
-                                                appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport with Logging {
+class ConfirmContactDetailsController @Inject() (
+  successViewContact: edit_success_contact,
+  successViewAddress: edit_success_address,
+  identify: IdentifierAction,
+  dataRetrievalAction: DataRetrievalAction,
+  resolveSessionId: SessionIdAction,
+  dataRequiredAction: DataRequiredAction,
+  accountLinkCacheService: AccountLinkCacheService
+)(implicit ec: ExecutionContext, errorHandler: ErrorHandler, mcc: MessagesControllerComponents, appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport
+    with Logging {
 
   private val commonActions = identify andThen resolveSessionId andThen dataRetrievalAction andThen dataRequiredAction
 
-  def successAddressDetails(): Action[AnyContent] = commonActions.async {
-    implicit request => {
-      request.userAnswers.get(EditAddressDetailsPage) match {
-        case Some(userAnswers) =>
-          val result = for {
-            accLink <- accountLinkCacheService.get(request.userAnswers.id)
-            accBool = accLink.map(_.isNiAccount).get
-          } yield Ok(successViewAddress(userAnswers.dan, accBool))
+  def successAddressDetails(): Action[AnyContent] = commonActions.async { implicit request =>
+    request.userAnswers.get(EditAddressDetailsPage) match {
+      case Some(userAnswers) =>
+        val result = for {
+          accLink <- accountLinkCacheService.get(request.userAnswers.id)
+          accBool  = accLink.map(_.isNiAccount).get
+        } yield Ok(successViewAddress(userAnswers.dan, accBool))
 
-          result.recover { case e =>
-            logger.error(s"Call to account cache failed with exception=$e")
-            InternalServerError(errorHandler.standardErrorTemplate())
-          }
-        case _ =>
-          logger.error(s"Unable to get stored user answers whilst confirming account address details")
-          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
-      }
+        result.recover { case e =>
+          logger.error(s"Call to account cache failed with exception=$e")
+          InternalServerError(errorHandler.standardErrorTemplate())
+        }
+      case _                 =>
+        logger.error(s"Unable to get stored user answers whilst confirming account address details")
+        Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
     }
   }
 
-  def successContactDetails(): Action[AnyContent] = commonActions.async {
-    implicit request => {
-      request.userAnswers.get(EditContactDetailsPage) match {
-        case Some(userAnswers) =>
-          val result = for {
-            accLink <- accountLinkCacheService.get(request.userAnswers.id)
-            accBool = accLink.map(_.isNiAccount).get
-          } yield Ok(successViewContact(userAnswers.dan, accBool))
+  def successContactDetails(): Action[AnyContent] = commonActions.async { implicit request =>
+    request.userAnswers.get(EditContactDetailsPage) match {
+      case Some(userAnswers) =>
+        val result = for {
+          accLink <- accountLinkCacheService.get(request.userAnswers.id)
+          accBool  = accLink.map(_.isNiAccount).get
+        } yield Ok(successViewContact(userAnswers.dan, accBool))
 
-          result.recover { case e =>
-            logger.error(s"Call to account cache failed with exception=$e")
-            InternalServerError(errorHandler.standardErrorTemplate())
-          }
-        case None =>
-          logger.error(s"Unable to get stored user answers whilst confirming account contact details")
-          Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
-      }
+        result.recover { case e =>
+          logger.error(s"Call to account cache failed with exception=$e")
+          InternalServerError(errorHandler.standardErrorTemplate())
+        }
+      case None              =>
+        logger.error(s"Unable to get stored user answers whilst confirming account contact details")
+        Future.successful(InternalServerError(errorHandler.standardErrorTemplate()))
     }
   }
 

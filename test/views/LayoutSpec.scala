@@ -35,13 +35,18 @@ class LayoutSpec extends SpecBase {
     "display correct guidance" when {
 
       "title and back link are provided" in new Setup {
-        val title = "test_title"
+        val title   = "test_title"
         val linkUrl = "test.com"
 
-        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply(
-          pageTitle = Some(title),
-          backLink = Some(linkUrl)
-        )(content).body)
+        val layoutView: Document = Jsoup.parse(
+          app.injector
+            .instanceOf[Layout]
+            .apply(
+              pageTitle = Some(title),
+              backLink = Some(linkUrl)
+            )(content)
+            .body
+        )
 
         shouldContainCorrectTitle(layoutView, title)
         shouldContainCorrectServiceUrls(layoutView)
@@ -61,13 +66,12 @@ class LayoutSpec extends SpecBase {
 
   }
 
-  private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit msgs: Messages) = {
+  private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit msgs: Messages) =
     if (title.nonEmpty) {
       viewDoc.title() mustBe s"$title - ${msgs("service.name")} - GOV.UK"
     } else {
       viewDoc.title() mustBe s"${msgs("service.name")} - GOV.UK"
     }
-  }
 
   private def shouldContainCorrectServiceUrls(viewDoc: Document)(implicit appConfig: AppConfig) = {
     viewDoc.html().contains(appConfig.financialsHomepage) mustBe true
@@ -75,25 +79,28 @@ class LayoutSpec extends SpecBase {
     viewDoc.html().contains("/accessibility-statement/customs-financials") mustBe true
   }
 
-  private def shouldContainCorrectBackLink(viewDoc: Document,
-                                           backLinkUrl: Option[String] = None) = {
-
+  private def shouldContainCorrectBackLink(viewDoc: Document, backLinkUrl: Option[String] = None) =
     if (backLinkUrl.isDefined) {
       viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
-      viewDoc.getElementsByClass("govuk-back-link").attr("href")
+      viewDoc
+        .getElementsByClass("govuk-back-link")
+        .attr("href")
         .contains(backLinkUrl.get) mustBe true
     } else {
       viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
-      viewDoc.getElementsByClass("govuk-back-link").attr("href")
+      viewDoc
+        .getElementsByClass("govuk-back-link")
+        .attr("href")
         .contains("#") mustBe true
     }
-  }
 
   private def shouldContainCorrectBanners(viewDoc: Document) = {
-    viewDoc.getElementsByClass("govuk-phase-banner")
+    viewDoc
+      .getElementsByClass("govuk-phase-banner")
       .text() mustBe "BETA This is a new service – your feedback will help us to improve it."
 
-    viewDoc.getElementsByClass("hmrc-user-research-banner")
+    viewDoc
+      .getElementsByClass("hmrc-user-research-banner")
       .text() mustBe "Help make GOV.UK better Sign up to take part in research (opens in new tab)" +
       " Hide message Hide message. I do not want to take part in research"
   }
@@ -101,9 +108,9 @@ class LayoutSpec extends SpecBase {
   trait Setup {
     val app: Application = application().build()
 
-    implicit val msgs: Messages = messages(app)
+    implicit val msgs: Messages                               = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
 
     val content: Html = Html("test")
   }

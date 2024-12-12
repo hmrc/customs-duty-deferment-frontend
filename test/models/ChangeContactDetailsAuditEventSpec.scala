@@ -40,7 +40,7 @@ class ChangeContactDetailsAuditEventSpec extends SpecBase {
   }
 
   trait Setup {
-    val eori = "test_eori"
+    val eori                                   = "test_eori"
     val previousContactDetails: ContactDetails = ContactDetails(
       contactName = Some("John Smith"),
       addressLine1 = "1 High Street",
@@ -67,7 +67,8 @@ class ChangeContactDetailsAuditEventSpec extends SpecBase {
       telephone = Some("1234567"),
       fax = Some("7654321"),
       email = Some("abc@de.com"),
-      isNiAccount = false)
+      isNiAccount = false
+    )
 
     val changeContactDetailsOb: ChangeContactDetailsAuditEvent =
       ChangeContactDetailsAuditEvent(eori, previousContactDetails, updatedContactDetails)

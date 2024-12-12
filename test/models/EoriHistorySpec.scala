@@ -29,8 +29,8 @@ class EoriHistorySpec extends SpecBase {
       val json: JsValue = Json.toJson(expectedEoriHistory)
 
       val expectedJson: JsObject = Json.obj(
-        "eori" -> "EORI123",
-        "validFrom" -> "2023-01-01",
+        "eori"       -> "EORI123",
+        "validFrom"  -> "2023-01-01",
         "validUntil" -> "2023-12-31"
       )
 
@@ -39,8 +39,8 @@ class EoriHistorySpec extends SpecBase {
 
     "be deserializable from JSON" in new Setup {
       val json: JsObject = Json.obj(
-        "eori" -> "EORI123",
-        "validFrom" -> "2023-01-01",
+        "eori"       -> "EORI123",
+        "validFrom"  -> "2023-01-01",
         "validUntil" -> "2023-12-31"
       )
 
@@ -57,7 +57,7 @@ class EoriHistorySpec extends SpecBase {
     "Correctly ignore invalid date and accepts correct date while parsing" in new Setup {
 
       val expectedEoriHistory01: EoriHistory = EoriHistory("EORI123", Some(LocalDate.parse("2023-12-19")), None)
-      val validJson01: String = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString()
+      val validJson01: String                = EoriHistory.eoriHistoryWrites.writes(expectedEoriHistory01).toString()
       EoriHistory.eoriHistoryFormat.reads(Json.parse(validJson01)) mustBe JsSuccess(expectedEoriHistory01)
 
       val validJson02: JsObject = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T10:15:30+01:00")
@@ -67,7 +67,7 @@ class EoriHistorySpec extends SpecBase {
     "Correctly ignore date with wrong hour and use None while parsing" in new Setup {
 
       val expectedEoriHistory01: EoriHistory = EoriHistory("EORI123", None, None)
-      val validJson02: JsObject = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T25:15:30+01:00")
+      val validJson02: JsObject              = Json.obj("eori" -> "EORI123", "validFrom" -> "2023-12-19T25:15:30+01:00")
       EoriHistory.eoriHistoryFormat.reads(validJson02) mustBe JsSuccess(expectedEoriHistory01)
     }
 

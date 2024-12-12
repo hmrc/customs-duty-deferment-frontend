@@ -23,9 +23,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.not_subscribed_to_cds
 import javax.inject.Inject
 
-class NotSubscribedController @Inject()(notSubscribedView: not_subscribed_to_cds,
-                                        implicit val mcc: MessagesControllerComponents)(implicit val appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport {
+class NotSubscribedController @Inject() (
+  notSubscribedView: not_subscribed_to_cds,
+  implicit val mcc: MessagesControllerComponents
+)(implicit val appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(notSubscribedView())

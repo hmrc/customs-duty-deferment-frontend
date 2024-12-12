@@ -59,7 +59,7 @@ class EmailResponseSpec extends SpecBase {
         |  }
         |}""".stripMargin
 
-    val eventCode = 12
+    val eventCode                                       = 12
     val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent(
       "example-id",
       "someEvent",
@@ -67,18 +67,22 @@ class EmailResponseSpec extends SpecBase {
       "2021-05-14T10:59:45.811+01:00",
       Some(eventCode),
       Some("Inbox full"),
-      "HMRC-CUS-ORG~EORINumber~GB744638982004")
+      "HMRC-CUS-ORG~EORINumber~GB744638982004"
+    )
 
     val undelInfoOb: UndeliverableInformation = UndeliverableInformation(
       "subject-example",
       "example-id",
       "example-group-id",
       "2021-05-14T10:59:45.811+01:00",
-      undelInfoEventOb)
+      undelInfoEventOb
+    )
 
-    val emailResponseObject: EmailResponse = EmailResponse(address = Some("john.doe@example.com"),
+    val emailResponseObject: EmailResponse = EmailResponse(
+      address = Some("john.doe@example.com"),
       timestamp = Some("2023-12-15T23:25:25.000Z"),
-      undeliverable = Some(undelInfoOb))
+      undeliverable = Some(undelInfoOb)
+    )
 
   }
 }

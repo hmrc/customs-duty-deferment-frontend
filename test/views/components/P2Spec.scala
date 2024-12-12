@@ -45,10 +45,10 @@ class P2Spec extends SpecBase {
     }
 
     trait Setup {
-      val app: Application = application().build()
+      val app: Application       = application().build()
       implicit val msg: Messages = messages(app)
-      val id = "undelivered-pi"
-      val messageKey = "cf.undeliverable.email.p1"
+      val id                     = "undelivered-pi"
+      val messageKey             = "cf.undeliverable.email.p1"
 
       val p2Component: Document = Jsoup.parse(
         app.injector.instanceOf[p2].apply(message = messageKey, id = Some(id)).body

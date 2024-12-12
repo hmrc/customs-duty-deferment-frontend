@@ -16,10 +16,11 @@
 
 package models.responses.retrieve
 
-case class AddressDetails(addressLine1: String,
-                          addressLine2: Option[String],
-                          addressLine3: Option[String],
-                          addressLine4: Option[String],
-                          postCode: Option[String],
-                          countryCode: String)
-
+case class AddressDetails(
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: Option[String],
+  addressLine4: Option[String],
+  postCode: Option[String],
+  countryCode: String
+)

@@ -23,46 +23,54 @@ import utils.OrderedByEoriHistory
 
 import java.time.LocalDate
 
-case class DutyDefermentStatementsForEori(eoriHistory: EoriHistory,
-                                          currentStatements: Seq[DutyDefermentStatementFile],
-                                          requestedStatements: Seq[DutyDefermentStatementFile],
-                                          endDate: LocalDate)
-  extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
+case class DutyDefermentStatementsForEori(
+  eoriHistory: EoriHistory,
+  currentStatements: Seq[DutyDefermentStatementFile],
+  requestedStatements: Seq[DutyDefermentStatementFile],
+  endDate: LocalDate
+) extends OrderedByEoriHistory[DutyDefermentStatementsForEori] {
 
-  private val numberOfMonths: Int = 7
-  private val startDate: LocalDate = firstDayOfPastNthMonth(endDate, numberOfMonths)
+  private val numberOfMonths: Int                                          = 7
+  private val startDate: LocalDate                                         = firstDayOfPastNthMonth(endDate, numberOfMonths)
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
-  val groups: Seq[DutyDefermentStatementPeriodsByMonth] = filterDates(
-    startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod))
+  val groups: Seq[DutyDefermentStatementPeriodsByMonth] =
+    filterDates(startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod))
 
-  private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] = {
-    files.groupBy(file => (file.metadata.fileRole,
-      file.startDate,
-      file.endDate,
-      file.metadata.defermentStatementType)).map { case (_, periodFiles) =>
-      DutyDefermentStatementPeriod(
-        periodFiles.head.metadata.fileRole,
-        periodFiles.head.metadata.defermentStatementType,
-        periodFiles.head.monthAndYear,
-        periodFiles.head.startDate,
-        periodFiles.head.endDate,
-        periodFiles.sorted)
-    }.toSeq.sorted
-  }
+  private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] =
+    files
+      .groupBy(file => (file.metadata.fileRole, file.startDate, file.endDate, file.metadata.defermentStatementType))
+      .map { case (_, periodFiles) =>
+        DutyDefermentStatementPeriod(
+          periodFiles.head.metadata.fileRole,
+          periodFiles.head.metadata.defermentStatementType,
+          periodFiles.head.monthAndYear,
+          periodFiles.head.startDate,
+          periodFiles.head.endDate,
+          periodFiles.sorted
+        )
+      }
+      .toSeq
+      .sorted
 
-  private def filterDates(startDate: LocalDate,
-                          endDate: LocalDate,
-                          periods: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] = {
+  private def filterDates(
+    startDate: LocalDate,
+    endDate: LocalDate,
+    periods: Seq[DutyDefermentStatementPeriodsByMonth]
+  ): Seq[DutyDefermentStatementPeriodsByMonth] =
     periods.filter(dds => isEqualOrAfter(dds.monthAndYear, startDate) && isEqualOrBefore(dds.monthAndYear, endDate))
-  }
 
-  private def groupByMonthAndYear(periods: Seq[DutyDefermentStatementPeriod]): Seq[DutyDefermentStatementPeriodsByMonth] = {
+  private def groupByMonthAndYear(
+    periods: Seq[DutyDefermentStatementPeriod]
+  ): Seq[DutyDefermentStatementPeriodsByMonth] = {
     val monthYearSorted = periods.groupBy(_.monthAndYear).toSeq.sortWith(_._1 > _._1)
-    monthYearSorted.map {
-      case (monthAndYear, statementPeriods) => DutyDefermentStatementPeriodsByMonth(monthAndYear, statementPeriods
-        .sortWith(_.startDate > _.startDate)
-        .sortWith(_.defermentStatementType < _.defermentStatementType))
+    monthYearSorted.map { case (monthAndYear, statementPeriods) =>
+      DutyDefermentStatementPeriodsByMonth(
+        monthAndYear,
+        statementPeriods
+          .sortWith(_.startDate > _.startDate)
+          .sortWith(_.defermentStatementType < _.defermentStatementType)
+      )
     }
   }
 }

@@ -18,17 +18,15 @@ package models
 
 import play.api.libs.json._
 
-
 case class Metadata(items: Seq[MetadataItem]) {
   def toDutyDefermentStatementFileMetadata: DutyDefermentStatementFileMetadata = {
     val metadata = items.map(item => (item.key, item.value)).toMap
 
-    def mapDutyOverLimit: Boolean = {
+    def mapDutyOverLimit: Boolean =
       metadata.getOrElse("DutyOverLimit", "false") match {
         case "Y" => true
-        case _ => false
+        case _   => false
       }
-    }
 
     DutyDefermentStatementFileMetadata(
       metadata("PeriodStartYear").toInt,
@@ -43,12 +41,13 @@ case class Metadata(items: Seq[MetadataItem]) {
       Some(mapDutyOverLimit),
       Some(metadata.getOrElse("DutyPaymentType", "Unknown")),
       metadata.getOrElse("DAN", "Unknown"),
-      metadata.get("statementRequestID"))
+      metadata.get("statementRequestID")
+    )
   }
 }
 
 object Metadata {
-  implicit val metadataReads: Reads[Metadata] = __.read[List[MetadataItem]].map(Metadata.apply)
-  implicit val metadataWrites: Writes[Metadata] = (o: Metadata) => JsArray(o.items.map(
-    item => Json.obj(("metadata", item.key), ("value", item.value))))
+  implicit val metadataReads: Reads[Metadata]   = __.read[List[MetadataItem]].map(Metadata.apply)
+  implicit val metadataWrites: Writes[Metadata] = (o: Metadata) =>
+    JsArray(o.items.map(item => Json.obj(("metadata", item.key), ("value", item.value))))
 }
