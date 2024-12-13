@@ -28,28 +28,29 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SDESConnector @Inject()(http: HttpClientV2,
-                              auditingService: AuditingService,
-                              appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
+class SDESConnector @Inject() (http: HttpClientV2, auditingService: AuditingService, appConfig: AppConfig)(implicit
+  executionContext: ExecutionContext
+) {
 
-  val AUDIT_TYPE = "DisplayDutyDefermentStatements"
+  val AUDIT_TYPE                       = "DisplayDutyDefermentStatements"
   val AUDIT_DUTY_DEFERMENT_TRANSACTION = "Display duty deferment statements"
 
-  def getDutyDefermentStatements(eori: String,
-                                 dan: String)(implicit hc: HeaderCarrier): Future[Seq[DutyDefermentStatementFile]] = {
+  def getDutyDefermentStatements(eori: String, dan: String)(implicit
+    hc: HeaderCarrier
+  ): Future[Seq[DutyDefermentStatementFile]] = {
     val sdesDutyDefermentStatementListUrl: String = appConfig.sdesApi + "/files-available/list/DutyDefermentStatement"
 
     auditingService.audit(
       AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
     )
 
-    http.get(url"$sdesDutyDefermentStatementListUrl")
-      .setHeader(("x-client-id" -> appConfig.xClientIdHeader), ("X-SDES-Key" -> s"$eori-$dan"))
+    http
+      .get(url"$sdesDutyDefermentStatementListUrl")
+      .setHeader("x-client-id" -> appConfig.xClientIdHeader, "X-SDES-Key" -> s"$eori-$dan")
       .execute[Seq[FileInformation]]
-      .flatMap {
-        response =>
-          val res1: Seq[DutyDefermentStatementFile] = response.map(_.toDutyDefermentStatementFile)
-          Future.successful((filterFileFormats(SdesFileFormats)(res1)))
+      .flatMap { response =>
+        val res1: Seq[DutyDefermentStatementFile] = response.map(_.toDutyDefermentStatementFile)
+        Future.successful(filterFileFormats(SdesFileFormats)(res1))
       }
   }
 }

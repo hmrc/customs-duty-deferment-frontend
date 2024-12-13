@@ -47,14 +47,16 @@ class SDDSConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val app: Application = application().overrides(
-      inject.bind[HttpClientV2].toInstance(mockHttpClient)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[HttpClientV2].toInstance(mockHttpClient)
+      )
+      .build()
 
     val connector: SDDSConnector = app.injector.instanceOf[SDDSConnector]
   }

@@ -19,8 +19,8 @@ package connectors
 import config.AppConfig
 import models.responses.retrieve.ContactDetails
 import models.{
-  ContactDetailsUserAnswers, FileRole,
-  GetContactDetailsRequest, UpdateContactDetailsRequest, UpdateContactDetailsResponse
+  ContactDetailsUserAnswers, FileRole, GetContactDetailsRequest, UpdateContactDetailsRequest,
+  UpdateContactDetailsResponse
 }
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.mvc.Http.Status
@@ -32,45 +32,51 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CustomsFinancialsApiConnector @Inject()(appConfig: AppConfig,
-                                              httpClient: HttpClientV2,
-                                              auditingService: AuditingService)(implicit ec: ExecutionContext) {
+class CustomsFinancialsApiConnector @Inject() (
+  appConfig: AppConfig,
+  httpClient: HttpClientV2,
+  auditingService: AuditingService
+)(implicit ec: ExecutionContext) {
 
-  def deleteNotification(eori: String,
-                         fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val endPointUrl = s"${appConfig.customsFinancialsApi}/eori/$eori/notifications/$fileRole"
 
-    httpClient.delete(url"$endPointUrl")
+    httpClient
+      .delete(url"$endPointUrl")
       .execute[HttpResponse]
-      .flatMap {
-        response => Future.successful(response.status == Status.OK)
-      }.recover { case _ => false }
+      .flatMap { response =>
+        Future.successful(response.status == Status.OK)
+      }
+      .recover { case _ => false }
   }
 
   def getContactDetails(dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
     val request = GetContactDetailsRequest(dan, eori)
 
-    httpClient.post(url"${appConfig.getAccountDetailsUrl}")
+    httpClient
+      .post(url"${appConfig.getAccountDetailsUrl}")
       .withBody[GetContactDetailsRequest](request)
       .execute[ContactDetails]
-      .flatMap {
-        response => Future.successful(response)
+      .flatMap { response =>
+        Future.successful(response)
       }
   }
 
-  def updateContactDetails(dan: String,
-                           eori: String,
-                           oldContactDetails: ContactDetails,
-                           newContactDetails: ContactDetailsUserAnswers)
-                          (implicit hc: HeaderCarrier): Future[UpdateContactDetailsResponse] = {
-    val trimmed: ContactDetailsUserAnswers = newContactDetails.withWhitespaceTrimmed
+  def updateContactDetails(
+    dan: String,
+    eori: String,
+    oldContactDetails: ContactDetails,
+    newContactDetails: ContactDetailsUserAnswers
+  )(implicit hc: HeaderCarrier): Future[UpdateContactDetailsResponse] = {
+    val trimmed: ContactDetailsUserAnswers   = newContactDetails.withWhitespaceTrimmed
     val request: UpdateContactDetailsRequest = UpdateContactDetailsRequest(dan, eori, trimmed)
 
-    val response = httpClient.post(url"${appConfig.updateAccountAddressUrl}")
+    val response = httpClient
+      .post(url"${appConfig.updateAccountAddressUrl}")
       .withBody[UpdateContactDetailsRequest](request)
       .execute[UpdateContactDetailsResponse]
-      .flatMap {
-        response => Future.successful(response)
+      .flatMap { response =>
+        Future.successful(response)
       }
 
     auditingService.changeContactDetailsAuditEvent(dan, oldContactDetails, trimmed)

@@ -20,8 +20,10 @@ import models.UserAnswers
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.http.SessionId
 
-case class OptionalDataRequest[A](request: Request[A],
-                                  internalId: String,
-                                  eoriNumber: String,
-                                  sessionId: SessionId,
-                                  maybeUserAnswers: Option[UserAnswers]) extends WrappedRequest[A](request)
+case class OptionalDataRequest[A](
+  request: Request[A],
+  internalId: String,
+  eoriNumber: String,
+  sessionId: SessionId,
+  maybeUserAnswers: Option[UserAnswers]
+) extends WrappedRequest[A](request)

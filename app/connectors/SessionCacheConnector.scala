@@ -26,31 +26,36 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SessionCacheConnector @Inject()(httpClient: HttpClientV2,
-                                      appConfig: AppConfig)(implicit executionContext: ExecutionContext) {
+class SessionCacheConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
+  executionContext: ExecutionContext
+) {
 
   def retrieveSession(id: String, linkId: String)(implicit hc: HeaderCarrier): Future[Option[AccountLink]] = {
     val endpointUrl = appConfig.customsSessionCacheUrl + s"/account-link/$id/$linkId"
 
-    httpClient.get(url"$endpointUrl")
+    httpClient
+      .get(url"$endpointUrl")
       .execute[AccountLink]
-      .flatMap {
-        response => Future.successful(Some(response))
-      }.recover {
-      case _ => None
-    }
+      .flatMap { response =>
+        Future.successful(Some(response))
+      }
+      .recover { case _ =>
+        None
+      }
   }
 
   def removeSession(id: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
     val endpointUrl = s"${appConfig.customsSessionCacheUrl}/remove/$id"
 
-    httpClient.delete(url"$endpointUrl")
+    httpClient
+      .delete(url"$endpointUrl")
       .execute[HttpResponse]
-      .flatMap {
-        response => Future.successful(response.status == OK)
-      }.recover {
-      case _ => false
-    }
+      .flatMap { response =>
+        Future.successful(response.status == OK)
+      }
+      .recover { case _ =>
+        false
+      }
   }
 
 }

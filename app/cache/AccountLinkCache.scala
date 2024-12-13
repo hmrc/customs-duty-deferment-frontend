@@ -21,24 +21,24 @@ import models.DutyDefermentAccountLink
 import uk.gov.hmrc.mongo.{MongoComponent, TimestampSupport}
 import uk.gov.hmrc.mongo.cache.{CacheIdType, MongoCacheRepository}
 
-import javax.inject.{Singleton, Inject}
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 
 @Singleton
-class AccountLinkCache @Inject()(
-                                  appConfig: AppConfig,
-                                  mongoComponent: MongoComponent,
-                                  timestampSupport: TimestampSupport
-                                )
-                                (override implicit val ec: ExecutionContext) extends
-  MongoCacheRepository(
-    mongoComponent = mongoComponent,
-    collectionName = "account-link-cache",
-    ttl = appConfig.mongoAccountLinkTtl.seconds,
-    timestampSupport = timestampSupport,
-    cacheIdType = CacheIdType.SimpleCacheId
-  ) with SessionCache[DutyDefermentAccountLink] {
+class AccountLinkCache @Inject() (
+  appConfig: AppConfig,
+  mongoComponent: MongoComponent,
+  timestampSupport: TimestampSupport
+)(override implicit val ec: ExecutionContext)
+    extends MongoCacheRepository(
+      mongoComponent = mongoComponent,
+      collectionName = "account-link-cache",
+      ttl = appConfig.mongoAccountLinkTtl.seconds,
+      timestampSupport = timestampSupport,
+      cacheIdType = CacheIdType.SimpleCacheId
+    )
+    with SessionCache[DutyDefermentAccountLink] {
 
   override val key: String = "dutyDefermentAccountLink"
 }

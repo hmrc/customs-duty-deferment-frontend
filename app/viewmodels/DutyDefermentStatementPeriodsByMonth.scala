@@ -21,6 +21,6 @@ import java.time.LocalDate
 case class DutyDefermentStatementPeriodsByMonth(monthAndYear: LocalDate, periods: Seq[DutyDefermentStatementPeriod]) {
 
   val month: Int = monthAndYear.getMonth.getValue
-  val year: Int = monthAndYear.getYear
+  val year: Int  = monthAndYear.getYear
 
 }

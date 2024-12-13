@@ -27,37 +27,38 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-case class ContactDetailsCacheService @Inject()(connector: CustomsFinancialsApiConnector,
-                                                contactDetailsCache: ContactDetailsCache)
-                                               (implicit ec: ExecutionContext) {
+case class ContactDetailsCacheService @Inject() (
+  connector: CustomsFinancialsApiConnector,
+  contactDetailsCache: ContactDetailsCache
+)(implicit ec: ExecutionContext) {
 
   val log: Logger = Logger(this.getClass)
 
-
-  def getContactDetails(internalId: String, dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
+  def getContactDetails(internalId: String, dan: String, eori: String)(implicit
+    hc: HeaderCarrier
+  ): Future[ContactDetails] =
     getAndCacheContactDetails(internalId: String, dan: String, eori: String)
-  }
 
-  private def getAndCacheContactDetails(identifier: String, dan: String, eori: String)(implicit hc: HeaderCarrier): Future[ContactDetails] = {
+  private def getAndCacheContactDetails(identifier: String, dan: String, eori: String)(implicit
+    hc: HeaderCarrier
+  ): Future[ContactDetails] = {
     val idWithDan: String = s"$identifier$dan"
     contactDetailsCache.retrieve(idWithDan).flatMap {
       case Some(value) =>
         Future.successful(value)
-      case None =>
+      case None        =>
         for {
           contactDetails <- connector.getContactDetails(dan, eori)
-          _ <- contactDetailsCache.store(idWithDan, contactDetails)
+          _              <- contactDetailsCache.store(idWithDan, contactDetails)
         } yield contactDetails
     }
   }
 
-  def updateContactDetails(contactDetailsUserAnswers: ContactDetailsUserAnswers)
-                          (implicit request: DataRequest[AnyContent]): Future[Boolean] = {
-    val idWithDan: String = s"${request.identifier}${contactDetailsUserAnswers.dan}"
+  def updateContactDetails(
+    contactDetailsUserAnswers: ContactDetailsUserAnswers
+  )(implicit request: DataRequest[AnyContent]): Future[Boolean] = {
+    val idWithDan: String              = s"${request.identifier}${contactDetailsUserAnswers.dan}"
     val contactDetails: ContactDetails = contactDetailsUserAnswers.withWhitespaceTrimmed.toContactDetails
     contactDetailsCache.store(idWithDan, contactDetails)
   }
 }
-
-
-

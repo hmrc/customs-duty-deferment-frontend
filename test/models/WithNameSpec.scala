@@ -22,7 +22,7 @@ class WithNameSpec extends SpecBase {
 
   "WithName" should {
     "successfully overwrites name" in {
-      val testData = "Test Name"
+      val testData           = "Test Name"
       val withName: WithName = new WithName(testData)
       withName.toString mustBe testData
     }

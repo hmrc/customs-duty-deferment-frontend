@@ -38,9 +38,8 @@ class AuditingServiceSpec extends SpecBase {
   "AuditingService" should {
 
     "create the correct data event for a user requesting duty deferment statements" in new Setup {
-      val model: AuditModel = AuditModel(AUDIT_TYPE,
-        AUDIT_DUTY_DEFERMENT_TRANSACTION,
-        Json.toJson(AuditEori(eori, isHistoric = false)))
+      val model: AuditModel =
+        AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
       await(auditingService.audit(model))
 
       val dataEventCaptor: ArgumentCaptor[ExtendedDataEvent] = ArgumentCaptor.forClass(classOf[ExtendedDataEvent])
@@ -48,10 +47,10 @@ class AuditingServiceSpec extends SpecBase {
 
       val dataEvent: ExtendedDataEvent = dataEventCaptor.getValue
 
-      dataEvent.auditSource should be(expectedAuditSource)
-      dataEvent.auditType should be(AUDIT_TYPE)
+      dataEvent.auditSource       should be(expectedAuditSource)
+      dataEvent.auditType         should be(AUDIT_TYPE)
       dataEvent.detail.toString() should include(eori)
-      dataEvent.tags.toString() should include(AUDIT_DUTY_DEFERMENT_TRANSACTION)
+      dataEvent.tags.toString()   should include(AUDIT_DUTY_DEFERMENT_TRANSACTION)
     }
 
     "create the correct data event for recording a successful audit event" in new Setup {
@@ -70,8 +69,8 @@ class AuditingServiceSpec extends SpecBase {
 
     "create the correct data event for logging a Failure audit event" in new Setup {
 
-      when(mockAuditConnector.sendExtendedEvent(any)(any, any)).thenReturn(
-        Future.successful(AuditResult.Failure("Auditing failed", None)))
+      when(mockAuditConnector.sendExtendedEvent(any)(any, any))
+        .thenReturn(Future.successful(AuditResult.Failure("Auditing failed", None)))
 
       val dataEventCaptor: ArgumentCaptor[ExtendedDataEvent] = ArgumentCaptor.forClass(classOf[ExtendedDataEvent])
       await(auditingService.changeContactDetailsAuditEvent("dan", previousContactDetails, updatedContactDetails))
@@ -90,13 +89,13 @@ class AuditingServiceSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val expectedAuditSource = "customs-duty-deferment-frontend"
-    val eori = "EORI"
-    val AUDIT_DUTY_DEFERMENT_TRANSACTION = "Display duty deferment statements"
-    val AUDIT_VAT_CERTIFICATES_TRANSACTION = "Display VAT certificates"
+    val expectedAuditSource                        = "customs-duty-deferment-frontend"
+    val eori                                       = "EORI"
+    val AUDIT_DUTY_DEFERMENT_TRANSACTION           = "Display duty deferment statements"
+    val AUDIT_VAT_CERTIFICATES_TRANSACTION         = "Display VAT certificates"
     val AUDIT_POSTPONED_VAT_STATEMENTS_TRANSACTION = "Display postponed VAT statements"
-    val AUDIT_SECURITY_STATEMENTS_TRANSACTION = "Display security statements"
-    val AUDIT_TYPE = "DisplayDutyDefermentStatements"
+    val AUDIT_SECURITY_STATEMENTS_TRANSACTION      = "Display security statements"
+    val AUDIT_TYPE                                 = "DisplayDutyDefermentStatements"
 
     val mockConfig: AppConfig = mock[AppConfig]
     when(mockConfig.appName).thenReturn("customs-duty-deferment-frontend")
@@ -127,10 +126,10 @@ class AuditingServiceSpec extends SpecBase {
       telephone = Some("1234567"),
       fax = Some("7654321"),
       email = Some("abc@de.com"),
-      isNiAccount = false)
+      isNiAccount = false
+    )
 
-    val expectedPreviousContactDetails: JsValue = Json.parse(
-      """{
+    val expectedPreviousContactDetails: JsValue = Json.parse("""{
         |"addressLine1":"1 High Street",
         |"postCode":"AB12 3CD",
         |"telephone":"1234567",
@@ -142,8 +141,7 @@ class AuditingServiceSpec extends SpecBase {
         |"countryCode":"0044",
         |"addressLine2":"Town"}""".stripMargin)
 
-    val expectedUpdatedContactDetails: JsValue = Json.parse(
-      """{
+    val expectedUpdatedContactDetails: JsValue = Json.parse("""{
         |        "addressLine1":"2 Main Street",
         |        "postCode":"SC12 3CD",
         |        "telephone":"1234567",

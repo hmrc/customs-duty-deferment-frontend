@@ -19,15 +19,20 @@ package models
 import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
-case class EditContactDetailsUserAnswers(dan: String,
-                                         name: Option[String],
-                                         telephone: Option[String],
-                                         fax: Option[String],
-                                         email: Option[String],
-                                         isNiAccount: Boolean) {
+case class EditContactDetailsUserAnswers(
+  dan: String,
+  name: Option[String],
+  telephone: Option[String],
+  fax: Option[String],
+  email: Option[String],
+  isNiAccount: Boolean
+) {
 
-  def toContactDetailsUserAnswers(initialContactDetails: ContactDetails, isNiAccount: Boolean,
-                                  getCountryNameF: String => Option[String]): ContactDetailsUserAnswers = {
+  def toContactDetailsUserAnswers(
+    initialContactDetails: ContactDetails,
+    isNiAccount: Boolean,
+    getCountryNameF: String => Option[String]
+  ): ContactDetailsUserAnswers =
     ContactDetailsUserAnswers(
       dan = dan,
       name = name,
@@ -41,11 +46,10 @@ case class EditContactDetailsUserAnswers(dan: String,
       telephone = telephone,
       fax = fax,
       email = email,
-      isNiAccount = isNiAccount)
-  }
+      isNiAccount = isNiAccount
+    )
 }
 
 object EditContactDetailsUserAnswers {
   implicit val formats: OFormat[EditContactDetailsUserAnswers] = Json.format[EditContactDetailsUserAnswers]
 }
-

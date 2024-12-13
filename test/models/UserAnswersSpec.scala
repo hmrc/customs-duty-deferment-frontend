@@ -29,17 +29,17 @@ class UserAnswersSpec extends SpecBase {
 
     "get a value correctly" in new Setup {
       val gettable: MockGettable[String] = MockGettable[String](JsPath(List(KeyPathNode("key"))))
-      val result: Option[String] = userAnswers.get(gettable)(Reads.StringReads)
+      val result: Option[String]         = userAnswers.get(gettable)(Reads.StringReads)
       result mustBe Some("value")
     }
     "get None if value is incorrect" in new Setup {
       val gettable: MockGettable[String] = MockGettable[String](JsPath(List(KeyPathNode("key2"))))
-      val result: Option[String] = userAnswers.get(gettable)(Reads.StringReads)
+      val result: Option[String]         = userAnswers.get(gettable)(Reads.StringReads)
       result mustBe None
     }
 
     "set a value correctly" in new Setup {
-      val settable: MockSettable[String] = MockSettable[String](
+      val settable: MockSettable[String]   = MockSettable[String](
         JsPath(List(KeyPathNode("key"))),
         (_, ua) => Success(ua)
       )
@@ -62,7 +62,7 @@ class UserAnswersSpec extends SpecBase {
     }
 
     "remove a value correctly" in new Setup {
-      val settable: MockSettable[String] = MockSettable[String](
+      val settable: MockSettable[String]   = MockSettable[String](
         JsPath(List(KeyPathNode("key"))),
         (_, ua) => Success(ua)
       )
@@ -72,7 +72,7 @@ class UserAnswersSpec extends SpecBase {
     }
 
     "should not to remove if key is not found" in new Setup {
-      val settable: MockSettable[String] = MockSettable[String](
+      val settable: MockSettable[String]   = MockSettable[String](
         JsPath(List(KeyPathNode("key2"))),
         (_, ua) => Success(ua)
       )
@@ -89,17 +89,17 @@ class UserAnswersSpec extends SpecBase {
 
   trait Setup {
 
-    val sampleId = "sampleId"
-    val sampleData: JsObject = Json.obj("key" -> "value")
+    val sampleId                           = "sampleId"
+    val sampleData: JsObject               = Json.obj("key" -> "value")
     val sampleLocalDateTime: LocalDateTime = LocalDateTime.now
-    val userAnswers: UserAnswers = UserAnswers(sampleId, sampleData, sampleLocalDateTime)
+    val userAnswers: UserAnswers           = UserAnswers(sampleId, sampleData, sampleLocalDateTime)
 
     case class MockGettable[A](path: JsPath) extends Gettable[A]
 
     case class MockSettable[A](
-                                path: JsPath,
-                                cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
-                              ) extends Settable[A]
+      path: JsPath,
+      cleanup: (Option[A], UserAnswers) => Try[UserAnswers]
+    ) extends Settable[A]
 
   }
 }

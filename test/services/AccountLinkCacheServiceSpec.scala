@@ -35,42 +35,47 @@ class AccountLinkCacheServiceSpec extends SpecBase {
         .thenReturn(Future.successful(None))
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId",
-          "someSessionId",
-          "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
     }
 
     "return NoDutyDefermentSessionAvailable when no accountStatusId present" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(AccountLink("someEori",
-          "dan",
-          "linkId",
-          AccountStatusOpen,
-          None,
-          isNiAccount = false))))
+        .thenReturn(
+          Future.successful(
+            Some(AccountLink("someEori", "dan", "linkId", AccountStatusOpen, None, isNiAccount = false))
+          )
+        )
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId",
-          "someSessionId",
-          "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
     }
 
     "return AccountLink on successful submission" in new Setup {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Some(AccountLink("someEori",
-          "dan", "linkId", AccountStatusOpen, Some(DefermentAccountAvailable), isNiAccount = false))))
+        .thenReturn(
+          Future.successful(
+            Some(
+              AccountLink(
+                "someEori",
+                "dan",
+                "linkId",
+                AccountStatusOpen,
+                Some(DefermentAccountAvailable),
+                isNiAccount = false
+              )
+            )
+          )
+        )
 
       when(mockAccountLinkCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
       running(app) {
-        val result = await(service.cacheAccountLink("someLinkId",
-          "someSessionId",
-          "someInternalId"))
+        val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Right(dutyDefermentAccountLink)
       }
     }
@@ -101,17 +106,24 @@ class AccountLinkCacheServiceSpec extends SpecBase {
     }
   }
 
-
   trait Setup {
-    val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
-    val mockAccountLinkCache: AccountLinkCache = mock[AccountLinkCache]
+    val mockSessionCacheConnector: SessionCacheConnector   = mock[SessionCacheConnector]
+    val mockAccountLinkCache: AccountLinkCache             = mock[AccountLinkCache]
     val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
-      "someEori", "dan", "someLinkId", AccountStatusOpen, DefermentAccountAvailable, isNiAccount = false)
+      "someEori",
+      "dan",
+      "someLinkId",
+      AccountStatusOpen,
+      DefermentAccountAvailable,
+      isNiAccount = false
+    )
 
-    val app: Application = application().overrides(
-      inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
-      inject.bind[AccountLinkCache].toInstance(mockAccountLinkCache)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
+        inject.bind[AccountLinkCache].toInstance(mockAccountLinkCache)
+      )
+      .build()
 
     val service: AccountLinkCacheService = app.injector.instanceOf[AccountLinkCacheService]
   }

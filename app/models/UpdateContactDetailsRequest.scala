@@ -19,27 +19,29 @@ package models
 import play.api.libs.json.{JsValue, Json, OFormat, Writes}
 import play.api.libs.ws.BodyWritable
 
-case class UpdateContactDetailsRequest(dan: String,
-                                       eori: String,
-                                       name: Option[String],
-                                       addressLine1: String,
-                                       addressLine2: Option[String],
-                                       addressLine3: Option[String],
-                                       addressLine4: Option[String],
-                                       postCode: Option[String],
-                                       countryCode: Option[String],
-                                       telephone: Option[String],
-                                       fax: Option[String],
-                                       email: Option[String])
+case class UpdateContactDetailsRequest(
+  dan: String,
+  eori: String,
+  name: Option[String],
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: Option[String],
+  addressLine4: Option[String],
+  postCode: Option[String],
+  countryCode: Option[String],
+  telephone: Option[String],
+  fax: Option[String],
+  email: Option[String]
+)
 
 object UpdateContactDetailsRequest {
 
   private def trimEmptyPostCode(postcode: Option[String]): Option[String] = postcode match {
     case Some(p) if p.isEmpty => None
-    case _ => postcode
+    case _                    => postcode
   }
 
-  def apply(dan: String, eori: String, amendAddress: ContactDetailsUserAnswers): UpdateContactDetailsRequest = {
+  def apply(dan: String, eori: String, amendAddress: ContactDetailsUserAnswers): UpdateContactDetailsRequest =
     UpdateContactDetailsRequest(
       dan,
       eori,
@@ -54,12 +56,11 @@ object UpdateContactDetailsRequest {
       amendAddress.fax,
       amendAddress.email
     )
-  }
 
   implicit val formats: OFormat[UpdateContactDetailsRequest] = Json.format[UpdateContactDetailsRequest]
 
   implicit def jsonBodyWritable[T](implicit
-                                   writes: Writes[T],
-                                   jsValueBodyWritable: BodyWritable[JsValue]
-                                  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
+    writes: Writes[T],
+    jsValueBodyWritable: BodyWritable[JsValue]
+  ): BodyWritable[T] = jsValueBodyWritable.map(writes.writes)
 }

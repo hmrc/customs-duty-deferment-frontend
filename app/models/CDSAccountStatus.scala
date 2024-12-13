@@ -47,14 +47,13 @@ object CDSAccountStatus {
   implicit val CDSAccountStatusReads: Format[CDSAccountStatus] = new Format[CDSAccountStatus] {
     override def writes(accountStatus: CDSAccountStatus): JsValue = JsString(accountStatus.name)
 
-    override def reads(json: JsValue): JsResult[CDSAccountStatus] = {
+    override def reads(json: JsValue): JsResult[CDSAccountStatus] =
       json.as[String].toUpperCase match {
-        case "OPEN" => JsSuccess(AccountStatusOpen)
+        case "OPEN"      => JsSuccess(AccountStatusOpen)
         case "SUSPENDED" => JsSuccess(AccountStatusSuspended)
-        case "CLOSED" => JsSuccess(AccountStatusClosed)
-        case "PENDING" => JsSuccess(AccountStatusPending)
-        case e => logger.warn(s"Invalid account status: $e"); JsSuccess(AccountStatusOpen)
+        case "CLOSED"    => JsSuccess(AccountStatusClosed)
+        case "PENDING"   => JsSuccess(AccountStatusPending)
+        case e           => logger.warn(s"Invalid account status: $e"); JsSuccess(AccountStatusOpen)
       }
-    }
   }
 }

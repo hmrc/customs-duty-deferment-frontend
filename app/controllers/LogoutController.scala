@@ -24,10 +24,11 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class LogoutController @Inject()(sessionCacheConnector: SessionCacheConnector,
-                                 appConfig: AppConfig,
-                                 mcc: MessagesControllerComponents
-                                ) extends FrontendController(mcc) {
+class LogoutController @Inject() (
+  sessionCacheConnector: SessionCacheConnector,
+  appConfig: AppConfig,
+  mcc: MessagesControllerComponents
+) extends FrontendController(mcc) {
 
   def logout: Action[AnyContent] = Action { implicit request =>
     clearSession(appConfig.feedbackService)

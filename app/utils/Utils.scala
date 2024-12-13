@@ -22,8 +22,8 @@ import java.time.LocalDate
 import java.net.URL
 
 object Utils {
-  val emptyString = ""
-  val hyphen = "-"
+  val emptyString          = ""
+  val hyphen               = "-"
   private val questionMark = "?"
 
   def referrerUrl(platformHost: Option[String])(implicit request: RequestHeader): Option[String] =
@@ -34,15 +34,12 @@ object Utils {
     s"$path${if (rawQueryString.nonEmpty) questionMark else emptyString}$rawQueryString"
   }
 
-  def isEqualOrAfter(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+  def isEqualOrAfter(date: LocalDate, cutOffDate: LocalDate): Boolean =
     date.isEqual(cutOffDate) || date.isAfter(cutOffDate)
-  }
 
-  def isEqualOrBefore(date: LocalDate, cutOffDate: LocalDate): Boolean = {
+  def isEqualOrBefore(date: LocalDate, cutOffDate: LocalDate): Boolean =
     date.isEqual(cutOffDate) || date.isBefore(cutOffDate)
-  }
 
-  def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate = {
+  def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate =
     date.minusMonths(numberOfMonths).withDayOfMonth(1)
-  }
 }

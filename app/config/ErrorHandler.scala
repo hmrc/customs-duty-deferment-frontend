@@ -24,39 +24,38 @@ import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.{ErrorTemplate, not_found}
 import views.html.contact_details.edit_update_error
 
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
-                             notFound: not_found,
-                             val messagesApi: MessagesApi,
-                             editUpdateError: edit_update_error)
-                            (implicit appConfig: AppConfig, protected val ec: ExecutionContext)
-  extends FrontendErrorHandler {
+class ErrorHandler @Inject() (
+  errorTemplate: ErrorTemplate,
+  notFound: not_found,
+  val messagesApi: MessagesApi,
+  editUpdateError: edit_update_error
+)(implicit appConfig: AppConfig, protected val ec: ExecutionContext)
+    extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String,
-                                     heading: String,
-                                     message: String)(implicit rh: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
+    rh: RequestHeader
+  ): Future[Html] =
     Future.successful(errorTemplate(pageTitle, heading, message))
 
   override def notFoundTemplate(implicit rh: RequestHeader): Future[Html] =
     Future.successful(notFound())
 
-  def unauthorized()(implicit rh: RequestHeader): Html = {
+  def unauthorized()(implicit rh: RequestHeader): Html =
     errorTemplate(
       Messages("cf.error.unauthorized.title"),
       Messages("cf.error.unauthorized.heading"),
       Messages("cf.error.unauthorized.message")
     )
-  }
 
-  def standardErrorTemplate()(implicit rh:RequestHeader): Html = {
+  def standardErrorTemplate()(implicit rh: RequestHeader): Html =
     errorTemplate(
       Messages("accountDetails.edit.error.title"),
       Messages("accountDetails.edit.error.heading"),
       Messages("accountDetails.edit.error.message")
     )
-  }
 
   def sddsErrorTemplate()(implicit rh: RequestHeader): Html =
     errorTemplate(
@@ -72,11 +71,10 @@ class ErrorHandler @Inject()(errorTemplate: ErrorTemplate,
       Messages("cf.error.standard-error-contact-details.message")
     )
 
-  def errorUpdatingContactDetails()(implicit rh: RequestHeader): Html = {
+  def errorUpdatingContactDetails()(implicit rh: RequestHeader): Html =
     editUpdateError(
       title = Messages("accountDetails.edit.error.title"),
       heading = Messages("accountDetails.edit.error.heading"),
       message = Messages("accountDetails.edit.error.message")
     )
-  }
 }

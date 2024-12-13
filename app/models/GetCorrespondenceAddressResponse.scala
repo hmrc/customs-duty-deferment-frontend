@@ -19,8 +19,7 @@ package models
 import models.responses.retrieve.{ResponseCommon, ResponseDetail}
 import play.api.libs.json.{Json, OFormat}
 
-case class GetCorrespondenceAddressResponse(responseCommon: ResponseCommon,
-                                            responseDetail: Option[ResponseDetail])
+case class GetCorrespondenceAddressResponse(responseCommon: ResponseCommon, responseDetail: Option[ResponseDetail])
 
 object GetCorrespondenceAddressResponse {
   implicit val format: OFormat[GetCorrespondenceAddressResponse] = Json.format[GetCorrespondenceAddressResponse]

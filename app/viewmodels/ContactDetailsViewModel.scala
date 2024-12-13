@@ -20,26 +20,31 @@ import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 import utils.Utils.emptyString
 
-case class ContactDetailsViewModel(dan: String,
-                                   name: Option[String],
-                                   addressLine1: String,
-                                   addressLine2: Option[String],
-                                   addressLine3: Option[String],
-                                   addressLine4: Option[String],
-                                   postCode: Option[String],
-                                   countryCode: String,
-                                   countryName: String,
-                                   telephone: Option[String],
-                                   fax: Option[String],
-                                   email: Option[String])
+case class ContactDetailsViewModel(
+  dan: String,
+  name: Option[String],
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: Option[String],
+  addressLine4: Option[String],
+  postCode: Option[String],
+  countryCode: String,
+  countryName: String,
+  telephone: Option[String],
+  fax: Option[String],
+  email: Option[String]
+)
 
 object ContactDetailsViewModel {
 
-  implicit val formatsDutyDefermentAccountDetails: OFormat[ContactDetailsViewModel] = Json.format[ContactDetailsViewModel]
+  implicit val formatsDutyDefermentAccountDetails: OFormat[ContactDetailsViewModel] =
+    Json.format[ContactDetailsViewModel]
 
-  def apply(dan: String,
-            contactDetails: ContactDetails,
-            countryNameF: String => Option[String]): ContactDetailsViewModel = {
+  def apply(
+    dan: String,
+    contactDetails: ContactDetails,
+    countryNameF: String => Option[String]
+  ): ContactDetailsViewModel =
     ContactDetailsViewModel(
       dan,
       contactDetails.contactName,
@@ -54,5 +59,4 @@ object ContactDetailsViewModel {
       contactDetails.faxNumber,
       contactDetails.email
     )
-  }
 }

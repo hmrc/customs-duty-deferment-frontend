@@ -17,8 +17,8 @@
 package models
 
 import play.api.libs.json.{
-  IdxPathNode, JsArray, JsError, JsObject, JsPath, JsResult,
-  JsString, JsSuccess, JsValue, Json, KeyPathNode, RecursiveSearch
+  IdxPathNode, JsArray, JsError, JsObject, JsPath, JsResult, JsString, JsSuccess, JsValue, Json, KeyPathNode,
+  RecursiveSearch
 }
 import util.SpecBase
 
@@ -34,9 +34,8 @@ class ModelsSpec extends SpecBase {
       val result02: JsResult[JsObject] = RichJsObject(jsonObj01).setObject(jpath03, jvalue03)
       result02 mustBe JsSuccess(jsonObj03)
 
-      val result03: JsResult[JsObject] = RichJsObject(jsonObj03).setObject(
-        JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0)),
-        JsString("val2"))
+      val result03: JsResult[JsObject] =
+        RichJsObject(jsonObj03).setObject(JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0)), JsString("val2"))
       result03 mustBe JsSuccess(Json.parse(""" {"key1":"val1","key2":["val2"]} """))
     }
 
@@ -92,22 +91,22 @@ class ModelsSpec extends SpecBase {
     val jsonObj02: JsObject = Json.obj("key1" -> "val1", "key2" -> "val2")
     val jsonObj03: JsObject = Json.obj("key1" -> "val1", "key2" -> Json.arr("val2"));
     val jsonObj04: JsObject = Json.obj("key1" -> "val1", "key2" -> Json.obj("nestedKey" -> "nestedValue"))
-    val jsonObj05: JsArray = Json.arr("Alpha", "Beta", "Gamma")
+    val jsonObj05: JsArray  = Json.arr("Alpha", "Beta", "Gamma")
     val jsonObj06: JsObject = Json.obj("key1" -> Json.obj("key2" -> "value2"))
 
-    val jpath01: JsPath = JsPath(List(KeyPathNode("key1")))
+    val jpath01: JsPath   = JsPath(List(KeyPathNode("key1")))
     val jvalue01: JsValue = JsString("value1")
 
-    val jpath02: JsPath = JsPath(List(KeyPathNode("key2")) :+ RecursiveSearch("key1"))
+    val jpath02: JsPath   = JsPath(List(KeyPathNode("key2")) :+ RecursiveSearch("key1"))
     val jvalue02: JsValue = JsString("val2")
 
-    val jpath03: JsPath = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0))
+    val jpath03: JsPath   = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(0))
     val jvalue03: JsValue = JsString("val2")
 
-    val jpath04: JsPath = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(1))
+    val jpath04: JsPath   = JsPath(List(KeyPathNode("key2")) :+ IdxPathNode(1))
     val jvalue04: JsValue = JsString("val2")
 
-    val jpath05: JsPath = JsPath \ "key1" \ 0
+    val jpath05: JsPath   = JsPath \ "key1" \ 0
     val jvalue05: JsValue = Json.obj("newKey" -> "newValue")
 
     val jpath06: JsPath = JsPath \ "key1"

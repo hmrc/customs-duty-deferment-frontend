@@ -42,10 +42,12 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
 
-      val newApp: Application = application(Some(userAnswers)).overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-      ).build()
+      val newApp: Application = application(Some(userAnswers))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+        )
+        .build()
 
       running(newApp) {
         val result = route(newApp, onPageLoadRequest).value
@@ -91,16 +93,18 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     "redirect to the confirmation success page when a successful request made" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
-      val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
-      val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
-      val editedUserAnswers: UserAnswers = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
+      val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
+      val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
+      val editedUserAnswers: UserAnswers                                   = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
-      val newApp: Application = application(Some(editedUserAnswers)).overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
-        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-      ).build()
+      val newApp: Application = application(Some(editedUserAnswers))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+          inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+        )
+        .build()
 
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
@@ -120,15 +124,17 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     "redirect to the confirmation problem page when a update failed" in new Setup {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
-      val mockContactDetailsCacheServices: ContactDetailsCacheService = mock[ContactDetailsCacheService]
-      val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
+      val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
+      val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
 
-      val newApp: Application = application(Some(userAnswers)).overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
-        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-      ).build()
+      val newApp: Application = application(Some(userAnswers))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+          inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+        )
+        .build()
 
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
@@ -147,10 +153,12 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
   "isValidCountryName throws invalid country name error" in new Setup {
 
-    val newApp: Application = application(Some(userAnswers)).overrides(
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-      inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-    ).build()
+    val newApp: Application = application(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+      )
+      .build()
 
     running(newApp) {
       val result = route(newApp, invalidCountryCodeRequest).value
@@ -199,15 +207,17 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    lazy val app: Application = application(Some(userAnswers)).overrides(
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-    ).build()
+    lazy val app: Application = application(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
+      )
+      .build()
 
-    val view: edit_address_details = app.injector.instanceOf[edit_address_details]
+    val view: edit_address_details                = app.injector.instanceOf[edit_address_details]
     val form: Form[EditAddressDetailsUserAnswers] = app.injector.instanceOf[EditAddressDetailsFormProvider].apply()
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(onPageLoadRequest)
+    val appConfig: AppConfig                      = app.injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi                  = app.injector.instanceOf[MessagesApi]
+    val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
 
   }
 }

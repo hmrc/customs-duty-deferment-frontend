@@ -39,11 +39,9 @@ class FileRoleSpec extends SpecBase {
 
     "FileRole can successfully unapply a fileRole" in {
       val fileRole: FileRole = FileRole.apply("DutyDefermentStatement")
-      val result = FileRole.unapply(fileRole)
+      val result             = FileRole.unapply(fileRole)
 
       result mustBe Some("DutyDefermentStatement")
     }
   }
 }
-
-

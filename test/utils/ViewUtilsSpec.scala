@@ -66,13 +66,18 @@ class ViewUtilsSpec extends SpecBase {
   "linkComponent" should {
 
     "create the component correctly with provided input" in new Setup {
-      val result: HtmlFormat.Appendable = linkComponent(LinkComponentValues(pId = Some(testId),
-        linkMessageKey = testMsgKey,
-        location = testLocation,
-        linkClass = testClass,
-        preLinkMessageKey = Some(testMsgKey)))
+      val result: HtmlFormat.Appendable = linkComponent(
+        LinkComponentValues(
+          pId = Some(testId),
+          linkMessageKey = testMsgKey,
+          location = testLocation,
+          linkClass = testClass,
+          preLinkMessageKey = Some(testMsgKey)
+        )
+      )
 
-      result mustBe new link().apply(linkMessage = testMsgKey,
+      result mustBe new link().apply(
+        linkMessage = testMsgKey,
         location = testLocation,
         linkClass = testClass,
         preLinkMessage = Some(testMsgKey),
@@ -95,25 +100,32 @@ class ViewUtilsSpec extends SpecBase {
         content = Html(testMsg),
         id = Some(testId),
         classes = Some(testClass),
-        tabLink = Some(new HmrcNewTabLink().apply(
-          NewTabLink(
-            language = Some(msgs.lang.toString),
-            classList = Some(testClass),
-            href = Some(testHref),
-            text = testMsg
-          ))))
+        tabLink = Some(
+          new HmrcNewTabLink().apply(
+            NewTabLink(
+              language = Some(msgs.lang.toString),
+              classList = Some(testClass),
+              href = Some(testHref),
+              text = testMsg
+            )
+          )
+        )
+      )
 
       result mustBe new p().apply(
         id = Some(testId),
         classes = Some(testClass),
         content = Html(testMsg),
-        tabLink = Some(new HmrcNewTabLink().apply(
-          NewTabLink(
-            language = Some(msgs.lang.toString),
-            classList = Some(testClass),
-            href = Some(testHref),
-            text = testMsg
-          )))
+        tabLink = Some(
+          new HmrcNewTabLink().apply(
+            NewTabLink(
+              language = Some(msgs.lang.toString),
+              classList = Some(testClass),
+              href = Some(testHref),
+              text = testMsg
+            )
+          )
+        )
       )
 
       pComponent(content = Html(testMsg)) mustBe new p().apply(content = Html(testMsg))
@@ -133,22 +145,19 @@ class ViewUtilsSpec extends SpecBase {
   "captionComponent" should {
 
     "create the component correctly with provided input" in new Setup {
-      captionComponent(
-        msg = testMsg,
-        id = Some(testId),
-        classes = testClass) mustBe new caption().apply(msg = testMsg, id = Some(testId), classes = testClass)
+      captionComponent(msg = testMsg, id = Some(testId), classes = testClass) mustBe new caption()
+        .apply(msg = testMsg, id = Some(testId), classes = testClass)
 
-      captionComponent(msg = testMsg, classes = testClass) mustBe new caption().apply(msg = testMsg, classes = testClass)
+      captionComponent(msg = testMsg, classes = testClass) mustBe new caption()
+        .apply(msg = testMsg, classes = testClass)
     }
   }
 
   "hmrcNewTabLinkComponent" should {
 
     "create the component correctly with provided input" in new Setup {
-      val result: HtmlFormat.Appendable = hmrcNewTabLinkComponent(
-        text = testMsg,
-        href = Some(testHref),
-        language = Some(testLang))
+      val result: HtmlFormat.Appendable =
+        hmrcNewTabLinkComponent(text = testMsg, href = Some(testHref), language = Some(testLang))
 
       result mustBe
         new HmrcNewTabLink().apply(NewTabLink(language = Some(testLang), href = Some(testHref), text = testMsg))
@@ -156,15 +165,15 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = application().build()
+    val app: Application        = application().build()
     implicit val msgs: Messages = messages(app)
 
-    val testMsgKey = "test_key"
-    val testMsg = "test_msg"
-    val testId = "test_id"
-    val testClass = "test_class"
+    val testMsgKey   = "test_key"
+    val testMsg      = "test_msg"
+    val testId       = "test_id"
+    val testClass    = "test_class"
     val testLocation = "test_location"
-    val testHref = "http://www.test.com"
-    val testLang = "en"
+    val testHref     = "http://www.test.com"
+    val testLang     = "en"
   }
 }

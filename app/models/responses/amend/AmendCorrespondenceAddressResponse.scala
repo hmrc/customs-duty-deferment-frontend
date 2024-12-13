@@ -21,5 +21,6 @@ import play.api.libs.json.{Json, OFormat}
 case class AmendCorrespondenceAddressResponse(responseCommon: ResponseCommon)
 
 object AmendCorrespondenceAddressResponse {
-  implicit val updateResponseFormat: OFormat[AmendCorrespondenceAddressResponse] = Json.format[AmendCorrespondenceAddressResponse]
+  implicit val updateResponseFormat: OFormat[AmendCorrespondenceAddressResponse] =
+    Json.format[AmendCorrespondenceAddressResponse]
 }

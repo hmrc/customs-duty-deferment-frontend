@@ -73,38 +73,44 @@ class DataActionSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockAuthConnector: AuthConnector           = mock[AuthConnector]
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
-    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+    val mockErrorHandler: ErrorHandler             = mock[ErrorHandler]
+    val mockUserAnswersCache: UserAnswersCache     = mock[UserAnswersCache]
 
     when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
-      .thenReturn(Future.successful(Enrolments(Set(Enrolment("HMRC-CUS-ORG",
-        Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some("internalId")))
+      .thenReturn(
+        Future.successful(
+          Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some(
+            "internalId"
+          )
+        )
+      )
     when(mockDataStoreConnector.getAllEoriHistory(any)(any))
       .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
 
-    val app: Application = application().overrides().build()
-    val config: AppConfig = app.injector.instanceOf[AppConfig]
+    val app: Application                 = application().overrides().build()
+    val config: AppConfig                = app.injector.instanceOf[AppConfig]
     val bodyParsers: BodyParsers.Default = app.injector.instanceOf[BodyParsers.Default]
 
-    val authAction: AuthenticatedIdentifierAction = new AuthenticatedIdentifierAction(mockAuthConnector,
-      config, bodyParsers, mockDataStoreConnector)
-    val sessionIdAction: SessionIdAction = new SessionIdAction()(implicitly, mockErrorHandler)
-    val dataRetrievalAction: DataRetrievalAction = new DataRetrievalActionImpl(mockUserAnswersCache)
-    val dataRequiredAction: DataRequiredAction = new DataRequiredActionImpl()
-    val controller = new Harness(authAction, sessionIdAction, dataRetrievalAction, dataRequiredAction)
+    val authAction: AuthenticatedIdentifierAction =
+      new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
+    val sessionIdAction: SessionIdAction          = new SessionIdAction()(implicitly, mockErrorHandler)
+    val dataRetrievalAction: DataRetrievalAction  = new DataRetrievalActionImpl(mockUserAnswersCache)
+    val dataRequiredAction: DataRequiredAction    = new DataRequiredActionImpl()
+    val controller                                = new Harness(authAction, sessionIdAction, dataRetrievalAction, dataRequiredAction)
   }
 
   implicit class Ops[A](a: A) {
     def ~[B](b: B): A ~ B = new ~(a, b)
   }
 
-  class Harness(authAction: IdentifierAction,
-                resolveSessionId: SessionIdAction,
-                dataRetrievalAction: DataRetrievalAction,
-                dataRequiredAction: DataRequiredAction
-               ) {
+  class Harness(
+    authAction: IdentifierAction,
+    resolveSessionId: SessionIdAction,
+    dataRetrievalAction: DataRetrievalAction,
+    dataRequiredAction: DataRequiredAction
+  ) {
     def onPageLoad(): Action[AnyContent] = (authAction andThen resolveSessionId
       andThen dataRetrievalAction andThen dataRequiredAction).async {
       Future.successful(Results.Ok)

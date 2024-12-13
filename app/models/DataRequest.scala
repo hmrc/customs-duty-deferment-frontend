@@ -19,8 +19,10 @@ package models
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.http.SessionId
 
-case class DataRequest[A](request: Request[A],
-                          identifier: String,
-                          eoriNumber: String,
-                          sessionId: SessionId,
-                          userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class DataRequest[A](
+  request: Request[A],
+  identifier: String,
+  eoriNumber: String,
+  sessionId: SessionId,
+  userAnswers: UserAnswers
+) extends WrappedRequest[A](request)

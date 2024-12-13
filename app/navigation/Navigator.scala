@@ -20,17 +20,16 @@ import com.google.inject.{Inject, Singleton}
 import utils.Utils.emptyString
 
 @Singleton
-class Navigator @Inject()() {
-  val dutyDefermentStatementPageId = "duty-deferment-statement"
+class Navigator @Inject() () {
+  val dutyDefermentStatementPageId   = "duty-deferment-statement"
   val dutyDefermentStatementNAPageId = "duty-deferment-statement-na"
 
-  def backLinkUrlForServiceUnavailablePage(id: String,
-                                           linkId: String = emptyString): Option[String] =
+  def backLinkUrlForServiceUnavailablePage(id: String, linkId: String = emptyString): Option[String] =
     id match {
-      case pageId if pageId == dutyDefermentStatementPageId =>
+      case pageId if pageId == dutyDefermentStatementPageId   =>
         Some(controllers.routes.AccountController.showAccountDetails(linkId).url)
       case pageId if pageId == dutyDefermentStatementNAPageId =>
         Some(controllers.routes.AccountController.statementsUnavailablePage(linkId).url)
-      case _ => None
+      case _                                                  => None
     }
 }

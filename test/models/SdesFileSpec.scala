@@ -37,7 +37,7 @@ class SdesFileSpec extends SpecBase {
     "return correct value for unapply method" in new Setup {
       val pdfFileFormatName: String = FileFormat("PDF") match {
         case FileFormat(name) => name
-        case _ => emptyString
+        case _                => emptyString
       }
 
       pdfFileFormatName mustBe "PDF"
@@ -73,7 +73,7 @@ class SdesFileSpec extends SpecBase {
     "return correct value for unapply method" in new Setup {
       val exciseTypeName: String = DDStatementType("Excise") match {
         case DDStatementType(name) => name
-        case _ => emptyString
+        case _                     => emptyString
       }
 
       exciseTypeName mustBe "Excise"
@@ -97,29 +97,36 @@ class SdesFileSpec extends SpecBase {
 
   trait Setup {
     val exciseStatement: DDStatementType = DDStatementType("Excise")
-    val pdfFileFormat: FileFormat = FileFormat("PDF")
-    val pdfJsValue: JsString = JsString("PDF")
+    val pdfFileFormat: FileFormat        = FileFormat("PDF")
+    val pdfJsValue: JsString             = JsString("PDF")
 
-    val fileSize = 10L
-    val periodStartYear = 2018
-    val periodStartMonth = 6
-    val periodStartDate = 1
-    val periodEndYear = 2018
-    val periodEndMonth = 6
-    val periodEndDate = 8
+    val fileSize                                     = 10L
+    val periodStartYear                              = 2018
+    val periodStartMonth                             = 6
+    val periodStartDate                              = 1
+    val periodEndYear                                = 2018
+    val periodEndMonth                               = 6
+    val periodEndDate                                = 8
     val ddStatementFile1: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(periodStartYear,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
           periodStartMonth,
           periodStartDate,
           periodEndYear,
           periodEndMonth,
           periodEndDate,
           FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          "123456",
+          None
+        )
       )
 
     val ddStatementFile2: DutyDefermentStatementFile =
@@ -127,14 +134,21 @@ class SdesFileSpec extends SpecBase {
         "someFilename",
         "downloadUrl",
         fileSize,
-        DutyDefermentStatementFileMetadata(periodStartYear,
+        DutyDefermentStatementFileMetadata(
+          periodStartYear,
           periodStartMonth,
           periodStartDate,
           periodEndYear,
           periodEndMonth,
           periodEndDate,
           FileFormat.Csv,
-          DutyDefermentStatement, Weekly, Some(true), Some("BACS"), "123456", None)
+          DutyDefermentStatement,
+          Weekly,
+          Some(true),
+          Some("BACS"),
+          "123456",
+          None
+        )
       )
 
     val ddStatementFileList: Seq[DutyDefermentStatementFile] = Seq(ddStatementFile1, ddStatementFile2)

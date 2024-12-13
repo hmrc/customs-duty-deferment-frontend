@@ -48,8 +48,8 @@ class ShowSpec extends SpecBase {
     "when you click on the back link redirect to you contact details" in new Setup {
       running(app) {
         val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details")
-        val result = route(app, request).value
-        val html = Jsoup.parse(contentAsString(result))
+        val result  = route(app, request).value
+        val html    = Jsoup.parse(contentAsString(result))
         html.containsLinkWithText("/customs/payment-records/your-contact-details", "link-back")
       }
     }
@@ -58,8 +58,8 @@ class ShowSpec extends SpecBase {
   trait Setup extends I18nSupport {
 
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
-    val app: Application = application().build()
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val app: Application                                      = application().build()
+    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
 
     val someLinkId = "someLinkId"
 
@@ -69,8 +69,9 @@ class ShowSpec extends SpecBase {
       _ => Some("United Kingdom")
     )
 
-    def view: Document = Jsoup.parse(app.injector.instanceOf[show].apply(
-      validContactDetailsViewModel, DefermentAccountAvailable, someLinkId).body)
+    def view: Document = Jsoup.parse(
+      app.injector.instanceOf[show].apply(validContactDetailsViewModel, DefermentAccountAvailable, someLinkId).body
+    )
 
     override def messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   }

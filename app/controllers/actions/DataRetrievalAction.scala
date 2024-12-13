@@ -23,10 +23,11 @@ import play.api.mvc.ActionTransformer
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionImpl @Inject()(userAnswersCache: UserAnswersCache)
-                                       (implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
+class DataRetrievalActionImpl @Inject() (userAnswersCache: UserAnswersCache)(implicit
+  val executionContext: ExecutionContext
+) extends DataRetrievalAction {
 
-  override protected def transform[A](request: AuthenticatedRequestWithSessionId[A]): Future[OptionalDataRequest[A]] = {
+  override protected def transform[A](request: AuthenticatedRequestWithSessionId[A]): Future[OptionalDataRequest[A]] =
     userAnswersCache.retrieve(request.request.user.internalId).map {
       OptionalDataRequest(
         request.request,
@@ -36,7 +37,6 @@ class DataRetrievalActionImpl @Inject()(userAnswersCache: UserAnswersCache)
         _
       )
     }
-  }
 }
 
 trait DataRetrievalAction extends ActionTransformer[AuthenticatedRequestWithSessionId, OptionalDataRequest]

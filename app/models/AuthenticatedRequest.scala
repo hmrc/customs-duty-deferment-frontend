@@ -19,4 +19,3 @@ package models
 import play.api.mvc.{Request, WrappedRequest}
 
 final case class AuthenticatedRequest[A](request: Request[A], user: SignedInUser) extends WrappedRequest[A](request)
-

@@ -18,8 +18,8 @@ package connectors
 
 import config.AppConfig
 import models.{
-  EmailResponse, EmailResponses, EmailUnverifiedResponse, EmailVerifiedResponse,
-  EoriHistory, EoriHistoryResponse, UndeliverableEmail, UnverifiedEmail
+  EmailResponse, EmailResponses, EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, EoriHistoryResponse,
+  UndeliverableEmail, UnverifiedEmail
 }
 import play.api.http.Status.NOT_FOUND
 import uk.gov.hmrc.auth.core.retrieve.Email
@@ -30,9 +30,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps, UpstreamErrorResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataStoreConnector @Inject()(httpClient: HttpClientV2,
-                                   appConfig: AppConfig)
-                                  (implicit executionContext: ExecutionContext) {
+class DataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
+  executionContext: ExecutionContext
+) {
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
     val eoriHistoryEndPoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
@@ -40,8 +40,8 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
     httpClient
       .get(url"$eoriHistoryEndPoint")
       .execute[EoriHistoryResponse]
-      .flatMap {
-        response => Future.successful(response.eoriHistory)
+      .flatMap { response =>
+        Future.successful(response.eoriHistory)
       }
       .recover { case _ => Seq(EoriHistory(eori, None, None)) }
   }
@@ -53,12 +53,13 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
       .get(url"$dataStoreEndpoint")
       .execute[EmailResponse]
       .flatMap {
-        case EmailResponse(Some(address), _, None) => Future.successful(Right(Email(address)))
+        case EmailResponse(Some(address), _, None)  => Future.successful(Right(Email(address)))
         case EmailResponse(Some(email), _, Some(_)) => Future.successful(Left(UndeliverableEmail(email)))
-        case _ => Future.successful(Left(UnverifiedEmail))
-      }.recover {
-      case UpstreamErrorResponse(_, NOT_FOUND, _, _) => Left(UnverifiedEmail)
-    }
+        case _                                      => Future.successful(Left(UnverifiedEmail))
+      }
+      .recover { case UpstreamErrorResponse(_, NOT_FOUND, _, _) =>
+        Left(UnverifiedEmail)
+      }
   }
 
   def verifiedEmail(implicit hc: HeaderCarrier): Future[EmailVerifiedResponse] = {
@@ -67,8 +68,8 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
     httpClient
       .get(url"$emailDisplayApiUrl")
       .execute[EmailVerifiedResponse]
-      .flatMap {
-        response => Future.successful(response)
+      .flatMap { response =>
+        Future.successful(response)
       }
   }
 
@@ -78,8 +79,8 @@ class DataStoreConnector @Inject()(httpClient: HttpClientV2,
     httpClient
       .get(url"$unverifiedEmailDisplayApiUrl")
       .execute[EmailUnverifiedResponse]
-      .flatMap {
-        response => Future.successful(response.unVerifiedEmail)
+      .flatMap { response =>
+        Future.successful(response.unVerifiedEmail)
       }
   }
 }

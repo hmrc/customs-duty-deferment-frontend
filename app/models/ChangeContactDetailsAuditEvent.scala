@@ -19,14 +19,16 @@ package models
 import models.responses.retrieve.ContactDetails
 import play.api.libs.json.{Json, OFormat}
 
-case class ChangeContactDetailsAuditEvent(dutyDefermentAccountNumber: String,
-                                          eori: String,
-                                          from: ContactDetails,
-                                          to: ContactDetails)
+case class ChangeContactDetailsAuditEvent(
+  dutyDefermentAccountNumber: String,
+  eori: String,
+  from: ContactDetails,
+  to: ContactDetails
+)
 
 object ChangeContactDetailsAuditEvent {
 
-  def apply(eori: String, from: ContactDetails, to: ContactDetailsUserAnswers): ChangeContactDetailsAuditEvent = {
+  def apply(eori: String, from: ContactDetails, to: ContactDetailsUserAnswers): ChangeContactDetailsAuditEvent =
     ChangeContactDetailsAuditEvent(
       to.dan,
       eori,
@@ -55,7 +57,6 @@ object ChangeContactDetailsAuditEvent {
         to.email
       )
     )
-  }
 
   implicit val formats: OFormat[ChangeContactDetailsAuditEvent] = Json.format[ChangeContactDetailsAuditEvent]
 }

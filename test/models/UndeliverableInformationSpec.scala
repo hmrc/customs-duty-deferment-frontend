@@ -54,19 +54,23 @@ class UndeliverableInformationSpec extends SpecBase {
         |    }
         |  }""".stripMargin
 
-    val eventCode = 12
-    val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent("example-id",
+    val eventCode                                       = 12
+    val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent(
+      "example-id",
       "someEvent",
       "email@email.com",
       "2021-05-14T10:59:45.811+01:00",
       Some(eventCode),
       Some("Inbox full"),
-      "HMRC-CUS-ORG~EORINumber~GB744638982004")
+      "HMRC-CUS-ORG~EORINumber~GB744638982004"
+    )
 
-    val undelInfoOb: UndeliverableInformation = UndeliverableInformation("subject-example",
+    val undelInfoOb: UndeliverableInformation = UndeliverableInformation(
+      "subject-example",
       "example-id",
       "example-group-id",
       "2021-05-14T10:59:45.811+01:00",
-      undelInfoEventOb)
+      undelInfoEventOb
+    )
   }
 }

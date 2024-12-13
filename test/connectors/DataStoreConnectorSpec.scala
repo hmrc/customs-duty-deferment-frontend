@@ -17,8 +17,8 @@
 package connectors
 
 import models.{
-  EmailResponse, EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, EoriHistoryResponse,
-  UndeliverableEmail, UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail
+  EmailResponse, EmailUnverifiedResponse, EmailVerifiedResponse, EoriHistory, EoriHistoryResponse, UndeliverableEmail,
+  UndeliverableInformation, UndeliverableInformationEvent, UnverifiedEmail
 }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -131,7 +131,6 @@ class DataStoreConnectorSpec extends SpecBase {
     }
   }
 
-
   "verifiedEmail" should {
     "return undelivered email" in new Setup {
       when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
@@ -146,9 +145,9 @@ class DataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    val emailId = "test@test.com"
+    val emailId                        = "test@test.com"
     val expectedResult: Option[String] = Some(emailId)
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -156,28 +155,34 @@ class DataStoreConnectorSpec extends SpecBase {
     val eoriHistoryResponse: EoriHistoryResponse =
       EoriHistoryResponse(Seq(EoriHistory("someEori", None, None)))
 
-    val eventCode = 12
-    val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent("example-id",
+    val eventCode                                       = 12
+    val undelInfoEventOb: UndeliverableInformationEvent = UndeliverableInformationEvent(
+      "example-id",
       "someEvent",
       "email@email.com",
       "2021-05-14T10:59:45.811+01:00",
       Some(eventCode),
       Some("Inbox full"),
-      "HMRC-CUS-ORG~EORINumber~GB744638982004")
+      "HMRC-CUS-ORG~EORINumber~GB744638982004"
+    )
 
-    val undelInfoOb: UndeliverableInformation = UndeliverableInformation("someSubject",
+    val undelInfoOb: UndeliverableInformation = UndeliverableInformation(
+      "someSubject",
       "example-id",
       "example-group-id",
       "2021-05-14T10:59:45.811+01:00",
-      undelInfoEventOb)
+      undelInfoEventOb
+    )
 
-    val emailVerifiedRes: EmailVerifiedResponse = EmailVerifiedResponse(Some(emailId))
+    val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
 
-    val app: Application = application().overrides(
-      inject.bind[HttpClientV2].toInstance(mockHttpClient),
-      inject.bind[RequestBuilder].toInstance(requestBuilder)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[HttpClientV2].toInstance(mockHttpClient),
+        inject.bind[RequestBuilder].toInstance(requestBuilder)
+      )
+      .build()
 
     val connector: DataStoreConnector = app.injector.instanceOf[DataStoreConnector]
   }

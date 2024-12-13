@@ -26,16 +26,16 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 class UserAnswersCacheSpec
-  extends SpecBase
+    extends SpecBase
     with BeforeAndAfterEach
     with OptionValues
     with ScalaFutures
     with IntegrationPatience {
 
-  private val id = "session-123"
+  private val id                = "session-123"
   private val test: UserAnswers = UserAnswers("id", lastUpdated = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS))
-  private val app = application().build()
-  private val testCache = app.injector.instanceOf[UserAnswersCache]
+  private val app               = application().build()
+  private val testCache         = app.injector.instanceOf[UserAnswersCache]
 
   override def beforeEach(): Unit =
     testCache.collection.drop().toFuture().futureValue
@@ -60,16 +60,16 @@ class UserAnswersCacheSpec
     }
 
     ".get call after data removed from cache returns none" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult    = testCache.store(id, test).futureValue
       storeResult mustBe true
-      val removeResult = testCache.remove(id).futureValue
+      val removeResult   = testCache.remove(id).futureValue
       removeResult mustBe true
       val retrieveResult = testCache.retrieve(id).futureValue
       retrieveResult mustBe None
     }
 
     ".set and then remove value successfully" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult  = testCache.store(id, test).futureValue
       storeResult mustBe true
       val removeResult = testCache.remove(id).futureValue
       removeResult mustBe true

@@ -145,8 +145,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
 
   trait Setup {
     val mockContactDetailsCacheService: ContactDetailsCacheService = mock[ContactDetailsCacheService]
-    val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
-    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
+    val mockAccountLinkCacheService: AccountLinkCacheService       = mock[AccountLinkCacheService]
+    val mockDataStoreConnector: DataStoreConnector                 = mock[DataStoreConnector]
 
     val validContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(
       validDan,
@@ -159,7 +159,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
         bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
         bind[DataStoreConnector].toInstance(mockDataStoreConnector)
-      ).build()
+      )
+      .build()
 
     val showRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ShowContactDetailsController.show().url)
@@ -167,11 +168,11 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     val startSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ShowContactDetailsController.startSession("someLinkId").url)
 
-    val view: show = app.injector.instanceOf[show]
+    val view: show            = app.injector.instanceOf[show]
     val errorView: show_error = app.injector.instanceOf[show_error]
 
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+    val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(showRequest)
+    val messages: Messages       = messagesApi.preferred(showRequest)
   }
 }

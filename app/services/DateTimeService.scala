@@ -22,9 +22,9 @@ import utils.Constants._
 
 import java.time._
 
-class DateTimeService @Inject()(appConfig: AppConfig) {
+class DateTimeService @Inject() (appConfig: AppConfig) {
 
-  def systemDateTime(): LocalDateTime = {
+  def systemDateTime(): LocalDateTime =
     if (appConfig.fixedDateTime) {
       LocalDateTime.of(
         LocalDate.of(FIXED_DATE_TIME_YEAR, FIXED_DATE_TIME_MONTH_OF_YEAR, FIXED_DATE_TIME_DAY_OF_MONTH),
@@ -33,11 +33,9 @@ class DateTimeService @Inject()(appConfig: AppConfig) {
     } else {
       now()
     }
-  }
 
-  def now(): LocalDateTime = {
+  def now(): LocalDateTime =
     LocalDateTime.now(ZoneId.of("Europe/London"))
-  }
 
   def getTimeStamp: OffsetDateTime = OffsetDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)
 

@@ -19,26 +19,27 @@ package models
 import util.SpecBase
 import play.api.libs.json.{JsSuccess, Json}
 
-
 class MetadataSpec extends SpecBase {
 
   "Metadata" should {
 
-    val sampleMetadata: Metadata = Metadata(Seq(
-      MetadataItem("PeriodStartYear", "2023"),
-      MetadataItem("PeriodStartMonth", "10"),
-      MetadataItem("PeriodStartDay", "4"),
-      MetadataItem("PeriodEndYear", "2023"),
-      MetadataItem("PeriodEndMonth", "10"),
-      MetadataItem("PeriodEndDay", "31"),
-      MetadataItem("FileType", "CSV"),
-      MetadataItem("FileRole", "DutyDefermentStatement"),
-      MetadataItem("DefermentStatementType", "DD"),
-      MetadataItem("DutyOverLimit", "Y"),
-      MetadataItem("DutyPaymentType", "PPD"),
-      MetadataItem("DAN", "1234567890"),
-      MetadataItem("statementRequestId", "12345")
-    ))
+    val sampleMetadata: Metadata = Metadata(
+      Seq(
+        MetadataItem("PeriodStartYear", "2023"),
+        MetadataItem("PeriodStartMonth", "10"),
+        MetadataItem("PeriodStartDay", "4"),
+        MetadataItem("PeriodEndYear", "2023"),
+        MetadataItem("PeriodEndMonth", "10"),
+        MetadataItem("PeriodEndDay", "31"),
+        MetadataItem("FileType", "CSV"),
+        MetadataItem("FileRole", "DutyDefermentStatement"),
+        MetadataItem("DefermentStatementType", "DD"),
+        MetadataItem("DutyOverLimit", "Y"),
+        MetadataItem("DutyPaymentType", "PPD"),
+        MetadataItem("DAN", "1234567890"),
+        MetadataItem("statementRequestId", "12345")
+      )
+    )
 
     "convert Metadata to DutyDefermentStatementFileMetadata" in {
 
@@ -51,7 +52,7 @@ class MetadataSpec extends SpecBase {
 
     "Reads and Writes return corresponding objects" in {
 
-      val jsonVal = Metadata.metadataWrites.writes(sampleMetadata).toString()
+      val jsonVal   = Metadata.metadataWrites.writes(sampleMetadata).toString()
       val parsedObj = Metadata.metadataReads.reads(Json.parse(jsonVal))
       parsedObj mustBe JsSuccess(sampleMetadata)
     }

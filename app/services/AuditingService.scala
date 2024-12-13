@@ -33,8 +33,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditingService @Inject()(appConfig: AppConfig,
-                                auditConnector: AuditConnector)(implicit executionContext: ExecutionContext) {
+class AuditingService @Inject() (appConfig: AppConfig, auditConnector: AuditConnector)(implicit
+  executionContext: ExecutionContext
+) {
 
   val log: LoggerLike = Logger(this.getClass)
 
@@ -43,23 +44,27 @@ class AuditingService @Inject()(appConfig: AppConfig,
   def audit(auditModel: AuditModel)(implicit hc: HeaderCarrier): Future[AuditResult] = {
     val dataEvent = toExtendedDataEvent(appConfig.appName, auditModel, referrer(hc))
 
-    auditConnector.sendExtendedEvent(dataEvent)
+    auditConnector
+      .sendExtendedEvent(dataEvent)
       .map { auditResult =>
         logAuditResult(auditResult)
         auditResult
       }
   }
 
-  def changeContactDetailsAuditEvent(dan: String,
-                                     previousContactDetails: ContactDetails,
-                                     updatedContactDetails: ContactDetailsUserAnswers)
-                                    (implicit hc: HeaderCarrier): Future[AuditResult] = {
-    val event = ChangeContactDetailsAuditEvent(dan, previousContactDetails, updatedContactDetails)
+  def changeContactDetailsAuditEvent(
+    dan: String,
+    previousContactDetails: ContactDetails,
+    updatedContactDetails: ContactDetailsUserAnswers
+  )(implicit hc: HeaderCarrier): Future[AuditResult] = {
+    val event      = ChangeContactDetailsAuditEvent(dan, previousContactDetails, updatedContactDetails)
     val auditModel = AuditModel("UpdateDefermentAccountCorrespondence", "Update contact details", Json.toJson(event))
     audit(auditModel)
   }
 
-  private def toExtendedDataEvent(appName: String, auditModel: AuditModel, path: String)(implicit hc: HeaderCarrier): ExtendedDataEvent =
+  private def toExtendedDataEvent(appName: String, auditModel: AuditModel, path: String)(implicit
+    hc: HeaderCarrier
+  ): ExtendedDataEvent =
     ExtendedDataEvent(
       auditSource = appName,
       auditType = auditModel.auditType,
@@ -69,11 +74,11 @@ class AuditingService @Inject()(appConfig: AppConfig,
 
   private def logAuditResult(auditResult: AuditResult): Unit =
     auditResult match {
-      case Success =>
+      case Success         =>
         log.debug("Splunk Audit Successful")
       case Failure(err, _) =>
         log.debug(s"Splunk Audit Error, message: $err")
-      case Disabled =>
+      case Disabled        =>
         log.debug(s"Auditing Disabled")
     }
 }

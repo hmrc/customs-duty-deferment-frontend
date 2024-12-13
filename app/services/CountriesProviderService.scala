@@ -24,9 +24,8 @@ import play.api.{Environment, Logger}
 
 import javax.inject.Singleton
 
-
 @Singleton
-class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig) {
+class CountriesProviderService @Inject() (env: Environment, appConfig: AppConfig) {
 
   private val log = Logger(this.getClass)
 
@@ -38,10 +37,10 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
     def fromJsonFile: List[Country] =
       Json.parse(env.classLoader.getResourceAsStream(countriesFilename)) match {
         case JsArray(cs) =>
-          cs.toList.map {
-            country => Country(country(0).toString().stripPrefix("\"").stripSuffix("\""), countryCode(country(1).toString()))
+          cs.toList.map { country =>
+            Country(country(0).toString().stripPrefix("\"").stripSuffix("\""), countryCode(country(1).toString()))
           }
-        case _ =>
+        case _           =>
           log.error("Could not read JSON array of countries from : " + countriesFilename)
           throw new IllegalArgumentException("Could not read JSON array of countries from : " + countriesFilename)
       }
@@ -53,8 +52,9 @@ class CountriesProviderService @Inject()(env: Environment, appConfig: AppConfig)
 
   def isValidCountryName(countryName: String): Boolean = countriesNamesSet.contains(countryName)
 
-  private lazy val countriesNamesMap: Map[String, String] = countries
-    .map { country => country.countryCode -> country.countryName }.toMap
+  private lazy val countriesNamesMap: Map[String, String] = countries.map { country =>
+    country.countryCode -> country.countryName
+  }.toMap
 
   def getCountryName(countryCode: String): Option[String] = countriesNamesMap.get(countryCode)
 }

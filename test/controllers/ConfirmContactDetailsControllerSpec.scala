@@ -78,23 +78,27 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     val problemRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ConfirmContactDetailsController.problem.url)
 
-    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+    val mockUserAnswersCache: UserAnswersCache               = mock[UserAnswersCache]
     val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
 
-    val app: Application = application(Some(userAnswers)).overrides(
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-      inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-    ).build()
+    val app: Application = application(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+      )
+      .build()
 
-    val appAddressEdit: Application = application(Some(userAnswersAddress)).overrides(
-      inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-    ).build()
+    val appAddressEdit: Application = application(Some(userAnswersAddress))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
+      )
+      .build()
 
     val viewAddress: edit_success_address = app.injector.instanceOf[edit_success_address]
     val viewContact: edit_success_contact = app.injector.instanceOf[edit_success_contact]
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages = messagesApi.preferred(successContactDetailsRequest)
-    val messagesAddress: Messages = messagesApi.preferred(successAddressDetailsRequest)
+    val appConfig: AppConfig              = app.injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi          = app.injector.instanceOf[MessagesApi]
+    val messages: Messages                = messagesApi.preferred(successContactDetailsRequest)
+    val messagesAddress: Messages         = messagesApi.preferred(successAddressDetailsRequest)
   }
 }

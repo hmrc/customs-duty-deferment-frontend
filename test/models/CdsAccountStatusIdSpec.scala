@@ -24,16 +24,16 @@ class CdsAccountStatusIdSpec extends SpecBase {
   "CdsAccountStatusId" should {
     "read/write the correct values" in {
 
-      val val0 = 0
-      val val1 = 1
-      val val2 = 2
-      val val3 = 3
-      val val4 = 4
-      val val5 = 5
-      val val6 = 6
-      val val7 = 7
-      val val8 = 8
-      val val9 = 9
+      val val0  = 0
+      val val1  = 1
+      val val2  = 2
+      val val3  = 3
+      val val4  = 4
+      val val5  = 5
+      val val6  = 6
+      val val7  = 7
+      val val8  = 8
+      val val9  = 9
       val val99 = 99
 
       JsNumber(val0).as[CDSAccountStatusId] mustBe DefermentAccountAvailable

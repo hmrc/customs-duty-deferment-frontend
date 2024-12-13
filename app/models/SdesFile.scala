@@ -48,13 +48,15 @@ object FileFormat {
   val SdesFileFormats: SortedSet[FileFormat] = SortedSet(Pdf, Csv)
   val PvatFileFormats: SortedSet[FileFormat] = SortedSet(Pdf)
 
-  def filterFileFormats(allowedFileFormats: SortedSet[FileFormat])(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementFile] =
+  def filterFileFormats(allowedFileFormats: SortedSet[FileFormat])(
+    files: Seq[DutyDefermentStatementFile]
+  ): Seq[DutyDefermentStatementFile] =
     files.filter(file => allowedFileFormats(file.metadata.fileFormat))
 
   def apply(name: String): FileFormat = name.toUpperCase match {
     case Pdf.name => Pdf
     case Csv.name => Csv
-    case _ =>
+    case _        =>
       log.warn(s"Unknown file format: $name")
       UnknownFileFormat
   }
@@ -94,10 +96,10 @@ object DDStatementType {
   }
 
   def apply(name: String): DDStatementType = name match {
-    case Weekly.name => Weekly
+    case Weekly.name        => Weekly
     case Supplementary.name => Supplementary
-    case Excise.name => Excise
-    case _ =>
+    case Excise.name        => Excise
+    case _                  =>
       log.warn(s"Unknown duty deferment statement type: $name")
       UnknownStatementType
   }

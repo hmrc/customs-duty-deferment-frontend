@@ -23,15 +23,20 @@ import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
 
-class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionValues with ScalaFutures with IntegrationPatience {
+class AccountLinkCacheSpec
+    extends SpecBase
+    with BeforeAndAfterEach
+    with OptionValues
+    with ScalaFutures
+    with IntegrationPatience {
 
-  private val id = "session-123"
+  private val id          = "session-123"
   private val isNiAccount = false
 
-  private val test: DutyDefermentAccountLink = DutyDefermentAccountLink("someEori",
-    "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable, isNiAccount)
+  private val test: DutyDefermentAccountLink =
+    DutyDefermentAccountLink("someEori", "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable, isNiAccount)
 
-  private val app = application().build()
+  private val app       = application().build()
   private val testCache = app.injector.instanceOf[AccountLinkCache]
 
   override def beforeEach(): Unit =
@@ -57,16 +62,16 @@ class AccountLinkCacheSpec extends SpecBase with BeforeAndAfterEach with OptionV
     }
 
     ".get call after data removed from cache returns none" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult    = testCache.store(id, test).futureValue
       storeResult mustBe true
-      val removeResult = testCache.remove(id).futureValue
+      val removeResult   = testCache.remove(id).futureValue
       removeResult mustBe true
       val retrieveResult = testCache.retrieve(id).futureValue
       retrieveResult mustBe None
     }
 
     ".set and then remove value successfully" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult  = testCache.store(id, test).futureValue
       storeResult mustBe true
       val removeResult = testCache.remove(id).futureValue
       removeResult mustBe true

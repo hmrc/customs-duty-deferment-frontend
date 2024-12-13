@@ -46,15 +46,15 @@ class UtilsSpec extends SpecBase {
 
   "referrerUrl" must {
     "return correct value when platform host has some value" in {
-      val path = "somePath"
-      val platformHost = "localhost"
+      val path                                                     = "somePath"
+      val platformHost                                             = "localhost"
       implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
 
       referrerUrl(Some(platformHost)) mustBe Option(s"$platformHost$path")
     }
 
     "return correct value when platform host value is empty" in {
-      val path = "somePath"
+      val path                                                     = "somePath"
       implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
 
       referrerUrl(None) mustBe Option(s"$path")
@@ -91,8 +91,8 @@ class UtilsSpec extends SpecBase {
 
   trait Setup {
     val YEAR_2024: Int = 2024
-    val MONTH_06: Int = 6
-    val MONTH_03: Int = 3
+    val MONTH_06: Int  = 6
+    val MONTH_03: Int  = 3
 
     val DAY_01: Int = 1
     val DAY_02: Int = 2
@@ -100,10 +100,10 @@ class UtilsSpec extends SpecBase {
     val DAY_04: Int = 4
 
     val cutOffDate = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
-    val date01 = LocalDate.of(YEAR_2024, MONTH_03, DAY_01)
-    val date02 = LocalDate.of(YEAR_2024, MONTH_06, DAY_02)
-    val date03 = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
-    val date04 = LocalDate.of(YEAR_2024, MONTH_06, DAY_04)
+    val date01     = LocalDate.of(YEAR_2024, MONTH_03, DAY_01)
+    val date02     = LocalDate.of(YEAR_2024, MONTH_06, DAY_02)
+    val date03     = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
+    val date04     = LocalDate.of(YEAR_2024, MONTH_06, DAY_04)
 
     val numberOfMonths = 3
   }

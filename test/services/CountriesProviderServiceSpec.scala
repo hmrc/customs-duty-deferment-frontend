@@ -29,16 +29,16 @@ class CountriesProviderServiceSpec extends SpecBase {
   "CountriesProviderService" should {
 
     "return list of Countries for correct json data" in new Setup {
-      when(mockEnv.classLoader.getResourceAsStream(anyString)).thenReturn(
-        new ByteArrayInputStream(testData02.getBytes()))
+      when(mockEnv.classLoader.getResourceAsStream(anyString))
+        .thenReturn(new ByteArrayInputStream(testData02.getBytes()))
 
       val countryService: CountriesProviderService = new CountriesProviderService(mockEnv, mockConfig)
       countryService.countries.size mustBe 2
     }
 
     "throws error if unable to read json file" in new Setup {
-      when(mockEnv.classLoader.getResourceAsStream(anyString)).thenReturn(
-        new ByteArrayInputStream(testData01.getBytes()))
+      when(mockEnv.classLoader.getResourceAsStream(anyString))
+        .thenReturn(new ByteArrayInputStream(testData01.getBytes()))
 
       intercept[IllegalArgumentException] {
         new CountriesProviderService(mockEnv, mockConfig)
@@ -49,10 +49,10 @@ class CountriesProviderServiceSpec extends SpecBase {
   trait Setup {
     val testData01 = "{}"
     val testData02 = "[[\"United Kingdom\",\"country:GB\"],[\"Ireland\",\"country:IE\"]]"
-    val fileName = "countries.json"
+    val fileName   = "countries.json"
 
-    val mockEnv: Environment = mock[Environment]
-    val mockConfig: AppConfig = mock[AppConfig]
+    val mockEnv: Environment         = mock[Environment]
+    val mockConfig: AppConfig        = mock[AppConfig]
     val mockClassLoader: ClassLoader = mock[ClassLoader]
 
     when(mockConfig.countriesFilename).thenReturn(fileName)

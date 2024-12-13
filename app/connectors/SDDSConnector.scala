@@ -26,19 +26,19 @@ import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SDDSConnector @Inject()(httpClient: HttpClientV2,
-                              appConfig: AppConfig
-                             )(implicit executionContext: ExecutionContext) {
+class SDDSConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit
+  executionContext: ExecutionContext
+) {
 
   private lazy val returnUrl: String = appConfig.financialsHomepage
-  private lazy val backUrl: String = appConfig.financialsHomepage
+  private lazy val backUrl: String   = appConfig.financialsHomepage
 
-  def startJourney(dan: String, email: String)(implicit hc: HeaderCarrier): Future[String] = {
-    httpClient.post(url"${appConfig.sddsUri}")
+  def startJourney(dan: String, email: String)(implicit hc: HeaderCarrier): Future[String] =
+    httpClient
+      .post(url"${appConfig.sddsUri}")
       .withBody[SDDSRequest](SDDSRequest(returnUrl, backUrl, dan, email))
       .execute[SDDSResponse]
-      .flatMap {
-        response => Future.successful(response.nextUrl)
+      .flatMap { response =>
+        Future.successful(response.nextUrl)
       }
-  }
 }

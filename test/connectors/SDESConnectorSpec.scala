@@ -31,9 +31,10 @@ class SDESConnectorSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "return a sequence of duty deferment files on a successful response" in new Setup {
-      val fileSize = 10L
+      val fileSize                              = 10L
       val fileInformation: Seq[FileInformation] =
-        Seq(FileInformation("someFilename", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata1)),
+        Seq(
+          FileInformation("someFilename", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata1)),
           FileInformation("someFilename2", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata2)),
           FileInformation("someFilename3", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata3)),
           FileInformation("someFilename4", "downloadUrl", fileSize, Metadata(dutyDefermentStatementMetadata4))
@@ -54,13 +55,15 @@ class SDESConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2 = mock[HttpClientV2]
+    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val hc: HeaderCarrier     = HeaderCarrier()
 
-    val app: Application = application().overrides(
-      inject.bind[HttpClientV2].toInstance(mockHttpClient)
-    ).build()
+    val app: Application = application()
+      .overrides(
+        inject.bind[HttpClientV2].toInstance(mockHttpClient)
+      )
+      .build()
 
     val connector: SDESConnector = app.injector.instanceOf[SDESConnector]
   }

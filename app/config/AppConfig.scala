@@ -24,18 +24,19 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.Utils.{emptyString, referrerUrl}
 
 @Singleton
-class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
 
-  lazy val appName: String = config.get[String]("appName")
-  lazy val registerCdsUrl: String = config.get[String]("external-urls.cdsRegisterUrl")
-  lazy val subscribeCdsUrl: String = config.get[String]("external-urls.cdsSubscribeUrl")
-  lazy val loginUrl: String = config.get[String]("external-urls.login")
-  lazy val loginContinueUrl: String = config.get[String]("external-urls.loginContinue")
-  lazy val financialsHomepage: String = config.get[String]("external-urls.customsFinancialsHomepage")
-  lazy val yourContactDetailsUrl: String = financialsHomepage + config.get[String]("external-urls.yourContactDetailsUrl")
-  lazy val xClientIdHeader: String = config.get[String]("microservice.services.sdes.x-client-id")
-  lazy val signOutUrl: String = config.get[String]("external-urls.signOut")
-  lazy val countriesFilename: String = config.get[String]("countriesFilename")
+  lazy val appName: String               = config.get[String]("appName")
+  lazy val registerCdsUrl: String        = config.get[String]("external-urls.cdsRegisterUrl")
+  lazy val subscribeCdsUrl: String       = config.get[String]("external-urls.cdsSubscribeUrl")
+  lazy val loginUrl: String              = config.get[String]("external-urls.login")
+  lazy val loginContinueUrl: String      = config.get[String]("external-urls.loginContinue")
+  lazy val financialsHomepage: String    = config.get[String]("external-urls.customsFinancialsHomepage")
+  lazy val yourContactDetailsUrl: String =
+    financialsHomepage + config.get[String]("external-urls.yourContactDetailsUrl")
+  lazy val xClientIdHeader: String       = config.get[String]("microservice.services.sdes.x-client-id")
+  lazy val signOutUrl: String            = config.get[String]("external-urls.signOut")
+  lazy val countriesFilename: String     = config.get[String]("countriesFilename")
   var historicStatementsEnabled: Boolean = config.get[Boolean]("features.historic-statements-enabled")
 
   lazy val dutyDefermentContactDetailsEndpoint: String =
@@ -44,18 +45,18 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val dutyDefermentUpdateContactDetailsEndpoint: String =
     config.get[String]("microservice.services.customs-financials-api.duty-deferment-update-contact-details-endpoint")
 
-  lazy val getAccountDetailsUrl: String = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
+  lazy val getAccountDetailsUrl: String    = customsFinancialsApi + dutyDefermentContactDetailsEndpoint
   lazy val updateAccountAddressUrl: String = customsFinancialsApi + dutyDefermentUpdateContactDetailsEndpoint
-  val mongoSessionTtl: Int = config.get[Int]("mongodb.sessionTtl")
-  val mongoSessionContactDetailsTtl: Int = config.get[Int]("mongodb.contactDetailsTtl")
-  val mongoAccountLinkTtl: Int = config.get[Int]("mongodb.accountLinkTtl")
+  val mongoSessionTtl: Int                 = config.get[Int]("mongodb.sessionTtl")
+  val mongoSessionContactDetailsTtl: Int   = config.get[Int]("mongodb.contactDetailsTtl")
+  val mongoAccountLinkTtl: Int             = config.get[Int]("mongodb.accountLinkTtl")
 
-  lazy val cdsEmailEnquiries: String = config.get[String]("external-urls.cdsEmailEnquiries")
+  lazy val cdsEmailEnquiries: String     = config.get[String]("external-urls.cdsEmailEnquiries")
   lazy val cdsEmailEnquiriesHref: String = config.get[String]("external-urls.cdsEmailEnquiriesHref")
   lazy val chiefDDstatementsLink: String = config.get[String]("external-urls.chiefDDstatementsLink")
-  lazy val ddAccountSupportLink: String = config.get[String]("external-urls.ddAccountSupportLink")
+  lazy val ddAccountSupportLink: String  = config.get[String]("external-urls.ddAccountSupportLink")
 
-  lazy val timeout: Int = config.get[Int]("timeout.timeout")
+  lazy val timeout: Int   = config.get[Int]("timeout.timeout")
   lazy val countdown: Int = config.get[Int]("timeout.countdown")
 
   lazy val feedbackService: String = config.get[String]("microservice.services.feedback.url") +
@@ -92,23 +93,17 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   lazy val fixedDateTime: Boolean = config.get[Boolean]("features.fixed-systemdate-for-tests")
 
-  lazy val emailFrontendService = s"${servicesConfig.baseUrl(s"customs-email-frontend")}${
-    config.get[String](
-      "microservice.services.customs-email-frontend.context")
-  }"
+  lazy val emailFrontendService =
+    s"${servicesConfig.baseUrl(s"customs-email-frontend")}${config.get[String]("microservice.services.customs-email-frontend.context")}"
 
   lazy val emailFrontendUrl: String = s"$emailFrontendService/service/customs-finance"
 
   def deskProLinkUrlForServiceUnavailable(implicit request: RequestHeader): String =
-    s"$contactFrontEndBaseUrl/contact/report-technical-problem?newTab=true&amp;service=${
-      urlEncode(contactFrontEndServiceId)
-    }${
-      if (referrerUrl(platformHost).nonEmpty) {
-        s"referrerUrl=${
-          urlEncode(referrerUrl(platformHost).get)
-        }"
-      } else {
-        emptyString
-      }
-    }"
+    s"$contactFrontEndBaseUrl/contact/report-technical-problem?newTab=true&amp;service=${urlEncode(contactFrontEndServiceId)}${
+        if (referrerUrl(platformHost).nonEmpty) {
+          s"referrerUrl=${urlEncode(referrerUrl(platformHost).get)}"
+        } else {
+          emptyString
+        }
+      }"
 }
