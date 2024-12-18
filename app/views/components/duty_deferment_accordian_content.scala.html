@@ -35,10 +35,10 @@
                     case DutyDeferment => messages("cf.account.details.row.DutyDeferment.info")
                     case _ =>
                         messages("cf.account.detail.period-group",
-                                    Formatters.dateAsDay(period.startDate),
-                                    Formatters.dateAsDay(period.endDate),
-                                    Formatters.dateAsMonth(period.endDate)
-                                )
+                                  Formatters.dateAsDay(period.startDate),
+                                  Formatters.dateAsDay(period.endDate),
+                                  Formatters.dateAsMonth(period.endDate)
+                        )
                 }
             }
         </dt>
