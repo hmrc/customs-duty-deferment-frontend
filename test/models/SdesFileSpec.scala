@@ -73,12 +73,36 @@ class SdesFileSpec extends SpecBase {
     }
 
     "return correct value for unapply method" in new Setup {
-      val exciseTypeName: String = DDStatementType("Excise") match {
+      val exciseTypeName: String = exciseSttType match {
+        case DDStatementType(name) => name
+        case _                     => emptyString
+      }
+
+      val supplementaryTypeName: String = supplementarySttType match {
+        case DDStatementType(name) => name
+        case _                     => emptyString
+      }
+
+      val exciseDefermentTypeName: String = exciseDefermentSttType match {
+        case DDStatementType(name) => name
+        case _                     => emptyString
+      }
+
+      val dutyDefermentTypeName: String = dutyDefermentSttType match {
+        case DDStatementType(name) => name
+        case _                     => emptyString
+      }
+
+      val weeklyTypeName: String = weeklySttType match {
         case DDStatementType(name) => name
         case _                     => emptyString
       }
 
       exciseTypeName mustBe "Excise"
+      supplementaryTypeName mustBe "Supplementary"
+      exciseDefermentTypeName mustBe "DD1920"
+      dutyDefermentTypeName mustBe "DD1720"
+      weeklyTypeName mustBe "Weekly"
     }
 
     "provide correct output while comparing" in new Setup {
