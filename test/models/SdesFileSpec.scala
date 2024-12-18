@@ -16,7 +16,7 @@
 
 package models
 
-import models.DDStatementType.{Excise, Supplementary, UnknownStatementType, Weekly}
+import models.DDStatementType._
 import models.FileFormat.{Csv, Pdf, PvatFileFormats, SdesFileFormats, UnknownFileFormat}
 import models.FileRole.DutyDefermentStatement
 import play.api.libs.json.{JsString, JsSuccess, Json}
@@ -67,6 +67,8 @@ class SdesFileSpec extends SpecBase {
       DDStatementType("Excise") mustBe Excise
       DDStatementType("Supplementary") mustBe Supplementary
       DDStatementType("Weekly") mustBe Weekly
+      DDStatementType("DD1920") mustBe ExciseDeferment
+      DDStatementType("DD1720") mustBe DutyDeferment
       DDStatementType("UNKNOWN STATEMENT TYPE") mustBe UnknownStatementType
     }
 
@@ -80,25 +82,36 @@ class SdesFileSpec extends SpecBase {
     }
 
     "provide correct output while comparing" in new Setup {
-      List(DDStatementType("Excise"), DDStatementType("Supplementary")).min.name mustBe
-        "Excise"
+      List(exciseSttType, supplementarySttType).min.name mustBe "Excise"
+      List(exciseDefermentSttType, dutyDefermentSttType).min.name mustBe "DD1920"
+      List(
+        exciseSttType,
+        supplementarySttType,
+        exciseDefermentSttType,
+        dutyDefermentSttType,
+        weeklySttType
+      ).min.name mustBe "DD1920"
     }
 
     "return correct value for the Reads" in new Setup {
       import DDStatementType.format
 
-      Json.fromJson(JsString("Excise")) mustBe JsSuccess(exciseStatement)
+      Json.fromJson(JsString("Excise")) mustBe JsSuccess(exciseSttType)
     }
 
     "return correct value for the Writes" in new Setup {
-      Json.toJson(exciseStatement) mustBe JsString("Excise")
+      Json.toJson(exciseSttType) mustBe JsString("Excise")
     }
   }
 
   trait Setup {
-    val exciseStatement: DDStatementType = DDStatementType("Excise")
-    val pdfFileFormat: FileFormat        = FileFormat("PDF")
-    val pdfJsValue: JsString             = JsString("PDF")
+    val exciseSttType: DDStatementType          = DDStatementType("Excise")
+    val supplementarySttType: DDStatementType   = DDStatementType("Supplementary")
+    val exciseDefermentSttType: DDStatementType = DDStatementType("DD1920")
+    val dutyDefermentSttType: DDStatementType   = DDStatementType("DD1720")
+    val weeklySttType: DDStatementType          = DDStatementType("Weekly")
+    val pdfFileFormat: FileFormat               = FileFormat("PDF")
+    val pdfJsValue: JsString                    = JsString("PDF")
 
     val fileSize                                     = 10L
     val periodStartYear                              = 2018
