@@ -21,35 +21,40 @@
 @import views.html.components.duty_deferment_file
 
 @this(
-    h2: components.h2,
-    p: components.p
+h2: components.h2,
+p: components.p
 )
 
 @(group: DutyDefermentStatementPeriodsByMonth)(implicit messages: Messages)
 
-    @h2(id=Some(s"statements-month-heading-0-${group.year}-${group.month}"), msg = Formatters.dateAsMonthAndYear(group.monthAndYear))
+@h2(id=Some(s"statements-month-heading-0-${group.year}-${group.month}"), msg = Formatters.dateAsMonthAndYear(group.monthAndYear))
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for((period, index) <- group.periods.zipWithIndex) {
-        <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
-            <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell" class="govuk-summary-list__value">
-            @if(period.defermentStatementType == Supplementary) {
-                @messages("cf.account.detail.row.supplementary.info")
-            } else {@if(period.defermentStatementType == Excise) {
-                @messages("cf.account.details.row.excise.info")
-            } else {
-                @messages("cf.account.detail.period-group",
-                    Formatters.dateAsDay(period.startDate),
-                    Formatters.dateAsDay(period.endDate),
-                    Formatters.dateAsMonth(period.endDate))
-            }}
-            </dt>
-            <dd class="govuk-summary-list__actions">
+    <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
+        <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell"
+            class="govuk-summary-list__value">
+            @{
+                period.defermentStatementType match {
+                    case Supplementary => messages("cf.account.detail.row.supplementary.info")
+                    case Excise => messages("cf.account.details.row.excise.info")
+                    case ExciseDeferment => messages("cf.account.details.row.ExciseDeferment.info")
+                    case DutyDeferment => messages("cf.account.details.row.DutyDeferment.info")
+                    case _ =>
+                        messages("cf.account.detail.period-group",
+                                  Formatters.dateAsDay(period.startDate),
+                                  Formatters.dateAsDay(period.endDate),
+                                  Formatters.dateAsMonth(period.endDate)
+                        )
+                }
+            }
+        </dt>
+        <dd class="govuk-summary-list__actions">
             @duty_deferment_file(period, Pdf, s"pdf-0-${group.year}-${group.month}-row-${index}")
-            </dd>
-            <dd class="govuk-summary-list__actions">
+        </dd>
+        <dd class="govuk-summary-list__actions">
             @duty_deferment_file(period, Csv, s"csv-0-${group.year}-${group.month}-row-${index}")
-            </dd>
-        </div>
+        </dd>
+    </div>
     }
-    </dl>
+</dl>
