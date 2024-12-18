@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.DDStatementType.{Excise, Supplementary}
+@import models.DDStatementType.{Excise, Supplementary, ExciseDeferment, DutyDeferment}
 @import models.FileFormat.{Csv, Pdf}
 @import viewmodels.DutyDefermentStatementPeriodsByMonth
 @import views.helpers.Formatters
@@ -23,26 +23,31 @@
 @(group: DutyDefermentStatementPeriodsByMonth, historyIndex: Int)(implicit messages: Messages)
 
 <dl class="govuk-summary-list govuk-summary-list--no-border">
- @for((period, index) <- group.periods.zipWithIndex) {
-  <div class="govuk-summary-list__row">
-   <dt class="govuk-summary-list__value" id="statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-date-cell">
-   @if(period.defermentStatementType == Supplementary) {
-    @messages("cf.account.detail.row.supplementary.info")
-   } else {@if(period.defermentStatementType == Excise) {
-    @messages("cf.account.details.row.excise.info")
-   } else {
-    @messages("cf.account.detail.period-group",
-     Formatters.dateAsDay(period.startDate),
-     Formatters.dateAsDay(period.endDate),
-     Formatters.dateAsMonth(period.endDate))
-   }}
-   </dt>
-   <dd class="govuk-summary-list__actions">
-   @duty_deferment_file(period, Pdf, s"pdf-${historyIndex}-${group.year}-${group.month}-row-${index}")
-   </dd>
-   <dd class="govuk-summary-list__actions">
-   @duty_deferment_file(period, Csv, s"csv-${historyIndex}-${group.year}-${group.month}-row-${index}")
-   </dd>
-  </div>
- }
+    @for((period, index) <- group.periods.zipWithIndex) {
+    <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__value"
+            id="statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-date-cell">
+            @if(period.defermentStatementType == Supplementary) {
+                @messages("cf.account.detail.row.supplementary.info")
+            } else if(period.defermentStatementType == Excise){
+                @messages("cf.account.details.row.excise.info")
+            } else if(period.defermentStatementType == ExciseDeferment){
+                @messages("cf.account.details.row.ExciseDeferment.info")
+            } else if(period.defermentStatementType == DutyDeferment){
+                @messages("cf.account.details.row.DutyDeferment.info")
+            } else {
+                @messages("cf.account.detail.period-group",
+                Formatters.dateAsDay(period.startDate),
+                Formatters.dateAsDay(period.endDate),
+                Formatters.dateAsMonth(period.endDate))
+            }
+        </dt>
+        <dd class="govuk-summary-list__actions">
+            @duty_deferment_file(period, Pdf, s"pdf-${historyIndex}-${group.year}-${group.month}-row-${index}")
+        </dd>
+        <dd class="govuk-summary-list__actions">
+            @duty_deferment_file(period, Csv, s"csv-${historyIndex}-${group.year}-${group.month}-row-${index}")
+        </dd>
+    </div>
+    }
 </dl>
