@@ -16,11 +16,10 @@
 
 package util
 
-import models.DDStatementType.{Excise, Supplementary, Weekly}
+import models.DDStatementType
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
-import models._
-
+import models.*
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito.when
 import services.CountriesProviderService
@@ -110,154 +109,185 @@ trait TestData extends MockitoSugar {
   val dan                           = "123456"
   val bacs                          = "BACS"
 
+  def getDdSttMetadata(startDate: LocalDate, startDay: Int, endDate: LocalDate,
+                       endDay: Int, fileFormat: FileFormat, ddSttType: DDStatementType,
+                       dutyOverLimit: Boolean): DutyDefermentStatementFileMetadata =
+    DutyDefermentStatementFileMetadata(
+      startDate.getYear,
+      startDate.getMonthValue,
+      startDay,
+      endDate.getYear,
+      endDate.getMonthValue,
+      endDay,
+      fileFormat,
+      DutyDefermentStatement,
+      ddSttType,
+      Some(dutyOverLimit),
+      Some(bacs),
+      dan,
+      None
+    )
+
+  lazy val ddSttFile01: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Csv,
+      DDStatementType.Weekly,
+      true
+    )
+  )
+
+  lazy val ddSttFile02: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename2",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Pdf,
+      DDStatementType.Supplementary,
+      true
+    )
+  )
+
+  lazy val ddSttFile03: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename3",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Csv,
+      DDStatementType.Excise,
+      false
+    )
+  )
+
+  lazy val ddSttFile04: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Csv,
+      DDStatementType.Weekly,
+      true
+    )
+  )
+
+  lazy val ddSttFile05: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename4",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      twoMonthsPriorDate,
+      periodStartDay,
+      twoMonthsPriorDate,
+      periodEndDay,
+      FileFormat.Csv,
+      DDStatementType.Weekly,
+      false
+    )
+  )
+
+  lazy val ddSttFile06: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename4",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      twoMonthsPriorDate,
+      periodStartDay,
+      twoMonthsPriorDate,
+      periodEndDay,
+      FileFormat.Pdf,
+      DDStatementType.Excise,
+      false
+    )
+  )
+
+  lazy val ddSttFile07: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename2",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      twoMonthsPriorDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Pdf,
+      DDStatementType.Weekly,
+      true
+    )
+  )
+
+  lazy val ddSttFile08: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Csv,
+      DDStatementType.ExciseDeferment,
+      true
+    )
+  )
+
+  lazy val ddSttFile09: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Pdf,
+      DDStatementType.ExciseDeferment,
+      true
+    )
+  )
+
+  lazy val ddSttFile10: DutyDefermentStatementFile = DutyDefermentStatementFile(
+    "someFilename",
+    "downloadUrl",
+    fileSizeData,
+    getDdSttMetadata(
+      previousMonthDate,
+      periodStartDay,
+      previousMonthDate,
+      periodEndDay,
+      FileFormat.Pdf,
+      DDStatementType.DutyDeferment,
+      true
+    )
+  )
+
   lazy val dutyDefermentStatementFiles: Seq[DutyDefermentStatementFile] = List(
-    DutyDefermentStatementFile(
-      "someFilename",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodStartDay,
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Csv,
-        DutyDefermentStatement,
-        Weekly,
-        Some(true),
-        Some(bacs),
-        dan,
-        None
-      )
-    ),
-    DutyDefermentStatementFile(
-      "someFilename2",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodStartDay,
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Pdf,
-        DutyDefermentStatement,
-        Supplementary,
-        Some(true),
-        Some(bacs),
-        dan,
-        None
-      )
-    ),
-    DutyDefermentStatementFile(
-      "someFilename3",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodStartDay,
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Csv,
-        DutyDefermentStatement,
-        Excise,
-        Some(false),
-        Some(bacs),
-        dan,
-        None
-      )
-    ),
-    DutyDefermentStatementFile(
-      "someFilename4",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        twoMonthsPriorDate.getYear,
-        twoMonthsPriorDate.getMonthValue,
-        periodStartDay,
-        twoMonthsPriorDate.getYear,
-        twoMonthsPriorDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Pdf,
-        DutyDefermentStatement,
-        Excise,
-        Some(false),
-        Some(bacs),
-        dan,
-        None
-      )
-    )
+    ddSttFile01,
+    ddSttFile02,
+    ddSttFile03,
+    ddSttFile06
   )
 
-  lazy val dutyDefermentStatementFiles02: Seq[DutyDefermentStatementFile] = List(
-    DutyDefermentStatementFile(
-      "someFilename4",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        twoMonthsPriorDate.getYear,
-        twoMonthsPriorDate.getMonthValue,
-        periodStartDay,
-        twoMonthsPriorDate.getYear,
-        twoMonthsPriorDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Csv,
-        DutyDefermentStatement,
-        Weekly,
-        Some(false),
-        Some(bacs),
-        dan,
-        None
-      )
-    )
-  )
+  lazy val dutyDefermentStatementFiles02: Seq[DutyDefermentStatementFile] = List(ddSttFile05)
 
-  lazy val dutyDefermentStatementFiles03: Seq[DutyDefermentStatementFile] = List(
-    DutyDefermentStatementFile(
-      "someFilename",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodStartDay,
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Csv,
-        DutyDefermentStatement,
-        Weekly,
-        Some(true),
-        Some(bacs),
-        dan,
-        None
-      )
-    ),
-    DutyDefermentStatementFile(
-      "someFilename2",
-      "downloadUrl",
-      fileSizeData,
-      DutyDefermentStatementFileMetadata(
-        twoMonthsPriorDate.getYear,
-        twoMonthsPriorDate.getMonthValue,
-        periodStartDay,
-        previousMonthDate.getYear,
-        previousMonthDate.getMonthValue,
-        periodEndDay,
-        FileFormat.Pdf,
-        DutyDefermentStatement,
-        Weekly,
-        Some(true),
-        Some(bacs),
-        dan,
-        None
-      )
-    )
-  )
+  lazy val dutyDefermentStatementFiles03: Seq[DutyDefermentStatementFile] = List(ddSttFile04, ddSttFile07)
 
   lazy val dutyDefermentStatementMetadata1: Seq[MetadataItem] = List(
     MetadataItem("PeriodStartYear", previousMonthDate.getYear.toString),
@@ -337,21 +367,21 @@ trait TestData extends MockitoSugar {
     eoriHistory,
     dutyDefermentStatementFiles,
     dutyDefermentStatementFiles,
-    LocalDate.now()
+    todaysDate
   )
 
   lazy val dutyDefermentStatementsForEori02: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory02,
     dutyDefermentStatementFiles02,
     dutyDefermentStatementFiles02,
-    LocalDate.now()
+    todaysDate
   )
 
   lazy val dutyDefermentStatementsForEori03: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
     eoriHistory,
     dutyDefermentStatementFiles,
     dutyDefermentStatementFiles03,
-    LocalDate.now()
+    todaysDate
   )
 
   lazy val dutyDefermentAccountLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
