@@ -1,5 +1,4 @@
 import scoverage.ScoverageKeys
-import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 
 val appName = "customs-duty-deferment-frontend"
 val testDirectory = "test"
@@ -18,7 +17,6 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(sbt.plugins.JUnitXmlReportPlugin)
   .settings(
-    targetJvm := "jvm-11",
     PlayKeys.playDefaultPort := 9397,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
