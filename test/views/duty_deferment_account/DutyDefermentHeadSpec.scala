@@ -31,7 +31,7 @@ import java.time.LocalDate
 
 class DutyDefermentHeadSpec extends SpecBase {
 
-  "DutyDefermentAccount view" should {
+  "view" should {
 
     "display ExciseDeferment record with correct file description" in new Setup {
       val viewDoc: Document = view(model01)

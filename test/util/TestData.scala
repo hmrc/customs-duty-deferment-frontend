@@ -109,7 +109,7 @@ trait TestData extends MockitoSugar {
   val dan                           = "123456"
   val bacs                          = "BACS"
 
-  def getDdSttMetadata(
+  def ddSttMetadata(
     startDate: LocalDate,
     startDay: Int,
     endDate: LocalDate,
@@ -138,7 +138,7 @@ trait TestData extends MockitoSugar {
     "someFilename",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -153,7 +153,7 @@ trait TestData extends MockitoSugar {
     "someFilename2",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -168,7 +168,7 @@ trait TestData extends MockitoSugar {
     "someFilename3",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -183,7 +183,7 @@ trait TestData extends MockitoSugar {
     "someFilename",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -198,7 +198,7 @@ trait TestData extends MockitoSugar {
     "someFilename4",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       twoMonthsPriorDate,
       periodStartDay,
       twoMonthsPriorDate,
@@ -213,7 +213,7 @@ trait TestData extends MockitoSugar {
     "someFilename4",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       twoMonthsPriorDate,
       periodStartDay,
       twoMonthsPriorDate,
@@ -228,7 +228,7 @@ trait TestData extends MockitoSugar {
     "someFilename2",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       twoMonthsPriorDate,
       periodStartDay,
       previousMonthDate,
@@ -243,7 +243,7 @@ trait TestData extends MockitoSugar {
     "someFilename",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -258,7 +258,7 @@ trait TestData extends MockitoSugar {
     "someFilename",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
@@ -273,7 +273,7 @@ trait TestData extends MockitoSugar {
     "someFilename",
     "downloadUrl",
     fileSizeData,
-    getDdSttMetadata(
+    ddSttMetadata(
       previousMonthDate,
       periodStartDay,
       previousMonthDate,
