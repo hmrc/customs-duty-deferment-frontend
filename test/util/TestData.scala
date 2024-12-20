@@ -109,9 +109,15 @@ trait TestData extends MockitoSugar {
   val dan                           = "123456"
   val bacs                          = "BACS"
 
-  def getDdSttMetadata(startDate: LocalDate, startDay: Int, endDate: LocalDate,
-                       endDay: Int, fileFormat: FileFormat, ddSttType: DDStatementType,
-                       dutyOverLimit: Boolean): DutyDefermentStatementFileMetadata =
+  def getDdSttMetadata(
+    startDate: LocalDate,
+    startDay: Int,
+    endDate: LocalDate,
+    endDay: Int,
+    fileFormat: FileFormat,
+    ddSttType: DDStatementType,
+    dutyOverLimit: Boolean
+  ): DutyDefermentStatementFileMetadata =
     DutyDefermentStatementFileMetadata(
       startDate.getYear,
       startDate.getMonthValue,

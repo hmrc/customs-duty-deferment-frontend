@@ -59,7 +59,7 @@ class DutyDefermentAccordianContentSpec extends SpecBase {
 
     "display Supplementary record with correct file descriptions" in new Setup {
       val viewDoc: Document = view(model03)
-      val htmlText: String = viewDoc.body().text()
+      val htmlText: String  = viewDoc.body().text()
 
       shouldContainSupplementaryText(htmlText)
       shouldNotContainDutyDefermentText(htmlText)
