@@ -18,8 +18,6 @@ package views.email
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
@@ -31,26 +29,25 @@ class UndeliverableEmailViewSpec extends SpecBase {
     "display correct title, guidance and text" when {
       "registered email is available" in new Setup {
         view.title() mustBe
-          s"${messages(app)("cf.undeliverable.email.title")} - ${messages(app)("service.name")} - GOV.UK"
+          s"${messages("cf.undeliverable.email.title")} - ${messages("service.name")} - GOV.UK"
 
-        view.getElementById("email-heading-h1").text() mustBe
-          messages(app)("cf.undeliverable.email.heading")
+        view.getElementById("email-heading-h1").text().contains(
+          messages("cf.undeliverable.email.heading")) mustBe true
 
-        view.text().contains(messages(app)("cf.undeliverable.email.p1")) mustBe true
-        view.text().contains(messages(app)("cf.undeliverable.email.p2", undeliverableEmailUrl))
+        view.text().contains(messages("cf.undeliverable.email.p1")) mustBe true
+        view.text().contains(messages("cf.undeliverable.email.p2", undeliverableEmailUrl))
 
-        view.getElementById("email-verify-heading-h2").text() mustBe
-          messages(app)("cf.undeliverable.email.verify.heading")
+        view.getElementById("email-verify-heading-h2").text().contains(
+          messages("cf.undeliverable.email.verify.heading")) mustBe true
 
-        view.text().contains(messages(app)("cf.undeliverable.email.verify.text.p1")) mustBe true
+        view.text().contains(messages("cf.undeliverable.email.verify.text.p1")) mustBe true
 
-        view.getElementById("email-change-heading-h2").text() mustBe
-          messages(app)("cf.undeliverable.email.change.heading")
-
-        view.text().contains(messages(app)("cf.undeliverable.email.change.text.p1")) mustBe true
-        view.text().contains(messages(app)("cf.undeliverable.email.change.text.p2")) mustBe true
-
-        view.text().contains(messages(app)("cf.undeliverable.email.link-text")) mustBe true
+        view.getElementById("email-change-heading-h2").text().contains(
+          messages("cf.undeliverable.email.change.heading")) mustBe true
+        
+        view.text().contains(messages("cf.undeliverable.email.change.text.p1")) mustBe true
+        view.text().contains(messages("cf.undeliverable.email.change.text.p2")) mustBe true
+        view.text().contains(messages("cf.undeliverable.email.link-text")) mustBe true
 
         view.toString must include(nextPageUrl)
         view.text().contains(undeliverableEmailUrl.get) mustBe true
@@ -63,19 +60,17 @@ class UndeliverableEmailViewSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application                      = application().build()
     val nextPageUrl                           = "test_url"
     val undeliverableEmailUrl: Option[String] = Some("undeliverable_url")
 
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
-    implicit val msg: Messages                                = messages(app)
 
     val view: Document = Jsoup.parse(
-      app.injector.instanceOf[undeliverable_email].apply(nextPageUrl, undeliverableEmailUrl).body
+      application(None).injector.instanceOf[undeliverable_email].apply(nextPageUrl, undeliverableEmailUrl).body
     )
 
     val viewWithNoEmail: Document = Jsoup.parse(
-      app.injector.instanceOf[undeliverable_email].apply(nextPageUrl).body
+      application(None).injector.instanceOf[undeliverable_email].apply(nextPageUrl).body
     )
   }
 }

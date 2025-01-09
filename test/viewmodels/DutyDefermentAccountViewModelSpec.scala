@@ -16,16 +16,17 @@
 
 package viewmodels
 
-import config.AppConfig
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
 import views.html.components.{caption, h1, h2, inset, link, p}
 import views.html.requested_statements
+import org.scalatest.matchers.must.Matchers._
+import config.AppConfig
+import play.api.i18n.Messages
+import play.api.Application
 
 class DutyDefermentAccountViewModelSpec extends SpecBase {
 
@@ -48,7 +49,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainCurrentStatementSection(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -68,7 +69,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -88,7 +89,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -108,7 +109,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -128,7 +129,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -149,7 +150,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -170,7 +171,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel, linkId)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(app, viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
         shouldContainChiefStatementGuidance(viewModel)
         shouldContainHelpAndSupportGuidance(viewModel)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -193,15 +194,16 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
 
   private def shouldContainDDStatementHeading(
     viewModel: DutyDefermentAccountViewModel
-  )(implicit msgs: Messages): Assertion =
+  )(implicit messages: Messages): Assertion =
     viewModel.ddStatementHeading mustBe new h1()
-      .apply(msgs("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
+      .apply(messages("cf.account.detail.deferment-account-heading"), Some("statements-heading"))
 
   private def shouldContainDirectDebitInfoMsg(
     viewModel: DutyDefermentAccountViewModel
-  )(implicit msgs: Messages): Assertion =
+  )(implicit messages: Messages): Assertion =
     viewModel.directDebitInfoMsg mustBe new p()
-      .apply(id = Some("direct-debit-info"), content = Html(msgs("cf.account.detail.direct-debit.duty-vat-and-excise")))
+      .apply(id = Some("direct-debit-info"),
+        content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
 
   private def shouldContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel, linkId: String)(implicit
     messages: Messages,
@@ -238,14 +240,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     "show-all-sections".r.findAllIn(viewModel.toString).length
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(
-    app: Application,
+    application: Application,
     viewModel: DutyDefermentAccountViewModel
   ): Assertion =
     viewModel.statOlderThanSixMonths mustBe
       GuidanceRow(
         h2Heading = new h2().apply(
           id = Some("missing-documents-guidance-heading"),
-          msg = messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
+          msg = messages("cf.common.missing-documents-guidance.cdsStatements.heading")
         ),
         link = Some(
           new link().apply(
@@ -254,69 +256,66 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description")
-          )(messages(app))
+          )(messages)
         )
       )
 
   private def shouldContainChiefStatementGuidance(
     viewModel: DutyDefermentAccountViewModel
-  )(implicit appConfig: AppConfig, msgs: Messages): Assertion =
+  )(implicit appConfig: AppConfig, messages: Messages): Assertion =
     viewModel.chiefDeclaration mustBe
       GuidanceRow(
         h2Heading = new h2().apply(
           id = Some("chief-guidance-heading"),
-          msg = msgs("cf.common.chiefStatements.heading"),
+          msg = messages("cf.common.chiefStatements.heading"),
           h2Class = Some("govuk-!-margin-top-6")
         ),
         paragraph = Some(
           new p().apply(
             id = Some("chief-documents-guidance-text1"),
             classes = Some("govuk-body govuk-!-margin-bottom-7"),
-            content = Html(msgs("cf.accounts.chiefStatements.description")),
+            content = Html(messages("cf.accounts.chiefStatements.description")),
             tabLink = Some(
               new HmrcNewTabLink().apply(
                 NewTabLink(
-                  language = Some(msgs.lang.toString),
+                  language = Some(messages.lang.toString),
                   classList = Some("govuk-link govuk-link--no-visited-state"),
                   href = Some(appConfig.chiefDDstatementsLink),
-                  text = msgs("cf.accounts.chiefStatements.description.link")
+                  text = messages("cf.accounts.chiefStatements.description.link")
                 )
               )
             )
-          )(msgs)
+          )(messages)
         )
       )
 
   private def shouldContainHelpAndSupportGuidance(
     viewModel: DutyDefermentAccountViewModel
-  )(implicit appConfig: AppConfig, msgs: Messages): Assertion =
+  )(implicit appConfig: AppConfig, messages: Messages): Assertion =
     viewModel.helpAndSupport mustBe
       GuidanceRow(
-        h2Heading = new h2().apply(id = Some("dd-support-message-heading"), msg = msgs("cf.accounts.support.heading")),
+        h2Heading = new h2().apply(id = Some("dd-support-message-heading"),
+          msg = messages("cf.accounts.support.heading")),
         paragraph = Some(
           new p().apply(
             id = Some("dd-support-message"),
             classes = Some("govuk-body govuk-!-margin-bottom-9"),
-            content = Html(msgs("cf.accounts.support.message")),
+            content = Html(messages("cf.accounts.support.message")),
             tabLink = Some(
               new HmrcNewTabLink().apply(
                 NewTabLink(
-                  language = Some(msgs.lang.toString),
+                  language = Some(messages.lang.toString),
                   classList = Some("govuk-link"),
                   href = Some(appConfig.ddAccountSupportLink),
-                  text = msgs("cf.account.dd.support.link")
+                  text = messages("cf.account.dd.support.link")
                 )
               )
             )
-          )(msgs)
+          )(messages)
         )
       )
 
   trait Setup {
-    val app: Application = application().build()
-    val linkId           = "test_link_id"
-
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    implicit val msgs: Messages       = messages(app)
+    val linkId = "test_link_id"
   }
 }

@@ -37,7 +37,7 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
       when(mockContactDetailsCache.retrieve(any)(any))
         .thenReturn(Future.successful(Some(validAccountContactDetails)))
 
-      running(app) {
+      running(application) {
         val result = await(service.getContactDetails("someInternalId", "someDan", "someEori"))
         result mustBe validAccountContactDetails
       }
@@ -51,7 +51,7 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
       when(mockContactDetailsCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      running(app) {
+      running(application) {
         val result = await(service.getContactDetails("someInternalId", "someDan", "someEori"))
         result mustBe validAccountContactDetails
       }
@@ -66,7 +66,7 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
       implicit val dataRequest: DataRequest[AnyContent] =
         DataRequest(FakeRequest(), "identifier", "eori", SessionId("session"), emptyUserAnswers)
 
-      running(app) {
+      running(application) {
         val result = await(service.updateContactDetails(contactDetailsUserAnswers))
         result mustBe true
       }
@@ -77,14 +77,13 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
     val mockContactDetailsCache: ContactDetailsCache                     = mock[ContactDetailsCache]
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
 
-    val app: Application = application()
+    val application: Application = applicationBuilder(None)
       .overrides(
         inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
         inject.bind[ContactDetailsCache].toInstance(mockContactDetailsCache)
       )
       .build()
 
-    val service: ContactDetailsCacheService = app.injector.instanceOf[ContactDetailsCacheService]
+    val service: ContactDetailsCacheService = application.injector.instanceOf[ContactDetailsCacheService]
   }
-
 }

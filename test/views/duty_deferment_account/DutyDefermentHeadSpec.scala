@@ -16,13 +16,10 @@
 
 package views.duty_deferment_account
 
-import config.AppConfig
 import models.{DDStatementType, FileRole}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import util.SpecBase
 import viewmodels.{DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth}
 import views.html.duty_deferment_account.duty_deferment_head
@@ -98,10 +95,6 @@ class DutyDefermentHeadSpec extends SpecBase {
     htmlText.contains("Excise deferment 1920") mustBe false
 
   trait Setup {
-    val app: Application = application().build()
-
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    implicit val msg: Messages        = messages(app)
 
     val startDate01: LocalDate = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_01)
     val endDate01: LocalDate   = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_26)
@@ -146,6 +139,6 @@ class DutyDefermentHeadSpec extends SpecBase {
       )
 
     def view(model: DutyDefermentStatementPeriodsByMonth): Document =
-      Jsoup.parse(app.injector.instanceOf[duty_deferment_head].apply(model).body)
+      Jsoup.parse(application(None).injector.instanceOf[duty_deferment_head].apply(model).body)
   }
 }

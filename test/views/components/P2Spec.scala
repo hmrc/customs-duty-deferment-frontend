@@ -19,43 +19,43 @@ package views.components
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import play.api.Application
-import play.api.i18n.Messages
 import util.SpecBase
 import views.html.components.p2
 
 class P2Spec extends SpecBase {
+
   "component" should {
     "display the correct contents" when {
       "component has an id" in new Setup {
-        p2Component.getElementById(id).text() mustBe msg(messageKey)
-        p2Component.getElementsByClass("govuk-body").text() mustBe msg(messageKey)
+        
+        p2Component.getElementById(id).text().contains(messages(messageKey)) mustBe true
+
+        p2Component.getElementsByClass("govuk-body").text().contains(
+          messages(messageKey)) mustBe true
 
         val pElement: Elements = p2Component.getElementsByTag("p")
         pElement.size() mustBe 1
       }
 
       "component has no id" in new Setup {
-        p2ComponentWithNoId.getElementsByClass("govuk-body").text() mustBe msg(messageKey)
+        p2ComponentWithNoId.getElementsByClass("govuk-body").text().contains(
+          messages(messageKey)) mustBe true
 
         val pElement: Elements = p2ComponentWithNoId.getElementsByTag("p")
         pElement.size() mustBe 1
       }
-
     }
 
     trait Setup {
-      val app: Application       = application().build()
-      implicit val msg: Messages = messages(app)
       val id                     = "undelivered-pi"
       val messageKey             = "cf.undeliverable.email.p1"
 
       val p2Component: Document = Jsoup.parse(
-        app.injector.instanceOf[p2].apply(message = messageKey, id = Some(id)).body
+        application(None).injector.instanceOf[p2].apply(message = messageKey, id = Some(id)).body
       )
 
       val p2ComponentWithNoId: Document = Jsoup.parse(
-        app.injector.instanceOf[p2].apply(message = messageKey).body
+        application(None).injector.instanceOf[p2].apply(message = messageKey).body
       )
     }
   }

@@ -17,10 +17,9 @@
 package controllers.actions
 
 import cache.UserAnswersCache
-import config.{AppConfig, ErrorHandler}
+import config.ErrorHandler
 import connectors.DataStoreConnector
 import models.EoriHistory
-import play.api.Application
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{redirectLocation, running, status}
@@ -43,7 +42,7 @@ class DataActionSpec extends SpecBase {
       when(mockErrorHandler.unauthorized()(any))
         .thenReturn(Html("unauthorized"))
 
-      running(app) {
+      running(application(None)) {
         val result = controller.onPageLoad()(FakeRequest())
         status(result) mustBe UNAUTHORIZED
         contentAsString(result).contains("unauthorized") mustBe true
@@ -54,7 +53,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(None))
 
-      running(app) {
+      running(application(None)) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/this-service-has-been-reset")
@@ -65,7 +64,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(Some(emptyUserAnswers)))
 
-      running(app) {
+      running(application(None)) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe OK
       }
@@ -86,15 +85,14 @@ class DataActionSpec extends SpecBase {
           )
         )
       )
+    
     when(mockDataStoreConnector.getAllEoriHistory(any)(any))
       .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
 
-    val app: Application                 = application().overrides().build()
-    val config: AppConfig                = app.injector.instanceOf[AppConfig]
-    val bodyParsers: BodyParsers.Default = app.injector.instanceOf[BodyParsers.Default]
-
     val authAction: AuthenticatedIdentifierAction =
-      new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
+      new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+    
+    val bodyParsers: BodyParsers.Default = application(None).injector.instanceOf[BodyParsers.Default]
     val sessionIdAction: SessionIdAction          = new SessionIdAction()(implicitly, mockErrorHandler)
     val dataRetrievalAction: DataRetrievalAction  = new DataRetrievalActionImpl(mockUserAnswersCache)
     val dataRequiredAction: DataRequiredAction    = new DataRequiredActionImpl()
@@ -116,5 +114,4 @@ class DataActionSpec extends SpecBase {
       Future.successful(Results.Ok)
     }
   }
-
 }

@@ -41,7 +41,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
       when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.retrieveSession("someId", "someLink"))
         result mustBe Some(link)
       }
@@ -53,7 +53,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
       when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.retrieveSession("someId", "someLink"))
         result mustBe None
       }
@@ -68,7 +68,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.removeSession("someId"))
         result mustBe true
       }
@@ -81,7 +81,7 @@ class SessionCacheConnectorSpec extends SpecBase {
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.removeSession("someId"))
         result mustBe false
       }
@@ -93,7 +93,7 @@ class SessionCacheConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     implicit val hc: HeaderCarrier     = HeaderCarrier()
 
-    val app: Application = application()
+    val application: Application = applicationBuilder(None)
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)
@@ -101,6 +101,6 @@ class SessionCacheConnectorSpec extends SpecBase {
       .build()
 
     val connector: SessionCacheConnector =
-      app.injector.instanceOf[SessionCacheConnector]
+      application.injector.instanceOf[SessionCacheConnector]
   }
 }

@@ -39,7 +39,7 @@ class SDDSConnectorSpec extends SpecBase {
 
       when(mockHttpClient.post(any)(any)).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.startJourney("dan", "some@email.com"))
         result mustBe "someUrl"
       }
@@ -52,12 +52,12 @@ class SDDSConnectorSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val app: Application = application()
+    val application: Application = applicationBuilder(None)
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )
       .build()
 
-    val connector: SDDSConnector = app.injector.instanceOf[SDDSConnector]
+    val connector: SDDSConnector = application.injector.instanceOf[SDDSConnector]
   }
 }

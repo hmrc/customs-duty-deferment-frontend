@@ -34,8 +34,7 @@ class UserAnswersCacheSpec
 
   private val id                = "session-123"
   private val test: UserAnswers = UserAnswers("id", lastUpdated = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS))
-  private val app               = application().build()
-  private val testCache         = app.injector.instanceOf[UserAnswersCache]
+  private val testCache         = application.injector.instanceOf[UserAnswersCache]
 
   override def beforeEach(): Unit =
     testCache.collection.drop().toFuture().futureValue

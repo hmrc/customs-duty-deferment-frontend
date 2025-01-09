@@ -42,7 +42,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(eoriHistoryResponse))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getAllEoriHistory("someEori"))
         result mustBe eoriHistoryResponse.eoriHistory
       }
@@ -54,7 +54,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EoriHistoryResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(new HttpException("Unknown Error", INTERNAL_SERVER_ERROR)))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getAllEoriHistory("defaultEori"))
         result mustBe List(EoriHistory("defaultEori", None, None))
       }
@@ -70,7 +70,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getEmail("someEori"))
         result mustBe Right(Email("some@email.com"))
       }
@@ -84,7 +84,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getEmail("someEori"))
         result mustBe Left(UndeliverableEmail("some@email.com"))
       }
@@ -98,7 +98,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.successful(emailResponse))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getEmail("someEori"))
         result mustBe Left(UnverifiedEmail)
       }
@@ -110,7 +110,7 @@ class DataStoreConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any[HttpReads[EmailResponse]], any[ExecutionContext]))
         .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getEmail("someEori"))
         result mustBe Left(UnverifiedEmail)
       }
@@ -124,7 +124,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.retrieveUnverifiedEmail(hc))
         result mustBe expectedResult
       }
@@ -138,7 +138,7 @@ class DataStoreConnectorSpec extends SpecBase {
 
       when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
       }
     }
@@ -177,13 +177,13 @@ class DataStoreConnectorSpec extends SpecBase {
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
 
-    val app: Application = application()
+    val application: Application = applicationBuilder(None)
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)
       )
       .build()
 
-    val connector: DataStoreConnector = app.injector.instanceOf[DataStoreConnector]
+    val connector: DataStoreConnector = application.injector.instanceOf[DataStoreConnector]
   }
 }

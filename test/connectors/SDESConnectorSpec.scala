@@ -47,7 +47,7 @@ class SDESConnectorSpec extends SpecBase {
       when(requestBuilder.execute(any, any))
         .thenReturn(Future.successful(fileInformation))
 
-      running(app) {
+      running(application) {
         val result = await(connector.getDutyDefermentStatements("someEori", "someDan"))
         result mustBe dutyDefermentStatementFiles
       }
@@ -59,12 +59,12 @@ class SDESConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     implicit val hc: HeaderCarrier     = HeaderCarrier()
 
-    val app: Application = application()
+    val application: Application = applicationBuilder(None)
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )
       .build()
 
-    val connector: SDESConnector = app.injector.instanceOf[SDESConnector]
+    val connector: SDESConnector = application.injector.instanceOf[SDESConnector]
   }
 }

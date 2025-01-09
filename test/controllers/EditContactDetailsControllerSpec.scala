@@ -17,7 +17,6 @@
 package controllers
 
 import cache.UserAnswersCache
-import config.AppConfig
 import mappings.EditContactDetailsFormProvider
 import models.{EditContactDetailsUserAnswers, UserAnswers}
 import pages.EditContactDetailsPage
@@ -38,7 +37,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     "return OK on a valid request" in new Setup {
 
-      val newApp: Application = application(Some(userAnswers))
+      val newApp: Application = editApplication(userAnswers)
         .overrides(
           inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
           inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
@@ -59,7 +58,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
+      val newApp: Application = editApplication(emptyUserAnswers).build()
       running(newApp) {
         val result = route(newApp, onPageLoadRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
@@ -70,14 +69,14 @@ class EditContactDetailsControllerSpec extends SpecBase {
   "submit" must {
 
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(app) {
-        val result = route(app, invalidSubmitRequest).value
+      running(application) {
+        val result = route(application, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
       }
     }
 
     "return a redirect to session expired when user answers is empty" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
+      val newApp: Application = editApplication(emptyUserAnswers).build()
       running(newApp) {
         val result = route(newApp, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
@@ -112,16 +111,15 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    lazy val app: Application = application(Some(userAnswers))
+    def editApplication(ua: UserAnswers): Application = application(Option(ua))
       .overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
       )
       .build()
 
-    val view: edit_contact_details                = app.injector.instanceOf[edit_contact_details]
-    val form: Form[EditContactDetailsUserAnswers] = app.injector.instanceOf[EditContactDetailsFormProvider].apply()
-    val appConfig: AppConfig                      = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi                  = app.injector.instanceOf[MessagesApi]
+    val view: edit_contact_details                = editApplication(userAnswers).injector.instanceOf[edit_contact_details]
+    val form: Form[EditContactDetailsUserAnswers] = editApplication(userAnswers).injector.instanceOf[EditContactDetailsFormProvider].apply()
+    val messagesApi: MessagesApi                  = editApplication(userAnswers).injector.instanceOf[MessagesApi]
     val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
   }
 }

@@ -16,9 +16,7 @@
 
 package controllers
 
-import config.AppConfig
 import navigation.Navigator
-import play.api.Application
 import play.api.http.Status.OK
 import play.api.test.Helpers.{
   GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty
@@ -30,51 +28,47 @@ class ServiceUnavailableControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "render service unavailable page" in new Setup {
-      running(app) {
+      running(application(None)) {
         val request = fakeRequest(GET, routes.ServiceUnavailableController.onPageLoad("id-not-defined", "linkId_1").url)
-        val result  = route(app, request).value
+        val result  = route(application(None), request).value
 
         status(result) mustBe OK
-        contentAsString(result) mustBe view()(request, messages(app), appConfig).toString()
+        contentAsString(result) mustBe view()(request, messages, appConfig).toString()
       }
     }
 
     "render service unavailable page for duty deferment statements page" in new Setup {
-      running(app) {
+      running(application(None)) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, "linkId_1").url
         )
-        val result  = route(app, request).value
+        val result  = route(application(None), request).value
 
         status(result) mustBe OK
 
         val backlink = Some(routes.AccountController.showAccountDetails("linkId_1").url)
-        contentAsString(result) mustBe view(backlink)(request, messages(app), appConfig).toString()
+        contentAsString(result) mustBe view(backlink)(request, messages, appConfig).toString()
       }
     }
 
     "render service unavailable page for duty deferment statements not available page" in new Setup {
-      running(app) {
+      running(application(None)) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, "linkId_1").url
         )
-        val result  = route(app, request).value
+        val result  = route(application(None), request).value
 
         status(result) mustBe OK
         val backlink = Some(routes.AccountController.statementsUnavailablePage("linkId_1").url)
-        contentAsString(result) mustBe view(backlink)(request, messages(app), appConfig).toString()
+        contentAsString(result) mustBe view(backlink)(request, messages, appConfig).toString()
       }
     }
   }
 
   trait Setup {
-    val app: Application = application().build()
-
-    val view: service_unavailable = app.injector.instanceOf[service_unavailable]
-    val appConfig: AppConfig      = app.injector.instanceOf[AppConfig]
-    val navigator: Navigator      = app.injector.instanceOf[Navigator]
+    val view: service_unavailable = application(None).injector.instanceOf[service_unavailable]
+    val navigator: Navigator      = application(None).injector.instanceOf[Navigator]
   }
-
 }

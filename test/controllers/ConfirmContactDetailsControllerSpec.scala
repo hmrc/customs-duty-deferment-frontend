@@ -17,7 +17,6 @@
 package controllers
 
 import cache.UserAnswersCache
-import config.AppConfig
 import models.UserAnswers
 import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.i18n.{Messages, MessagesApi}
@@ -35,16 +34,21 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
   "success" must {
 
     "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
+      val emptyUsersApp: Application = applicationBuilder(emptyUserAnswers)
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+        )
+        .build()
 
-      running(newApp) {
+      running(emptyUsersApp) {
         val result = route(newApp, successContactDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty for address details" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
+      val newApp: Application = appLinkService.build()
 
       running(newApp) {
         val result = route(newApp, successAddressDetailsRequest).value
@@ -55,8 +59,8 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
 
   "problem" must {
     "return INTERNAL_SERVER_ERROR" in new Setup {
-      running(app) {
-        val result = route(app, problemRequest).value
+      running(appLinkService) {
+        val result = route(appLinkService, problemRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -81,23 +85,22 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache               = mock[UserAnswersCache]
     val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
 
-    val app: Application = application(Some(userAnswers))
+    val appLinkService: Application = applicationBuilder(Option(userAnswers))
       .overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
         inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
       )
       .build()
 
-    val appAddressEdit: Application = application(Some(userAnswersAddress))
+    val appAddressEdit: Application = appLinkService(Option(userAnswersAddress))
       .overrides(
         inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
       )
       .build()
 
-    val viewAddress: edit_success_address = app.injector.instanceOf[edit_success_address]
-    val viewContact: edit_success_contact = app.injector.instanceOf[edit_success_contact]
-    val appConfig: AppConfig              = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi          = app.injector.instanceOf[MessagesApi]
+    val viewAddress: edit_success_address = appLinkService.injector.instanceOf[edit_success_address]
+    val viewContact: edit_success_contact = appLinkService.injector.instanceOf[edit_success_contact]
+    val messagesApi: MessagesApi          = appLinkService.injector.instanceOf[MessagesApi]
     val messages: Messages                = messagesApi.preferred(successContactDetailsRequest)
     val messagesAddress: Messages         = messagesApi.preferred(successAddressDetailsRequest)
   }

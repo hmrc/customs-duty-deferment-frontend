@@ -16,55 +16,50 @@
 
 package views.duty_deferment_account
 
-import config.AppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
-import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
 import views.html.duty_deferment_account.duty_deferment_statements_not_available
+import org.scalatest.matchers.must.Matchers._
 
 class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
   "DutyDefermentStatementsNotAvailable view" should {
     "display correct title and guidance" in new Setup {
       view.title() mustBe
-        s"${messages(app)("service.name")} - ${messages(app)("service.name")} - GOV.UK"
+        s"${messages("service.name")} - ${messages("service.name")} - GOV.UK"
 
-      view.getElementById("statements-heading").text() mustBe
-        messages(app)("cf.account.detail.deferment-account-heading")
+      view.getElementById("statements-heading").text().contains(
+      messages("cf.account.detail.deferment-account-heading")) mustBe true
 
-      view.getElementById("no-statements").getElementsByTag("p").html() mustBe
-        messages(app)("cf.duty-deferment-account.problem-with-service.text")
+      view.getElementById("no-statements").getElementsByTag("p").html().contains(
+        messages("cf.duty-deferment-account.problem-with-service.text")) mustBe true
 
-      view.getElementById("missing-documents-guidance-heading").text() mustBe
-        messages(app)("cf.common.missing-documents-guidance.cdsStatements.heading")
+      view.getElementById("missing-documents-guidance-heading").text().contains(
+        messages("cf.common.missing-documents-guidance.cdsStatements.heading")) mustBe true
 
-      view.getElementById("chief-guidance-heading").text() mustBe
-        messages(app)("cf.common.chiefStatements.heading")
+      view.getElementById("chief-guidance-heading").text().contains(
+        messages("cf.common.chiefStatements.heading")) mustBe true
 
-      view.getElementById("dd-support-message-heading").text() mustBe
-        messages(app)("cf.accounts.support.heading")
+      view.getElementById("dd-support-message-heading").text().contains(
+        messages("cf.accounts.support.heading")) mustBe true
 
-      view.html().contains(messages(app)("cf.accounts.older-statements.description.link"))
-      view.html().contains(messages(app)("cf.accounts.older-statements.description"))
+      view.html().contains(messages("cf.accounts.older-statements.description.link"))
+      view.html().contains(messages("cf.accounts.older-statements.description"))
       view.html().contains(serviceUnavailableUrl.get)
     }
   }
 
   trait Setup {
-    val app: Application                      = application().build()
     val serviceUnavailableUrl: Option[String] = Option("service_unavailable_url")
     val accountNumber                         = "1234567"
     val linkId                                = "link_id"
 
-    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
-    implicit val msg: Messages                                = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      app.injector
+      application(None).injector
         .instanceOf[duty_deferment_statements_not_available]
         .apply(accountNumber, linkId, serviceUnavailableUrl)
         .body

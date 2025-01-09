@@ -18,6 +18,7 @@ package controllers
 
 import cache.UserAnswersCache
 import config.AppConfig
+import play.api.Application
 import connectors.CustomsFinancialsApiConnector
 import mappings.EditAddressDetailsFormProvider
 import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
@@ -34,6 +35,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
+import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.concurrent.Future
 
@@ -75,8 +77,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   "submit" must {
     "return BAD_REQUEST when form errors occur" in new Setup {
 
-      running(app) {
-        val result = route(app, invalidSubmitRequest).value
+      running(application(None)) {
+        val result = route(application, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
       }
@@ -109,8 +111,10 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
+
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.successful(UpdateContactDetailsResponse(true)))
+
       when(mockContactDetailsCacheServices.updateContactDetails(any)(any))
         .thenReturn(Future.successful(true))
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
@@ -139,6 +143,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
+
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
@@ -207,17 +212,24 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    lazy val app: Application = application(Some(userAnswers))
-      .overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-      )
-      .build()
+    def application(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
+      new GuiceApplicationBuilder()
+        .overrides(
+          bind[IdentifierAction].to[FakeIdentifierAction],
+          bind[DataRetrievalAction].to(new FakeDataRetrievalAction(userAnswers)),
+          bind[Metrics].toInstance(new FakeMetrics)
+        )
+        .configure(
+          "play.filters.csp.nonce.enabled" -> false,
+          "auditing.enabled" -> "false",
+          "microservice.metrics.graphite.enabled" -> "false",
+          "metrics.enabled" -> "false"
+        )
 
-    val view: edit_address_details                = app.injector.instanceOf[edit_address_details]
-    val form: Form[EditAddressDetailsUserAnswers] = app.injector.instanceOf[EditAddressDetailsFormProvider].apply()
-    val appConfig: AppConfig                      = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi                  = app.injector.instanceOf[MessagesApi]
-    val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
+    val view: edit_address_details                = application(None).injector.instanceOf[edit_address_details]
+    val form: Form[EditAddressDetailsUserAnswers] = application(None).injector.instanceOf[EditAddressDetailsFormProvider].apply()
+    val appConfig: AppConfig                      = application(None).injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi                  = application(None).injector.instanceOf[MessagesApi]
 
   }
 }

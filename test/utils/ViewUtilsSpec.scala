@@ -16,8 +16,6 @@
 
 package utils
 
-import play.api.Application
-import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
@@ -31,10 +29,10 @@ class ViewUtilsSpec extends SpecBase {
 
     "create the component correctly with provided input" in new Setup {
       h1Component(testMsgKey, Some(testId)) mustBe
-        new h1().apply(msg = msgs(testMsgKey), id = Some(testId))
+        new h1().apply(msg = messages(testMsgKey), id = Some(testId))
 
       h1Component(testMsgKey, Some(testId), testClass) mustBe
-        new h1().apply(msg = msgs(testMsgKey), id = Some(testId), classes = testClass)
+        new h1().apply(msg = messages(testMsgKey), id = Some(testId), classes = testClass)
     }
   }
 
@@ -103,7 +101,7 @@ class ViewUtilsSpec extends SpecBase {
         tabLink = Some(
           new HmrcNewTabLink().apply(
             NewTabLink(
-              language = Some(msgs.lang.toString),
+              language = Some(messages.lang.toString),
               classList = Some(testClass),
               href = Some(testHref),
               text = testMsg
@@ -119,7 +117,7 @@ class ViewUtilsSpec extends SpecBase {
         tabLink = Some(
           new HmrcNewTabLink().apply(
             NewTabLink(
-              language = Some(msgs.lang.toString),
+              language = Some(messages.lang.toString),
               classList = Some(testClass),
               href = Some(testHref),
               text = testMsg
@@ -165,9 +163,6 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application        = application().build()
-    implicit val msgs: Messages = messages(app)
-
     val testMsgKey   = "test_key"
     val testMsg      = "test_msg"
     val testId       = "test_id"

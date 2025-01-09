@@ -16,7 +16,6 @@
 
 package views
 
-import play.api.Application
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -27,12 +26,12 @@ import views.html.components.inset
 class InsetSpec extends SpecBase {
   "Inset Component" should {
     "render component correctly" in new SetUp {
-      running(app) {
+      running(application(None)) {
         val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
           msg = "Hello world!",
           classes = None
-        )(messages(app))
+        )(messages)
         val html                          = parseHtml(output)
 
         html.getElementById("div-id").text must include("Hello world!")
@@ -42,12 +41,12 @@ class InsetSpec extends SpecBase {
     }
 
     "render component correctly without an ID" in new SetUp {
-      running(app) {
+      running(application(None)) {
         val output: HtmlFormat.Appendable = insetView(
           id = None,
           msg = "Hello world!",
           classes = None
-        )(messages(app))
+        )(messages)
         val html                          = parseHtml(output)
 
         html.getElementsByTag("div").text must include("Hello world!")
@@ -57,12 +56,12 @@ class InsetSpec extends SpecBase {
     }
 
     "render component correctly with custom classes" in new SetUp {
-      running(app) {
+      running(application(None)) {
         val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
           msg = "Hello world!",
           classes = Some("custom-class")
-        )(messages(app))
+        )(messages)
         val html                          = parseHtml(output)
 
         html.getElementById("div-id").text must include("Hello world!")
@@ -72,8 +71,7 @@ class InsetSpec extends SpecBase {
   }
 
   trait SetUp {
-    val app: Application = application().build()
-    val insetView        = app.injector.instanceOf[inset]
+    val insetView        = application(None).injector.instanceOf[inset]
 
     def parseHtml(output: HtmlFormat.Appendable): Document =
       Jsoup.parse(contentAsString(output))
