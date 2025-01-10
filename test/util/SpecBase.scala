@@ -22,7 +22,6 @@ import config.AppConfig
 import models.UserAnswers
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers
-//import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{Assertion, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
