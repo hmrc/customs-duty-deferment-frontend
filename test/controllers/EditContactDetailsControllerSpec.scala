@@ -61,7 +61,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     "return BAD_REQUEST when form errors occur" in new Setup {
       running(application(None)) {
-        val result = route(application, invalidSubmitRequest).value
+        val result = route(application(), invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
       }
     }
@@ -102,7 +102,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
     val view: edit_contact_details                = application(Some(userAnswers)).injector.instanceOf[edit_contact_details]
-    val form: Form[EditContactDetailsUserAnswers] = application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()
+    val form: Form[EditContactDetailsUserAnswers] =
+      application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()
     val messagesApi: MessagesApi                  = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
     val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
   }

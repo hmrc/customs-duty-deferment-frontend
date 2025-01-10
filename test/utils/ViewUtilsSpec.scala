@@ -28,11 +28,10 @@ class ViewUtilsSpec extends SpecBase {
   "h1Component" should {
 
     "create the component correctly with provided input" in new Setup {
-      h1Component(testMsgKey, Some(testId)) mustBe
-        new h1().apply(msg = messages(testMsgKey), id = Some(testId))
+      h1Component(testMsgKey, Some(testId)) mustBe new h1().apply(msg = messages(testMsgKey), id = Some(testId))
 
-      h1Component(testMsgKey, Some(testId), testClass) mustBe
-        new h1().apply(msg = messages(testMsgKey), id = Some(testId), classes = testClass)
+      h1Component(testMsgKey, Some(testId), testClass) mustBe new h1()
+        .apply(msg = messages(testMsgKey), id = Some(testId), classes = testClass)
     }
   }
 

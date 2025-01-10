@@ -177,10 +177,10 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    val view: edit_address_details                = application(None).injector.instanceOf[edit_address_details]
-    val form: Form[EditAddressDetailsUserAnswers] = application(None).injector.instanceOf[EditAddressDetailsFormProvider].apply()
-    val appConfig: AppConfig                      = application(None).injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi                  = application(None).injector.instanceOf[MessagesApi]
+    val view: edit_address_details                = application().injector.instanceOf[edit_address_details]
+    val form: Form[EditAddressDetailsUserAnswers] = application().injector.instanceOf[EditAddressDetailsFormProvider].apply()
+    val appConfig: AppConfig                      = application().injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi                  = application().injector.instanceOf[MessagesApi]
 
   }
 }
