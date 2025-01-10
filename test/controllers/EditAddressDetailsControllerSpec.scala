@@ -24,18 +24,16 @@ import mappings.EditAddressDetailsFormProvider
 import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
 import pages.EditAddressDetailsPage
 import play.api.data.Form
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.{Application, inject}
-import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService}
 import util.SpecBase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
-import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.concurrent.Future
 
@@ -44,8 +42,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
 
-      running(application(Some(userAnswers))) {
-        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, onPageLoadRequest).value
 
         status(result) mustBe OK
 
@@ -59,8 +57,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      running(application(Some(userAnswers))) {
-        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
+      running(appWithoutUserAnswers) {
+        val result = route(appWithoutUserAnswers, onPageLoadRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -68,16 +66,16 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
   "submit" must {
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(application(None)) {
-        val result = route(application(None), invalidSubmitRequest).value
+      running(appWithoutUserAnswers) {
+        val result = route(appWithoutUserAnswers, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
       }
     }
 
     "return a redirect to session expired when user answers is empty" in new Setup {
-      running(application(Some(emptyUserAnswers))) {
-        val result = route(application(Some(emptyUserAnswers)), validSubmitRequest).value
+      running(appWithoutUserAnswers) {
+        val result = route(appWithoutUserAnswers, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
@@ -87,7 +85,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
       val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
       val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
-      val editedUserAnswers: UserAnswers                                   = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
@@ -101,8 +98,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
 
-      running(application(Some(editedUserAnswers))) {
-        val result = route(application(Some(editedUserAnswers)), validSubmitRequest).value
+      running(appWithEditedUserAnswers) {
+        val result = route(appWithEditedUserAnswers, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails().url
       }
@@ -121,8 +118,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
 
-      running(application(Some(userAnswers))) {
-        val result = route(application(Some(userAnswers)), validSubmitRequest).value
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
@@ -130,8 +127,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   }
 
   "isValidCountryName throws invalid country name error" in new Setup {
-    running(application(Some(userAnswers))) {
-      val result = route(application(Some(userAnswers)), invalidCountryCodeRequest).value
+    running(appWithUserAnswers) {
+      val result = route(appWithUserAnswers, invalidCountryCodeRequest).value
       status(result) mustBe 400
     }
   }
@@ -172,15 +169,22 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(
-          ("dan", validDan)
-        )
+          ("dan", validDan))
+
+    val editedUserAnswers: UserAnswers = userAnswers.set(
+      EditAddressDetailsPage, editAddressDetailsUserAnswers).get
+
+    val appWithUserAnswers: Application        = application(Some(userAnswers))
+    val appWithoutUserAnswers: Application     = application()
+    val appWithEditedUserAnswers: Application  = application(Some(editedUserAnswers))
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    val view: edit_address_details                = application(None).injector.instanceOf[edit_address_details]
-    val form: Form[EditAddressDetailsUserAnswers] = application(None).injector.instanceOf[EditAddressDetailsFormProvider].apply()
-    val appConfig: AppConfig                      = application(None).injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi                  = application(None).injector.instanceOf[MessagesApi]
+    val form: Form[EditAddressDetailsUserAnswers]
+      = application().injector.instanceOf[EditAddressDetailsFormProvider].apply()
 
+    val view: edit_address_details                = application().injector.instanceOf[edit_address_details]
+    val appConfig: AppConfig                      = application().injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi                  = application().injector.instanceOf[MessagesApi]
   }
 }

@@ -26,25 +26,21 @@ import views.html.components.{caption, h1, h2, inset, link, p}
 class ViewUtilsSpec extends SpecBase {
 
   "h1Component" should {
-
     "create the component correctly with provided input" in new Setup {
-      h1Component(testMsgKey, Some(testId)) mustBe
-        new h1().apply(msg = messages(testMsgKey), id = Some(testId))
+      h1Component(testMsgKey, Some(testId)) mustBe new h1().apply(msg = messages(testMsgKey), id = Some(testId))
 
-      h1Component(testMsgKey, Some(testId), testClass) mustBe
-        new h1().apply(msg = messages(testMsgKey), id = Some(testId), classes = testClass)
+      h1Component(testMsgKey, Some(testId), testClass) mustBe new h1()
+        .apply(msg = messages(testMsgKey), id = Some(testId), classes = testClass)
     }
   }
 
   "emptyH2Component" should {
-
     "return the empty h2 component" in {
       emptyH2Component mustBe new h2()
     }
   }
 
   "h2Component" should {
-
     "create the component correctly with provided input" in new Setup {
       h2Component(msg = testMsg, id = Some(testId)) mustBe
         new h2().apply(msg = testMsg, id = Some(testId))
@@ -55,14 +51,12 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   "emptyLinkComponent" should {
-
     "return the empty link component" in {
       emptyLinkComponent mustBe new link()
     }
   }
 
   "linkComponent" should {
-
     "create the component correctly with provided input" in new Setup {
       val result: HtmlFormat.Appendable = linkComponent(
         LinkComponentValues(
@@ -85,14 +79,12 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   "emptyPComponent" should {
-
     "return the empty p component" in {
       emptyPComponent mustBe new p()
     }
   }
 
   "pComponent" should {
-
     "create the component correctly with provided input" in new Setup {
       val result: HtmlFormat.Appendable = pComponent(
         content = Html(testMsg),
@@ -131,7 +123,6 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   "insetComponent" should {
-
     "create the component correctly with provided input" in new Setup {
       insetComponent(msg = testMsg, id = Some(testId)) mustBe new inset().apply(msg = testMsg, id = Some(testId))
 
@@ -141,7 +132,6 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   "captionComponent" should {
-
     "create the component correctly with provided input" in new Setup {
       captionComponent(msg = testMsg, id = Some(testId), classes = testClass) mustBe new caption()
         .apply(msg = testMsg, id = Some(testId), classes = testClass)
@@ -152,7 +142,6 @@ class ViewUtilsSpec extends SpecBase {
   }
 
   "hmrcNewTabLinkComponent" should {
-
     "create the component correctly with provided input" in new Setup {
       val result: HtmlFormat.Appendable =
         hmrcNewTabLinkComponent(text = testMsg, href = Some(testHref), language = Some(testLang))

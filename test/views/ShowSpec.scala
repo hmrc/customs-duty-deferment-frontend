@@ -31,22 +31,22 @@ class ShowSpec extends SpecBase {
 
   "Duty Deferment Account Show Spec" should {
     "display header" in new Setup {
-      running(application(None)) {
+      running(application()) {
         view.getElementsByTag("h1").text mustBe "Duty deferment contact details"
       }
     }
 
     "display header2" in new Setup {
-      running(application(None)) {
+      running(application()) {
         view.getElementsByTag("h2").text mustBe
           "Help make GOV.UK better Account: someDan Support links"
       }
     }
 
     "when you click on the back link redirect to you contact details" in new Setup {
-      running(application(None)) {
+      running(application()) {
         val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details")
-        val result  = route(application(None), request).value
+        val result  = route(application(), request).value
         val html    = Jsoup.parse(contentAsString(result))
         html.containsLinkWithText("/customs/payment-records/your-contact-details", "link-back")
       }
@@ -65,10 +65,10 @@ class ShowSpec extends SpecBase {
       _ => Some("United Kingdom")
     )
 
-    def view: Document = Jsoup.parse(
-      application(None).injector.instanceOf[show].apply(validContactDetailsViewModel, DefermentAccountAvailable, someLinkId).body
-    )
+    def view: Document =
+      Jsoup.parse(application().injector.instanceOf[show].apply(
+        validContactDetailsViewModel, DefermentAccountAvailable, someLinkId)(request, messages, appConfig).body)
 
-    override def messagesApi: MessagesApi = application(None).injector.instanceOf[MessagesApi]
+    override def messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
   }
 }

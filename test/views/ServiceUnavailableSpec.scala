@@ -53,6 +53,7 @@ class ServiceUnavailableSpec extends SpecBase {
       "/contact/report-technical-problem?newTab=true&amp;service=CDS%20FinancialsreferrerUrl=test_Path"
 
     val view: Document =
-      Jsoup.parse(application(None).injector.instanceOf[service_unavailable].apply(Option(backLinkUrl)).body)
+      Jsoup.parse(application().injector.instanceOf[service_unavailable].apply(
+        Option(backLinkUrl))(request, messages, appConfig).body)
   }
 }

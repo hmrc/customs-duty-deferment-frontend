@@ -19,7 +19,7 @@ package models
 import controllers.routes
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.GET
@@ -302,6 +302,6 @@ class DutyDeferementStatementFileSpec extends SpecBase {
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
     
-    val messagesApi: MessagesApi = application(None).injector.instanceOf[MessagesApi]
+    val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
   }
 }

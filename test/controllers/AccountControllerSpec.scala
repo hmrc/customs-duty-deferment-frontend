@@ -37,10 +37,10 @@ class AccountControllerSpec extends SpecBase {
 
   "showAccountDetails" should {
     "return unauthorized if no session id present" in {
-      running(application(None)) {
+      running(application()) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
 
-        val result = route(application(None), request).value
+        val result = route(application(), request).value
         status(result) mustBe SEE_OTHER
       }
     }
@@ -97,11 +97,11 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account                 = application
-        .injector.instanceOf[duty_deferment_account]
-      val request: FakeRequest[AnyContentAsEmpty.type] =
-        FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
-          .withHeaders("X-Session-Id" -> "someSessionId")
+      val view: duty_deferment_account = application.injector.instanceOf[duty_deferment_account]
+
+      val request: FakeRequest[AnyContentAsEmpty.type]
+      = FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
+        .withHeaders("X-Session-Id" -> "someSessionId")
 
       val messages: Messages = messagesApi.preferred(request)
 

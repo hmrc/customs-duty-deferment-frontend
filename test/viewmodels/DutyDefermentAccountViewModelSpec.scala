@@ -26,14 +26,12 @@ import views.html.requested_statements
 import org.scalatest.matchers.must.Matchers._
 import config.AppConfig
 import play.api.i18n.Messages
-import play.api.Application
 
 class DutyDefermentAccountViewModelSpec extends SpecBase {
 
   "apply method" must {
 
     "populate the model correctly" when {
-
       "current statements are available" in new Setup {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
@@ -42,16 +40,16 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainCurrentStatementSection(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
@@ -63,15 +61,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
@@ -83,15 +81,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
@@ -103,15 +101,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
@@ -123,15 +121,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = true,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel, isNiAccount = true)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
@@ -143,16 +141,16 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
@@ -164,16 +162,16 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
-          )
+          )(appConfig, messages)
 
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
-        shouldContainRequestedStatementsMsg(viewModel, linkId)
+        shouldContainRequestedStatementsMsg(viewModel, linkId)(messages, appConfig)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(application(None), viewModel)
-        shouldContainChiefStatementGuidance(viewModel)
-        shouldContainHelpAndSupportGuidance(viewModel)
+        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
+        shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
     }
@@ -240,7 +238,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     "show-all-sections".r.findAllIn(viewModel.toString).length
 
   private def shouldContainStatementOlderThanSixMonthsGuidance(
-    application: Application,
     viewModel: DutyDefermentAccountViewModel
   ): Assertion =
     viewModel.statOlderThanSixMonths mustBe

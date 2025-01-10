@@ -26,7 +26,7 @@ import views.html.components.inset
 class InsetSpec extends SpecBase {
   "Inset Component" should {
     "render component correctly" in new SetUp {
-      running(application(None)) {
+      running(application()) {
         val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
           msg = "Hello world!",
@@ -41,7 +41,7 @@ class InsetSpec extends SpecBase {
     }
 
     "render component correctly without an ID" in new SetUp {
-      running(application(None)) {
+      running(application()) {
         val output: HtmlFormat.Appendable = insetView(
           id = None,
           msg = "Hello world!",
@@ -56,7 +56,7 @@ class InsetSpec extends SpecBase {
     }
 
     "render component correctly with custom classes" in new SetUp {
-      running(application(None)) {
+      running(application()) {
         val output: HtmlFormat.Appendable = insetView(
           id = Some("div-id"),
           msg = "Hello world!",
@@ -71,7 +71,7 @@ class InsetSpec extends SpecBase {
   }
 
   trait SetUp {
-    val insetView        = application(None).injector.instanceOf[inset]
+    val insetView        = application().injector.instanceOf[inset]
 
     def parseHtml(output: HtmlFormat.Appendable): Document =
       Jsoup.parse(contentAsString(output))

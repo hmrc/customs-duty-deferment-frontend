@@ -25,8 +25,7 @@ import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.{Application, inject}
-import services.CountriesProviderService
+import play.api.Application
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_contact_details
@@ -35,9 +34,10 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
 
-    "return OK on a valid request" in new Setup {
-      running(application(Some(userAnswers))) {
-        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
+    "return OK on a val" +
+      "id request" in new Setup {
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, onPageLoadRequest).value
         status(result) mustBe OK
 
         contentAsString(result).removeCsrf() mustBe view(
@@ -50,8 +50,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      running(application(Some(emptyUserAnswers))) {
-        val result = route(application(Some(emptyUserAnswers)), onPageLoadRequest).value
+      running(appWithEmptyUserAnswers) {
+        val result = route(appWithEmptyUserAnswers, onPageLoadRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -60,20 +60,19 @@ class EditContactDetailsControllerSpec extends SpecBase {
   "submit" must {
 
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(application(None)) {
-        val result = route(application, invalidSubmitRequest).value
+      running(appWithoutUsersAnswers) {
+        val result = route(appWithoutUsersAnswers, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
       }
     }
 
     "return a redirect to session expired when user answers is empty" in new Setup {
-      running(application(Some(emptyUserAnswers))) {
-        val result = route(application(Some(emptyUserAnswers)), validSubmitRequest).value
+      running(appWithEmptyUserAnswers) {
+        val result = route(appWithEmptyUserAnswers, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
     }
-
   }
 
   trait Setup {
@@ -101,9 +100,17 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    val view: edit_contact_details                = application(Some(userAnswers)).injector.instanceOf[edit_contact_details]
-    val form: Form[EditContactDetailsUserAnswers] = application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()
+    val appWithUserAnswers: Application = application(Some(userAnswers))
+    val appWithEmptyUserAnswers: Application = application(Some(emptyUserAnswers))
+    val appWithoutUsersAnswers: Application = application()
+
     val messagesApi: MessagesApi                  = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
     val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
+
+    val form: Form[EditContactDetailsUserAnswers] =
+      application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()
+
+    val view: edit_contact_details =
+      application(Some(userAnswers)).injector.instanceOf[edit_contact_details]
   }
 }

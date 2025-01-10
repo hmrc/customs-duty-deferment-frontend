@@ -110,7 +110,7 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     val modelWithNoCurrentStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
@@ -118,7 +118,7 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     val modelWithNoCurrentAndRequestedStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
@@ -126,9 +126,10 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     def view(model: DutyDefermentAccountViewModel): Document =
-      Jsoup.parse(application(None).injector.instanceOf[duty_deferment_account].apply(model).body)
+      Jsoup.parse(application().injector.instanceOf[duty_deferment_account].apply(model)(
+        request, messages, appConfig).body)
   }
 }

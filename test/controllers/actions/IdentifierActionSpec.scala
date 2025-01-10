@@ -45,7 +45,6 @@ class AuthActionSpec extends SpecBase {
   }
 
   "Auth Action" when {
-
     "redirect the user to unauthorised controller when has no enrolments" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
@@ -54,16 +53,14 @@ class AuthActionSpec extends SpecBase {
       val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(application(None)) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
     }
 
-    "redirect the user to unauthorised controller when has no eori enrolment" in new Setup  {
-      val mockAuthConnector = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "redirect the user to unauthorised controller when has no eori enrolment" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -79,7 +76,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application(None)) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
@@ -96,112 +93,110 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application(None)) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
+    }
 
-      "redirect the user to unauthorised controller when InternalID is empty" in {
+    "redirect the user to unauthorised controller when InternalID is empty" in new Setup  {
 
-        when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
-          .thenReturn(
-            Future.successful(
-              Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ None
-            )
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
+        .thenReturn(
+          Future.successful(
+            Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ None
           )
+        )
 
-        val bodyParsers = application(None).injector.instanceOf[BodyParsers.Default]
+      val authAction = new AuthenticatedIdentifierAction(
+        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+
+      val controller = new Harness(authAction)
+
+      running(application()) {
+        val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
+      }
+    }
+
+    "continue journey on successful response from auth" in new Setup {
+
+      when(mockDataStoreConnector.getAllEoriHistory(any)(any))
+        .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
+
+      when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
+        .thenReturn(
+          Future.successful(
+            Enrolments(Set(Enrolment(
+              "HMRC-CUS-ORG",
+              Seq(EnrolmentIdentifier("EORINumber", "test")),
+              "Active"))) ~ Some("internalId")
+          )
+        )
+
+      val authAction = new AuthenticatedIdentifierAction(
+        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+
+      val controller = new Harness(authAction)
+
+      running(application()) {
+        val result = controller.onPageLoad()(FakeRequest().withHeaders(
+          "X-Session-Id" -> "someSessionId"))
+
+        status(result) mustBe OK
+      }
+    }
+
+    "the user hasn't logged in" must {
+      "redirect the user to log in " in new Setup {
 
         val authAction = new AuthenticatedIdentifierAction(
-          mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
-
+          new FakeFailingAuthConnector(new MissingBearerToken),
+          appConfig,
+          bodyParsers,
+          mockDataStoreConnector
+        )
         val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest())
 
-        running(application(None)) {
-          val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
-        }
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must startWith(appConfig.loginUrl)
       }
+    }
 
-      "continue journey on successful response from auth" in new Setup {
-
-        when(mockDataStoreConnector.getAllEoriHistory(any)(any))
-          .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
-
-        when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
-          .thenReturn(
-            Future.successful(
-              Enrolments(Set(Enrolment(
-                "HMRC-CUS-ORG",
-                Seq(EnrolmentIdentifier("EORINumber", "test")),
-                "Active"))) ~ Some("internalId")
-            )
-          )
+    "the user's session has expired" must {
+      "redirect the user to log in " in new Setup {
 
         val authAction = new AuthenticatedIdentifierAction(
-          mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
-
+          new FakeFailingAuthConnector(new BearerTokenExpired),
+          appConfig,
+          bodyParsers,
+          mockDataStoreConnector
+        )
         val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest())
 
-        running(application(None)) {
-          val result = controller.onPageLoad()(FakeRequest().withHeaders(
-            "X-Session-Id" -> "someSessionId"))
-
-          status(result) mustBe OK
-        }
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).get must startWith(appConfig.loginUrl)
       }
+    }
 
-      "the user hasn't logged in" must {
-        "redirect the user to log in " in new Setup {
+    "the user doesn't have sufficient enrolments" must {
+      "redirect the user to the unauthorised page" in new Setup {
 
-          val authAction = new AuthenticatedIdentifierAction(
-            new FakeFailingAuthConnector(new MissingBearerToken),
-            appConfig,
-            bodyParsers,
-            mockDataStoreConnector
-          )
-          val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+        val authAction = new AuthenticatedIdentifierAction(
+          new FakeFailingAuthConnector(new InsufficientEnrolments),
+          appConfig,
+          bodyParsers,
+          mockDataStoreConnector
+        )
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).get must startWith(appConfig.loginUrl)
-        }
-      }
-
-      "the user's session has expired" must {
-        "redirect the user to log in " in {
-
-          val authAction = new AuthenticatedIdentifierAction(
-            new FakeFailingAuthConnector(new BearerTokenExpired),
-            appConfig,
-            bodyParsers,
-            mockDataStoreConnector
-          )
-          val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).get must startWith(appConfig.loginUrl)
-        }
-      }
-
-      "the user doesn't have sufficient enrolments" must {
-        "redirect the user to the unauthorised page" in new Setup {
-
-          val authAction = new AuthenticatedIdentifierAction(
-            new FakeFailingAuthConnector(new InsufficientEnrolments),
-            appConfig,
-            bodyParsers,
-            mockDataStoreConnector
-          )
-          val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.NotSubscribedController.onPageLoad.url
-        }
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe routes.NotSubscribedController.onPageLoad.url
       }
     }
   }
@@ -209,16 +204,16 @@ class AuthActionSpec extends SpecBase {
   trait Setup {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val bodyParsers: BodyParsers.Default = application(None).injector.instanceOf[BodyParsers.Default]
+    val bodyParsers: BodyParsers.Default = application().injector.instanceOf[BodyParsers.Default]
   }
 }
 
-  class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
-    val serviceUrl: String = ""
+class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
+  val serviceUrl: String = ""
 
-    override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
-                                                                             hc: HeaderCarrier,
-                                                                             ec: ExecutionContext
-    ): Future[A] =
-      Future.failed(exceptionToReturn)
-  }
+  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
+                                                                           hc: HeaderCarrier,
+                                                                           ec: ExecutionContext
+  ): Future[A] =
+    Future.failed(exceptionToReturn)
+}

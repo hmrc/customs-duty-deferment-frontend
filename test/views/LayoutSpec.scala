@@ -38,7 +38,7 @@ class LayoutSpec extends SpecBase {
         val linkUrl = "test.com"
 
         val layoutView: Document = Jsoup.parse(
-          application(None).injector
+          application().injector
             .instanceOf[Layout]
             .apply(
               pageTitle = Some(title),
@@ -48,16 +48,16 @@ class LayoutSpec extends SpecBase {
         )
 
         shouldContainCorrectTitle(layoutView, title)(messages)
-        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectServiceUrls(layoutView)(appConfig)
         shouldContainCorrectBackLink(layoutView, Some(linkUrl))
         shouldContainCorrectBanners(layoutView)
       }
 
       "there is no value for title and back link" in new Setup {
-        val layoutView: Document = Jsoup.parse(application(None).injector.instanceOf[Layout].apply()(content).body)
+        val layoutView: Document = Jsoup.parse(application().injector.instanceOf[Layout].apply()(content).body)
 
         shouldContainCorrectTitle(layoutView)(messages)
-        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectServiceUrls(layoutView)(appConfig)
         shouldContainCorrectBackLink(layoutView)
         shouldContainCorrectBanners(layoutView)
       }
