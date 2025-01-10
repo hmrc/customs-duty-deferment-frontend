@@ -36,16 +36,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
   "onPageLoad" must {
 
     "return OK on a valid request" in new Setup {
-
-      val newApp: Application = editApplication(userAnswers)
-        .overrides(
-          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-        )
-        .build()
-
-      running(newApp) {
-        val result = route(newApp, onPageLoadRequest).value
+      running(application(Some(userAnswers))) {
+        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
         status(result) mustBe OK
 
         contentAsString(result).removeCsrf() mustBe view(
@@ -58,9 +50,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      val newApp: Application = editApplication(emptyUserAnswers).build()
-      running(newApp) {
-        val result = route(newApp, onPageLoadRequest).value
+      running(application(Some(emptyUserAnswers))) {
+        val result = route(application(Some(emptyUserAnswers)), onPageLoadRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -69,16 +60,15 @@ class EditContactDetailsControllerSpec extends SpecBase {
   "submit" must {
 
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(application) {
+      running(application(None)) {
         val result = route(application, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
       }
     }
 
     "return a redirect to session expired when user answers is empty" in new Setup {
-      val newApp: Application = editApplication(emptyUserAnswers).build()
-      running(newApp) {
-        val result = route(newApp, validSubmitRequest).value
+      running(application(Some(emptyUserAnswers))) {
+        val result = route(application(Some(emptyUserAnswers)), validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
@@ -111,15 +101,9 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    def editApplication(ua: UserAnswers): Application = application(Option(ua))
-      .overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache)
-      )
-      .build()
-
-    val view: edit_contact_details                = editApplication(userAnswers).injector.instanceOf[edit_contact_details]
-    val form: Form[EditContactDetailsUserAnswers] = editApplication(userAnswers).injector.instanceOf[EditContactDetailsFormProvider].apply()
-    val messagesApi: MessagesApi                  = editApplication(userAnswers).injector.instanceOf[MessagesApi]
+    val view: edit_contact_details                = application(Some(userAnswers)).injector.instanceOf[edit_contact_details]
+    val form: Form[EditContactDetailsUserAnswers] = application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()
+    val messagesApi: MessagesApi                  = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
     val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
   }
 }

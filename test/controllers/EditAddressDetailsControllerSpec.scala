@@ -44,15 +44,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
 
-      val newApp: Application = application(Some(userAnswers))
-        .overrides(
-          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-        )
-        .build()
-
-      running(newApp) {
-        val result = route(newApp, onPageLoadRequest).value
+      running(application(Some(userAnswers))) {
+        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
 
         status(result) mustBe OK
 
@@ -66,9 +59,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
 
     "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
-      running(newApp) {
-        val result = route(newApp, onPageLoadRequest).value
+      running(application(Some(userAnswers))) {
+        val result = route(application(Some(userAnswers)), onPageLoadRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -76,18 +68,16 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
   "submit" must {
     "return BAD_REQUEST when form errors occur" in new Setup {
-
       running(application(None)) {
-        val result = route(application, invalidSubmitRequest).value
+        val result = route(application(None), invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
       }
     }
 
     "return a redirect to session expired when user answers is empty" in new Setup {
-      val newApp: Application = application(Some(emptyUserAnswers)).build()
-      running(newApp) {
-        val result = route(newApp, validSubmitRequest).value
+      running(application(Some(emptyUserAnswers))) {
+        val result = route(application(Some(emptyUserAnswers)), validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
@@ -99,15 +89,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
       val editedUserAnswers: UserAnswers                                   = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
-      val newApp: Application = application(Some(editedUserAnswers))
-        .overrides(
-          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-          inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-          inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
-          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-        )
-        .build()
-
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
@@ -117,10 +98,11 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
       when(mockContactDetailsCacheServices.updateContactDetails(any)(any))
         .thenReturn(Future.successful(true))
+
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Option(dutyDefermentAccountLink)))
 
-      running(newApp) {
-        val result = route(newApp, validSubmitRequest).value
+      running(application(Some(editedUserAnswers))) {
+        val result = route(application(Some(editedUserAnswers)), validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.successAddressDetails().url
       }
@@ -131,15 +113,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
       val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
 
-      val newApp: Application = application(Some(userAnswers))
-        .overrides(
-          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-          inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
-          inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
-          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-        )
-        .build()
-
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
@@ -148,8 +121,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
 
-      running(newApp) {
-        val result = route(newApp, validSubmitRequest).value
+      running(application(Some(userAnswers))) {
+        val result = route(application(Some(userAnswers)), validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
@@ -157,16 +130,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   }
 
   "isValidCountryName throws invalid country name error" in new Setup {
-
-    val newApp: Application = application(Some(userAnswers))
-      .overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-      )
-      .build()
-
-    running(newApp) {
-      val result = route(newApp, invalidCountryCodeRequest).value
+    running(application(Some(userAnswers))) {
+      val result = route(application(Some(userAnswers)), invalidCountryCodeRequest).value
       status(result) mustBe 400
     }
   }
@@ -211,20 +176,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         )
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
-
-    def application(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
-      new GuiceApplicationBuilder()
-        .overrides(
-          bind[IdentifierAction].to[FakeIdentifierAction],
-          bind[DataRetrievalAction].to(new FakeDataRetrievalAction(userAnswers)),
-          bind[Metrics].toInstance(new FakeMetrics)
-        )
-        .configure(
-          "play.filters.csp.nonce.enabled" -> false,
-          "auditing.enabled" -> "false",
-          "microservice.metrics.graphite.enabled" -> "false",
-          "metrics.enabled" -> "false"
-        )
 
     val view: edit_address_details                = application(None).injector.instanceOf[edit_address_details]
     val form: Form[EditAddressDetailsUserAnswers] = application(None).injector.instanceOf[EditAddressDetailsFormProvider].apply()
