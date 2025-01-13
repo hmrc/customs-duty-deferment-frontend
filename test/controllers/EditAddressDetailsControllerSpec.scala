@@ -18,20 +18,20 @@ package controllers
 
 import cache.UserAnswersCache
 import config.AppConfig
-import play.api.Application
 import connectors.CustomsFinancialsApiConnector
 import mappings.EditAddressDetailsFormProvider
 import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.EditAddressDetailsPage
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.{AccountLinkCacheService, ContactDetailsCacheService}
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
 
@@ -82,10 +82,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to the confirmation success page when a successful request made" in new Setup {
-      val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
-      val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
-      val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
-
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
@@ -106,10 +102,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to the confirmation problem page when a update failed" in new Setup {
-      val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
-      val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
-      val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
-
       when(mockUserAnswersCache.store(any, any)(any)).thenReturn(Future.successful(true))
       when(mockContactDetailsCacheServices.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
@@ -134,6 +126,10 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   }
 
   trait Setup {
+    val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
+    val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
+    val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
+
     val userAnswers: UserAnswers =
       emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
 
@@ -168,23 +164,21 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
-        .withFormUrlEncodedBody(
-          ("dan", validDan))
+        .withFormUrlEncodedBody(("dan", validDan))
 
-    val editedUserAnswers: UserAnswers = userAnswers.set(
-      EditAddressDetailsPage, editAddressDetailsUserAnswers).get
+    val editedUserAnswers: UserAnswers = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
-    val appWithUserAnswers: Application        = application(Some(userAnswers))
-    val appWithoutUserAnswers: Application     = application()
-    val appWithEditedUserAnswers: Application  = application(Some(editedUserAnswers))
+    val appWithUserAnswers: Application       = application(Some(userAnswers))
+    val appWithoutUserAnswers: Application    = application()
+    val appWithEditedUserAnswers: Application = application(Some(editedUserAnswers))
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
-    val form: Form[EditAddressDetailsUserAnswers]
-      = application().injector.instanceOf[EditAddressDetailsFormProvider].apply()
+    val form: Form[EditAddressDetailsUserAnswers] =
+      application().injector.instanceOf[EditAddressDetailsFormProvider].apply()
 
-    val view: edit_address_details                = application().injector.instanceOf[edit_address_details]
-    val appConfig: AppConfig                      = application().injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi                  = application().injector.instanceOf[MessagesApi]
+    val view: edit_address_details = application().injector.instanceOf[edit_address_details]
+    val appConfig: AppConfig       = application().injector.instanceOf[AppConfig]
+    val messagesApi: MessagesApi   = application().injector.instanceOf[MessagesApi]
   }
 }

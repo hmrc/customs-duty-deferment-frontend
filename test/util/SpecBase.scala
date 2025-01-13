@@ -17,8 +17,8 @@
 package util
 
 import com.codahale.metrics.MetricRegistry
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import config.AppConfig
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import org.jsoup.nodes.Document
 import org.scalatest.matchers.must.Matchers
@@ -74,10 +74,10 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
         bind[Metrics].toInstance(new FakeMetrics)
       )
       .configure(
-        "play.filters.csp.nonce.enabled" -> false,
-        "auditing.enabled" -> "false",
+        "play.filters.csp.nonce.enabled"        -> false,
+        "auditing.enabled"                      -> "false",
         "microservice.metrics.graphite.enabled" -> "false",
-        "metrics.enabled" -> "false"
+        "metrics.enabled"                       -> "false"
       )
 
   def application(ua: Option[UserAnswers] = None): Application = applicationBuilder(ua).build()

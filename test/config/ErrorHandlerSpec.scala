@@ -124,8 +124,8 @@ class ErrorHandlerSpec extends SpecBase {
     lazy val app: Application = application()
 
     val errorHandler: ErrorHandler = app.injector.instanceOf[ErrorHandler]
-    val title = "test_title"
-    val heading = "test_heading"
-    val message = "test_msg"
+    val title                      = "test_title"
+    val heading                    = "test_heading"
+    val message                    = "test_msg"
   }
 }

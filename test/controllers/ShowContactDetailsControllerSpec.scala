@@ -18,17 +18,17 @@ package controllers
 
 import connectors.DataStoreConnector
 import models.{UndeliverableEmail, UnverifiedEmail}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.{AccountLinkCacheService, ContactDetailsCacheService, NoAccountStatusId}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
 
@@ -167,8 +167,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     val startSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ShowContactDetailsController.startSession("someLinkId").url)
 
-    val view: show            = application.injector.instanceOf[show]
-    val errorView: show_error = application.injector.instanceOf[show_error]
+    val view: show               = application.injector.instanceOf[show]
+    val errorView: show_error    = application.injector.instanceOf[show_error]
     val messagesApi: MessagesApi = application.injector.instanceOf[MessagesApi]
     val messages: Messages       = messagesApi.preferred(showRequest)
   }

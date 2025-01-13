@@ -30,20 +30,31 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
       view.title() mustBe
         s"${messages("service.name")} - ${messages("service.name")} - GOV.UK"
 
-      view.getElementById("statements-heading").text().contains(
-      messages("cf.account.detail.deferment-account-heading")) mustBe true
+      view
+        .getElementById("statements-heading")
+        .text()
+        .contains(messages("cf.account.detail.deferment-account-heading")) mustBe true
 
-      view.getElementById("no-statements").getElementsByTag("p").html().contains(
-        messages("cf.duty-deferment-account.problem-with-service.text")) mustBe true
+      view
+        .getElementById("no-statements")
+        .getElementsByTag("p")
+        .html()
+        .contains(messages("cf.duty-deferment-account.problem-with-service.text")) mustBe true
 
-      view.getElementById("missing-documents-guidance-heading").text().contains(
-        messages("cf.common.missing-documents-guidance.cdsStatements.heading")) mustBe true
+      view
+        .getElementById("missing-documents-guidance-heading")
+        .text()
+        .contains(messages("cf.common.missing-documents-guidance.cdsStatements.heading")) mustBe true
 
-      view.getElementById("chief-guidance-heading").text().contains(
-        messages("cf.common.chiefStatements.heading")) mustBe true
+      view
+        .getElementById("chief-guidance-heading")
+        .text()
+        .contains(messages("cf.common.chiefStatements.heading")) mustBe true
 
-      view.getElementById("dd-support-message-heading").text().contains(
-        messages("cf.accounts.support.heading")) mustBe true
+      view
+        .getElementById("dd-support-message-heading")
+        .text()
+        .contains(messages("cf.accounts.support.heading")) mustBe true
 
       view.html().contains(messages("cf.accounts.older-statements.description.link"))
       view.html().contains(messages("cf.accounts.older-statements.description"))

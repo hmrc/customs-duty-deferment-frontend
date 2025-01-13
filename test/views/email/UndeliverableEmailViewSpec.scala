@@ -31,19 +31,25 @@ class UndeliverableEmailViewSpec extends SpecBase {
         view.title() mustBe
           s"${messages("cf.undeliverable.email.title")} - ${messages("service.name")} - GOV.UK"
 
-        view.getElementById("email-heading-h1").text().contains(
-          messages("cf.undeliverable.email.heading")) mustBe true
+        view
+          .getElementById("email-heading-h1")
+          .text()
+          .contains(messages("cf.undeliverable.email.heading")) mustBe true
 
         view.text().contains(messages("cf.undeliverable.email.p1")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.p2", undeliverableEmailUrl))
 
-        view.getElementById("email-verify-heading-h2").text().contains(
-          messages("cf.undeliverable.email.verify.heading")) mustBe true
+        view
+          .getElementById("email-verify-heading-h2")
+          .text()
+          .contains(messages("cf.undeliverable.email.verify.heading")) mustBe true
 
         view.text().contains(messages("cf.undeliverable.email.verify.text.p1")) mustBe true
 
-        view.getElementById("email-change-heading-h2").text().contains(
-          messages("cf.undeliverable.email.change.heading")) mustBe true
+        view
+          .getElementById("email-change-heading-h2")
+          .text()
+          .contains(messages("cf.undeliverable.email.change.heading")) mustBe true
 
         view.text().contains(messages("cf.undeliverable.email.change.text.p1")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.change.text.p2")) mustBe true

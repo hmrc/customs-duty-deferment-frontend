@@ -85,6 +85,6 @@ class AppConfigSpec extends SpecBase {
   }
 
   trait Setup {
-    val linkId               = "id"
+    val linkId = "id"
   }
 }

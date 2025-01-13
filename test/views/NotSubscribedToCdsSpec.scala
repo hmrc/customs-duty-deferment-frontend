@@ -31,21 +31,23 @@ class NotSubscribedToCdsSpec extends SpecBase {
       view.title() mustBe
         s"${messages("cf.not-subscribed-to-cds.detail.title")} - ${messages("service.name")} - GOV.UK"
 
-      view.getElementsByTag("h1").html().contains(
-        messages("cf.not-subscribed-to-cds.detail.heading")) mustBe true
+      view.getElementsByTag("h1").html().contains(messages("cf.not-subscribed-to-cds.detail.heading")) mustBe true
 
       val h2Elements: Elements = view.getElementsByTag("h2")
 
-      h2Elements.get(1).html().contains(
-        messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds")) mustBe true
+      h2Elements
+        .get(1)
+        .html()
+        .contains(messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds")) mustBe true
 
-      h2Elements.get(2).html().contains(
-        messages("cf.not-subscribed-to-cds.details.subscribe-to-cds")) mustBe true
+      h2Elements.get(2).html().contains(messages("cf.not-subscribed-to-cds.details.subscribe-to-cds")) mustBe true
 
       val pElements: Elements = view.getElementsByTag("p")
 
-      pElements.get(1).html().contains(
-        messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds-guidance-text")) mustBe true
+      pElements
+        .get(1)
+        .html()
+        .contains(messages("cf.not-subscribed-to-cds.detail.already-subscribed-to-cds-guidance-text")) mustBe true
 
       view.html().contains(cdsSubscribeUrl)
       view.html().contains(messages("cf.not-subscribed-to-cds.details.subscribe-to-cds-link-text"))

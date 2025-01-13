@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.i18n.MessagesApi
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import util.SpecBase
 import views.html.session_expired
 
@@ -25,7 +25,7 @@ class SessionExpiredControllerSpec extends SpecBase {
 
   "onPageLoad" must {
     "return OK" in {
-      val request          = fakeRequest(GET, routes.SessionExpiredController.onPageLoad.url)
+      val request = fakeRequest(GET, routes.SessionExpiredController.onPageLoad.url)
 
       val view                     = application().injector.instanceOf[session_expired]
       val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]

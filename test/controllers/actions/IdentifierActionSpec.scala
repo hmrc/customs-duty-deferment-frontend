@@ -41,7 +41,7 @@ class AuthActionSpec extends SpecBase {
   }
 
   implicit class Ops[A](a: A) {
-    def ~[B](b: B): A ~ B = new~(a, b)
+    def ~[B](b: B): A ~ B = new ~(a, b)
   }
 
   "Auth Action" when {
@@ -50,7 +50,9 @@ class AuthActionSpec extends SpecBase {
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("internalId")))
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+
       val controller = new Harness(authAction)
 
       running(application()) {
@@ -71,8 +73,8 @@ class AuthActionSpec extends SpecBase {
           )
         )
 
-      val authAction = new AuthenticatedIdentifierAction(
-        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
       val controller = new Harness(authAction)
 
@@ -88,8 +90,8 @@ class AuthActionSpec extends SpecBase {
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.failed(new RuntimeException("something went wrong")))
 
-      val authAction = new AuthenticatedIdentifierAction(
-        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
       val controller = new Harness(authAction)
 
@@ -100,7 +102,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "redirect the user to unauthorised controller when InternalID is empty" in new Setup  {
+    "redirect the user to unauthorised controller when InternalID is empty" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -109,8 +111,8 @@ class AuthActionSpec extends SpecBase {
           )
         )
 
-      val authAction = new AuthenticatedIdentifierAction(
-        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
       val controller = new Harness(authAction)
 
@@ -129,21 +131,19 @@ class AuthActionSpec extends SpecBase {
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
           Future.successful(
-            Enrolments(Set(Enrolment(
-              "HMRC-CUS-ORG",
-              Seq(EnrolmentIdentifier("EORINumber", "test")),
-              "Active"))) ~ Some("internalId")
+            Enrolments(Set(Enrolment("HMRC-CUS-ORG", Seq(EnrolmentIdentifier("EORINumber", "test")), "Active"))) ~ Some(
+              "internalId"
+            )
           )
         )
 
-      val authAction = new AuthenticatedIdentifierAction(
-        mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
       val controller = new Harness(authAction)
 
       running(application()) {
-        val result = controller.onPageLoad()(FakeRequest().withHeaders(
-          "X-Session-Id" -> "someSessionId"))
+        val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
 
         status(result) mustBe OK
       }
@@ -159,7 +159,7 @@ class AuthActionSpec extends SpecBase {
           mockDataStoreConnector
         )
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest())
+        val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith(appConfig.loginUrl)
@@ -176,7 +176,7 @@ class AuthActionSpec extends SpecBase {
           mockDataStoreConnector
         )
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest())
+        val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith(appConfig.loginUrl)
@@ -193,7 +193,7 @@ class AuthActionSpec extends SpecBase {
           mockDataStoreConnector
         )
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest())
+        val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.NotSubscribedController.onPageLoad.url
@@ -202,18 +202,18 @@ class AuthActionSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockAuthConnector: AuthConnector           = mock[AuthConnector]
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val bodyParsers: BodyParsers.Default = application().injector.instanceOf[BodyParsers.Default]
+    val bodyParsers: BodyParsers.Default           = application().injector.instanceOf[BodyParsers.Default]
   }
 }
 
-class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends AuthConnector {
+class FakeFailingAuthConnector @Inject() (exceptionToReturn: Throwable) extends AuthConnector {
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
-                                                                           hc: HeaderCarrier,
-                                                                           ec: ExecutionContext
+    hc: HeaderCarrier,
+    ec: ExecutionContext
   ): Future[A] =
     Future.failed(exceptionToReturn)
 }

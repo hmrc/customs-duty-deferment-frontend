@@ -18,16 +18,16 @@ package controllers
 
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import navigation.Navigator
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
@@ -80,7 +80,9 @@ class AccountControllerSpec extends SpecBase {
       running(application) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
-        val result  = route(application, request).value
+
+        val result = route(application, request).value
+
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.AccountController.statementsUnavailablePage("someLink").url
       }
@@ -99,9 +101,9 @@ class AccountControllerSpec extends SpecBase {
 
       val view: duty_deferment_account = application.injector.instanceOf[duty_deferment_account]
 
-      val request: FakeRequest[AnyContentAsEmpty.type]
-      = FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
-        .withHeaders("X-Session-Id" -> "someSessionId")
+      val request: FakeRequest[AnyContentAsEmpty.type] =
+        FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
+          .withHeaders("X-Session-Id" -> "someSessionId")
 
       val messages: Messages = messagesApi.preferred(request)
 
@@ -135,7 +137,9 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account                 = application.injector.instanceOf[duty_deferment_account]
+      val view: duty_deferment_account =
+        application.injector.instanceOf[duty_deferment_account]
+
       val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
           .withHeaders("X-Session-Id" -> "someSessionId")
@@ -173,7 +177,9 @@ class AccountControllerSpec extends SpecBase {
         running(application) {
           val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
             .withHeaders("X-Session-Id" -> "someSessionId")
-          val result  = route(application, request).value
+
+          val result = route(application, request).value
+
           status(result) mustBe UNAUTHORIZED
         }
       }
@@ -199,7 +205,9 @@ class AccountControllerSpec extends SpecBase {
         running(application) {
           val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage(linkId).url)
             .withHeaders("X-Session-Id" -> "someSessionId")
-          val result  = route(application, request).value
+
+          val result = route(application, request).value
+
           status(result) mustBe OK
           contentAsString(result) mustBe
             view("accountNumber", linkId, Some(serviceUnavailableUrl))(request, messages, appConfig).toString()
@@ -212,9 +220,8 @@ class AccountControllerSpec extends SpecBase {
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
       val mockDocumentService: DocumentService             = mock[DocumentService]
       val navigator                                        = new Navigator()
-
-      val linkId                        = "someLink"
-      val serviceUnavailableUrl: String =
+      val linkId                                           = "someLink"
+      val serviceUnavailableUrl: String                    =
         routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
 
       implicit val hc: HeaderCarrier = HeaderCarrier()

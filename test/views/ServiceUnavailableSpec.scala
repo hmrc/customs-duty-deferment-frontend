@@ -30,14 +30,22 @@ class ServiceUnavailableSpec extends SpecBase {
       view.title() mustBe
         s"${messages("cf.service-unavailable.title")} - ${messages("service.name")} - GOV.UK"
 
-      view.getElementById("service-unavailable.heading").text().contains(
-        messages("cf.service-unavailable.heading")) mustBe true
+      view
+        .getElementById("service-unavailable.heading")
+        .text()
+        .contains(messages("cf.service-unavailable.heading")) mustBe true
 
-      view.getElementById("older-statement-guidance-text").text() must not be empty
+      view
+        .getElementById("older-statement-guidance-text")
+        .text() must not be empty
 
-      view.getElementById("older-statement-guidance-text").text().contains(
-        s"${messages("cf.service-unavailable.description.1")} " +
-          s"${messages("cf.service-unavailable.description.2")}") mustBe true
+      view
+        .getElementById("older-statement-guidance-text")
+        .text()
+        .contains(
+          s"${messages("cf.service-unavailable.description.1")} " +
+            s"${messages("cf.service-unavailable.description.2")}"
+        ) mustBe true
 
       view.html().contains(backLinkUrl)
       view.html().contains(messages("cf.service-unavailable.description.3"))
@@ -53,7 +61,11 @@ class ServiceUnavailableSpec extends SpecBase {
       "/contact/report-technical-problem?newTab=true&amp;service=CDS%20FinancialsreferrerUrl=test_Path"
 
     val view: Document =
-      Jsoup.parse(application().injector.instanceOf[service_unavailable].apply(
-        Option(backLinkUrl))(request, messages, appConfig).body)
+      Jsoup.parse(
+        application().injector
+          .instanceOf[service_unavailable]
+          .apply(Option(backLinkUrl))(request, messages, appConfig)
+          .body
+      )
   }
 }

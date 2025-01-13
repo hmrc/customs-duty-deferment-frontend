@@ -20,12 +20,12 @@ import cache.UserAnswersCache
 import mappings.EditContactDetailsFormProvider
 import models.{EditContactDetailsUserAnswers, UserAnswers}
 import pages.EditContactDetailsPage
+import play.api.Application
 import play.api.data.Form
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.Application
+import play.api.test.Helpers.*
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_contact_details
@@ -34,8 +34,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
 
-    "return OK on a val" +
-      "id request" in new Setup {
+    "return OK on a val id request" in new Setup {
       running(appWithUserAnswers) {
         val result = route(appWithUserAnswers, onPageLoadRequest).value
         status(result) mustBe OK
@@ -99,13 +98,12 @@ class EditContactDetailsControllerSpec extends SpecBase {
         )
 
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+    val appWithUserAnswers: Application        = application(Some(userAnswers))
+    val appWithEmptyUserAnswers: Application   = application(Some(emptyUserAnswers))
+    val appWithoutUsersAnswers: Application    = application()
 
-    val appWithUserAnswers: Application = application(Some(userAnswers))
-    val appWithEmptyUserAnswers: Application = application(Some(emptyUserAnswers))
-    val appWithoutUsersAnswers: Application = application()
-
-    val messagesApi: MessagesApi                  = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
-    val messages: Messages                        = messagesApi.preferred(onPageLoadRequest)
+    val messagesApi: MessagesApi = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
+    val messages: Messages       = messagesApi.preferred(onPageLoadRequest)
 
     val form: Form[EditContactDetailsUserAnswers] =
       application(Some(userAnswers)).injector.instanceOf[EditContactDetailsFormProvider].apply()

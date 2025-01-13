@@ -16,16 +16,16 @@
 
 package views
 
-import util.SpecBase
+import config.AppConfig
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import views.html.Layout
-import org.jsoup.nodes.Document
 import play.twirl.api.Html
+import util.SpecBase
 import utils.Utils.emptyString
-import config.AppConfig
-import play.api.i18n.Messages
+import views.html.Layout
 
 class LayoutSpec extends SpecBase {
 
@@ -106,6 +106,6 @@ class LayoutSpec extends SpecBase {
 
   trait Setup {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    val content: Html = Html("test")
+    val content: Html                                         = Html("test")
   }
 }

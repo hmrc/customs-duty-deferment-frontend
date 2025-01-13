@@ -67,6 +67,7 @@ class DutyDefermentAccountSpec extends SpecBase {
     accountNumber: String,
     serviceUnavailableUrl: String
   ): Assertion = {
+
     viewDoc.title() mustBe
       s"${messages("cf.account.detail.title")} - ${messages("service.name")} - GOV.UK"
 
@@ -129,7 +130,8 @@ class DutyDefermentAccountSpec extends SpecBase {
     )(appConfig, messages)
 
     def view(model: DutyDefermentAccountViewModel): Document =
-      Jsoup.parse(application().injector.instanceOf[duty_deferment_account].apply(model)(
-        request, messages, appConfig).body)
+      Jsoup.parse(
+        application().injector.instanceOf[duty_deferment_account].apply(model)(request, messages, appConfig).body
+      )
   }
 }

@@ -20,19 +20,17 @@ import cache.UserAnswersCache
 import config.ErrorHandler
 import connectors.DataStoreConnector
 import models.EoriHistory
-import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{redirectLocation, running, status}
-import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
-import play.api.test.Helpers._
-import play.twirl.api.Html
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.*
+import play.twirl.api.Html
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
 import util.SpecBase
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataActionSpec extends SpecBase {
@@ -92,11 +90,12 @@ class DataActionSpec extends SpecBase {
     val authAction: AuthenticatedIdentifierAction =
       new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-    val bodyParsers: BodyParsers.Default = application().injector.instanceOf[BodyParsers.Default]
-    val sessionIdAction: SessionIdAction          = new SessionIdAction()(implicitly, mockErrorHandler)
-    val dataRetrievalAction: DataRetrievalAction  = new DataRetrievalActionImpl(mockUserAnswersCache)
-    val dataRequiredAction: DataRequiredAction    = new DataRequiredActionImpl()
-    val controller                                = new Harness(authAction, sessionIdAction, dataRetrievalAction, dataRequiredAction)
+    val bodyParsers: BodyParsers.Default         = application().injector.instanceOf[BodyParsers.Default]
+    val sessionIdAction: SessionIdAction         = new SessionIdAction()(implicitly, mockErrorHandler)
+    val dataRetrievalAction: DataRetrievalAction = new DataRetrievalActionImpl(mockUserAnswersCache)
+    val dataRequiredAction: DataRequiredAction   = new DataRequiredActionImpl()
+
+    val controller = new Harness(authAction, sessionIdAction, dataRetrievalAction, dataRequiredAction)
   }
 
   implicit class Ops[A](a: A) {

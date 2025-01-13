@@ -200,8 +200,10 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel: DutyDefermentAccountViewModel
   )(implicit messages: Messages): Assertion =
     viewModel.directDebitInfoMsg mustBe new p()
-      .apply(id = Some("direct-debit-info"),
-        content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
+      .apply(
+        id = Some("direct-debit-info"),
+        content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise"))
+      )
 
   private def shouldContainRequestedStatementsMsg(viewModel: DutyDefermentAccountViewModel, linkId: String)(implicit
     messages: Messages,
@@ -291,8 +293,8 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   )(implicit appConfig: AppConfig, messages: Messages): Assertion =
     viewModel.helpAndSupport mustBe
       GuidanceRow(
-        h2Heading = new h2().apply(id = Some("dd-support-message-heading"),
-          msg = messages("cf.accounts.support.heading")),
+        h2Heading =
+          new h2().apply(id = Some("dd-support-message-heading"), msg = messages("cf.accounts.support.heading")),
         paragraph = Some(
           new p().apply(
             id = Some("dd-support-message"),
