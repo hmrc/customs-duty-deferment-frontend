@@ -26,11 +26,12 @@ import org.mockito.Mockito.when
 import pages.EditAddressDetailsPage
 import play.api.Application
 import play.api.data.Form
+import play.api.inject
 import play.api.i18n.MessagesApi
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
-import services.{AccountLinkCacheService, ContactDetailsCacheService}
+import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
 import views.html.contact_details.edit_address_details
@@ -41,6 +42,13 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
     "return OK on a valid request" in new Setup {
+
+      val newApp: Application = applicationBuilder(Some(userAnswers))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+        )
+        .build()
 
       running(appWithUserAnswers) {
         val result = route(appWithUserAnswers, onPageLoadRequest).value
@@ -119,7 +127,15 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   }
 
   "isValidCountryName throws invalid country name error" in new Setup {
-    running(appWithUserAnswers) {
+
+    val newApp: Application = applicationBuilder(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+      )
+      .build()
+
+    running(newApp) {
       val result = route(appWithUserAnswers, invalidCountryCodeRequest).value
       status(result) mustBe 400
     }
@@ -166,13 +182,13 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(("dan", validDan))
 
+    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+
     val editedUserAnswers: UserAnswers = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
     val appWithUserAnswers: Application       = application(Some(userAnswers))
     val appWithoutUserAnswers: Application    = application()
     val appWithEditedUserAnswers: Application = application(Some(editedUserAnswers))
-
-    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
 
     val form: Form[EditAddressDetailsUserAnswers] =
       application().injector.instanceOf[EditAddressDetailsFormProvider].apply()

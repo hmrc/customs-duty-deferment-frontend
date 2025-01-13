@@ -59,8 +59,8 @@ class EditContactDetailsControllerSpec extends SpecBase {
   "submit" must {
 
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(appWithoutUsersAnswers) {
-        val result = route(appWithoutUsersAnswers, invalidSubmitRequest).value
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
       }
     }

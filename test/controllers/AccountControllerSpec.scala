@@ -91,7 +91,7 @@ class AccountControllerSpec extends SpecBase {
     "display the account page on a successful response" in new Setup {
       appConfig.historicStatementsEnabled = false
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
-        .thenReturn(Future.successful(Option(accountLink)))
+        .thenReturn(Future.successful(Some(accountLink)))
 
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentStatementsForEori01))
@@ -226,7 +226,7 @@ class AccountControllerSpec extends SpecBase {
 
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
-      val application: Application = applicationBuilder(None)
+      val application: Application = applicationBuilder()
         .overrides(
           inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
           inject.bind[DocumentService].toInstance(mockDocumentService),

@@ -86,6 +86,8 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
     application().injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
   lazy val appConfig: AppConfig = application().injector.instanceOf[AppConfig]
+
+  val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
 }
 
 class FakeMetrics extends Metrics {
