@@ -96,7 +96,7 @@ class DutyDefermentAccountSpec extends SpecBase {
   }
 
   trait Setup {
-    
+
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val serviceUnavailableUrl: String = "service_unavailable_url"

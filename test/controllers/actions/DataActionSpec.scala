@@ -85,13 +85,13 @@ class DataActionSpec extends SpecBase {
           )
         )
       )
-    
+
     when(mockDataStoreConnector.getAllEoriHistory(any)(any))
       .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
 
     val authAction: AuthenticatedIdentifierAction =
       new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
-    
+
     val bodyParsers: BodyParsers.Default = application().injector.instanceOf[BodyParsers.Default]
     val sessionIdAction: SessionIdAction          = new SessionIdAction()(implicitly, mockErrorHandler)
     val dataRetrievalAction: DataRetrievalAction  = new DataRetrievalActionImpl(mockUserAnswersCache)

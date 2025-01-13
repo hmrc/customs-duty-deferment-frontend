@@ -44,11 +44,10 @@ class UndeliverableEmailViewSpec extends SpecBase {
 
         view.getElementById("email-change-heading-h2").text().contains(
           messages("cf.undeliverable.email.change.heading")) mustBe true
-        
+
         view.text().contains(messages("cf.undeliverable.email.change.text.p1")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.change.text.p2")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.link-text")) mustBe true
-
         view.toString must include(nextPageUrl)
         view.text().contains(undeliverableEmailUrl.get) mustBe true
       }

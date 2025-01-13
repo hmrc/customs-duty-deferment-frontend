@@ -227,7 +227,7 @@ class AccountControllerSpec extends SpecBase {
           inject.bind[Navigator].toInstance(navigator)
         )
         .build()
-      
+
       val messagesApi: MessagesApi = application.injector.instanceOf[MessagesApi]
     }
   }

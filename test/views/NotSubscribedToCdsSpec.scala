@@ -57,7 +57,7 @@ class NotSubscribedToCdsSpec extends SpecBase {
   trait Setup {
     val deskProLinkText = "Is this page not working properly? (opens in new tab)"
     val cdsSubscribeUrl = "https://www.tax.service.gov.uk/customs-enrolment-services/cds/subscribe"
-    
+
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document =

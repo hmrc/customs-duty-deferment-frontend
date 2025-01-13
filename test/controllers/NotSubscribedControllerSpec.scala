@@ -24,9 +24,8 @@ class NotSubscribedControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "return OK" in {
-      
       val request          = FakeRequest(GET, routes.NotSubscribedController.onPageLoad.url)
-      
+
       running(application()) {
         val result = route(application(), request).value
         status(result) mustBe OK

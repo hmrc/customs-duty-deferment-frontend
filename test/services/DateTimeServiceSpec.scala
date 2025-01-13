@@ -41,7 +41,7 @@ class DateTimeServiceSpec extends SpecBase {
 
       val application = applicationBuilder(None).configure(
         "features.fixed-systemdate-for-tests" -> true).build()
-      
+
       val service = application.injector.instanceOf[DateTimeService]
 
       running(application) {

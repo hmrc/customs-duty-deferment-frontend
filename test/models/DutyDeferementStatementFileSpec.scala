@@ -301,7 +301,7 @@ class DutyDeferementStatementFileSpec extends SpecBase {
     val request: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
-    
-    val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
+
+      val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
   }
 }

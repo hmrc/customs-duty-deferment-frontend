@@ -27,7 +27,7 @@ class P2Spec extends SpecBase {
   "component" should {
     "display the correct contents" when {
       "component has an id" in new Setup {
-        
+
         p2Component.getElementById(id).text().contains(messages(messageKey)) mustBe true
 
         p2Component.getElementsByClass("govuk-body").text().contains(
