@@ -74,7 +74,7 @@ class InsetSpec extends SpecBase {
   }
 
   trait SetUp {
-    val insetView = application().injector.instanceOf[inset]
+    val insetView = instanceOf[inset]
 
     def parseHtml(output: HtmlFormat.Appendable): Document =
       Jsoup.parse(contentAsString(output))

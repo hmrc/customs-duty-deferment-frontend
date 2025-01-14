@@ -204,7 +204,7 @@ class AuthActionSpec extends SpecBase {
   trait Setup {
     val mockAuthConnector: AuthConnector           = mock[AuthConnector]
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val bodyParsers: BodyParsers.Default           = application().injector.instanceOf[BodyParsers.Default]
+    val bodyParsers: BodyParsers.Default           = instanceOf[BodyParsers.Default]
   }
 }
 

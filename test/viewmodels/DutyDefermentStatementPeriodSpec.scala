@@ -90,6 +90,6 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
 
-    val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
+    val messagesApi: MessagesApi = instanceOf[MessagesApi]
   }
 }

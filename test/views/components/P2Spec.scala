@@ -49,11 +49,11 @@ class P2Spec extends SpecBase {
       val messageKey = "cf.undeliverable.email.p1"
 
       val p2Component: Document = Jsoup.parse(
-        application().injector.instanceOf[p2].apply(message = messageKey, id = Some(id)).body
+        instanceOf[p2].apply(message = messageKey, id = Some(id)).body
       )
 
       val p2ComponentWithNoId: Document = Jsoup.parse(
-        application().injector.instanceOf[p2].apply(message = messageKey).body
+        instanceOf[p2].apply(message = messageKey).body
       )
     }
   }

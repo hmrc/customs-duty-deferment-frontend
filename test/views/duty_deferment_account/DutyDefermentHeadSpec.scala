@@ -139,6 +139,6 @@ class DutyDefermentHeadSpec extends SpecBase {
       )
 
     def view(model: DutyDefermentStatementPeriodsByMonth): Document =
-      Jsoup.parse(application().injector.instanceOf[duty_deferment_head].apply(model).body)
+      Jsoup.parse(instanceOf[duty_deferment_head].apply(model).body)
   }
 }

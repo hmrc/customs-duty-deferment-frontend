@@ -131,7 +131,7 @@ class DutyDefermentAccountSpec extends SpecBase {
 
     def view(model: DutyDefermentAccountViewModel): Document =
       Jsoup.parse(
-        application().injector.instanceOf[duty_deferment_account].apply(model)(request, messages, appConfig).body
+        instanceOf[duty_deferment_account].apply(model)(request, messages, appConfig).body
       )
   }
 }

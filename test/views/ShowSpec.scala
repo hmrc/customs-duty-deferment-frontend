@@ -67,12 +67,11 @@ class ShowSpec extends SpecBase {
 
     def view: Document =
       Jsoup.parse(
-        application().injector
-          .instanceOf[show]
+        instanceOf[show]
           .apply(validContactDetailsViewModel, DefermentAccountAvailable, someLinkId)(request, messages, appConfig)
           .body
       )
 
-    override def messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
+    override def messagesApi: MessagesApi = instanceOf[MessagesApi]
   }
 }

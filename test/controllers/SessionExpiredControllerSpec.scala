@@ -27,8 +27,8 @@ class SessionExpiredControllerSpec extends SpecBase {
     "return OK" in {
       val request = fakeRequest(GET, routes.SessionExpiredController.onPageLoad.url)
 
-      val view                     = application().injector.instanceOf[session_expired]
-      val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
+      val view                     = instanceOf[session_expired]
+      val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
       running(application()) {
         val result = route(application(), request).value

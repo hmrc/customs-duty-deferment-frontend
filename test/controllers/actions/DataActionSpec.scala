@@ -90,7 +90,7 @@ class DataActionSpec extends SpecBase {
     val authAction: AuthenticatedIdentifierAction =
       new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-    val bodyParsers: BodyParsers.Default         = application().injector.instanceOf[BodyParsers.Default]
+    val bodyParsers: BodyParsers.Default         = instanceOf[BodyParsers.Default]
     val sessionIdAction: SessionIdAction         = new SessionIdAction()(implicitly, mockErrorHandler)
     val dataRetrievalAction: DataRetrievalAction = new DataRetrievalActionImpl(mockUserAnswersCache)
     val dataRequiredAction: DataRequiredAction   = new DataRequiredActionImpl()

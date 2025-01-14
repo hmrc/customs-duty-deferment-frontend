@@ -36,7 +36,7 @@ class AccountLinkCacheSpec
   private val test: DutyDefermentAccountLink =
     DutyDefermentAccountLink("someEori", "dan", "linkId", AccountStatusOpen, DefermentAccountAvailable, isNiAccount)
 
-  private val testCache = application().injector.instanceOf[AccountLinkCache]
+  private val testCache = instanceOf[AccountLinkCache]
 
   override def beforeEach(): Unit =
     testCache.collection.drop().toFuture().futureValue

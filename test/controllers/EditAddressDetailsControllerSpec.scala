@@ -196,10 +196,10 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       .build()
 
     val form: Form[EditAddressDetailsUserAnswers] =
-      application().injector.instanceOf[EditAddressDetailsFormProvider].apply()
+      instanceOf[EditAddressDetailsFormProvider].apply()
 
-    val view: edit_address_details = application().injector.instanceOf[edit_address_details]
-    val appConfig: AppConfig       = application().injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi   = application().injector.instanceOf[MessagesApi]
+    val view: edit_address_details = instanceOf[edit_address_details]
+    val appConfig: AppConfig       = instanceOf[AppConfig]
+    val messagesApi: MessagesApi   = instanceOf[MessagesApi]
   }
 }

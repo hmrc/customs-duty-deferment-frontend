@@ -34,6 +34,7 @@ import play.api.test.CSRFTokenHelper.*
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.Utils.emptyString
+import scala.reflect.ClassTag
 
 import scala.jdk.CollectionConverters.*
 
@@ -83,11 +84,13 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
   def application(ua: Option[UserAnswers] = None): Application = applicationBuilder(ua).build()
 
   implicit lazy val messages: Messages =
-    application().injector.instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
+    instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
-  lazy val appConfig: AppConfig = application().injector.instanceOf[AppConfig]
+  lazy val appConfig: AppConfig = instanceOf[AppConfig]
 
-  val messagesApi: MessagesApi = application().injector.instanceOf[MessagesApi]
+  val messagesApi: MessagesApi = instanceOf[MessagesApi]
+
+  def instanceOf[T: ClassTag]: T = application().injector.instanceOf[T]
 }
 
 class FakeMetrics extends Metrics {
