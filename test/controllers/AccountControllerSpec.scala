@@ -52,7 +52,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(None))
 
-      val application: Application = applicationBuilder(None)
+      val application: Application = applicationBuilder()
         .overrides(
           inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
         )

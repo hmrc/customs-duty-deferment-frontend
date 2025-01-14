@@ -153,7 +153,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       _ => Some("United Kingdom")
     )
 
-    val application: Application = applicationBuilder(None)
+    val application: Application = applicationBuilder()
       .overrides(
         bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),

@@ -18,7 +18,6 @@ package config
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Application
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
@@ -29,7 +28,7 @@ class ErrorHandlerSpec extends SpecBase {
 
   "overridden standardErrorTemplate" should {
     "display template with correct contents" in new Setup {
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application().injector.instanceOf[ErrorTemplate]
 
       errorHandler.standardErrorTemplate(title, heading, message).map { errorTemplate =>
         errorTemplate mustBe errorTemplateView(title, heading, message)
@@ -43,17 +42,17 @@ class ErrorHandlerSpec extends SpecBase {
 
   "notFoundTemplate" should {
     "display template with correct contents" in new Setup {
-      val notFoundView: not_found = app.injector.instanceOf[not_found]
+      val notFoundView: not_found = application().injector.instanceOf[not_found]
 
       errorHandler.notFoundTemplate.map { notFoundTemplate =>
-        notFoundTemplate.toString mustBe notFoundView.apply().body
+        notFoundTemplate.toString mustBe notFoundView.apply()(request, messages, appConfig).body
       }
     }
   }
 
   "unauthorized" should {
     "display template with correct contents" in new Setup {
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application().injector.instanceOf[ErrorTemplate]
 
       errorHandler.unauthorized() mustBe
         errorTemplateView.apply(
@@ -66,7 +65,7 @@ class ErrorHandlerSpec extends SpecBase {
 
   "standardErrorTemplate" should {
     "display template with correct contents" in new Setup {
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application().injector.instanceOf[ErrorTemplate]
 
       errorHandler.standardErrorTemplate() mustBe
         errorTemplateView.apply(
@@ -79,7 +78,7 @@ class ErrorHandlerSpec extends SpecBase {
 
   "sddsErrorTemplate" should {
     "display template with correct contents" in new Setup {
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application().injector.instanceOf[ErrorTemplate]
 
       errorHandler.sddsErrorTemplate() mustBe
         errorTemplateView.apply(
@@ -92,7 +91,7 @@ class ErrorHandlerSpec extends SpecBase {
 
   "contactDetailsErrorTemplate" should {
     "display template with correct contents" in new Setup {
-      val errorTemplateView: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+      val errorTemplateView: ErrorTemplate = application().injector.instanceOf[ErrorTemplate]
 
       errorHandler.contactDetailsErrorTemplate() mustBe
         errorTemplateView.apply(
@@ -105,25 +104,22 @@ class ErrorHandlerSpec extends SpecBase {
 
   "errorUpdatingContactDetails" should {
     "display template with correct contents" in new Setup {
-      val editUpdateTemplateView: edit_update_error = app.injector.instanceOf[edit_update_error]
+      val editUpdateTemplateView: edit_update_error = application().injector.instanceOf[edit_update_error]
 
       errorHandler.errorUpdatingContactDetails() mustBe
         editUpdateTemplateView.apply(
           messages("accountDetails.edit.error.title"),
           messages("accountDetails.edit.error.heading"),
           messages("accountDetails.edit.error.message")
-        )
+        )(request,messages, appConfig)
     }
   }
 
   trait Setup {
     implicit val ec: scala.concurrent.ExecutionContext        = scala.concurrent.ExecutionContext.global
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit lazy val config: AppConfig                       = appConfig
 
-    lazy val app: Application = application()
-
-    val errorHandler: ErrorHandler = app.injector.instanceOf[ErrorHandler]
+    val errorHandler: ErrorHandler = application().injector.instanceOf[ErrorHandler]
     val title                      = "test_title"
     val heading                    = "test_heading"
     val message                    = "test_msg"

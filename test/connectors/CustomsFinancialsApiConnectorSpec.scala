@@ -119,7 +119,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder       = mock[RequestBuilder]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
-    val application: Application = applicationBuilder(None)
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder),

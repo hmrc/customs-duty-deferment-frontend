@@ -77,7 +77,7 @@ class ContactDetailsCacheServiceSpec extends SpecBase {
     val mockContactDetailsCache: ContactDetailsCache                     = mock[ContactDetailsCache]
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
 
-    val application: Application = applicationBuilder(None)
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
         inject.bind[ContactDetailsCache].toInstance(mockContactDetailsCache)
