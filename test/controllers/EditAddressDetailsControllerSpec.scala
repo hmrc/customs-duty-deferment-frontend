@@ -24,10 +24,9 @@ import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, User
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.EditAddressDetailsPage
-import play.api.Application
 import play.api.data.Form
-import play.api.inject
 import play.api.i18n.MessagesApi
+import play.api.{Application, inject}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
@@ -41,27 +40,27 @@ import scala.concurrent.Future
 class EditAddressDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
-      "return OK on a valid request" in new Setup {
-        running(appWithUserAnswers) {
-          val result = route(appWithUserAnswers, onPageLoadRequest).value
-          status(result) mustBe OK
+    "return OK on a valid request" in new Setup {
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, onPageLoadRequest).value
+        status(result) mustBe OK
 
-          contentAsString(result).removeCsrf() mustBe view(
-            dan = validDan,
-            isNi = false,
-            form = form.fill(editAddressDetailsUserAnswers),
-            countries = fakeCountries
-          )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
-        }
-      }
-
-      "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-        running(appWithoutUserAnswers) {
-          val result = route(appWithoutUserAnswers, onPageLoadRequest).value
-          status(result) mustBe INTERNAL_SERVER_ERROR
-        }
+        contentAsString(result).removeCsrf() mustBe view(
+          dan = validDan,
+          isNi = false,
+          form = form.fill(editAddressDetailsUserAnswers),
+          countries = fakeCountries
+        )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
       }
     }
+
+    "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
+      running(appWithoutUserAnswers) {
+        val result = route(appWithoutUserAnswers, onPageLoadRequest).value
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+  }
 
   "submit" must {
     "return BAD_REQUEST when form errors occur" in new Setup {
