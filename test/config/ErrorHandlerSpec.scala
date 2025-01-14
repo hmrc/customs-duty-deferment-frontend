@@ -111,7 +111,7 @@ class ErrorHandlerSpec extends SpecBase {
           messages("accountDetails.edit.error.title"),
           messages("accountDetails.edit.error.heading"),
           messages("accountDetails.edit.error.message")
-        )(request,messages, appConfig)
+        )(request, messages, appConfig)
     }
   }
 
