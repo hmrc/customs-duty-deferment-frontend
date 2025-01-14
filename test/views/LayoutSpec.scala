@@ -17,16 +17,15 @@
 package views
 
 import config.AppConfig
-import util.SpecBase
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import views.html.Layout
-import org.jsoup.nodes.Document
-import play.api.Application
 import play.twirl.api.Html
+import util.SpecBase
 import utils.Utils.emptyString
+import views.html.Layout
 
 class LayoutSpec extends SpecBase {
 
@@ -39,7 +38,7 @@ class LayoutSpec extends SpecBase {
         val linkUrl = "test.com"
 
         val layoutView: Document = Jsoup.parse(
-          app.injector
+          application().injector
             .instanceOf[Layout]
             .apply(
               pageTitle = Some(title),
@@ -48,17 +47,17 @@ class LayoutSpec extends SpecBase {
             .body
         )
 
-        shouldContainCorrectTitle(layoutView, title)
-        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectTitle(layoutView, title)(messages)
+        shouldContainCorrectServiceUrls(layoutView)(appConfig)
         shouldContainCorrectBackLink(layoutView, Some(linkUrl))
         shouldContainCorrectBanners(layoutView)
       }
 
       "there is no value for title and back link" in new Setup {
-        val layoutView: Document = Jsoup.parse(app.injector.instanceOf[Layout].apply()(content).body)
+        val layoutView: Document = Jsoup.parse(instanceOf[Layout].apply()(content).body)
 
-        shouldContainCorrectTitle(layoutView)
-        shouldContainCorrectServiceUrls(layoutView)
+        shouldContainCorrectTitle(layoutView)(messages)
+        shouldContainCorrectServiceUrls(layoutView)(appConfig)
         shouldContainCorrectBackLink(layoutView)
         shouldContainCorrectBanners(layoutView)
       }
@@ -66,11 +65,11 @@ class LayoutSpec extends SpecBase {
 
   }
 
-  private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit msgs: Messages) =
+  private def shouldContainCorrectTitle(viewDoc: Document, title: String = emptyString)(implicit messages: Messages) =
     if (title.nonEmpty) {
-      viewDoc.title() mustBe s"$title - ${msgs("service.name")} - GOV.UK"
+      viewDoc.title() mustBe s"$title - ${messages("service.name")} - GOV.UK"
     } else {
-      viewDoc.title() mustBe s"${msgs("service.name")} - GOV.UK"
+      viewDoc.title() mustBe s"${messages("service.name")} - GOV.UK"
     }
 
   private def shouldContainCorrectServiceUrls(viewDoc: Document)(implicit appConfig: AppConfig) = {
@@ -106,12 +105,7 @@ class LayoutSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = application().build()
-
-    implicit val msgs: Messages                               = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
-    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
-
-    val content: Html = Html("test")
+    val content: Html                                         = Html("test")
   }
 }

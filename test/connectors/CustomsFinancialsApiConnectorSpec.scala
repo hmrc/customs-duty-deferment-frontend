@@ -23,7 +23,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.http.Status
 import play.api.test.Helpers._
-import play.api.{Application, inject}
+import play.api.Application
+import play.api.inject
 import services.AuditingService
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
@@ -44,7 +45,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(mockHttpClient.post(any)(any)).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.getContactDetails("someDan", "someEori"))
         result mustBe validAccountContactDetails
       }
@@ -62,7 +63,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       when(mockAuditingService.changeContactDetailsAuditEvent(any, any, any)(any))
         .thenReturn(Future.successful(AuditResult.Success))
 
-      running(app) {
+      running(application) {
         val result =
           await(connector.updateContactDetails("dan", "eori", validAccountContactDetails, contactDetailsUserAnswers))
 
@@ -79,7 +80,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe true
       }
@@ -92,7 +93,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe false
       }
@@ -105,7 +106,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
 
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
-      running(app) {
+      running(application) {
         val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
         result mustBe false
       }
@@ -118,7 +119,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder       = mock[RequestBuilder]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
-    val app: Application = application()
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder),
@@ -127,6 +128,6 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       .build()
 
     val connector: CustomsFinancialsApiConnector =
-      app.injector.instanceOf[CustomsFinancialsApiConnector]
+      application.injector.instanceOf[CustomsFinancialsApiConnector]
   }
 }

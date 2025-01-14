@@ -16,7 +16,6 @@
 
 package config
 
-import play.api.Application
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import util.SpecBase
@@ -86,8 +85,6 @@ class AppConfigSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application     = application().build()
-    val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    val linkId               = "id"
+    val linkId = "id"
   }
 }

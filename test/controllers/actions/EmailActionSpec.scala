@@ -35,7 +35,7 @@ class EmailActionSpec extends SpecBase {
 
   "EmailAction" should {
     "Let requests with validated email through" in new Setup {
-      running(app) {
+      running(application) {
         when(mockDataStoreConnector.getEmail(any)(any))
           .thenReturn(Future.successful(Right(Email("last.man@standing.co.uk"))))
 
@@ -45,7 +45,7 @@ class EmailActionSpec extends SpecBase {
     }
 
     "Let request through, when getEmail throws service unavailable exception" in new Setup {
-      running(app) {
+      running(application) {
         when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.failed(new ServiceUnavailableException("")))
 
         val response = await(emailAction.filter(authenticatedRequest))
@@ -54,7 +54,7 @@ class EmailActionSpec extends SpecBase {
     }
 
     "Redirect users with unvalidated emails" in new Setup {
-      running(app) {
+      running(application) {
         when(mockDataStoreConnector.getEmail(any)(any)).thenReturn(Future.successful(Left(UnverifiedEmail)))
 
         val response = await(emailAction.filter(authenticatedRequest))
@@ -64,7 +64,7 @@ class EmailActionSpec extends SpecBase {
     }
 
     "Redirect users to undelivered email page when undeliverable email response is returned" in new Setup {
-      running(app) {
+      running(application) {
         when(mockDataStoreConnector.getEmail(any)(any))
           .thenReturn(Future.successful(Left(UndeliverableEmail("test@test.com"))))
 
@@ -78,13 +78,13 @@ class EmailActionSpec extends SpecBase {
   trait Setup {
     val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
 
-    val app: Application = application()
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[DataStoreConnector].toInstance(mockDataStoreConnector)
       )
       .build()
 
-    val emailAction: EmailAction = app.injector.instanceOf[EmailAction]
+    val emailAction: EmailAction = application.injector.instanceOf[EmailAction]
 
     val authenticatedRequest: AuthenticatedRequest[AnyContentAsEmpty.type] =
       AuthenticatedRequest(FakeRequest("GET", "/"), SignedInUser("someEori", Seq.empty, "internalId"))

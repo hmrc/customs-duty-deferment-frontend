@@ -47,7 +47,7 @@ class DateConvertersSpec extends SpecBase {
     "OrderedLocalDate fails if dates are not valid" in {
       val diffTime = LocalDate.MIN
       val result   = OrderedLocalDate(LocalDate.now()).compare(diffTime)
-      result mustBe 1000002023
+      result mustBe 1000002024
     }
 
     "OrderedLocalDate fails if dates are not equal" in {

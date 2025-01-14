@@ -16,19 +16,18 @@
 
 package controllers
 
-import play.api.Application
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import util.SpecBase
 
 class NotSubscribedControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "return OK" in {
-      val app: Application = application().build()
-      val request          = FakeRequest(GET, routes.NotSubscribedController.onPageLoad.url)
-      running(app) {
-        val result = route(app, request).value
+      val request = FakeRequest(GET, routes.NotSubscribedController.onPageLoad.url)
+
+      running(application()) {
+        val result = route(application(), request).value
         status(result) mustBe OK
       }
     }

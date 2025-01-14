@@ -30,8 +30,7 @@ class ContactDetailsCacheSpec
     with IntegrationPatience {
 
   private val id        = "session-123"
-  private val app       = application().build()
-  private val testCache = app.injector.instanceOf[ContactDetailsCache]
+  private val testCache = instanceOf[ContactDetailsCache]
 
   override def beforeEach(): Unit =
     testCache.collection.drop().toFuture().futureValue

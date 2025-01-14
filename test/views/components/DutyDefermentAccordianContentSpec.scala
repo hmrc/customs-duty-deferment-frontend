@@ -16,13 +16,10 @@
 
 package views.components
 
-import config.AppConfig
 import models.{DDStatementType, FileRole}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
-import play.api.i18n.Messages
 import util.SpecBase
 import viewmodels.{DutyDefermentStatementPeriod, DutyDefermentStatementPeriodsByMonth}
 import views.html.components.duty_deferment_accordian_content
@@ -113,10 +110,6 @@ class DutyDefermentAccordianContentSpec extends SpecBase {
     htmlText.contains("Excise deferment 1920") mustBe false
 
   trait Setup {
-    val app: Application = application().build()
-
-    implicit val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-    implicit val msg: Messages        = messages(app)
 
     val startDate01: LocalDate = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_01)
     val endDate01: LocalDate   = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_26)

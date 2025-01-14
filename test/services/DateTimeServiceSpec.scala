@@ -17,7 +17,7 @@
 package services
 
 import config.AppConfig
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers.*
 import play.api.test.Helpers.running
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
@@ -39,7 +39,8 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return the fixed date if fixedDateTime is enabled" in {
 
-      val app     = application().configure("features.fixed-systemdate-for-tests" -> true).build()
+      val app = applicationBuilder().configure("features.fixed-systemdate-for-tests" -> true).build()
+
       val service = app.injector.instanceOf[DateTimeService]
 
       running(app) {

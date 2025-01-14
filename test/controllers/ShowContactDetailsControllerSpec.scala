@@ -16,20 +16,19 @@
 
 package controllers
 
-import config.AppConfig
 import connectors.DataStoreConnector
 import models.{UndeliverableEmail, UnverifiedEmail}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.{AccountLinkCacheService, ContactDetailsCacheService, NoAccountStatusId}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import viewmodels.ContactDetailsViewModel
 import views.html.contact_details.{show, show_error}
 
@@ -44,8 +43,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockContactDetailsCacheService.getContactDetails(any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown Error")))
 
-      running(app) {
-        val result: Future[Result] = route(app, showRequest).value
+      running(application) {
+        val result: Future[Result] = route(application, showRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
         contentAsString(result) mustBe errorView(
           dutyDefermentAccountLink.dan,
@@ -59,8 +58,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     "redirect to session expired view when no accountLink found" in new Setup {
       when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(None))
 
-      running(app) {
-        val result: Future[Result] = route(app, showRequest).value
+      running(application) {
+        val result: Future[Result] = route(application, showRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
@@ -73,8 +72,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockContactDetailsCacheService.getContactDetails(any, any, any)(any))
         .thenReturn(Future.successful(validAccountContactDetails))
 
-      running(app) {
-        val result: Future[Result] = route(app, showRequest).value
+      running(application) {
+        val result: Future[Result] = route(application, showRequest).value
         status(result) mustBe OK
       }
     }
@@ -87,8 +86,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Left(NoAccountStatusId)))
 
-      running(app) {
-        val result = route(app, startSessionRequest).value
+      running(application) {
+        val result = route(application, startSessionRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.SessionExpiredController.onPageLoad.url
       }
@@ -100,8 +99,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))
 
-      running(app) {
-        val result = route(app, startSessionRequest).value
+      running(application) {
+        val result = route(application, startSessionRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ShowContactDetailsController.show().url
       }
@@ -111,8 +110,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockDataStoreConnector.getEmail(any)(any))
         .thenReturn(Future.successful(Left(UnverifiedEmail)))
 
-      running(app) {
-        val result = route(app, startSessionRequest).value
+      running(application) {
+        val result = route(application, startSessionRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.EmailController.showUnverified().url
       }
@@ -122,8 +121,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockDataStoreConnector.getEmail(any)(any))
         .thenReturn(Future.successful(Left(UndeliverableEmail("test@test.com"))))
 
-      running(app) {
-        val result = route(app, startSessionRequest).value
+      running(application) {
+        val result = route(application, startSessionRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.EmailController.showUndeliverable().url
       }
@@ -135,8 +134,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))
 
-      running(app) {
-        val result = route(app, startSessionRequest).value
+      running(application) {
+        val result = route(application, startSessionRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ShowContactDetailsController.show().url
       }
@@ -154,7 +153,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       _ => Some("United Kingdom")
     )
 
-    val app: Application = application()
+    val application: Application = applicationBuilder()
       .overrides(
         bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
@@ -168,11 +167,9 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     val startSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ShowContactDetailsController.startSession("someLinkId").url)
 
-    val view: show            = app.injector.instanceOf[show]
-    val errorView: show_error = app.injector.instanceOf[show_error]
-
-    val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+    val view: show               = application.injector.instanceOf[show]
+    val errorView: show_error    = application.injector.instanceOf[show_error]
+    val messagesApi: MessagesApi = application.injector.instanceOf[MessagesApi]
     val messages: Messages       = messagesApi.preferred(showRequest)
   }
 }

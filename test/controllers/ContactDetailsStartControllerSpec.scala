@@ -34,8 +34,8 @@ class ContactDetailsStartControllerSpec extends SpecBase {
       when(mockAccountLinkCacheService.get(any))
         .thenReturn(Future.successful(None))
 
-      running(app) {
-        val result = route(app, startEditContactDetailsRequest).value
+      running(application) {
+        val result = route(application, startEditContactDetailsRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9876/customs/payment-records"
       }
@@ -51,8 +51,8 @@ class ContactDetailsStartControllerSpec extends SpecBase {
       when(mockUserAnswersCache.store(any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown Error")))
 
-      running(app) {
-        val result = route(app, startEditContactDetailsRequest).value
+      running(application) {
+        val result = route(application, startEditContactDetailsRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -67,8 +67,8 @@ class ContactDetailsStartControllerSpec extends SpecBase {
       when(mockUserAnswersCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      running(app) {
-        val result = route(app, startEditContactDetailsRequest).value
+      running(application) {
+        val result = route(application, startEditContactDetailsRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.EditContactDetailsController.onPageLoad.url
       }
@@ -84,8 +84,8 @@ class ContactDetailsStartControllerSpec extends SpecBase {
       when(mockUserAnswersCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      running(app) {
-        val result = route(app, startEditAddressDetailsRequest).value
+      running(application) {
+        val result = route(application, startEditAddressDetailsRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.EditAddressDetailsController.onPageLoad.url
       }
@@ -104,7 +104,7 @@ class ContactDetailsStartControllerSpec extends SpecBase {
     val startEditAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(false).url)
 
-    val app: Application = application()
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),

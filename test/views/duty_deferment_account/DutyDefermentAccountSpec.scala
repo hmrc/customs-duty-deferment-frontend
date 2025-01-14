@@ -16,11 +16,9 @@
 
 package views.duty_deferment_account
 
-import config.AppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.Assertion
-import play.api.Application
 import play.api.i18n.Messages
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -35,7 +33,7 @@ class DutyDefermentAccountSpec extends SpecBase {
     "display correct title and guidance" in new Setup {
       val viewDoc: Document = view(model)
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
       viewDoc.getElementById("request-statement-link").text() must not be empty
       showAllSectionText.r.findAllIn(viewDoc.html()).length mustBe 1
     }
@@ -44,10 +42,10 @@ class DutyDefermentAccountSpec extends SpecBase {
       val viewDoc: Document = view(modelWithNoCurrentStatements)
       val htmlDoc: String   = viewDoc.html()
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
 
       viewDoc.getElementById("request-statement-link").text() must not be empty
-      htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(messages("cf.account.detail.no-statements", accountNumber))
       showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
 
@@ -55,10 +53,10 @@ class DutyDefermentAccountSpec extends SpecBase {
       val viewDoc: Document = view(modelWithNoCurrentAndRequestedStatements)
       val htmlDoc: String   = viewDoc.html()
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, msg, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
 
       Option(viewDoc.getElementById("request-statement-link")) mustBe empty
-      htmlDoc.contains(msg("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(messages("cf.account.detail.no-statements", accountNumber))
       showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
   }
@@ -69,6 +67,7 @@ class DutyDefermentAccountSpec extends SpecBase {
     accountNumber: String,
     serviceUnavailableUrl: String
   ): Assertion = {
+
     viewDoc.title() mustBe
       s"${messages("cf.account.detail.title")} - ${messages("service.name")} - GOV.UK"
 
@@ -98,16 +97,13 @@ class DutyDefermentAccountSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application = application().build()
 
-    implicit val appConfig: AppConfig                         = app.injector.instanceOf[AppConfig]
-    implicit val msg: Messages                                = messages(app)
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val serviceUnavailableUrl: String = "service_unavailable_url"
     val accountNumber                 = "1234567"
     val linkId                        = "link_id"
-    val showAllSectionText: String    = msg("cf.account.detail.accordion.show-all-sections")
+    val showAllSectionText: String    = messages("cf.account.detail.accordion.show-all-sections")
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
@@ -115,7 +111,7 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     val modelWithNoCurrentStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
@@ -123,7 +119,7 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     val modelWithNoCurrentAndRequestedStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accountNumber,
@@ -131,9 +127,11 @@ class DutyDefermentAccountSpec extends SpecBase {
       "linkId",
       isNiAccount = false,
       serviceUnavailableUrl
-    )
+    )(appConfig, messages)
 
     def view(model: DutyDefermentAccountViewModel): Document =
-      Jsoup.parse(app.injector.instanceOf[duty_deferment_account].apply(model).body)
+      Jsoup.parse(
+        instanceOf[duty_deferment_account].apply(model)(request, messages, appConfig).body
+      )
   }
 }

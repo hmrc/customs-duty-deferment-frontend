@@ -17,20 +17,19 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import config.AppConfig
 import connectors.DataStoreConnector
 import controllers.routes
 import models.EoriHistory
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,31 +45,24 @@ class AuthActionSpec extends SpecBase {
   }
 
   "Auth Action" when {
-
-    "redirect the user to unauthorised controller when has no enrolments" in {
-      val mockAuthConnector      = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "redirect the user to unauthorised controller when has no enrolments" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("internalId")))
 
-      val app         = application().overrides().build()
-      val config      = app.injector.instanceOf[AppConfig]
-      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(app) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
     }
 
-    "redirect the user to unauthorised controller when has no eori enrolment" in {
-      val mockAuthConnector      = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "redirect the user to unauthorised controller when has no eori enrolment" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -81,44 +73,36 @@ class AuthActionSpec extends SpecBase {
           )
         )
 
-      val app         = application().overrides().build()
-      val config      = app.injector.instanceOf[AppConfig]
-      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(app) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
     }
 
-    "redirect the user to unauthorised controller when an auth error happens" in {
-      val mockAuthConnector      = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "redirect the user to unauthorised controller when an auth error happens" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.failed(new RuntimeException("something went wrong")))
 
-      val app         = application().overrides().build()
-      val config      = app.injector.instanceOf[AppConfig]
-      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(app) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
     }
 
-    "redirect the user to unauthorised controller when InternalID is empty" in {
-      val mockAuthConnector      = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "redirect the user to unauthorised controller when InternalID is empty" in new Setup {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -127,23 +111,19 @@ class AuthActionSpec extends SpecBase {
           )
         )
 
-      val app         = application().overrides().build()
-      val config      = app.injector.instanceOf[AppConfig]
-      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(app) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
       }
     }
 
-    "continue journey on successful response from auth" in {
-      val mockAuthConnector      = mock[AuthConnector]
-      val mockDataStoreConnector = mock[DataStoreConnector]
+    "continue journey on successful response from auth" in new Setup {
 
       when(mockDataStoreConnector.getAllEoriHistory(any)(any))
         .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
@@ -157,32 +137,24 @@ class AuthActionSpec extends SpecBase {
           )
         )
 
-      val app         = application().overrides().build()
-      val config      = app.injector.instanceOf[AppConfig]
-      val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
+      val authAction =
+        new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers, mockDataStoreConnector)
 
-      val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, config, bodyParsers, mockDataStoreConnector)
       val controller = new Harness(authAction)
 
-      running(app) {
+      running(application()) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
+
         status(result) mustBe OK
       }
     }
 
     "the user hasn't logged in" must {
-
-      "redirect the user to log in " in {
-
-        val app                    = application().build()
-        val mockDataStoreConnector = mock[DataStoreConnector]
-
-        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = app.injector.instanceOf[AppConfig]
+      "redirect the user to log in " in new Setup {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new MissingBearerToken),
-          frontendAppConfig,
+          appConfig,
           bodyParsers,
           mockDataStoreConnector
         )
@@ -190,24 +162,16 @@ class AuthActionSpec extends SpecBase {
         val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
-
-        redirectLocation(result).get must startWith(frontendAppConfig.loginUrl)
+        redirectLocation(result).get must startWith(appConfig.loginUrl)
       }
     }
 
     "the user's session has expired" must {
-
-      "redirect the user to log in " in {
-
-        val app                    = application().build()
-        val mockDataStoreConnector = mock[DataStoreConnector]
-
-        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = app.injector.instanceOf[AppConfig]
+      "redirect the user to log in " in new Setup {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new BearerTokenExpired),
-          frontendAppConfig,
+          appConfig,
           bodyParsers,
           mockDataStoreConnector
         )
@@ -215,24 +179,16 @@ class AuthActionSpec extends SpecBase {
         val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
-
-        redirectLocation(result).get must startWith(frontendAppConfig.loginUrl)
+        redirectLocation(result).get must startWith(appConfig.loginUrl)
       }
     }
 
     "the user doesn't have sufficient enrolments" must {
-
-      "redirect the user to the unauthorised page" in {
-
-        val app                    = application().build()
-        val mockDataStoreConnector = mock[DataStoreConnector]
-
-        val bodyParsers       = app.injector.instanceOf[BodyParsers.Default]
-        val frontendAppConfig = app.injector.instanceOf[AppConfig]
+      "redirect the user to the unauthorised page" in new Setup {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new InsufficientEnrolments),
-          frontendAppConfig,
+          appConfig,
           bodyParsers,
           mockDataStoreConnector
         )
@@ -240,10 +196,15 @@ class AuthActionSpec extends SpecBase {
         val result     = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe SEE_OTHER
-
         redirectLocation(result).value mustBe routes.NotSubscribedController.onPageLoad.url
       }
     }
+  }
+
+  trait Setup {
+    val mockAuthConnector: AuthConnector           = mock[AuthConnector]
+    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
+    val bodyParsers: BodyParsers.Default           = instanceOf[BodyParsers.Default]
   }
 }
 

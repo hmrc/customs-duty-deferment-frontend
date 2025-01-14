@@ -17,23 +17,26 @@
 package util
 
 import com.codahale.metrics.MetricRegistry
+import config.AppConfig
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import org.jsoup.nodes.Document
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{Assertion, OptionValues}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{Assertion, OptionValues}
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.Application
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsEmpty
-import play.api.test.CSRFTokenHelper._
+import play.api.test.CSRFTokenHelper.*
 import play.api.test.FakeRequest
-import play.api.Application
-import play.api.i18n.{Messages, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
-import scala.jdk.CollectionConverters._
 import utils.Utils.emptyString
+import scala.reflect.ClassTag
+
+import scala.jdk.CollectionConverters.*
 
 trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with OptionValues with TestData {
 
@@ -64,7 +67,7 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
     fakeRequest(method, path).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
-  def application(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
+  def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].to[FakeIdentifierAction],
@@ -78,11 +81,16 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
         "metrics.enabled"                       -> "false"
       )
 
-  def messages(app: Application): Messages = app.injector
-    .instanceOf[MessagesApi]
-    .preferred(
-      fakeRequest(emptyString, emptyString)
-    )
+  def application(ua: Option[UserAnswers] = None): Application = applicationBuilder(ua).build()
+
+  implicit lazy val messages: Messages =
+    instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
+
+  lazy val appConfig: AppConfig = instanceOf[AppConfig]
+
+  val messagesApi: MessagesApi = instanceOf[MessagesApi]
+
+  def instanceOf[T: ClassTag]: T = application().injector.instanceOf[T]
 }
 
 class FakeMetrics extends Metrics {

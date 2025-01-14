@@ -34,7 +34,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(None))
 
-      running(app) {
+      running(application) {
         val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
@@ -48,7 +48,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
           )
         )
 
-      running(app) {
+      running(application) {
         val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Left(NoDutyDefermentSessionAvailable)
       }
@@ -74,7 +74,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       when(mockAccountLinkCache.store(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      running(app) {
+      running(application) {
         val result = await(service.cacheAccountLink("someLinkId", "someSessionId", "someInternalId"))
         result mustBe Right(dutyDefermentAccountLink)
       }
@@ -87,7 +87,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       when(mockAccountLinkCache.retrieve(any)(any))
         .thenReturn(Future.successful(Some(dutyDefermentAccountLink)))
 
-      running(app) {
+      running(application) {
         val result = await(service.get("someInternalId"))
         result mustBe Some(dutyDefermentAccountLink)
       }
@@ -99,7 +99,7 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       when(mockAccountLinkCache.remove(any[String]))
         .thenReturn(Future.successful(true))
 
-      running(app) {
+      running(application) {
         val result = await(service.remove("someInternalId"))
         result mustBe true
       }
@@ -118,13 +118,13 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       isNiAccount = false
     )
 
-    val app: Application = application()
+    val application: Application = applicationBuilder()
       .overrides(
         inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
         inject.bind[AccountLinkCache].toInstance(mockAccountLinkCache)
       )
       .build()
 
-    val service: AccountLinkCacheService = app.injector.instanceOf[AccountLinkCacheService]
+    val service: AccountLinkCacheService = application.injector.instanceOf[AccountLinkCacheService]
   }
 }

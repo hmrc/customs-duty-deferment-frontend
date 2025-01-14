@@ -16,19 +16,19 @@
 
 package controllers
 
-import config.AppConfig
 import connectors.{CustomsFinancialsApiConnector, SessionCacheConnector}
 import navigation.Navigator
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
+import config.AppConfig
 import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
@@ -38,12 +38,10 @@ class AccountControllerSpec extends SpecBase {
 
   "showAccountDetails" should {
     "return unauthorized if no session id present" in {
-      val app: Application = application().build()
-
-      running(app) {
+      running(application()) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
 
-        val result = route(app, request).value
+        val result = route(application(), request).value
         status(result) mustBe SEE_OTHER
       }
     }
@@ -54,17 +52,17 @@ class AccountControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(None))
 
-      val app: Application = application()
+      val application: Application = applicationBuilder()
         .overrides(
           inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
         )
         .build()
 
-      running(app) {
+      running(application) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
 
-        val result = route(app, request).value
+        val result = route(application, request).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9876/customs/payment-records"
       }
@@ -80,17 +78,21 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      running(app) {
+      running(application) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
           .withHeaders("X-Session-Id" -> "someSessionId")
-        val result  = route(app, request).value
+
+        val result = route(application, request).value
+
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.AccountController.statementsUnavailablePage("someLink").url
       }
     }
 
-    "display the account page on a successful response" in new Setup {
-      appConfig.historicStatementsEnabled = false
+    "display the service unavailable page on a successful response when feature is disabled" in new Setup {
+      val config: AppConfig = application.injector.instanceOf[AppConfig]
+      config.historicStatementsEnabled = false
+
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
@@ -100,7 +102,8 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account                 = app.injector.instanceOf[duty_deferment_account]
+      val view: duty_deferment_account = application.injector.instanceOf[duty_deferment_account]
+
       val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
           .withHeaders("X-Session-Id" -> "someSessionId")
@@ -113,13 +116,12 @@ class AccountControllerSpec extends SpecBase {
         "linkId",
         isNiAccount = false,
         serviceUnavailableUrl
-      )(appConfig, messages)
+      )(config, messages)
 
-      running(app) {
-
-        val result = route(app, request).value
+      running(application) {
+        val result = route(application, request).value
         status(result) mustBe OK
-        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
+        contentAsString(result) mustBe view(model)(request, messages, config).toString
       }
     }
 
@@ -137,7 +139,9 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account                 = app.injector.instanceOf[duty_deferment_account]
+      val view: duty_deferment_account =
+        application.injector.instanceOf[duty_deferment_account]
+
       val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, routes.AccountController.showAccountDetails(linkId).url)
           .withHeaders("X-Session-Id" -> "someSessionId")
@@ -152,8 +156,8 @@ class AccountControllerSpec extends SpecBase {
         historicRequestUrl
       )(appConfig, messages)
 
-      running(app) {
-        val result = route(app, request).value
+      running(application) {
+        val result = route(application, request).value
         status(result) mustBe OK
         contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
       }
@@ -166,46 +170,41 @@ class AccountControllerSpec extends SpecBase {
         when(mockSessionCacheConnector.retrieveSession(any, any)(any))
           .thenReturn(Future.successful(None))
 
-        val app: Application = application()
+        val application: Application = applicationBuilder()
           .overrides(
             inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
           )
           .build()
 
-        running(app) {
+        running(application) {
           val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage("someLink").url)
             .withHeaders("X-Session-Id" -> "someSessionId")
-          val result  = route(app, request).value
+
+          val result = route(application, request).value
+
           status(result) mustBe UNAUTHORIZED
         }
       }
 
-      "return the accounts unavailable page when an account link found" in {
-        val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+      "return the accounts unavailable page when an account link found" in new Setup {
 
         when(mockSessionCacheConnector.retrieveSession(any, any)(any))
           .thenReturn(Future.successful(Some(accountLink)))
 
-        val app: Application = application()
-          .overrides(
-            inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
-          )
-          .build()
+        val view        = appWithSessionCache.injector.instanceOf[duty_deferment_statements_not_available]
+        val navigatorNA = appWithSessionCache.injector.instanceOf[Navigator]
+        val url: String =
+          routes.ServiceUnavailableController.onPageLoad(navigatorNA.dutyDefermentStatementNAPageId, linkId).url
 
-        val view                          = app.injector.instanceOf[duty_deferment_statements_not_available]
-        val appConfig: AppConfig          = app.injector.instanceOf[AppConfig]
-        val navigator                     = app.injector.instanceOf[Navigator]
-        val linkId                        = "someLink"
-        val serviceUnavailableUrl: String =
-          routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url
-
-        running(app) {
+        running(appWithSessionCache) {
           val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage(linkId).url)
             .withHeaders("X-Session-Id" -> "someSessionId")
-          val result  = route(app, request).value
+
+          val result = route(appWithSessionCache, request).value
+
           status(result) mustBe OK
           contentAsString(result) mustBe
-            view("accountNumber", linkId, Some(serviceUnavailableUrl))(request, messages(app), appConfig).toString()
+            view("accountNumber", linkId, Some(url))(request, messages, appConfig).toString()
         }
       }
     }
@@ -215,14 +214,13 @@ class AccountControllerSpec extends SpecBase {
       val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
       val mockDocumentService: DocumentService             = mock[DocumentService]
       val navigator                                        = new Navigator()
-
-      val linkId                        = "someLink"
-      val serviceUnavailableUrl: String =
+      val linkId                                           = "someLink"
+      val serviceUnavailableUrl: String                    =
         routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
 
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
-      val app: Application = application()
+      val application: Application = applicationBuilder()
         .overrides(
           inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
           inject.bind[DocumentService].toInstance(mockDocumentService),
@@ -231,8 +229,13 @@ class AccountControllerSpec extends SpecBase {
         )
         .build()
 
-      val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
-      val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+      val appWithSessionCache: Application = applicationBuilder()
+        .overrides(
+          inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
+        )
+        .build()
+
+      val messagesApi: MessagesApi = application.injector.instanceOf[MessagesApi]
     }
   }
 }

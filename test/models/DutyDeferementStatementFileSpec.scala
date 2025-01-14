@@ -16,15 +16,12 @@
 
 package models
 
-import config.AppConfig
 import controllers.routes
 import models.DDStatementType.{Excise, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
-import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.GET
-import play.api.Application
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
@@ -303,10 +300,5 @@ class DutyDeferementStatementFileSpec extends SpecBase {
     val request: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
-
-    val app: Application         = application().overrides().build()
-    val appConfig: AppConfig     = app.injector.instanceOf[AppConfig]
-    val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    val messages: Messages       = messagesApi.preferred(request)
   }
 }
