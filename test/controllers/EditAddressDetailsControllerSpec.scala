@@ -41,41 +41,32 @@ import scala.concurrent.Future
 class EditAddressDetailsControllerSpec extends SpecBase {
 
   "onPageLoad" must {
-    "return OK on a valid request" in new Setup {
+      "return OK on a valid request" in new Setup {
+        running(appWithUserAnswers) {
+          val result = route(appWithUserAnswers, onPageLoadRequest).value
+          status(result) mustBe OK
 
-      val newApp: Application = applicationBuilder(Some(userAnswers))
-        .overrides(
-          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-          inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-        )
-        .build()
+          contentAsString(result).removeCsrf() mustBe view(
+            dan = validDan,
+            isNi = false,
+            form = form.fill(editAddressDetailsUserAnswers),
+            countries = fakeCountries
+          )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
+        }
+      }
 
-      running(appWithUserAnswers) {
-        val result = route(appWithUserAnswers, onPageLoadRequest).value
-
-        status(result) mustBe OK
-
-        contentAsString(result).removeCsrf() mustBe view(
-          dan = validDan,
-          isNi = false,
-          form = form.fill(editAddressDetailsUserAnswers),
-          countries = fakeCountries
-        )(onPageLoadRequest, messages, appConfig).toString().removeCsrf()
+      "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
+        running(appWithoutUserAnswers) {
+          val result = route(appWithoutUserAnswers, onPageLoadRequest).value
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
       }
     }
-
-    "return INTERNAL_SERVER_ERROR when user answers is empty" in new Setup {
-      running(appWithoutUserAnswers) {
-        val result = route(appWithoutUserAnswers, onPageLoadRequest).value
-        status(result) mustBe INTERNAL_SERVER_ERROR
-      }
-    }
-  }
 
   "submit" must {
     "return BAD_REQUEST when form errors occur" in new Setup {
-      running(appWithoutUserAnswers) {
-        val result = route(appWithoutUserAnswers, invalidSubmitRequest).value
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
       }
@@ -118,8 +109,8 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       when(mockCustomsFinancialsApiConnector.updateContactDetails(any, any, any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
 
-      running(appWithUserAnswers) {
-        val result = route(appWithUserAnswers, validSubmitRequest).value
+      running(appWithMockedServices) {
+        val result = route(appWithMockedServices, validSubmitRequest).value
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe routes.ConfirmContactDetailsController.problem.url
       }
@@ -127,15 +118,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
   }
 
   "isValidCountryName throws invalid country name error" in new Setup {
-
-    val newApp: Application = applicationBuilder(Some(userAnswers))
-      .overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
-      )
-      .build()
-
-    running(newApp) {
+    running(appWithUserAnswers) {
       val result = route(appWithUserAnswers, invalidCountryCodeRequest).value
       status(result) mustBe 400
     }
@@ -145,6 +128,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
     val mockAccountLinkCacheService: AccountLinkCacheService             = mock[AccountLinkCacheService]
+    val mockUserAnswersCache: UserAnswersCache                           = mock[UserAnswersCache]
 
     val userAnswers: UserAnswers =
       emptyUserAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).toOption.value
@@ -182,13 +166,35 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(("dan", validDan))
 
-    val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
+    val editedUserAnswers: UserAnswers =
+      userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
 
-    val editedUserAnswers: UserAnswers = userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
+    val appWithoutUserAnswers: Application = application(Some(emptyUserAnswers))
 
-    val appWithUserAnswers: Application       = application(Some(userAnswers))
-    val appWithoutUserAnswers: Application    = application()
-    val appWithEditedUserAnswers: Application = application(Some(editedUserAnswers))
+    val appWithUserAnswers: Application = applicationBuilder(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CountriesProviderService].toInstance(mockCountriesProviderService)
+      )
+      .build()
+
+    val appWithMockedServices: Application = applicationBuilder(Some(userAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+      )
+      .build()
+
+    val appWithEditedUserAnswers: Application = applicationBuilder(Some(editedUserAnswers))
+      .overrides(
+        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+        inject.bind[CustomsFinancialsApiConnector].toInstance(mockCustomsFinancialsApiConnector),
+        inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheServices),
+        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+      )
+      .build()
 
     val form: Form[EditAddressDetailsUserAnswers] =
       application().injector.instanceOf[EditAddressDetailsFormProvider].apply()

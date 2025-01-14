@@ -28,6 +28,7 @@ import play.api.{Application, inject}
 import services.DocumentService
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
+import config.AppConfig
 import viewmodels.DutyDefermentAccountViewModel
 import views.html.duty_deferment_account.{duty_deferment_account, duty_deferment_statements_not_available}
 
@@ -88,8 +89,10 @@ class AccountControllerSpec extends SpecBase {
       }
     }
 
-    "display the account page on a successful response" in new Setup {
-      appConfig.historicStatementsEnabled = false
+    "display the service unavailable page on a successful response when feature is disabled" in new Setup {
+      val config: AppConfig = application.injector.instanceOf[AppConfig]
+      config.historicStatementsEnabled = false
+
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
@@ -113,13 +116,12 @@ class AccountControllerSpec extends SpecBase {
         "linkId",
         isNiAccount = false,
         serviceUnavailableUrl
-      )(appConfig, messages)
+      )(config, messages)
 
       running(application) {
-
         val result = route(application, request).value
         status(result) mustBe OK
-        contentAsString(result) mustBe view(model)(request, messages, appConfig).toString
+        contentAsString(result) mustBe view(model)(request, messages, config).toString
       }
     }
 
@@ -168,7 +170,7 @@ class AccountControllerSpec extends SpecBase {
         when(mockSessionCacheConnector.retrieveSession(any, any)(any))
           .thenReturn(Future.successful(None))
 
-        val application: Application = applicationBuilder(None)
+        val application: Application = applicationBuilder()
           .overrides(
             inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
           )
@@ -184,33 +186,25 @@ class AccountControllerSpec extends SpecBase {
         }
       }
 
-      "return the accounts unavailable page when an account link found" in {
-        val mockSessionCacheConnector: SessionCacheConnector = mock[SessionCacheConnector]
+      "return the accounts unavailable page when an account link found" in new Setup {
 
         when(mockSessionCacheConnector.retrieveSession(any, any)(any))
           .thenReturn(Future.successful(Some(accountLink)))
 
-        val application: Application = applicationBuilder(None)
-          .overrides(
-            inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
-          )
-          .build()
+        val view        = appWithSessionCache.injector.instanceOf[duty_deferment_statements_not_available]
+        val navigatorNA = appWithSessionCache.injector.instanceOf[Navigator]
+        val url: String =
+          routes.ServiceUnavailableController.onPageLoad(navigatorNA.dutyDefermentStatementNAPageId, linkId).url
 
-        val view                          = application.injector.instanceOf[duty_deferment_statements_not_available]
-        val navigator                     = application.injector.instanceOf[Navigator]
-        val linkId                        = "someLink"
-        val serviceUnavailableUrl: String =
-          routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, linkId).url
-
-        running(application) {
+        running(appWithSessionCache) {
           val request = FakeRequest(GET, routes.AccountController.statementsUnavailablePage(linkId).url)
             .withHeaders("X-Session-Id" -> "someSessionId")
 
-          val result = route(application, request).value
+          val result = route(appWithSessionCache, request).value
 
           status(result) mustBe OK
           contentAsString(result) mustBe
-            view("accountNumber", linkId, Some(serviceUnavailableUrl))(request, messages, appConfig).toString()
+            view("accountNumber", linkId, Some(url))(request, messages, appConfig).toString()
         }
       }
     }
@@ -232,6 +226,12 @@ class AccountControllerSpec extends SpecBase {
           inject.bind[DocumentService].toInstance(mockDocumentService),
           inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
           inject.bind[Navigator].toInstance(navigator)
+        )
+        .build()
+
+      val appWithSessionCache: Application = applicationBuilder()
+        .overrides(
+          inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
         )
         .build()
 
