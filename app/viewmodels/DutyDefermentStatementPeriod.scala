@@ -57,9 +57,9 @@ case class DutyDefermentStatementPeriod(
       case Excise          =>
         messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
       case ExciseDeferment =>
-        messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
+        messages("cf.account.detail.missing-file-type-excise-deferment-1920", fileFormat, endDateMonthAndYear)
       case DutyDeferment   =>
-        messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
+        messages("cf.account.detail.missing-file-type-duty-deferment-1720", fileFormat, endDateMonthAndYear)
       case _               =>
         messages(
           "cf.account.detail.missing-file-type",
