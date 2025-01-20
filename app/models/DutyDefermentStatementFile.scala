@@ -16,7 +16,7 @@
 
 package models
 
-import models.DDStatementType.{Excise, Supplementary, ExciseDeferment, DutyDeferment}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.helpers.Formatters
@@ -40,15 +40,15 @@ case class DutyDefermentStatementFile(
     lazy val formattedFileSize      = Formatters.fileSize(fileSize)
 
     metadata.defermentStatementType match {
-      case Supplementary      =>
+      case Supplementary   =>
         messages("cf.account.detail.supplementary-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case Excise             =>
+      case Excise          =>
         messages("cf.account.detail.excise-download-link", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case ExciseDeferment    =>
+      case ExciseDeferment =>
         messages("cf.account.detail.download.excise-deferment-1920", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case DutyDeferment      =>
+      case DutyDeferment   =>
         messages("cf.account.detail.download.duty-deferment-1720", fileFormat, endDateMonthAndYear, formattedFileSize)
-      case _                  =>
+      case _               =>
         messages("cf.account.detail.download-link", fileFormat, startDateDay, endDateDayMonthAndYear, formattedFileSize)
     }
   }

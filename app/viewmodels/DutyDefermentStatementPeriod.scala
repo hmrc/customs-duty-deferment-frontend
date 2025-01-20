@@ -16,7 +16,7 @@
 
 package viewmodels
 
-import models.DDStatementType.{Excise, Supplementary, ExciseDeferment, DutyDeferment}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary}
 import models.{DDStatementType, DutyDefermentStatementFile, FileFormat, FileRole}
 import play.api.i18n.Messages
 import views.helpers.Formatters
@@ -52,15 +52,15 @@ case class DutyDefermentStatementPeriod(
     lazy val endDateDayMonthAndYear = Formatters.dateAsDayMonthAndYear(endDate)
 
     defermentStatementType match {
-      case Supplementary        =>
+      case Supplementary   =>
         messages("cf.account.detail.missing-file-type-supplementary", fileFormat, endDateMonthAndYear)
-      case Excise               =>
+      case Excise          =>
         messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
-      case ExciseDeferment      =>
+      case ExciseDeferment =>
         messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
-      case DutyDeferment        =>
+      case DutyDeferment   =>
         messages("cf.account.detail.missing-file-type-excise", fileFormat, endDateMonthAndYear)
-      case _                    =>
+      case _               =>
         messages(
           "cf.account.detail.missing-file-type",
           fileFormat,
