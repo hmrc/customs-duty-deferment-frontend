@@ -25,7 +25,7 @@ import play.api.test.Helpers.GET
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
-class DutyDeferementStatementFileSpec extends SpecBase {
+class DutyDefermentStatementFileSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "compare file returns success response when the same" in new Setup {
