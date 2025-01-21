@@ -17,7 +17,7 @@
 package models
 
 import controllers.routes
-import models.DDStatementType.{Excise, Supplementary, Weekly}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -25,7 +25,7 @@ import play.api.test.Helpers.GET
 import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
-class DutyDeferementStatementFileSpec extends SpecBase {
+class DutyDefermentStatementFileSpec extends SpecBase {
 
   "getDutyDefermentStatements" should {
     "compare file returns success response when the same" in new Setup {
@@ -164,7 +164,7 @@ class DutyDeferementStatementFileSpec extends SpecBase {
       result mustBe 0
     }
 
-    "compare file returns FileFormatUnknown when unknwon file format is found" in new Setup {
+    "compare file returns FileFormatUnknown when unknown file format is found" in new Setup {
 
       val periodStartYear = 2019
       val periodEndYear   = 2020
@@ -210,11 +210,16 @@ class DutyDeferementStatementFileSpec extends SpecBase {
       label.contains("supplementary") mustBe false
     }
 
-    "return a correct label for Weekly statementType" in new Setup {
-      val label = currentFile.downloadLinkAriaLabel()(messages)
-      label.contains("weekly") mustBe false
-      label.contains("excise") mustBe false
+    "return a correct label for ExciseDeferment statementType" in new Setup {
+      val label = currentExciseDefermentFile.downloadLinkAriaLabel()(messages)
+      label.contains("excise deferment") mustBe true
       label.contains("supplementary") mustBe false
+    }
+
+    "return a correct label for DutyDeferment statementType" in new Setup {
+      val label = currentDutyDefermentFile.downloadLinkAriaLabel()(messages)
+      label.contains("duty deferment") mustBe true
+      label.contains("excise deferment") mustBe false
     }
   }
 
@@ -290,6 +295,50 @@ class DutyDeferementStatementFileSpec extends SpecBase {
           FileFormat.Csv,
           DutyDefermentStatement,
           Excise,
+          Some(true),
+          Some("BACS"),
+          dan,
+          None
+        )
+      )
+
+    val currentExciseDefermentFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(
+        "someFilename",
+        "downloadUrl",
+        fileSize,
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          ExciseDeferment,
+          Some(true),
+          Some("BACS"),
+          dan,
+          None
+        )
+      )
+
+    val currentDutyDefermentFile: DutyDefermentStatementFile =
+      DutyDefermentStatementFile(
+        "someFilename",
+        "downloadUrl",
+        fileSize,
+        DutyDefermentStatementFileMetadata(
+          startYear,
+          startMonth,
+          startDate,
+          endYear,
+          endMonth,
+          endDate,
+          FileFormat.Csv,
+          DutyDefermentStatement,
+          DutyDeferment,
           Some(true),
           Some("BACS"),
           dan,

@@ -45,6 +45,20 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       unavailableText.toLowerCase.contains("excise") mustBe true
     }
 
+    "correctly give unavailable message for ExciseDeferment statement type" in new Setup {
+      val unavailableText: String = period4.unavailableLinkHiddenText(FileFormat.Csv)(messages)
+
+      unavailableText.contains("unavailable") mustBe true
+      unavailableText.toLowerCase.contains("excise deferment") mustBe true
+    }
+
+    "correctly give unavailable message for DutyDeferment statement type" in new Setup {
+      val unavailableText: String = period5.unavailableLinkHiddenText(FileFormat.Csv)(messages)
+
+      unavailableText.contains("unavailable") mustBe true
+      unavailableText.toLowerCase.contains("duty deferment") mustBe true
+    }
+
     "correctly give unavailable message for Weekly statement type" in new Setup {
       val unavailableText: String = period3.unavailableLinkHiddenText(FileFormat.Csv)(messages)
       unavailableText.contains("unavailable") mustBe true
@@ -79,6 +93,22 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val period3 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.Weekly,
+      startDate01,
+      startDate01,
+      endDate01
+    )
+
+    val period4 = DutyDefermentStatementPeriod(
+      FileRole.DutyDefermentStatement,
+      DDStatementType.ExciseDeferment,
+      startDate01,
+      startDate01,
+      endDate01
+    )
+
+    val period5 = DutyDefermentStatementPeriod(
+      FileRole.DutyDefermentStatement,
+      DDStatementType.DutyDeferment,
       startDate01,
       startDate01,
       endDate01
