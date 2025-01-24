@@ -38,10 +38,10 @@ class AccountControllerSpec extends SpecBase {
 
   "showAccountDetails" should {
     "return unauthorized if no session id present" in {
-      running(application()) {
+      running(application) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
 
-        val result = route(application(), request).value
+        val result = route(application, request).value
         status(result) mustBe SEE_OTHER
       }
     }
@@ -52,7 +52,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(None))
 
-      val application: Application = applicationBuilder()
+      val application: Application = applicationBuilder
         .overrides(
           inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
         )
@@ -170,7 +170,7 @@ class AccountControllerSpec extends SpecBase {
         when(mockSessionCacheConnector.retrieveSession(any, any)(any))
           .thenReturn(Future.successful(None))
 
-        val application: Application = applicationBuilder()
+        val application: Application = applicationBuilder
           .overrides(
             inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
           )
@@ -220,7 +220,7 @@ class AccountControllerSpec extends SpecBase {
 
       implicit val hc: HeaderCarrier = HeaderCarrier()
 
-      val application: Application = applicationBuilder()
+      val application: Application = applicationBuilder
         .overrides(
           inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
           inject.bind[DocumentService].toInstance(mockDocumentService),
@@ -229,7 +229,7 @@ class AccountControllerSpec extends SpecBase {
         )
         .build()
 
-      val appWithSessionCache: Application = applicationBuilder()
+      val appWithSessionCache: Application = applicationBuilder
         .overrides(
           inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
         )

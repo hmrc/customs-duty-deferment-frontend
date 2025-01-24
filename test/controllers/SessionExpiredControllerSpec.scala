@@ -30,8 +30,8 @@ class SessionExpiredControllerSpec extends SpecBase {
       val view                     = instanceOf[session_expired]
       val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
-      running(application()) {
-        val result = route(application(), request).value
+      running(application) {
+        val result = route(application, request).value
         status(result) mustBe OK
         contentAsString(result) mustBe view()(request, messages, appConfig).toString()
       }

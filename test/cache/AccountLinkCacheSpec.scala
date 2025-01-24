@@ -22,6 +22,7 @@ import org.mongodb.scala.SingleObservableFuture
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import util.SpecBase
+import org.scalatest.Ignore
 
 class AccountLinkCacheSpec
     extends SpecBase

@@ -24,6 +24,7 @@ import util.SpecBase
 
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import org.scalatest.Ignore
 
 class UserAnswersCacheSpec
     extends SpecBase

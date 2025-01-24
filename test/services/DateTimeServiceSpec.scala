@@ -39,7 +39,7 @@ class DateTimeServiceSpec extends SpecBase {
 
     "return the fixed date if fixedDateTime is enabled" in {
 
-      val app = applicationBuilder().configure("features.fixed-systemdate-for-tests" -> true).build()
+      val app = applicationBuilder.configure("features.fixed-systemdate-for-tests" -> true).build()
 
       val service = app.injector.instanceOf[DateTimeService]
 

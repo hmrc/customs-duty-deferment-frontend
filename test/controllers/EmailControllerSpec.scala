@@ -89,7 +89,7 @@ class EmailControllerSpec extends SpecBase {
 
     val response: EmailUnverifiedResponse = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )
