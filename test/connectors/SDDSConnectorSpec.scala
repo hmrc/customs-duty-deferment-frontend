@@ -52,7 +52,7 @@ class SDDSConnectorSpec extends SpecBase {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )

@@ -55,7 +55,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
@@ -78,7 +78,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
@@ -95,7 +95,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
@@ -116,7 +116,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/not-subscribed-for-cds")
@@ -142,7 +142,7 @@ class AuthActionSpec extends SpecBase {
 
       val controller = new Harness(authAction)
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
 
         status(result) mustBe OK

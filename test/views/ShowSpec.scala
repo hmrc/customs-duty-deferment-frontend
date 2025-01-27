@@ -19,6 +19,7 @@ package views
 import models.DefermentAccountAvailable
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.Application
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -31,22 +32,22 @@ class ShowSpec extends SpecBase {
 
   "Duty Deferment Account Show Spec" should {
     "display header" in new Setup {
-      running(application()) {
+      running(application1) {
         view.getElementsByTag("h1").text mustBe "Duty deferment contact details"
       }
     }
 
     "display header2" in new Setup {
-      running(application()) {
+      running(application1) {
         view.getElementsByTag("h2").text mustBe
           "Help make GOV.UK better Account: someDan Support links"
       }
     }
 
     "when you click on the back link redirect to you contact details" in new Setup {
-      running(application()) {
+      running(application1) {
         val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details")
-        val result  = route(application(), request).value
+        val result  = route(application1, request).value
         val html    = Jsoup.parse(contentAsString(result))
         html.containsLinkWithText("/customs/payment-records/your-contact-details", "link-back")
       }
@@ -56,6 +57,8 @@ class ShowSpec extends SpecBase {
   trait Setup extends I18nSupport {
 
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
+
+    val application1: Application = applicationBuilder.build()
 
     val someLinkId = "someLinkId"
 

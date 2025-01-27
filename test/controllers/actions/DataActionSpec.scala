@@ -40,7 +40,7 @@ class DataActionSpec extends SpecBase {
       when(mockErrorHandler.unauthorized()(any))
         .thenReturn(Html("unauthorized"))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest())
         status(result) mustBe UNAUTHORIZED
         contentAsString(result).contains("unauthorized") mustBe true
@@ -51,7 +51,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(None))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/this-service-has-been-reset")
@@ -62,7 +62,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(Some(emptyUserAnswers)))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe OK
       }

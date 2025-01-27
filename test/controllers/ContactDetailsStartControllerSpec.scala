@@ -104,7 +104,7 @@ class ContactDetailsStartControllerSpec extends SpecBase {
     val startEditAddressDetailsRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequestWithCsrf(GET, routes.ContactDetailsEditStartController.start(false).url)
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),

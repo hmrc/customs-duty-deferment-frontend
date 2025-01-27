@@ -70,7 +70,7 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      application().injector
+      application.injector
         .instanceOf[duty_deferment_statements_not_available]
         .apply(accountNumber, linkId, serviceUnavailableUrl)(request, messages, appConfig)
         .body

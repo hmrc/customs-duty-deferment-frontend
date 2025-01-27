@@ -100,7 +100,7 @@ class EditContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache = mock[UserAnswersCache]
     val appWithUserAnswers: Application        = application(Some(userAnswers))
     val appWithEmptyUserAnswers: Application   = application(Some(emptyUserAnswers))
-    val appWithoutUsersAnswers: Application    = application()
+    val appWithoutUsersAnswers: Application    = application
 
     val messagesApi: MessagesApi = application(Some(userAnswers)).injector.instanceOf[MessagesApi]
     val messages: Messages       = messagesApi.preferred(onPageLoadRequest)

@@ -93,7 +93,7 @@ class SessionCacheConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     implicit val hc: HeaderCarrier     = HeaderCarrier()
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)

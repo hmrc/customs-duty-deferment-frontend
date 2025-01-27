@@ -32,9 +32,12 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.CSRFTokenHelper.*
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.Utils.emptyString
+
 import scala.reflect.ClassTag
+import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 
 import scala.jdk.CollectionConverters.*
 
@@ -67,6 +70,20 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
     fakeRequest(method, path).withCSRFToken
       .asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
 
+  lazy val applicationBuilder: GuiceApplicationBuilder =
+    new GuiceApplicationBuilder()
+      .overrides(
+        bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[DataRetrievalAction].to(new FakeDataRetrievalAction(None)),
+        bind[Metrics].toInstance(new FakeMetrics)
+      )
+      .configure(
+        "play.filters.csp.nonce.enabled"        -> false,
+        "auditing.enabled"                      -> "false",
+        "microservice.metrics.graphite.enabled" -> "false",
+        "metrics.enabled"                       -> "false"
+      )
+
   def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
@@ -81,7 +98,19 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
         "metrics.enabled"                       -> "false"
       )
 
+  lazy val mockAuthConnector: DefaultAuthConnector = mock[DefaultAuthConnector]
+  lazy val mockClient1: HttpClientV2               = mock[HttpClientV2]
+
+  lazy val application: Application                            = applicationBuilder.build()
   def application(ua: Option[UserAnswers] = None): Application = applicationBuilder(ua).build()
+
+  def applicationWithMockAuthConnector: Application =
+    applicationBuilder
+      .overrides(
+        bind[HttpClientV2].to(mockClient1),
+        bind[DefaultAuthConnector].to(mockAuthConnector)
+      )
+      .build()
 
   implicit lazy val messages: Messages =
     instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
@@ -90,7 +119,8 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
 
   val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
-  def instanceOf[T: ClassTag]: T = application().injector.instanceOf[T]
+  def instanceOf[T: ClassTag]: T    = application.injector.instanceOf[T]
+  def instanceOfNew[T: ClassTag]: T = applicationWithMockAuthConnector.injector.instanceOf[T]
 }
 
 class FakeMetrics extends Metrics {
