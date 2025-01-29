@@ -38,7 +38,7 @@ class LayoutSpec extends SpecBase {
         val linkUrl = "test.com"
 
         val layoutView: Document = Jsoup.parse(
-          application().injector
+          application.injector
             .instanceOf[Layout]
             .apply(
               pageTitle = Some(title),

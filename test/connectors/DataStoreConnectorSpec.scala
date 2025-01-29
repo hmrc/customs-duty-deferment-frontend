@@ -26,7 +26,7 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.auth.core.retrieve.Email
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpReads, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HttpException, HttpReads, UpstreamErrorResponse}
 import util.SpecBase
 
 import java.net.URL
@@ -149,9 +149,7 @@ class DataStoreConnectorSpec extends SpecBase {
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
     val emailId                        = "test@test.com"
     val expectedResult: Option[String] = Some(emailId)
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
+    
     val eoriHistoryResponse: EoriHistoryResponse =
       EoriHistoryResponse(Seq(EoriHistory("someEori", None, None)))
 
@@ -177,7 +175,7 @@ class DataStoreConnectorSpec extends SpecBase {
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)

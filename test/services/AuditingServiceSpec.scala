@@ -25,7 +25,6 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatest.matchers.should.Matchers._
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector._
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 import util.SpecBase
@@ -86,9 +85,6 @@ class AuditingServiceSpec extends SpecBase {
   }
 
   trait Setup {
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
     val expectedAuditSource                        = "customs-duty-deferment-frontend"
     val eori                                       = "EORI"
     val AUDIT_DUTY_DEFERMENT_TRANSACTION           = "Display duty deferment statements"

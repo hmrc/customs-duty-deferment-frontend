@@ -21,7 +21,6 @@ import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
 import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, FileFormat}
 import play.api.{Application, inject}
-import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -45,8 +44,6 @@ class DocumentServiceSpec extends SpecBase {
   trait Setup {
     val mockSDESConnector: SDESConnector     = mock[SDESConnector]
     val mockAuditingService: AuditingService = mock[AuditingService]
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
     val dan                   = "1234567"
@@ -103,7 +100,7 @@ class DocumentServiceSpec extends SpecBase {
         )
       )
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[AuditingService].toInstance(mockAuditingService),
         inject.bind[SDESConnector].toInstance(mockSDESConnector)

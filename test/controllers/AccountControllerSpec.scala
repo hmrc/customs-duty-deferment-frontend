@@ -26,7 +26,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import services.DocumentService
-import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 import config.AppConfig
 import viewmodels.DutyDefermentAccountViewModel
@@ -38,10 +37,10 @@ class AccountControllerSpec extends SpecBase {
 
   "showAccountDetails" should {
     "return unauthorized if no session id present" in {
-      running(application()) {
+      running(application) {
         val request = FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
 
-        val result = route(application(), request).value
+        val result = route(application, request).value
         status(result) mustBe SEE_OTHER
       }
     }
@@ -218,9 +217,7 @@ class AccountControllerSpec extends SpecBase {
       val serviceUnavailableUrl: String                    =
         routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, linkId).url
 
-      implicit val hc: HeaderCarrier = HeaderCarrier()
-
-      val application: Application = applicationBuilder()
+      val application: Application = applicationBuilder
         .overrides(
           inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
           inject.bind[DocumentService].toInstance(mockDocumentService),

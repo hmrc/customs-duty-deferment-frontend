@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse, UpstreamErrorResponse}
 import util.SpecBase
 import utils.Utils.emptyString
 
@@ -91,9 +91,8 @@ class SessionCacheConnectorSpec extends SpecBase {
   trait Setup {
     val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    implicit val hc: HeaderCarrier     = HeaderCarrier()
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)

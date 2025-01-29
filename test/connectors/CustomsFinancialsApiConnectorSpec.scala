@@ -27,7 +27,7 @@ import play.api.Application
 import play.api.inject
 import services.AuditingService
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import util.SpecBase
 import utils.Utils.emptyString
@@ -114,12 +114,11 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    implicit val hc: HeaderCarrier           = HeaderCarrier()
     val mockHttpClient: HttpClientV2         = mock[HttpClientV2]
     val requestBuilder: RequestBuilder       = mock[RequestBuilder]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder),

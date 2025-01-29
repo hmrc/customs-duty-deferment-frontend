@@ -33,7 +33,7 @@ class DutyDefermentAccountSpec extends SpecBase {
     "display correct title and guidance" in new Setup {
       val viewDoc: Document = view(model)
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accNumber, testServiceUnavailableUrl)
       viewDoc.getElementById("request-statement-link").text() must not be empty
       showAllSectionText.r.findAllIn(viewDoc.html()).length mustBe 1
     }
@@ -42,10 +42,10 @@ class DutyDefermentAccountSpec extends SpecBase {
       val viewDoc: Document = view(modelWithNoCurrentStatements)
       val htmlDoc: String   = viewDoc.html()
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accNumber, testServiceUnavailableUrl)
 
       viewDoc.getElementById("request-statement-link").text() must not be empty
-      htmlDoc.contains(messages("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(messages("cf.account.detail.no-statements", accNumber))
       showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
 
@@ -53,10 +53,10 @@ class DutyDefermentAccountSpec extends SpecBase {
       val viewDoc: Document = view(modelWithNoCurrentAndRequestedStatements)
       val htmlDoc: String   = viewDoc.html()
 
-      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accountNumber, serviceUnavailableUrl)
+      shouldDisplayCorrectCommonGuidanceAndText(viewDoc, messages, accNumber, testServiceUnavailableUrl)
 
       Option(viewDoc.getElementById("request-statement-link")) mustBe empty
-      htmlDoc.contains(messages("cf.account.detail.no-statements", accountNumber))
+      htmlDoc.contains(messages("cf.account.detail.no-statements", accNumber))
       showAllSectionText.r.findAllIn(htmlDoc).length mustBe 0
     }
   }
@@ -97,36 +97,32 @@ class DutyDefermentAccountSpec extends SpecBase {
   }
 
   trait Setup {
-
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
-    val serviceUnavailableUrl: String = "service_unavailable_url"
-    val accountNumber                 = "1234567"
-    val linkId                        = "link_id"
     val showAllSectionText: String    = messages("cf.account.detail.accordion.show-all-sections")
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
-      accountNumber,
+      accNumber,
       Seq(dutyDefermentStatementsForEori01),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl
+      testServiceUnavailableUrl
     )(appConfig, messages)
 
     val modelWithNoCurrentStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
-      accountNumber,
+      accNumber,
       Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl
+      testServiceUnavailableUrl
     )(appConfig, messages)
 
     val modelWithNoCurrentAndRequestedStatements: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
-      accountNumber,
+      accNumber,
       Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq(), requestedStatements = Seq())),
       "linkId",
       isNiAccount = false,
-      serviceUnavailableUrl
+      testServiceUnavailableUrl
     )(appConfig, messages)
 
     def view(model: DutyDefermentAccountViewModel): Document =

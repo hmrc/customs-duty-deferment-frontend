@@ -22,7 +22,7 @@ import org.mockito.Mockito.when
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.HttpReads
 import util.SpecBase
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,10 +49,8 @@ class SDDSConnectorSpec extends SpecBase {
   trait Setup {
     val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
     val requestBuilder: RequestBuilder = mock[RequestBuilder]
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
-    val application: Application = applicationBuilder()
+    
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )
