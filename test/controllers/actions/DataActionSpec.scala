@@ -16,9 +16,6 @@
 
 package controllers.actions
 
-import cache.UserAnswersCache
-import config.ErrorHandler
-import connectors.DataStoreConnector
 import models.EoriHistory
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -27,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import util.SpecBase
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -70,11 +67,6 @@ class DataActionSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockAuthConnector: AuthConnector           = mock[AuthConnector]
-    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val mockErrorHandler: ErrorHandler             = mock[ErrorHandler]
-    val mockUserAnswersCache: UserAnswersCache     = mock[UserAnswersCache]
-
     when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
       .thenReturn(
         Future.successful(

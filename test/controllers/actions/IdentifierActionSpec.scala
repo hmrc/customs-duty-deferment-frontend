@@ -17,12 +17,11 @@
 package controllers.actions
 
 import com.google.inject.Inject
-import connectors.DataStoreConnector
 import controllers.routes
 import models.EoriHistory
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
+import play.api.mvc.{Action, AnyContent, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.*
@@ -45,7 +44,7 @@ class AuthActionSpec extends SpecBase {
   }
 
   "Auth Action" when {
-    "redirect the user to unauthorised controller when has no enrolments" in new Setup {
+    "redirect the user to unauthorised controller when has no enrolments" in {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.successful(Enrolments(Set.empty) ~ Some("internalId")))
@@ -62,7 +61,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "redirect the user to unauthorised controller when has no eori enrolment" in new Setup {
+    "redirect the user to unauthorised controller when has no eori enrolment" in {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -85,7 +84,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "redirect the user to unauthorised controller when an auth error happens" in new Setup {
+    "redirect the user to unauthorised controller when an auth error happens" in {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(Future.failed(new RuntimeException("something went wrong")))
@@ -102,7 +101,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "redirect the user to unauthorised controller when InternalID is empty" in new Setup {
+    "redirect the user to unauthorised controller when InternalID is empty" in {
 
       when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
         .thenReturn(
@@ -123,7 +122,7 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-    "continue journey on successful response from auth" in new Setup {
+    "continue journey on successful response from auth" in {
 
       when(mockDataStoreConnector.getAllEoriHistory(any)(any))
         .thenReturn(Future.successful(Seq(EoriHistory("someEori", None, None))))
@@ -150,7 +149,7 @@ class AuthActionSpec extends SpecBase {
     }
 
     "the user hasn't logged in" must {
-      "redirect the user to log in " in new Setup {
+      "redirect the user to log in " in {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new MissingBearerToken),
@@ -167,7 +166,7 @@ class AuthActionSpec extends SpecBase {
     }
 
     "the user's session has expired" must {
-      "redirect the user to log in " in new Setup {
+      "redirect the user to log in " in {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new BearerTokenExpired),
@@ -184,7 +183,7 @@ class AuthActionSpec extends SpecBase {
     }
 
     "the user doesn't have sufficient enrolments" must {
-      "redirect the user to the unauthorised page" in new Setup {
+      "redirect the user to the unauthorised page" in {
 
         val authAction = new AuthenticatedIdentifierAction(
           new FakeFailingAuthConnector(new InsufficientEnrolments),
@@ -199,11 +198,6 @@ class AuthActionSpec extends SpecBase {
         redirectLocation(result).value mustBe routes.NotSubscribedController.onPageLoad.url
       }
     }
-  }
-
-  trait Setup {
-    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val bodyParsers: BodyParsers.Default           = instanceOf[BodyParsers.Default]
   }
 }
 

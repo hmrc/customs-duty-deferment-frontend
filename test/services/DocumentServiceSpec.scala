@@ -35,7 +35,7 @@ class DocumentServiceSpec extends SpecBase {
       when(mockSDESConnector.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentStatementFiles))
 
-      service.getDutyDefermentStatements(eoriHistory, dan).map { ddStatements =>
+      service.getDutyDefermentStatements(eoriHistory, someDan).map { ddStatements =>
         ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
       }
     }
@@ -46,7 +46,6 @@ class DocumentServiceSpec extends SpecBase {
     val mockAuditingService: AuditingService = mock[AuditingService]
 
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
-    val dan                   = "1234567"
 
     val startYear  = previousMonthDate.getYear
     val startMonth = previousMonthDate.getMonthValue

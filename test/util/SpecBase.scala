@@ -29,11 +29,15 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.{AnyContentAsEmpty, BodyParsers}
 import play.api.test.CSRFTokenHelper.*
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
+import services.AuditingService
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import cache.UserAnswersCache
+import config.ErrorHandler
+import connectors.DataStoreConnector
 import uk.gov.hmrc.play.bootstrap.auth.DefaultAuthConnector
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.Utils.emptyString
@@ -97,32 +101,31 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
         "microservice.metrics.graphite.enabled" -> "false",
         "metrics.enabled"                       -> "false"
       )
-  
-  lazy val mockAuthConnector: DefaultAuthConnector = mock[DefaultAuthConnector]
-  lazy val mockClient1: HttpClientV2               = mock[HttpClientV2]
-  lazy val requestBuilder: RequestBuilder          = mock[RequestBuilder]
+
+  lazy val mockAuthConnector: DefaultAuthConnector    = mock[DefaultAuthConnector]
+  lazy val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
+  lazy val mockErrorHandler: ErrorHandler             = mock[ErrorHandler]
+  lazy val mockUserAnswersCache: UserAnswersCache     = mock[UserAnswersCache]
+  lazy val requestBuilder: RequestBuilder             = mock[RequestBuilder]
+  lazy val mockHttpClient: HttpClientV2               = mock[HttpClientV2]
+  lazy val mockAuditingService: AuditingService       = mock[AuditingService]
+  lazy val mockConfig: AppConfig                      = mock[AppConfig]
+
   lazy implicit val hc: HeaderCarrier = HeaderCarrier()
-  
+
   lazy val application: Application                                     = applicationBuilder.build()
   def application(userAnswers: Option[UserAnswers] = None): Application = applicationBuilder(userAnswers).build()
 
-  def applicationWithMockAuthConnector: Application =
-    applicationBuilder
-      .overrides(
-        bind[HttpClientV2].to(mockClient1),
-        bind[DefaultAuthConnector].to(mockAuthConnector)
-      )
-      .build()
-
   implicit lazy val messages: Messages =
     instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
+
+  lazy val bodyParsers: BodyParsers.Default = instanceOf[BodyParsers.Default]
 
   lazy val appConfig: AppConfig = instanceOf[AppConfig]
 
   val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
-  def instanceOf[T: ClassTag]: T  = application.injector.instanceOf[T]
-  def instanceOf2[T: ClassTag]: T = applicationWithMockAuthConnector.injector.instanceOf[T]
+  def instanceOf[T: ClassTag]: T = application.injector.instanceOf[T]
 }
 
 class FakeMetrics extends Metrics {

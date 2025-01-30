@@ -29,9 +29,9 @@ class ServiceUnavailableControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "render service unavailable page" in new Setup {
-      running(application1) {
+      running(applicationNew) {
         val request = fakeRequest(GET, routes.ServiceUnavailableController.onPageLoad("id-not-defined", "linkId_1").url)
-        val result  = route(application1, request).value
+        val result  = route(applicationNew, request).value
 
         status(result) mustBe OK
         contentAsString(result) mustBe view()(request, messages, appConfig).toString()
@@ -39,12 +39,12 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     }
 
     "render service unavailable page for duty deferment statements page" in new Setup {
-      running(application1) {
+      running(applicationNew) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, "linkId_1").url
         )
-        val result  = route(application1, request).value
+        val result  = route(applicationNew, request).value
 
         status(result) mustBe OK
 
@@ -54,12 +54,12 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     }
 
     "render service unavailable page for duty deferment statements not available page" in new Setup {
-      running(application1) {
+      running(applicationNew) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, "linkId_1").url
         )
-        val result  = route(application1, request).value
+        val result  = route(applicationNew, request).value
 
         status(result) mustBe OK
         val backlink = Some(routes.AccountController.statementsUnavailablePage("linkId_1").url)
@@ -72,6 +72,6 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     val view: service_unavailable = instanceOf[service_unavailable]
     val navigator: Navigator      = new Navigator()
 
-    val application1: Application = applicationBuilder.build()
+    val applicationNew: Application = applicationBuilder.build()
   }
 }

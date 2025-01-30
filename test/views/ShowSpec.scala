@@ -54,7 +54,6 @@ class ShowSpec extends SpecBase {
   }
 
   trait Setup extends I18nSupport {
-
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val validContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(

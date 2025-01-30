@@ -16,7 +16,6 @@
 
 package services
 
-import config.AppConfig
 import models.responses.retrieve.ContactDetails
 import models.{AuditEori, AuditModel, ContactDetailsUserAnswers}
 import org.mockito.ArgumentCaptor
@@ -38,7 +37,7 @@ class AuditingServiceSpec extends SpecBase {
 
     "create the correct data event for a user requesting duty deferment statements" in new Setup {
       val model: AuditModel =
-        AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(eori, isHistoric = false)))
+        AuditModel(AUDIT_TYPE, AUDIT_DUTY_DEFERMENT_TRANSACTION, Json.toJson(AuditEori(validEori, isHistoric = false)))
       await(auditingService.audit(model))
 
       val dataEventCaptor: ArgumentCaptor[ExtendedDataEvent] = ArgumentCaptor.forClass(classOf[ExtendedDataEvent])
@@ -48,7 +47,7 @@ class AuditingServiceSpec extends SpecBase {
 
       dataEvent.auditSource       should be(expectedAuditSource)
       dataEvent.auditType         should be(AUDIT_TYPE)
-      dataEvent.detail.toString() should include(eori)
+      dataEvent.detail.toString() should include(validEori)
       dataEvent.tags.toString()   should include(AUDIT_DUTY_DEFERMENT_TRANSACTION)
     }
 
@@ -86,14 +85,12 @@ class AuditingServiceSpec extends SpecBase {
 
   trait Setup {
     val expectedAuditSource                        = "customs-duty-deferment-frontend"
-    val eori                                       = "EORI"
     val AUDIT_DUTY_DEFERMENT_TRANSACTION           = "Display duty deferment statements"
     val AUDIT_VAT_CERTIFICATES_TRANSACTION         = "Display VAT certificates"
     val AUDIT_POSTPONED_VAT_STATEMENTS_TRANSACTION = "Display postponed VAT statements"
     val AUDIT_SECURITY_STATEMENTS_TRANSACTION      = "Display security statements"
     val AUDIT_TYPE                                 = "DisplayDutyDefermentStatements"
 
-    val mockConfig: AppConfig = mock[AppConfig]
     when(mockConfig.appName).thenReturn("customs-duty-deferment-frontend")
 
     val previousContactDetails: ContactDetails = ContactDetails(

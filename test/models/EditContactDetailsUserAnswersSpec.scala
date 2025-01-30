@@ -25,11 +25,11 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
     "convert to ContactDetailsUserAnswers correctly" in new Setup {
 
       val result: ContactDetailsUserAnswers = EditContactDetailsUserAnswers(
-        dan,
-        name,
-        telephone,
-        fax,
-        email,
+        someDan,
+        nameOpt,
+        telephoneOpt,
+        faxOpt,
+        emailOpt,
         isNiAccount
       )
         .toContactDetailsUserAnswers(
@@ -38,11 +38,11 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
           getCountryNameF
         )
 
-      result.dan mustBe dan
-      result.name mustBe name
-      result.telephone mustBe telephone
-      result.fax mustBe fax
-      result.email mustBe email
+      result.dan mustBe someDan
+      result.name mustBe nameOpt
+      result.telephone mustBe telephoneOpt
+      result.fax mustBe faxOpt
+      result.email mustBe emailOpt
       result.isNiAccount mustBe isNiAccount
       result.addressLine1 mustBe initialContactDetails.addressLine1
       result.addressLine2 mustBe initialContactDetails.addressLine2
@@ -55,12 +55,7 @@ class EditContactDetailsUserAnswersSpec extends SpecBase {
   }
 
   trait Setup {
-    val dan                   = "testDan"
-    val name: Some[EORI]      = Some("John Doe")
-    val telephone: Some[EORI] = Some("123-456-7890")
-    val fax: Some[EORI]       = Some("987-654-3210")
-    val email: Some[EORI]     = Some("john.doe@example.com")
-    val isNiAccount           = true
+    val isNiAccount = true
 
     val initialContactDetails: ContactDetails = ContactDetails(
       contactName = Some("John Doe"),

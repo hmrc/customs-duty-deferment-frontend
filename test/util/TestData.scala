@@ -101,20 +101,31 @@ trait TestData extends MockitoSugar {
   val todaysDate: LocalDate         = LocalDate.now()
   val previousMonthDate: LocalDate  = todaysDate.minusMonths(1);
   val twoMonthsPriorDate: LocalDate = todaysDate.minusMonths(2);
-  val periodStartDay: Int           = 1
-  val periodEndDay: Int             = 8
+  val periodStartYear2023           = 2023
+  val periodStartMonth10            = 10
+  val periodStartDay1               = 1
+  val periodEndYear2023             = 2023
+  val periodEndMonth10              = 10
+  val periodEndDay8                 = 8
   val fileSizeData: Long            = 10L
   val someDan                       = "123456"
   val bacs                          = "BACS"
   val someLinkId                    = "test_link_id"
+  val someLinkId2                   = "test_link_id2"
   val testLinkUrl                   = "test_url"
+  val someId                        = "123456"
+  val emailId                       = "test@test.com"
+  val emailOpt: Some[String]        = Some("abc@test.com")
+  val nameOpt: Some[EORI]           = Some("John Doe")
+  val telephoneOpt: Some[EORI]      = Some("123-456-7890")
+  val faxOpt: Some[EORI]            = Some("987-654-3210")
 
-  val startYear  = 2018
-  val startMonth = 6
-  val startDate  = 1
-  val endYear    = 2018
-  val endMonth   = 6
-  val endDate    = 8
+  val testMsgKey   = "test_key"
+  val testMsg      = "test_msg"
+  val testClass    = "test_class"
+  val testLocation = "test_location"
+  val testHref     = "http://www.test.com"
+  val testLang     = "en"
 
   def ddSttMetadata(
     startDate: LocalDate,
@@ -147,9 +158,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Csv,
       DDStatementType.Weekly,
       true
@@ -162,9 +173,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Pdf,
       DDStatementType.Supplementary,
       true
@@ -177,9 +188,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Csv,
       DDStatementType.Excise,
       false
@@ -192,9 +203,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Csv,
       DDStatementType.Weekly,
       true
@@ -207,9 +218,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       twoMonthsPriorDate,
-      periodStartDay,
+      periodStartDay1,
       twoMonthsPriorDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Csv,
       DDStatementType.Weekly,
       false
@@ -222,9 +233,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       twoMonthsPriorDate,
-      periodStartDay,
+      periodStartDay1,
       twoMonthsPriorDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Pdf,
       DDStatementType.Excise,
       false
@@ -237,9 +248,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       twoMonthsPriorDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Pdf,
       DDStatementType.Weekly,
       true
@@ -252,9 +263,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Csv,
       DDStatementType.ExciseDeferment,
       true
@@ -267,9 +278,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Pdf,
       DDStatementType.ExciseDeferment,
       true
@@ -282,9 +293,9 @@ trait TestData extends MockitoSugar {
     fileSizeData,
     ddSttMetadata(
       previousMonthDate,
-      periodStartDay,
+      periodStartDay1,
       previousMonthDate,
-      periodEndDay,
+      periodEndDay8,
       FileFormat.Pdf,
       DDStatementType.DutyDeferment,
       true

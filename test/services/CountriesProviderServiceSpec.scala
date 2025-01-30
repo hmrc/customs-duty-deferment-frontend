@@ -16,7 +16,6 @@
 
 package services
 
-import config.AppConfig
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.when
 import play.api.Environment
@@ -52,7 +51,6 @@ class CountriesProviderServiceSpec extends SpecBase {
     val fileName   = "countries.json"
 
     val mockEnv: Environment         = mock[Environment]
-    val mockConfig: AppConfig        = mock[AppConfig]
     val mockClassLoader: ClassLoader = mock[ClassLoader]
 
     when(mockConfig.countriesFilename).thenReturn(fileName)

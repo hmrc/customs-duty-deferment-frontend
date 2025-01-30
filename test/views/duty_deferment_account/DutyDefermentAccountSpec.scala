@@ -99,7 +99,7 @@ class DutyDefermentAccountSpec extends SpecBase {
   trait Setup {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
-    val showAllSectionText: String    = messages("cf.account.detail.accordion.show-all-sections")
+    val showAllSectionText: String = messages("cf.account.detail.accordion.show-all-sections")
 
     val model: DutyDefermentAccountViewModel = DutyDefermentAccountViewModel(
       accNumber,

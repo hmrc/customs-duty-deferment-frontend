@@ -30,7 +30,6 @@ class AccountLinkCacheSpec
     with ScalaFutures
     with IntegrationPatience {
 
-  private val id          = "session-123"
   private val isNiAccount = false
 
   private val test: DutyDefermentAccountLink =
@@ -44,35 +43,35 @@ class AccountLinkCacheSpec
   "Session Cache" must {
 
     ".set a value successfully" in {
-      val storeResult = testCache.store(id, test).futureValue
+      val storeResult = testCache.store(someId, test).futureValue
       storeResult mustBe true
     }
 
     ".set and then .get the value successfully" in {
-      testCache.store(id, test).futureValue
-      val retrieved = testCache.retrieve(id).futureValue
+      testCache.store(someId, test).futureValue
+      val retrieved = testCache.retrieve(someId).futureValue
       retrieved.value mustBe test
     }
 
     ".get call when data not found from cache returns none" in {
-      testCache.store(id + 1, test).futureValue
-      val retrieved = testCache.retrieve(id).futureValue
+      testCache.store(someId + 1, test).futureValue
+      val retrieved = testCache.retrieve(someId).futureValue
       assertEquals(None, retrieved)
     }
 
     ".get call after data removed from cache returns none" in {
-      val storeResult    = testCache.store(id, test).futureValue
+      val storeResult    = testCache.store(someId, test).futureValue
       storeResult mustBe true
-      val removeResult   = testCache.remove(id).futureValue
+      val removeResult   = testCache.remove(someId).futureValue
       removeResult mustBe true
-      val retrieveResult = testCache.retrieve(id).futureValue
+      val retrieveResult = testCache.retrieve(someId).futureValue
       retrieveResult mustBe None
     }
 
     ".set and then remove value successfully" in {
-      val storeResult  = testCache.store(id, test).futureValue
+      val storeResult  = testCache.store(someId, test).futureValue
       storeResult mustBe true
-      val removeResult = testCache.remove(id).futureValue
+      val removeResult = testCache.remove(someId).futureValue
       removeResult mustBe true
     }
   }

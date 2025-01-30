@@ -16,7 +16,6 @@
 
 package services
 
-import config.AppConfig
 import org.scalatest.matchers.should.Matchers.*
 import play.api.test.Helpers.running
 import util.SpecBase
@@ -53,7 +52,6 @@ class DateTimeServiceSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockConfig: AppConfig      = mock[AppConfig]
-    val dateTimeService            = new DateTimeService(mockConfig)
+    val dateTimeService = new DateTimeService(mockConfig)
   }
 }

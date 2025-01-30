@@ -28,7 +28,7 @@ class P2Spec extends SpecBase {
     "display the correct contents" when {
       "component has an id" in new Setup {
 
-        p2Component.getElementById(id).text().contains(messages(messageKey)) mustBe true
+        p2Component.getElementById(someId).text().contains(messages(messageKey)) mustBe true
 
         p2Component.getElementsByClass("govuk-body").text().contains(messages(messageKey)) mustBe true
 
@@ -45,11 +45,10 @@ class P2Spec extends SpecBase {
     }
 
     trait Setup {
-      val id         = "undelivered-pi"
       val messageKey = "cf.undeliverable.email.p1"
 
       val p2Component: Document = Jsoup.parse(
-        instanceOf[p2].apply(message = messageKey, id = Some(id)).body
+        instanceOf[p2].apply(message = messageKey, id = Some(someId)).body
       )
 
       val p2ComponentWithNoId: Document = Jsoup.parse(

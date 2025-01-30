@@ -145,11 +145,8 @@ class DataStoreConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
-    val requestBuilder: RequestBuilder = mock[RequestBuilder]
-    val emailId                        = "test@test.com"
     val expectedResult: Option[String] = Some(emailId)
-    
+
     val eoriHistoryResponse: EoriHistoryResponse =
       EoriHistoryResponse(Seq(EoriHistory("someEori", None, None)))
 
