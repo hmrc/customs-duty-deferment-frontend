@@ -60,8 +60,7 @@ class ServiceUnavailableSpec extends SpecBase {
 
     val view: Document =
       Jsoup.parse(
-        application().injector
-          .instanceOf[service_unavailable]
+        instanceOf[service_unavailable]
           .apply(Option(testLinkUrl))(request, messages, appConfig)
           .body
       )

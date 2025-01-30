@@ -17,7 +17,6 @@
 package controllers
 
 import navigation.Navigator
-import play.api.Application
 import play.api.http.Status.OK
 import play.api.test.Helpers.{
   GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty
@@ -29,9 +28,9 @@ class ServiceUnavailableControllerSpec extends SpecBase {
 
   "onPageLoad" should {
     "render service unavailable page" in new Setup {
-      running(applicationNew) {
+      running(application()) {
         val request = fakeRequest(GET, routes.ServiceUnavailableController.onPageLoad("id-not-defined", "linkId_1").url)
-        val result  = route(applicationNew, request).value
+        val result  = route(application(), request).value
 
         status(result) mustBe OK
         contentAsString(result) mustBe view()(request, messages, appConfig).toString()
@@ -39,12 +38,12 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     }
 
     "render service unavailable page for duty deferment statements page" in new Setup {
-      running(applicationNew) {
+      running(application()) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, "linkId_1").url
         )
-        val result  = route(applicationNew, request).value
+        val result  = route(application(), request).value
 
         status(result) mustBe OK
 
@@ -54,12 +53,12 @@ class ServiceUnavailableControllerSpec extends SpecBase {
     }
 
     "render service unavailable page for duty deferment statements not available page" in new Setup {
-      running(applicationNew) {
+      running(application()) {
         val request = fakeRequest(
           GET,
           routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementNAPageId, "linkId_1").url
         )
-        val result  = route(applicationNew, request).value
+        val result  = route(application(), request).value
 
         status(result) mustBe OK
         val backlink = Some(routes.AccountController.statementsUnavailablePage("linkId_1").url)
@@ -71,7 +70,5 @@ class ServiceUnavailableControllerSpec extends SpecBase {
   trait Setup {
     val view: service_unavailable = instanceOf[service_unavailable]
     val navigator: Navigator      = new Navigator()
-
-    val applicationNew: Application = applicationBuilder.build()
   }
 }
