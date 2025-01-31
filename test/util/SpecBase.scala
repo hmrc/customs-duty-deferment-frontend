@@ -113,9 +113,9 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
 
   lazy implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  lazy implicit val application: Application                                     = applicationBuilder.build()
+  lazy implicit val application: Application                            = applicationBuilder.build()
   def application(userAnswers: Option[UserAnswers] = None): Application = applicationBuilder(userAnswers).build()
-  
+
   implicit lazy val messages: Messages =
     instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
