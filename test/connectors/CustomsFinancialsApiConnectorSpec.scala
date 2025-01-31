@@ -114,7 +114,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder),
@@ -122,7 +122,6 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       )
       .build()
 
-    val connector: CustomsFinancialsApiConnector =
-      application.injector.instanceOf[CustomsFinancialsApiConnector]
+    val connector: CustomsFinancialsApiConnector = instanceOf[CustomsFinancialsApiConnector]
   }
 }

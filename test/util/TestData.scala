@@ -119,6 +119,7 @@ trait TestData extends MockitoSugar {
   val nameOpt: Some[EORI]           = Some("John Doe")
   val telephoneOpt: Some[EORI]      = Some("123-456-7890")
   val faxOpt: Some[EORI]            = Some("987-654-3210")
+  val spaces: Some[String]          = Some(" ")
 
   val testMsgKey   = "test_key"
   val testMsg      = "test_msg"

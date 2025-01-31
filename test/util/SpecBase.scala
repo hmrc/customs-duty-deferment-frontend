@@ -113,9 +113,9 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
 
   lazy implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  lazy val application: Application                                     = applicationBuilder.build()
+  lazy implicit val application: Application                                     = applicationBuilder.build()
   def application(userAnswers: Option[UserAnswers] = None): Application = applicationBuilder(userAnswers).build()
-
+  
   implicit lazy val messages: Messages =
     instanceOf[MessagesApi].preferred(fakeRequest(emptyString, emptyString))
 
@@ -125,7 +125,7 @@ trait SpecBase extends AnyWordSpecLike with Matchers with MockitoSugar with Opti
 
   val messagesApi: MessagesApi = instanceOf[MessagesApi]
 
-  def instanceOf[T: ClassTag]: T = application.injector.instanceOf[T]
+  def instanceOf[T: ClassTag](implicit application: Application): T = application.injector.instanceOf[T]
 }
 
 class FakeMetrics extends Metrics {

@@ -234,7 +234,6 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces: Some[String]                            = Some("   ")
   val emailWithLeadingSpaces: Some[String]            = Some("   abc@test.com")
   val emailWithTrailingSpaces: Some[String]           = Some("abc@test.com   ")
   val emailWithLeadingAndTrailingSpaces: Some[String] = Some("   abc@test.com   ")
