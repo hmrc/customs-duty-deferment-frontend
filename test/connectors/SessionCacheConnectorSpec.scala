@@ -89,14 +89,13 @@ class SessionCacheConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)
       )
       .build()
 
-    val connector: SessionCacheConnector =
-      application.injector.instanceOf[SessionCacheConnector]
+    val connector: SessionCacheConnector = instanceOf[SessionCacheConnector]
   }
 }

@@ -22,12 +22,14 @@ import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.api.{Application, inject}
 import services.AccountLinkCacheService
 import util.SpecBase
 import views.html.contact_details.edit_success_address
 import views.html.contact_details.edit_success_contact
+
+import scala.reflect.ClassTag
 
 class ConfirmContactDetailsControllerSpec extends SpecBase {
 
@@ -90,10 +92,12 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       )
       .build()
 
-    val viewAddress: edit_success_address = appLinkService.injector.instanceOf[edit_success_address]
-    val viewContact: edit_success_contact = appLinkService.injector.instanceOf[edit_success_contact]
-    val messagesApi: MessagesApi          = appLinkService.injector.instanceOf[MessagesApi]
+    val viewAddress: edit_success_address = instanceOf[edit_success_address]
+    val viewContact: edit_success_contact = instanceOf[edit_success_contact]
+    val messagesApi: MessagesApi          = instanceOf[MessagesApi]
     val messages: Messages                = messagesApi.preferred(successContactDetailsRequest)
     val messagesAddress: Messages         = messagesApi.preferred(successAddressDetailsRequest)
+
+    def instanceOf[T: ClassTag]: T = appLinkService.injector.instanceOf[T]
   }
 }

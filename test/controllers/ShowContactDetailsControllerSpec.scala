@@ -153,7 +153,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
       _ => Some("United Kingdom")
     )
 
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         bind[ContactDetailsCacheService].toInstance(mockContactDetailsCacheService),
         bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService),
@@ -167,8 +167,8 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     val startSessionRequest: FakeRequest[AnyContentAsEmpty.type] =
       fakeRequest(GET, routes.ShowContactDetailsController.startSession("someLinkId").url)
 
-    val view: show            = application.injector.instanceOf[show]
-    val errorView: show_error = application.injector.instanceOf[show_error]
+    val view: show            = instanceOf[show]
+    val errorView: show_error = instanceOf[show_error]
     val messages: Messages    = messagesApi.preferred(showRequest)
   }
 }

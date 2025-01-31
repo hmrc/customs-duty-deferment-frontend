@@ -89,7 +89,7 @@ class AccountControllerSpec extends SpecBase {
     }
 
     "display the service unavailable page on a successful response when feature is disabled" in new Setup {
-      val config: AppConfig = application.injector.instanceOf[AppConfig]
+      val config: AppConfig = instanceOf[AppConfig]
       config.historicStatementsEnabled = false
 
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
@@ -101,7 +101,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account = application.injector.instanceOf[duty_deferment_account]
+      val view: duty_deferment_account = instanceOf[duty_deferment_account]
 
       val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, routes.AccountController.showAccountDetails(someLinkId).url)
@@ -138,8 +138,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockApiConnector.deleteNotification(any, any)(any))
         .thenReturn(Future.successful(true))
 
-      val view: duty_deferment_account =
-        application.injector.instanceOf[duty_deferment_account]
+      val view: duty_deferment_account = instanceOf[duty_deferment_account]
 
       val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest(GET, routes.AccountController.showAccountDetails(someLinkId).url)
@@ -216,7 +215,7 @@ class AccountControllerSpec extends SpecBase {
       val serviceUnavailableUrl: String                    =
         routes.ServiceUnavailableController.onPageLoad(navigator.dutyDefermentStatementPageId, someLinkId).url
 
-      val application: Application = applicationBuilder
+      implicit val application: Application = applicationBuilder
         .overrides(
           inject.bind[CustomsFinancialsApiConnector].toInstance(mockApiConnector),
           inject.bind[DocumentService].toInstance(mockDocumentService),

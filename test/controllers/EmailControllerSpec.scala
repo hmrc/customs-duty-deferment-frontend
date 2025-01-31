@@ -41,7 +41,7 @@ class EmailControllerSpec extends SpecBase {
       when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
       running(application) {
-        val connector = application.injector.instanceOf[DataStoreConnector]
+        val connector = instanceOf[DataStoreConnector]
 
         val result: Future[Option[String]] = connector.retrieveUnverifiedEmail(hc)
         await(result) mustBe expectedResult
@@ -85,7 +85,7 @@ class EmailControllerSpec extends SpecBase {
 
     val response: EmailUnverifiedResponse = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )

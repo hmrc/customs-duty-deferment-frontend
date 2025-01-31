@@ -99,13 +99,13 @@ class DocumentServiceSpec extends SpecBase {
         )
       )
 
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[AuditingService].toInstance(mockAuditingService),
         inject.bind[SDESConnector].toInstance(mockSDESConnector)
       )
       .build()
 
-    val service: DocumentService = application.injector.instanceOf[DocumentService]
+    val service: DocumentService = instanceOf[DocumentService]
   }
 }

@@ -120,6 +120,9 @@ trait TestData extends MockitoSugar {
   val telephoneOpt: Some[EORI]      = Some("123-456-7890")
   val faxOpt: Some[EORI]            = Some("987-654-3210")
   val spaces: Some[String]          = Some(" ")
+  val title                         = "test_title"
+  val heading                       = "test_heading"
+  val message                       = "test_msg"
 
   val testMsgKey   = "test_key"
   val testMsg      = "test_msg"

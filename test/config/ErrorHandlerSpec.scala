@@ -120,8 +120,5 @@ class ErrorHandlerSpec extends SpecBase {
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", "test_path")
 
     val errorHandler: ErrorHandler = instanceOf[ErrorHandler]
-    val title                      = "test_title"
-    val heading                    = "test_heading"
-    val message                    = "test_msg"
   }
 }

@@ -54,12 +54,12 @@ class SDESConnectorSpec extends SpecBase {
   }
 
   trait Setup {
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )
       .build()
 
-    val connector: SDESConnector = application.injector.instanceOf[SDESConnector]
+    val connector: SDESConnector = instanceOf[SDESConnector]
   }
 }

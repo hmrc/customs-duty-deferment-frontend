@@ -172,13 +172,13 @@ class DataStoreConnectorSpec extends SpecBase {
     val emailVerifiedRes: EmailVerifiedResponse     = EmailVerifiedResponse(Some(emailId))
     val emailUnverifiedRes: EmailUnverifiedResponse = EmailUnverifiedResponse(Some(emailId))
 
-    val application: Application = applicationBuilder
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient),
         inject.bind[RequestBuilder].toInstance(requestBuilder)
       )
       .build()
 
-    val connector: DataStoreConnector = application.injector.instanceOf[DataStoreConnector]
+    val connector: DataStoreConnector = instanceOf[DataStoreConnector]
   }
 }
