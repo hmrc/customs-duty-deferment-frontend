@@ -22,7 +22,7 @@ import util.SpecBase
 
 class AppConfigSpec extends SpecBase {
   "AppConfig" should {
-    "contain correct values for the provided configuration" in new Setup {
+    "contain correct values for the provided configuration" in {
       appConfig.appName mustBe "customs-duty-deferment-frontend"
       appConfig.subscribeCdsUrl mustBe "https://www.tax.service.gov.uk/customs-enrolment-services/cds/subscribe"
       appConfig.loginUrl mustBe "http://localhost:9553/bas-gateway/sign-in"
@@ -54,17 +54,17 @@ class AppConfigSpec extends SpecBase {
       appConfig.customsDataStore mustBe "http://localhost:9893/customs-data-store"
       appConfig.sdesApi mustBe "http://localhost:9754/customs-financials-sdes-stub"
       appConfig.sddsUri mustBe "http://localhost:8323/customs-financials-sdds-stub/cds-homepage/cds/journey/start"
-      appConfig.requestedStatementsUrl(linkId) mustBe
-        s"http://localhost:9396/customs/historic-statement/requested/duty-deferment/$linkId"
-      appConfig.historicRequestUrl(linkId) mustBe
-        s"http://localhost:9396/customs/historic-statement/start-journey/duty-deferment/$linkId"
+      appConfig.requestedStatementsUrl(someLinkId) mustBe
+        s"http://localhost:9396/customs/historic-statement/requested/duty-deferment/$someLinkId"
+      appConfig.historicRequestUrl(someLinkId) mustBe
+        s"http://localhost:9396/customs/historic-statement/start-journey/duty-deferment/$someLinkId"
       appConfig.helpMakeGovUkBetterUrl mustBe
         "https://signup.take-part-in-research.service.gov.uk?" +
         "utm_campaign=CDSfinancials&utm_source=Other&utm_medium=other&t=HMRC&id=249"
       appConfig.contactFrontEndServiceId mustBe "CDS Financials"
     }
 
-    "return correct value for deskProLinkUrlForServiceUnavailable" in new Setup {
+    "return correct value for deskProLinkUrlForServiceUnavailable" in {
       val path                                                     = "test_Path"
       implicit val reqHeaders: FakeRequest[AnyContentAsEmpty.type] = fakeRequest("GET", path)
 
@@ -74,17 +74,13 @@ class AppConfigSpec extends SpecBase {
     }
 
     "emailFrontendService" should {
-      "return correct url" in new Setup {
+      "return correct url" in {
         appConfig.emailFrontendService mustBe "http://localhost:9898/manage-email-cds"
       }
 
-      "return the correct value" in new Setup {
+      "return the correct value" in {
         appConfig.emailFrontendUrl mustBe "http://localhost:9898/manage-email-cds/service/customs-finance"
       }
     }
-  }
-
-  trait Setup {
-    val linkId = "id"
   }
 }

@@ -21,7 +21,6 @@ import models.DDStatementType.Weekly
 import models.FileRole.DutyDefermentStatement
 import models.{DutyDefermentStatementFile, DutyDefermentStatementFileMetadata, EoriHistory, FileFormat}
 import play.api.{Application, inject}
-import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -36,7 +35,7 @@ class DocumentServiceSpec extends SpecBase {
       when(mockSDESConnector.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentStatementFiles))
 
-      service.getDutyDefermentStatements(eoriHistory, dan).map { ddStatements =>
+      service.getDutyDefermentStatements(eoriHistory, someDan).map { ddStatements =>
         ddStatements mustBe dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())
       }
     }
@@ -46,10 +45,7 @@ class DocumentServiceSpec extends SpecBase {
     val mockSDESConnector: SDESConnector     = mock[SDESConnector]
     val mockAuditingService: AuditingService = mock[AuditingService]
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
-    val dan                   = "1234567"
 
     val startYear  = previousMonthDate.getYear
     val startMonth = previousMonthDate.getMonthValue
@@ -103,13 +99,13 @@ class DocumentServiceSpec extends SpecBase {
         )
       )
 
-    val application: Application = applicationBuilder()
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[AuditingService].toInstance(mockAuditingService),
         inject.bind[SDESConnector].toInstance(mockSDESConnector)
       )
       .build()
 
-    val service: DocumentService = application.injector.instanceOf[DocumentService]
+    val service: DocumentService = instanceOf[DocumentService]
   }
 }

@@ -16,9 +16,6 @@
 
 package controllers.actions
 
-import cache.UserAnswersCache
-import config.ErrorHandler
-import connectors.DataStoreConnector
 import models.EoriHistory
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -27,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.*
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import util.SpecBase
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +37,7 @@ class DataActionSpec extends SpecBase {
       when(mockErrorHandler.unauthorized()(any))
         .thenReturn(Html("unauthorized"))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest())
         status(result) mustBe UNAUTHORIZED
         contentAsString(result).contains("unauthorized") mustBe true
@@ -51,7 +48,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(None))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe SEE_OTHER
         redirectLocation(result).get must startWith("/customs/duty-deferment/this-service-has-been-reset")
@@ -62,7 +59,7 @@ class DataActionSpec extends SpecBase {
       when(mockUserAnswersCache.retrieve(any)(any))
         .thenReturn(Future.successful(Some(emptyUserAnswers)))
 
-      running(application()) {
+      running(application) {
         val result = controller.onPageLoad()(FakeRequest().withHeaders("X-Session-Id" -> "someSessionId"))
         status(result) mustBe OK
       }
@@ -70,11 +67,6 @@ class DataActionSpec extends SpecBase {
   }
 
   trait Setup {
-    val mockAuthConnector: AuthConnector           = mock[AuthConnector]
-    val mockDataStoreConnector: DataStoreConnector = mock[DataStoreConnector]
-    val mockErrorHandler: ErrorHandler             = mock[ErrorHandler]
-    val mockUserAnswersCache: UserAnswersCache     = mock[UserAnswersCache]
-
     when(mockAuthConnector.authorise[Enrolments ~ Option[String]](any, any)(any, any))
       .thenReturn(
         Future.successful(

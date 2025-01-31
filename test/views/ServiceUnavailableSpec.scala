@@ -47,24 +47,21 @@ class ServiceUnavailableSpec extends SpecBase {
             s"${messages("cf.service-unavailable.description.2")}"
         ) mustBe true
 
-      view.html().contains(backLinkUrl)
+      view.html().contains(testLinkUrl)
       view.html().contains(messages("cf.service-unavailable.description.3"))
       view.html().contains(deskProLink)
     }
   }
 
   trait Setup {
-
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
-    val backLinkUrl                                           = "test_url"
     val deskProLink: String                                   = "http://localhost:9250" +
       "/contact/report-technical-problem?newTab=true&amp;service=CDS%20FinancialsreferrerUrl=test_Path"
 
     val view: Document =
       Jsoup.parse(
-        application().injector
-          .instanceOf[service_unavailable]
-          .apply(Option(backLinkUrl))(request, messages, appConfig)
+        instanceOf[service_unavailable]
+          .apply(Option(testLinkUrl))(request, messages, appConfig)
           .body
       )
   }

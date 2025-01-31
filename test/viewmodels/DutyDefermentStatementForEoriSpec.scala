@@ -79,15 +79,9 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
   }
 
   trait Setup {
-
-    val eightMonths = 8
-    val dayTen      = 10
-
-    val endDate = LocalDate.now
-
-    val startDate01 = endDate.minusMonths(1)
-    val startDate02 = endDate.minusMonths(2)
-    val startDate03 = endDate.minusMonths(eightMonths)
+    val startDate01 = todaysDate.minusMonths(1)
+    val startDate02 = todaysDate.minusMonths(2)
+    val startDate03 = todaysDate.minusMonths(periodStartMonth10)
 
     val metaData01 = DutyDefermentStatementFileMetadata(
       startDate01.getYear,
@@ -95,7 +89,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       1,
       startDate01.getYear,
       startDate01.getMonthValue,
-      dayTen,
+      periodStartDay1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,
@@ -111,7 +105,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       1,
       startDate02.getYear,
       startDate02.getMonthValue,
-      dayTen,
+      periodStartDay1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,
@@ -127,7 +121,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       1,
       startDate03.getYear,
       startDate03.getMonthValue,
-      dayTen,
+      periodStartDay1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,

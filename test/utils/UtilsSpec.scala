@@ -90,20 +90,20 @@ class UtilsSpec extends SpecBase {
   }
 
   trait Setup {
-    val YEAR_2024: Int = 2024
-    val MONTH_06: Int  = 6
-    val MONTH_03: Int  = 3
+    val year_2024: Int = 2024
+    val month_06: Int  = 6
+    val month_03: Int  = 3
 
-    val DAY_01: Int = 1
-    val DAY_02: Int = 2
-    val DAY_03: Int = 3
-    val DAY_04: Int = 4
+    val day_01: Int = 1
+    val day_02: Int = 2
+    val day_03: Int = 3
+    val day_04: Int = 4
 
-    val cutOffDate = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
-    val date01     = LocalDate.of(YEAR_2024, MONTH_03, DAY_01)
-    val date02     = LocalDate.of(YEAR_2024, MONTH_06, DAY_02)
-    val date03     = LocalDate.of(YEAR_2024, MONTH_06, DAY_03)
-    val date04     = LocalDate.of(YEAR_2024, MONTH_06, DAY_04)
+    val cutOffDate = LocalDate.of(year_2024, month_06, day_03)
+    val date01     = LocalDate.of(year_2024, month_03, day_01)
+    val date02     = LocalDate.of(year_2024, month_06, day_02)
+    val date03     = LocalDate.of(year_2024, month_06, day_03)
+    val date04     = LocalDate.of(year_2024, month_06, day_04)
 
     val numberOfMonths = 3
   }

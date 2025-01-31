@@ -35,21 +35,13 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
   }
 
   trait Setup {
-
-    val periodStartYear  = 2023
-    val periodStartMonth = 10
-    val periodStartDay   = 1
-    val periodEndYear    = 2023
-    val periodEndMonth   = 10
-    val periodEndDay     = 31
-
     val metadata: DutyDefermentStatementFileMetadata = DutyDefermentStatementFileMetadata(
-      periodStartYear = periodStartYear,
-      periodStartMonth = periodStartMonth,
-      periodStartDay = periodStartDay,
-      periodEndYear = periodEndYear,
-      periodEndMonth = periodEndMonth,
-      periodEndDay = periodEndDay,
+      periodStartYear = periodStartYear2023,
+      periodStartMonth = periodStartMonth10,
+      periodStartDay = periodStartDay1,
+      periodEndYear = periodEndYear2023,
+      periodEndMonth = periodEndMonth10,
+      periodEndDay = periodEndDay8,
       fileFormat = FileFormat.Csv,
       fileRole = FileRole.DutyDefermentStatement,
       defermentStatementType = DDStatementType.Weekly,
@@ -65,7 +57,7 @@ class DutyDefermentStatementFileMetadataSpec extends SpecBase {
       "dan"                    -> "DAN123456",
       "fileRole"               -> "DutyDefermentStatement",
       "dutyPaymentType"        -> "Some(BACS)",
-      "periodEndDay"           -> "31",
+      "periodEndDay"           -> "8",
       "dutyOverLimit"          -> "Some(true)",
       "periodStartDay"         -> "1",
       "fileFormat"             -> "CSV",

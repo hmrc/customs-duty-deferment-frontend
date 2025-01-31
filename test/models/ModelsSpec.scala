@@ -86,7 +86,6 @@ class ModelsSpec extends SpecBase {
   }
 
   trait Setup {
-
     val jsonObj01: JsObject = Json.obj("key1" -> "val1");
     val jsonObj02: JsObject = Json.obj("key1" -> "val1", "key2" -> "val2")
     val jsonObj03: JsObject = Json.obj("key1" -> "val1", "key2" -> Json.arr("val2"));

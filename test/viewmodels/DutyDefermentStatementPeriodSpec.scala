@@ -18,11 +18,9 @@ package viewmodels
 
 import controllers.routes
 import models.{DDStatementType, FileFormat, FileRole}
-import play.api.i18n.MessagesApi
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.GET
-import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
 import java.time.LocalDate
@@ -69,10 +67,10 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val year  = previousMonthDate.getYear
     val month = previousMonthDate.getMonthValue
 
-    val startDate01 = LocalDate.of(year, month, DAY_01)
-    val startDate02 = LocalDate.of(year, month, DAY_02)
-    val endDate01   = LocalDate.of(year, month, DAY_25)
-    val endDate02   = LocalDate.of(year, month, DAY_26)
+    val startDate01 = LocalDate.of(year, month, day_01)
+    val startDate02 = LocalDate.of(year, month, day_02)
+    val endDate01   = LocalDate.of(year, month, day_25)
+    val endDate02   = LocalDate.of(year, month, day_26)
 
     val period1 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
@@ -114,12 +112,8 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
       endDate01
     )
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
     val request: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)
         .withHeaders("X-Session-Id" -> "someSessionId")
-
-    val messagesApi: MessagesApi = instanceOf[MessagesApi]
   }
 }

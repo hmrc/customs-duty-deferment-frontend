@@ -110,9 +110,8 @@ class DutyDefermentAccordianContentSpec extends SpecBase {
     htmlText.contains("Excise deferment 1920") mustBe false
 
   trait Setup {
-
-    val startDate01: LocalDate = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_01)
-    val endDate01: LocalDate   = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, DAY_26)
+    val startDate01: LocalDate = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, day_01)
+    val endDate01: LocalDate   = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, day_26)
 
     val ddSttPeriod01: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,

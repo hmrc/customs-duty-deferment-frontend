@@ -32,12 +32,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   "apply method" must {
 
     "populate the model correctly" when {
-      "current statements are available" in new Setup {
+      "current statements are available" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -53,12 +53,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
-      "current statements with historic eori are available" in new Setup {
+      "current statements with historic eori are available" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori02),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -73,12 +73,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
-      "current statements are available for tailing statements with historic eori" in new Setup {
+      "current statements are available for tailing statements with historic eori" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori02),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -93,12 +93,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
-      "current statements are available for tailing statements without historic eori" in new Setup {
+      "current statements are available for tailing statements without historic eori" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01, dutyDefermentStatementsForEori03),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -113,12 +113,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
 
-      "current statements are available and is a NI account" in new Setup {
+      "current statements are available and is a NI account" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01.copy(requestedStatements = Seq())),
-            linkId,
+            someLinkId,
             isNiAccount = true,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -133,12 +133,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
-      "current statements are unavailable" in new Setup {
+      "current statements are unavailable" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -154,12 +154,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
 
-      "requested statements are available but current statements are unavailable" in new Setup {
+      "requested statements are available but current statements are unavailable" in {
         val viewModel: DutyDefermentAccountViewModel =
           DutyDefermentAccountViewModel(
             accountNumber = accNumber,
             Seq(dutyDefermentStatementsForEori01.copy(currentStatements = Seq())),
-            linkId,
+            someLinkId,
             isNiAccount = false,
             serviceUnavailableUrl = testServiceUnavailableUrl
           )(appConfig, messages)
@@ -167,7 +167,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainAccountNumberMsg(accNumber, viewModel)
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
-        shouldContainRequestedStatementsMsg(viewModel, linkId)(messages, appConfig)
+        shouldContainRequestedStatementsMsg(viewModel, someLinkId)(messages, appConfig)
         shouldContainNoStatementsAvailableMsg(viewModel)
         shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
@@ -313,8 +313,4 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
           )(messages)
         )
       )
-
-  trait Setup {
-    val linkId = "test_link_id"
-  }
 }

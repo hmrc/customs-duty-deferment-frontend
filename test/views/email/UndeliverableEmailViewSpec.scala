@@ -54,7 +54,7 @@ class UndeliverableEmailViewSpec extends SpecBase {
         view.text().contains(messages("cf.undeliverable.email.change.text.p1")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.change.text.p2")) mustBe true
         view.text().contains(messages("cf.undeliverable.email.link-text")) mustBe true
-        view.toString must include(nextPageUrl)
+        view.toString must include(testLinkUrl)
         view.text().contains(undeliverableEmailUrl.get) mustBe true
       }
 
@@ -65,17 +65,16 @@ class UndeliverableEmailViewSpec extends SpecBase {
   }
 
   trait Setup {
-    val nextPageUrl                           = "test_url"
     val undeliverableEmailUrl: Option[String] = Some("undeliverable_url")
 
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      instanceOf[undeliverable_email].apply(nextPageUrl, undeliverableEmailUrl).body
+      instanceOf[undeliverable_email].apply(testLinkUrl, undeliverableEmailUrl).body
     )
 
     val viewWithNoEmail: Document = Jsoup.parse(
-      instanceOf[undeliverable_email].apply(nextPageUrl).body
+      instanceOf[undeliverable_email].apply(testLinkUrl).body
     )
   }
 }

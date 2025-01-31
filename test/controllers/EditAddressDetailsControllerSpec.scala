@@ -17,7 +17,6 @@
 package controllers
 
 import cache.UserAnswersCache
-import config.AppConfig
 import connectors.CustomsFinancialsApiConnector
 import mappings.EditAddressDetailsFormProvider
 import models.{EditAddressDetailsUserAnswers, UpdateContactDetailsResponse, UserAnswers}
@@ -25,7 +24,6 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.EditAddressDetailsPage
 import play.api.data.Form
-import play.api.i18n.MessagesApi
 import play.api.{Application, inject}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
@@ -199,7 +197,5 @@ class EditAddressDetailsControllerSpec extends SpecBase {
       instanceOf[EditAddressDetailsFormProvider].apply()
 
     val view: edit_address_details = instanceOf[edit_address_details]
-    val appConfig: AppConfig       = instanceOf[AppConfig]
-    val messagesApi: MessagesApi   = instanceOf[MessagesApi]
   }
 }

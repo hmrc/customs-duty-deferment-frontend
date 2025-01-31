@@ -21,12 +21,12 @@ import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
 import play.api.http.Status.OK
 import play.api.{Application, inject}
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.HttpReads
 import util.SpecBase
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers.shouldBe
-import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +41,7 @@ class EmailControllerSpec extends SpecBase {
       when(mockHttpClient.get(any)(any)).thenReturn(requestBuilder)
 
       running(application) {
-        val connector = application.injector.instanceOf[DataStoreConnector]
+        val connector = instanceOf[DataStoreConnector]
 
         val result: Future[Option[String]] = connector.retrieveUnverifiedEmail(hc)
         await(result) mustBe expectedResult
@@ -82,14 +82,10 @@ class EmailControllerSpec extends SpecBase {
 
   trait Setup {
     val expectedResult: Option[String] = Some("unverifiedEmail")
-    implicit val hc: HeaderCarrier     = HeaderCarrier()
-
-    val mockHttpClient: HttpClientV2   = mock[HttpClientV2]
-    val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
     val response: EmailUnverifiedResponse = EmailUnverifiedResponse(Some("unverifiedEmail"))
 
-    val application: Application = applicationBuilder()
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[HttpClientV2].toInstance(mockHttpClient)
       )

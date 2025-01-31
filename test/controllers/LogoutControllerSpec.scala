@@ -62,7 +62,7 @@ class LogoutControllerSpec extends SpecBase {
     when(mockSessionCacheConnector.removeSession(any)(any))
       .thenReturn(Future.successful(true))
 
-    val application: Application = applicationBuilder()
+    val application: Application = applicationBuilder
       .overrides(
         inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector)
       )

@@ -64,15 +64,12 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
 
   trait Setup {
     val serviceUnavailableUrl: Option[String] = Option("service_unavailable_url")
-    val accountNumber                         = "1234567"
-    val linkId                                = "link_id"
 
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val view: Document = Jsoup.parse(
-      application().injector
-        .instanceOf[duty_deferment_statements_not_available]
-        .apply(accountNumber, linkId, serviceUnavailableUrl)(request, messages, appConfig)
+      instanceOf[duty_deferment_statements_not_available]
+        .apply(accNumber, someLinkId, serviceUnavailableUrl)(request, messages, appConfig)
         .body
     )
   }

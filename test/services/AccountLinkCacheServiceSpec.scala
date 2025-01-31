@@ -118,13 +118,13 @@ class AccountLinkCacheServiceSpec extends SpecBase {
       isNiAccount = false
     )
 
-    val application: Application = applicationBuilder()
+    implicit val application: Application = applicationBuilder
       .overrides(
         inject.bind[SessionCacheConnector].toInstance(mockSessionCacheConnector),
         inject.bind[AccountLinkCache].toInstance(mockAccountLinkCache)
       )
       .build()
 
-    val service: AccountLinkCacheService = application.injector.instanceOf[AccountLinkCacheService]
+    val service: AccountLinkCacheService = instanceOf[AccountLinkCacheService]
   }
 }

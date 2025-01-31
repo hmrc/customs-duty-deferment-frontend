@@ -88,7 +88,6 @@ class UserAnswersSpec extends SpecBase {
   }
 
   trait Setup {
-
     val sampleId                           = "sampleId"
     val sampleData: JsObject               = Json.obj("key" -> "value")
     val sampleLocalDateTime: LocalDateTime = LocalDateTime.now

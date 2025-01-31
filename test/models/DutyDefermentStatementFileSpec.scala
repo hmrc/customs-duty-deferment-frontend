@@ -22,7 +22,6 @@ import models.FileRole.DutyDefermentStatement
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.GET
-import uk.gov.hmrc.http.HeaderCarrier
 import util.SpecBase
 
 class DutyDefermentStatementFileSpec extends SpecBase {
@@ -224,17 +223,7 @@ class DutyDefermentStatementFileSpec extends SpecBase {
   }
 
   trait Setup {
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-
-    val startYear  = 2018
-    val startMonth = 6
-    val startDate  = 1
-    val endYear    = 2018
-    val endMonth   = 6
-    val endDate    = 8
-    val fileSize   = 10L
-    val dan        = "123456"
+    val fileSize = 10L
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
@@ -242,18 +231,18 @@ class DutyDefermentStatementFileSpec extends SpecBase {
         "downloadUrl",
         fileSize,
         DutyDefermentStatementFileMetadata(
-          startYear,
-          startMonth,
-          startDate,
-          endDate,
-          endMonth,
-          endDate,
+          periodStartYear2023,
+          periodStartMonth10,
+          periodStartDay1,
+          periodEndYear2023,
+          periodEndMonth10,
+          periodEndDay8,
           FileFormat.Csv,
           DutyDefermentStatement,
           Weekly,
           Some(true),
           Some("BACS"),
-          dan,
+          someDan,
           None
         )
       )
@@ -264,18 +253,18 @@ class DutyDefermentStatementFileSpec extends SpecBase {
         "downloadUrl",
         fileSize,
         DutyDefermentStatementFileMetadata(
-          startYear,
-          startMonth,
-          startDate,
-          endYear,
-          endMonth,
-          endDate,
+          periodStartYear2023,
+          periodStartMonth10,
+          periodStartDay1,
+          periodEndYear2023,
+          periodEndMonth10,
+          periodEndDay8,
           FileFormat.Csv,
           DutyDefermentStatement,
           Supplementary,
           Some(true),
           Some("BACS"),
-          dan,
+          someDan,
           None
         )
       )
@@ -286,18 +275,18 @@ class DutyDefermentStatementFileSpec extends SpecBase {
         "downloadUrl",
         fileSize,
         DutyDefermentStatementFileMetadata(
-          startYear,
-          startMonth,
-          startDate,
-          endYear,
-          endMonth,
-          endDate,
+          periodStartYear2023,
+          periodStartMonth10,
+          periodStartDay1,
+          periodEndYear2023,
+          periodEndMonth10,
+          periodEndDay8,
           FileFormat.Csv,
           DutyDefermentStatement,
           Excise,
           Some(true),
           Some("BACS"),
-          dan,
+          someDan,
           None
         )
       )
@@ -308,18 +297,18 @@ class DutyDefermentStatementFileSpec extends SpecBase {
         "downloadUrl",
         fileSize,
         DutyDefermentStatementFileMetadata(
-          startYear,
-          startMonth,
-          startDate,
-          endYear,
-          endMonth,
-          endDate,
+          periodStartYear2023,
+          periodStartMonth10,
+          periodStartDay1,
+          periodEndYear2023,
+          periodEndMonth10,
+          periodEndDay8,
           FileFormat.Csv,
           DutyDefermentStatement,
           ExciseDeferment,
           Some(true),
           Some("BACS"),
-          dan,
+          someDan,
           None
         )
       )
@@ -330,18 +319,18 @@ class DutyDefermentStatementFileSpec extends SpecBase {
         "downloadUrl",
         fileSize,
         DutyDefermentStatementFileMetadata(
-          startYear,
-          startMonth,
-          startDate,
-          endYear,
-          endMonth,
-          endDate,
+          periodStartYear2023,
+          periodStartMonth10,
+          periodStartDay1,
+          periodEndYear2023,
+          periodEndMonth10,
+          periodEndDay8,
           FileFormat.Csv,
           DutyDefermentStatement,
           DutyDeferment,
           Some(true),
           Some("BACS"),
-          dan,
+          someDan,
           None
         )
       )

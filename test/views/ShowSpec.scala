@@ -31,20 +31,20 @@ class ShowSpec extends SpecBase {
 
   "Duty Deferment Account Show Spec" should {
     "display header" in new Setup {
-      running(application()) {
+      running(application) {
         view.getElementsByTag("h1").text mustBe "Duty deferment contact details"
       }
     }
 
     "display header2" in new Setup {
-      running(application()) {
+      running(application) {
         view.getElementsByTag("h2").text mustBe
           "Help make GOV.UK better Account: someDan Support links"
       }
     }
 
     "when you click on the back link redirect to you contact details" in new Setup {
-      running(application()) {
+      running(application) {
         val request = fakeRequest(GET, "http://localhost:9876/customs/payment-records/your-contact-details")
         val result  = route(application(), request).value
         val html    = Jsoup.parse(contentAsString(result))
@@ -54,10 +54,7 @@ class ShowSpec extends SpecBase {
   }
 
   trait Setup extends I18nSupport {
-
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
-
-    val someLinkId = "someLinkId"
 
     val validContactDetailsViewModel: ContactDetailsViewModel = ContactDetailsViewModel(
       validDan,
@@ -68,7 +65,7 @@ class ShowSpec extends SpecBase {
     def view: Document =
       Jsoup.parse(
         instanceOf[show]
-          .apply(validContactDetailsViewModel, DefermentAccountAvailable, someLinkId)(request, messages, appConfig)
+          .apply(validContactDetailsViewModel, DefermentAccountAvailable, testLinkUrl)(request, messages, appConfig)
           .body
       )
 

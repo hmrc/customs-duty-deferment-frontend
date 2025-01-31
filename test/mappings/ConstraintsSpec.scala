@@ -35,17 +35,17 @@ class ConstraintsSpec extends SpecBase with Constraints {
     }
 
     "remove white space from single middle" in new SetUp {
-      stripWhiteSpaces(emailWithSpacesWithIn_2.value) mustBe email.value
+      stripWhiteSpaces(emailWithSpacesWithIn_2.value) mustBe emailOpt.value
     }
 
     "remove white space from multiple middle" in new SetUp {
-      stripWhiteSpaces(emailWithSpacesWithIn_5.value) mustBe email.value
+      stripWhiteSpaces(emailWithSpacesWithIn_5.value) mustBe emailOpt.value
     }
   }
 
   "regex returns result" should {
     "email is valid" in new SetUp {
-      isValid(email.value) mustBe true
+      isValid(emailOpt.value) mustBe true
     }
 
     "email is valid when stripped of whitespace" in new SetUp {
@@ -82,7 +82,7 @@ class ConstraintsSpec extends SpecBase with Constraints {
   "validEmail return correct result" should {
 
     "email is valid" in new SetUp {
-      isValidEmail(email) mustBe Valid
+      isValidEmail(emailOpt) mustBe Valid
     }
 
     "email is valid when emailWithLeadingSpaces" in new SetUp {
@@ -234,8 +234,6 @@ class ConstraintsSpec extends SpecBase with Constraints {
 }
 
 trait SetUp {
-  val spaces: Some[String]                            = Some("   ")
-  val email: Some[String]                             = Some("abc@test.com")
   val emailWithLeadingSpaces: Some[String]            = Some("   abc@test.com")
   val emailWithTrailingSpaces: Some[String]           = Some("abc@test.com   ")
   val emailWithLeadingAndTrailingSpaces: Some[String] = Some("   abc@test.com   ")
