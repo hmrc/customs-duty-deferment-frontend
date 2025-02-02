@@ -49,8 +49,7 @@ class DirectDebitController @Inject() (
                                Redirect(appConfig.financialsHomepage)
                              )
       email               <- fromOptionF(
-                               dateStoreConnector
-                                 .getEmail(req.request.user.eori)
+                               dateStoreConnector.getEmail
                                  .map {
                                    case Right(email) => Some(email)
                                    case Left(_)      => None

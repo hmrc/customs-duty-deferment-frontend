@@ -16,7 +16,6 @@
 
 package util
 
-import models.DDStatementType
 import models.FileRole.DutyDefermentStatement
 import models.responses.retrieve.{ContactDetails, ResponseCommon}
 import models.*

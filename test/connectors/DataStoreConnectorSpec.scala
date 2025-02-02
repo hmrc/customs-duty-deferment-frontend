@@ -71,7 +71,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Right(Email("some@email.com"))
       }
     }
@@ -85,7 +85,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UndeliverableEmail("some@email.com"))
       }
     }
@@ -99,7 +99,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UnverifiedEmail)
       }
     }
@@ -111,7 +111,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UnverifiedEmail)
       }
     }
