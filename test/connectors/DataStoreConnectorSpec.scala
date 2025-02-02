@@ -117,6 +117,19 @@ class DataStoreConnectorSpec extends SpecBase {
     }
   }
 
+  "verifiedEmail" should {
+    "return undelivered email" in new Setup {
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailVerifiedRes))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      running(application) {
+        connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
+      }
+    }
+  }
+
   "retrieveUnverifiedEmail" should {
     "return unverified email" in new Setup {
       when(requestBuilder.execute(any[HttpReads[EmailUnverifiedResponse]], any[ExecutionContext]))
@@ -127,19 +140,6 @@ class DataStoreConnectorSpec extends SpecBase {
       running(application) {
         val result = await(connector.retrieveUnverifiedEmail(hc))
         result mustBe expectedResult
-      }
-    }
-  }
-
-  "verifiedEmail" should {
-    "return undelivered email" in new Setup {
-      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailVerifiedRes))
-
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
-
-      running(application) {
-        connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
       }
     }
   }
