@@ -81,7 +81,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
 
   "startSession" must {
     "redirect to session expired when no account link found" in new Setup {
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Right(Email("test@test.com"))))
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Left(NoAccountStatusId)))
@@ -94,7 +94,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to 'show' when a verified email response and account link are returned" in new Setup {
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Right(Email("test@test.com"))))
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))
@@ -107,7 +107,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to 'verify your email' page when an unverified email response is received" in new Setup {
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Left(UnverifiedEmail)))
 
       running(application) {
@@ -118,7 +118,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to 'Undelivered email' page when an undelivered email response is received" in new Setup {
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Left(UndeliverableEmail("test@test.com"))))
 
       running(application) {
@@ -129,7 +129,7 @@ class ShowContactDetailsControllerSpec extends SpecBase {
     }
 
     "redirect to 'show contact details' page when an error occurs while retrieving the email" in new Setup {
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.failed(new RuntimeException("Error occurred")))
       when(mockAccountLinkCacheService.cacheAccountLink(any, any, any)(any))
         .thenReturn(Future.successful(Right(dutyDefermentAccountLink)))

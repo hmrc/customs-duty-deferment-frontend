@@ -49,7 +49,7 @@ class DirectDebitControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Left(UnverifiedEmail)))
 
       running(app) {
@@ -65,7 +65,7 @@ class DirectDebitControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown error")))
 
       running(app) {
@@ -81,7 +81,7 @@ class DirectDebitControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Right(Email("some@email.com"))))
 
       when(mockSDDSConnector.startJourney(any, any)(any))
@@ -100,7 +100,7 @@ class DirectDebitControllerSpec extends SpecBase {
       when(mockSessionCacheConnector.retrieveSession(any, any)(any))
         .thenReturn(Future.successful(Some(accountLink)))
 
-      when(mockDataStoreConnector.getEmail(any)(any))
+      when(mockDataStoreConnector.getEmail(any))
         .thenReturn(Future.successful(Right(Email("some@email.com"))))
 
       when(mockSDDSConnector.startJourney(any, any)(any))

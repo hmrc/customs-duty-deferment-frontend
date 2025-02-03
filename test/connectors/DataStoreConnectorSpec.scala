@@ -71,7 +71,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Right(Email("some@email.com"))
       }
     }
@@ -85,7 +85,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UndeliverableEmail("some@email.com"))
       }
     }
@@ -99,7 +99,7 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.successful(emailResponse))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UnverifiedEmail)
       }
     }
@@ -111,8 +111,21 @@ class DataStoreConnectorSpec extends SpecBase {
         .thenReturn(Future.failed(UpstreamErrorResponse("Not Found", NOT_FOUND, NOT_FOUND)))
 
       running(application) {
-        val result = await(connector.getEmail("someEori"))
+        val result = await(connector.getEmail)
         result mustBe Left(UnverifiedEmail)
+      }
+    }
+  }
+
+  "verifiedEmail" should {
+    "return undelivered email" in new Setup {
+      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
+        .thenReturn(Future.successful(emailVerifiedRes))
+
+      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
+
+      running(application) {
+        connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
       }
     }
   }
@@ -127,19 +140,6 @@ class DataStoreConnectorSpec extends SpecBase {
       running(application) {
         val result = await(connector.retrieveUnverifiedEmail(hc))
         result mustBe expectedResult
-      }
-    }
-  }
-
-  "verifiedEmail" should {
-    "return undelivered email" in new Setup {
-      when(requestBuilder.execute(any[HttpReads[EmailVerifiedResponse]], any[ExecutionContext]))
-        .thenReturn(Future.successful(emailVerifiedRes))
-
-      when(mockHttpClient.get(any[URL]())(any())).thenReturn(requestBuilder)
-
-      running(application) {
-        connector.verifiedEmail.map(_.verifiedEmail mustBe Some(emailVerifiedRes))
       }
     }
   }

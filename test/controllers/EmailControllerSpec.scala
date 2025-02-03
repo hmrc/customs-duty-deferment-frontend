@@ -18,7 +18,6 @@ package controllers
 
 import connectors.DataStoreConnector
 import models.{EmailUnverifiedResponse, EmailVerifiedResponse}
-import play.api.http.Status.OK
 import play.api.{Application, inject}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpReads

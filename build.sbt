@@ -1,17 +1,17 @@
 import scoverage.ScoverageKeys
 
-val appName = "customs-duty-deferment-frontend"
-val testDirectory = "test"
-val bootstrap = "9.0.0"
-val scala3_3_3 = "3.3.3"
+val appName         = "customs-duty-deferment-frontend"
+val testDirectory   = "test"
+val scala3_3_4      = "3.3.4"
 val silencerVersion = "1.7.14"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala3_3_3
+ThisBuild / scalaVersion := scala3_3_4
 
 lazy val scalastyleSettings = Seq(
   scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
-  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml")
+  (Test / scalastyleConfig) := baseDirectory.value / testDirectory / "test-scalastyle-config.xml"
+)
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -20,15 +20,16 @@ lazy val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := 9397,
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions := scalacOptions.value.diff(Seq("-Wunused:all")),
+    scalacOptions += "-Wconf:msg=Flag.*repeatedly:s",
     Test / scalacOptions ++= Seq(
       "-Wunused:imports",
       "-Wunused:params",
       "-Wunused:implicits",
       "-Wunused:explicits",
-      "-Wunused:privates"),
-
-    ScoverageKeys.coverageExcludedFiles := List(
-      "<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*").mkString(";"),
+      "-Wunused:privates"
+    ),
+    ScoverageKeys.coverageExcludedFiles := List("<empty>", "Reverse.*", ".*(BuildInfo|Routes|testOnly).*", ".*views.*")
+      .mkString(";"),
     ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageMinimumBranchTotal := 90,
     ScoverageKeys.coverageFailOnMinimum := false,
@@ -36,8 +37,9 @@ lazy val microservice = Project(appName, file("."))
     Assets / pipelineStages := Seq(gzip),
     libraryDependencies ++= Seq(
       compilerPlugin(
-        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.for3Use2_13With("", ".12")),
-      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.for3Use2_13With("",".12")
+        "com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.for3Use2_13With("", ".12")
+      ),
+      "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.for3Use2_13With("", ".12")
     )
   )
   .settings(resolvers += Resolver.jcenterRepo)
@@ -51,7 +53,9 @@ lazy val microservice = Project(appName, file("."))
 lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
-  .settings(libraryDependencies ++= Seq("uk.gov.hmrc" %% "bootstrap-test-play-30" % bootstrap % Test))
+  .settings(
+    libraryDependencies ++= Seq("uk.gov.hmrc" %% "bootstrap-test-play-30" % AppDependencies.bootstrapVersion % Test)
+  )
 
 addCommandAlias(
   "runAllChecks",

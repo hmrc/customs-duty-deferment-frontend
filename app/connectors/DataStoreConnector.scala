@@ -35,7 +35,7 @@ class DataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConf
 ) {
 
   def getAllEoriHistory(eori: String)(implicit hc: HeaderCarrier): Future[Seq[EoriHistory]] = {
-    val eoriHistoryEndPoint = s"${appConfig.customsDataStore}/eori/$eori/eori-history"
+    val eoriHistoryEndPoint = s"${appConfig.customsDataStore}/eori/eori-history"
 
     httpClient
       .get(url"$eoriHistoryEndPoint")
@@ -46,8 +46,8 @@ class DataStoreConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConf
       .recover { case _ => Seq(EoriHistory(eori, None, None)) }
   }
 
-  def getEmail(eori: String)(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
-    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/$eori/verified-email"
+  def getEmail(implicit hc: HeaderCarrier): Future[Either[EmailResponses, Email]] = {
+    val dataStoreEndpoint = s"${appConfig.customsDataStore}/eori/verified-email"
 
     httpClient
       .get(url"$dataStoreEndpoint")
