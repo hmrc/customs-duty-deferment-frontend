@@ -2,7 +2,6 @@ import scoverage.ScoverageKeys
 
 val appName         = "customs-duty-deferment-frontend"
 val testDirectory   = "test"
-val bootstrap       = "9.0.0"
 val scala3_3_4      = "3.3.4"
 val silencerVersion = "1.7.14"
 
