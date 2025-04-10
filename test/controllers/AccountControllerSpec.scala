@@ -74,7 +74,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.failed(new RuntimeException("Unknown failure")))
 
-      when(mockApiConnector.deleteNotification(any, any)(any))
+      when(mockApiConnector.deleteNotification(any)(any))
         .thenReturn(Future.successful(true))
 
       running(application) {
@@ -98,7 +98,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentStatementsForEori01))
 
-      when(mockApiConnector.deleteNotification(any, any)(any))
+      when(mockApiConnector.deleteNotification(any)(any))
         .thenReturn(Future.successful(true))
 
       val view: duty_deferment_account = instanceOf[duty_deferment_account]
@@ -135,7 +135,7 @@ class AccountControllerSpec extends SpecBase {
       when(mockDocumentService.getDutyDefermentStatements(any, any)(any))
         .thenReturn(Future.successful(dutyDefermentStatementsForEori01))
 
-      when(mockApiConnector.deleteNotification(any, any)(any))
+      when(mockApiConnector.deleteNotification(any)(any))
         .thenReturn(Future.successful(true))
 
       val view: duty_deferment_account = instanceOf[duty_deferment_account]

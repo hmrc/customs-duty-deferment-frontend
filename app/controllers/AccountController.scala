@@ -51,7 +51,7 @@ class AccountController @Inject() (
 
   def showAccountDetails(linkId: String): Action[AnyContent] =
     (authenticate andThen checkEmailIsVerified andThen resolveSessionId) async { implicit req =>
-      apiConnector.deleteNotification(req.request.user.eori, DutyDefermentStatement)
+      apiConnector.deleteNotification(DutyDefermentStatement)
       (for {
         accountLink        <- fromOptionF(
                                 sessionCacheConnector.retrieveSession(req.sessionId.value, linkId),

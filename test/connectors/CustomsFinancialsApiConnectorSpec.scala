@@ -81,7 +81,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(application) {
-        val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
+        val result = await(connector.deleteNotification(DutyDefermentStatement))
         result mustBe true
       }
     }
@@ -94,7 +94,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(application) {
-        val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
+        val result = await(connector.deleteNotification(DutyDefermentStatement))
         result mustBe false
       }
     }
@@ -107,7 +107,7 @@ class CustomsFinancialsApiConnectorSpec extends SpecBase {
       when(mockHttpClient.delete(any[URL]())(any())).thenReturn(requestBuilder)
 
       running(application) {
-        val result = await(connector.deleteNotification("someEori", DutyDefermentStatement))
+        val result = await(connector.deleteNotification(DutyDefermentStatement))
         result mustBe false
       }
     }

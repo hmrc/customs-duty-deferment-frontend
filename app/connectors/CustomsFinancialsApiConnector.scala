@@ -38,8 +38,8 @@ class CustomsFinancialsApiConnector @Inject() (
   auditingService: AuditingService
 )(implicit ec: ExecutionContext) {
 
-  def deleteNotification(eori: String, fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    val endPointUrl = s"${appConfig.customsFinancialsApi}/eori/$eori/notifications/$fileRole"
+  def deleteNotification(fileRole: FileRole)(implicit hc: HeaderCarrier): Future[Boolean] = {
+    val endPointUrl = s"${appConfig.customsFinancialsApi}/eori/notifications/$fileRole"
 
     httpClient
       .delete(url"$endPointUrl")
