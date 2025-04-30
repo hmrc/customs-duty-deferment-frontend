@@ -16,14 +16,14 @@
 
 package mappings
 
-import javax.inject.Inject
-import mappings.ConditionalMappingsExt.mandatoryIfNotExists
 import models.EditAddressDetailsUserAnswers
 import play.api.data.Forms.{mapping, of, optional}
-import play.api.data.format.Formats._
-import play.api.data.validation.{Constraint, Invalid, Valid}
-import play.api.data.{Form, FormError, Forms}
+import play.api.data.format.Formats.*
+import play.api.data.validation.Constraint
+import play.api.data.{Form, Forms}
 import services.CountriesProviderService
+
+import javax.inject.Inject
 
 class EditAddressDetailsFormProvider @Inject() (
   countriesProviderService: CountriesProviderService
@@ -42,26 +42,13 @@ class EditAddressDetailsFormProvider @Inject() (
           .verifying(validOptionalAddressField("accountDetails.edit.address.line4")),
         "postCode"     -> postcodeMapping,
         "countryCode"  -> of[String].verifying(isValidCountryCode),
-        "countryName"  -> mandatoryIfNotExists("countryNameNoJs", of[String].verifying(isValidCountryName)),
+        "countryName"  -> optional(of[String]),
         "isNiAccount"  -> of[Boolean]
       )(EditAddressDetailsUserAnswers.apply)(ead => Some(Tuple.fromProductTyped(ead)))
     )
 
-  private val isValidCountryName: Constraint[Any] = Constraint {
-    case country: String if countriesProviderService.isValidCountryName(country) => Valid
-    case _                                                                       => Invalid(countryError)
-  }
-
   def toForm(formData: Map[String, Seq[String]], dan: String): Form[EditAddressDetailsUserAnswers] = {
     val newDetailsFormData: Map[String, Seq[String]] = formData + ("dan" -> Seq(dan))
-    deDuplicateCountryErrors(apply().bindFromRequest(newDetailsFormData))
+    apply().bindFromRequest(newDetailsFormData)
   }
-
-  private def deDuplicateCountryErrors(form: Form[EditAddressDetailsUserAnswers]): Form[EditAddressDetailsUserAnswers] =
-    form.copy(errors = form.errors.map {
-      case countryNameError: FormError if countryNameError.key == "countryName" =>
-        countryNameError.copy(key = "countryCode")
-
-      case x: FormError => x
-    }.distinct)
 }
