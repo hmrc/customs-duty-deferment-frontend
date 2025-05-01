@@ -59,8 +59,7 @@ class AppConfigSpec extends SpecBase {
       appConfig.historicRequestUrl(someLinkId) mustBe
         s"http://localhost:9396/customs/historic-statement/start-journey/duty-deferment/$someLinkId"
       appConfig.helpMakeGovUkBetterUrl mustBe
-        "https://signup.take-part-in-research.service.gov.uk?" +
-        "utm_campaign=CDSfinancials&utm_source=Other&utm_medium=other&t=HMRC&id=249"
+        "https://survey.take-part-in-research.service.gov.uk/jfe/form/SV_74GjifgnGv6GsMC?Source=BannerList_HMRC_CDS_MIDVA"
       appConfig.contactFrontEndServiceId mustBe "CDS Financials"
     }
 
