@@ -254,7 +254,8 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             linkMessage = "cf.accounts.older-statements.description.link",
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
-            preLinkMessage = Some("cf.accounts.older-statements.description")
+            preLinkMessage = Some("cf.accounts.older-statements.description"),
+            linkSentence = true
           )(messages)
         )
       )
@@ -277,7 +278,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             tabLink = Some(
               new HmrcNewTabLink().apply(
                 NewTabLink(
-                  language = Some(messages.lang.toString),
+                  language = Some(messages.lang.language),
                   classList = Some("govuk-link govuk-link--no-visited-state"),
                   href = Some(appConfig.chiefDDstatementsLink),
                   text = messages("cf.accounts.chiefStatements.description.link")
@@ -303,7 +304,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             tabLink = Some(
               new HmrcNewTabLink().apply(
                 NewTabLink(
-                  language = Some(messages.lang.toString),
+                  language = Some(messages.lang.language),
                   classList = Some("govuk-link"),
                   href = Some(appConfig.ddAccountSupportLink),
                   text = messages("cf.account.dd.support.link")
