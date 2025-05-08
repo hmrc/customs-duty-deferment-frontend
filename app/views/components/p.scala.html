@@ -15,9 +15,15 @@
  *@
 
 @import utils.Utils.{emptyString, period}
+@import play.twirl.api.HtmlFormat
 
 @this()
 
 @(content: Html, id: Option[String] = None, classes: Option[String] = None, link: Option[Html] = None, tabLink: Option[Html] = None)(implicit messages: Messages)
 
-<p @{id.fold(emptyString)(id => s"id=$id")}  class="@{classes.fold("govuk-body")(classes => s"$classes")}">@content @link@tabLink@if(link.isDefined || tabLink.isDefined){@period}</p>
+@l = @{ link.fold(Html(""))(l => HtmlFormat.fill(Seq(Html(" "), l))) }
+@tl = @{ tabLink.fold(Html(""))(tl => HtmlFormat.fill(Seq(Html(" "), tl))) }
+@maybePeriod = @{ if (link.isDefined || tabLink.isDefined) Html(period) else Html("") }
+@idAttr = @{ id.fold(Html(""))(i => HtmlFormat.raw(s""" id="$i"""")) }
+
+<p class="@{classes.fold("govuk-body")(classes => s"$classes")}"@idAttr>@content@l@tl@maybePeriod</p>
