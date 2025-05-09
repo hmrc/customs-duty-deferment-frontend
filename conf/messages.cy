@@ -92,14 +92,14 @@ month.abbr.12 = Rhag
 # Request statement guidance
 # ----------------------------------------------------------
 cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 6 mis
-cf.accounts.older-statements.description.link=llenwch ac anfon cais am ddatganiad.
+cf.accounts.older-statements.description.link=llenwch ac anfon cais am ddatganiad
 cf.accounts.older-statements.description=Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
 cf.common.chiefStatements.heading=Datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF
-cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES) (yn agor tab newydd).
+cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES)
 cf.accounts.chiefStatements.description=Er mwyn bwrw golwg dros, argraffu neu lawrlwytho datganiadau gohirio tollau ar gyfer datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF, gallwch ddefnyddio’r gwasanaeth
 cf.accounts.support.heading=Help a chymorth
 cf.accounts.support.message=Os oes angen help arnoch, cysylltwch â’r
-cf.account.dd.support.link=Llinell Gymorth TAW ac Ecséis (yn agor mewn tab newydd).
+cf.account.dd.support.link=Llinell Gymorth TAW ac Ecséis
 cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIEF
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis

@@ -71,12 +71,11 @@ object ViewUtils {
   def hmrcNewTabLinkComponent(
     text: String = emptyString,
     href: Option[String] = None,
-    language: Option[String] = None,
     classList: Option[String] = None
-  ): HtmlFormat.Appendable =
+  )(implicit messages: Messages): HtmlFormat.Appendable =
     new HmrcNewTabLink().apply(
       NewTabLink(
-        language = language,
+        language = Some(messages.lang.language.toString),
         classList = classList,
         href = href,
         text = text

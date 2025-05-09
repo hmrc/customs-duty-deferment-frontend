@@ -215,7 +215,8 @@ object DutyDefermentAccountViewModel {
             linkMessageKey = "cf.accounts.older-statements.description.link",
             location = serviceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
-            preLinkMessageKey = Some("cf.accounts.older-statements.description")
+            preLinkMessageKey = Some("cf.accounts.older-statements.description"),
+            linkSentence = true
           )
         )
       )
@@ -235,7 +236,6 @@ object DutyDefermentAccountViewModel {
           content = Html(messages("cf.accounts.chiefStatements.description")),
           tabLink = Some(
             hmrcNewTabLinkComponent(
-              language = Some(messages.lang.toString),
               classList = Some("govuk-link govuk-link--no-visited-state"),
               href = Some(appConfig.chiefDDstatementsLink),
               text = messages("cf.accounts.chiefStatements.description.link")
@@ -258,7 +258,6 @@ object DutyDefermentAccountViewModel {
           content = Html(messages("cf.accounts.support.message")),
           tabLink = Some(
             hmrcNewTabLinkComponent(
-              language = Some(messages.lang.toString),
               classList = Some("govuk-link"),
               href = Some(appConfig.ddAccountSupportLink),
               text = messages("cf.account.dd.support.link")

@@ -23,7 +23,9 @@ import java.net.URL
 
 object Utils {
   val emptyString          = ""
+  val singleSpace          = " "
   val hyphen               = "-"
+  val period               = "."
   private val questionMark = "?"
 
   def referrerUrl(platformHost: Option[String])(implicit request: RequestHeader): Option[String] =

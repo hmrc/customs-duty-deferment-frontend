@@ -93,14 +93,14 @@ month.abbr.12 = Dec
 # Request statement guidance
 # ----------------------------------------------------------
 cf.common.missing-documents-guidance.cdsStatements.heading=Statements older than 6 months
-cf.accounts.older-statements.description.link=complete and send a statement request.
+cf.accounts.older-statements.description.link=complete and send a statement request
 cf.accounts.older-statements.description=For declarations made using the Customs Declarations Service,
 cf.common.chiefStatements.heading=Declarations made using CHIEF
-cf.accounts.chiefStatements.description.link=Duty Deferment Electronic Statements (DDES) (opens in new tab).
+cf.accounts.chiefStatements.description.link=Duty Deferment Electronic Statements (DDES)
 cf.accounts.chiefStatements.description=You can view, print or download duty deferment statements for declarations made using CHIEF from
 cf.accounts.support.heading=Help and support
 cf.accounts.support.message=If you need help contact
-cf.account.dd.support.link=duty deferment general enquiries (opens in a new tab).
+cf.account.dd.support.link=duty deferment general enquiries
 cf.common.missing-documents-guidance.chiefStatements.heading={0} made in CHIEF
 cf.common.missing-documents-guidance.text1={0} for import declarations made in Customs Handling of Import and Export Freight (CHIEF) are not available in this service.
 cf.common.missing-documents-guidance.olderStatements.heading={0} older than 6 months

@@ -14,10 +14,19 @@
  * limitations under the License.
  *@
 
-@import utils.Utils.emptyString
+@import utils.Utils.{emptyString, period, singleSpace}
+@import play.twirl.api.HtmlFormat
 
 @this()
 
 @(content: Html, id: Option[String] = None, classes: Option[String] = None, link: Option[Html] = None, tabLink: Option[Html] = None)(implicit messages: Messages)
 
-<p @{id.fold(emptyString)(id => s"id=$id")}  class="@{classes.fold("govuk-body")(classes => s"$classes")}">@content @link @tabLink</p>
+@l = @{ link.fold(Html(emptyString))(l => HtmlFormat.fill(Seq(Html(singleSpace), l))) }
+@tl = @{ tabLink.fold(Html(emptyString))(tl => HtmlFormat.fill(Seq(Html(singleSpace), tl))) }
+
+@maybePeriod = @{ if (link.isDefined || tabLink.isDefined) Html(period) else Html(emptyString) }
+
+@idAttr = @{ id.fold(Html(emptyString))(i => HtmlFormat.raw(s"${singleSpace}id=\"$i\"")) }
+@classAttrVal = @{classes.fold("govuk-body")(classes => s"$classes")}
+
+<p class="@classAttrVal"@idAttr>@content@l@tl@maybePeriod</p>

@@ -16,11 +16,12 @@
 
 package utils
 
+import play.api.i18n.Lang
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
-import utils.ViewUtils._
+import utils.ViewUtils.*
 import views.html.components.{caption, h1, h2, inset, link, p}
 
 class ViewUtilsSpec extends SpecBase {
@@ -144,7 +145,7 @@ class ViewUtilsSpec extends SpecBase {
   "hmrcNewTabLinkComponent" should {
     "create the component correctly with provided input" in {
       val result: HtmlFormat.Appendable =
-        hmrcNewTabLinkComponent(text = testMsg, href = Some(testHref), language = Some(testLang))
+        hmrcNewTabLinkComponent(text = testMsg, href = Some(testHref))(messagesApi.preferred(Seq(Lang.apply(testLang))))
 
       result mustBe
         new HmrcNewTabLink().apply(NewTabLink(language = Some(testLang), href = Some(testHref), text = testMsg))
