@@ -84,7 +84,7 @@ Application entrypoint:  `/customs/duty-deferment`
 > There's a risk of WIP features being exposed in production!
 > **Don't** enable features in `application.conf`, as this will apply globally by default
 
-Feature flags are used appropriately on different envs and could be updated in customs-cash-account-frontend.yaml on pertinent env
+Feature flags are used appropriately on different envs and could be updated in customs-duty-deferment-frontend.yaml on pertinent env
 
 ### Enable features
 | Command                                       | Description                                        |
