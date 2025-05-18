@@ -1,4 +1,3 @@
-
 # customs-duty-deferment-frontend
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Coverage](https://img.shields.io/badge/test_coverage-90-green.svg)](/target/scala-2.11/scoverage-report/index.html) [![Accessibility](https://img.shields.io/badge/WCAG2.2-AA-purple.svg)](https://www.gov.uk/service-manual/helping-people-to-use-your-service/understanding-wcag)
@@ -91,7 +90,7 @@ Feature flags are used appropriately on different envs and could be updated in c
 |-----------------------------------------------|----------------------------------------------------|
 | `sbt "run -Dfeatures.some-feature-name=true"` | enables a feature locally without risking exposure |
 
-Feature switches can be enabled per-environment via the `app-config-<env>` project:
+Feature switches can be enabled per-environment via the `app-config-<env>` project in customs-duty-deferment-frontend.conf/.yaml:
 
 ### Available feature flags
 | Flag                          | Description                                                                                                                                         |
@@ -120,17 +119,17 @@ This is a sbt command alias specific to this project. It will run a scala style 
 
 ## Helpful commands
 
-| Command                                       | Description                                                                                                                                |
-|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `sbt runAllChecks`                            | Runs all standard code checks                                                                                                              |
-| `sbt clean`                                   | Cleans code                                                                                                                                |
-| `sbt compile`                                 | Compiles the code                                                                                                                          |
-| `sbt test`                                    | Runs unit tests                                                                                                                            |
-| `sbt it/test`                                 | Runs integration tests                                                                                                                     |
-| `sbt scalafmtCheckAll`                        | Runs code formatting checks based on .scalafmt.conf                                                                                        |
-| `sbt scalastyle`                              | Runs scala style checks based on scalastyle-config.xml                                                                                     |
-| `sbt Test/scalastyle`                         | Runs scala style checks for unit tests based on test-scalastyle-config.xml                                                                 |
-| `sbt coverageReport`                          | Produces a code coverage report                                                                                                            |
-| `sbt "test:testOnly *TEST_FILE_NAME*"`        | Runs tests for a single file                                                                                                               |
-| `sbt clean coverage test coverageReport`      | Runs the unit test with enabled coverage and generates coverage report that you can find in target/scala-3.x.x/scoverage-report/index.html |
-| `sbt "run -Dfeatures.some-feature-name=true"` | Enables a feature locally without risking exposure                                                                                         |
+| Command                                       | Description                                                                                                                                 |
+|-----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `sbt runAllChecks`                            | Runs all standard code checks                                                                                                               |
+| `sbt clean`                                   | Cleans code                                                                                                                                 |
+| `sbt compile`                                 | Compiles the code                                                                                                                           |
+| `sbt test`                                    | Runs unit tests                                                                                                                             |
+| `sbt it/test`                                 | Runs integration tests                                                                                                                      |
+| `sbt scalafmtCheckAll`                        | Runs code formatting checks based on .scalafmt.conf                                                                                         |
+| `sbt scalastyle`                              | Runs scala style checks based on scalastyle-config.xml                                                                                      |
+| `sbt Test/scalastyle`                         | Runs scala style checks for unit tests based on test-scalastyle-config.xml                                                                  |
+| `sbt coverageReport`                          | Produces a code coverage report                                                                                                             |
+| `sbt "test:testOnly *TEST_FILE_NAME*"`        | Runs tests for a single file                                                                                                                |
+| `sbt clean coverage test coverageReport`      | Runs the unit tests with enabled coverage and generates coverage report that you can find in target/scala-3.x.x/scoverage-report/index.html |
+| `sbt "run -Dfeatures.some-feature-name=true"` | Enables a feature locally without risking exposure                                                                                          |
