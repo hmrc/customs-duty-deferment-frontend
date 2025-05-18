@@ -8,7 +8,7 @@ This service is built following GDS standards to [WCAG 2.2 AA](https://www.gov.u
 
 We use the [GOV.UK design system](https://design-system.service.gov.uk/) to ensure consistency and compliance through the project
 
-This applications lives in the "public" zone. It integrates with:
+This application lives in the "public" zone. It integrates with:
 
 Secure Document Exchange Service (SDES) bulk data API via the [SDES proxy](https://github.com/hmrc/secure-data-exchange-proxy)
 
