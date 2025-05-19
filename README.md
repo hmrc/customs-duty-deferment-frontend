@@ -49,12 +49,17 @@ The easiest way to get started with these is via the service manager CLI - you c
 
 ### Login enrolments
 
-The service can be accessed via MIDVA home page (CUSTOMS FINANCIALS FRONTEND microservice) using below enrolments and with below sample EORI numbers
+The service can be accessed via MIDVA home page (CUSTOMS FINANCIALS FRONTEND microservice) using 'View statements' link under 'Duty deferment accounts'
 
-| Enrolment Key	| Identifier Name | Identifier Value |
-| -------- | ------- | ------- |
-| `HMRC-CUS-ORG` | `EORINumber`| `GB744638982000` |
-| `HMRC-CUS-ORG` | `EORINumber`| `GB744638982001` |
+Access CUSTOMS FINANCIALS FRONTEND using below enrolments and with below sample EORI numbers
+via http://localhost:9949/auth-login-stub/gg-sign-in (on local) or https://<host:port>/auth-login-stub/gg-sign-in on DEV/QA/STAGING
+
+Redirect URL - `/customs/payment-records`
+
+| Enrolment Key	 | Identifier Name | Identifier Value |
+|----------------|-----------------|------------------|
+| `HMRC-CUS-ORG` | `EORINumber`    | `GB744638982000` |
+| `HMRC-CUS-ORG` | `EORINumber`    | `GB744638982001` |
 
 ## Running tests and test coverage
 
