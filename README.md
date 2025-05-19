@@ -74,7 +74,7 @@ The minimum requirement for test coverage is 90%. Builds will fail when the proj
 
 You can find a list of microservice specific routes here - `/conf/app.routes`
 
-Application entrypoint:  `/customs/duty-deferment`
+Microservice entrypoint:  `/customs/duty-deferment`
 
 | Path                          | Description                        |
 |-------------------------------|------------------------------------|
