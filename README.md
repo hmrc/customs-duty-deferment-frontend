@@ -41,7 +41,7 @@ The easiest way to get started with these is via the service manager CLI - you c
 
 | Command                                      | Description                                      |
 |----------------------------------------------|--------------------------------------------------|
-| `sm2 --start CUSTOMS_FINANCIALS_ALL`         | Runs all dependencies                            |
+| `sm2 --start CUSTOMS_FINANCIALS_ALL -f`      | Runs all dependencies                            |
 | `sm2 -s`                                     | Shows running services                           |
 | `sm2 --stop CUSTOMS_DUTY_DEFERMENT_FRONTEND` | Stop the micro service                           |
 | `sbt run` or `sbt "run 9397"`                | (from root dir) starts the service on port  9397 |
