@@ -95,7 +95,7 @@ Feature flags are used appropriately on different envs and could be updated in c
 |-----------------------------------------------|----------------------------------------------------|
 | `sbt "run -Dfeatures.some-feature-name=true"` | enables a feature locally without risking exposure |
 
-Feature switches can be enabled per-environment via the `app-config-<env>` project in customs-duty-deferment-frontend.conf/.yaml:
+Feature switches can be enabled per-environment via the `app-config-<env>` project in customs-duty-deferment-frontend.conf/.yaml
 
 ### Available feature flags
 | Flag                          | Description                                                                                                                                         |
