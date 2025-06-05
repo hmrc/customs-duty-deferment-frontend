@@ -35,6 +35,13 @@ cf.account.detail.accordion.hide-section=Cuddio
 cf.account.detail.accordion.hide-all-sections=Cuddio bob adran
 # ----------------------------------------------------------
 
+# User Research
+# ----------------------------------------------------------
+user-research.subheader-text=Helpu ni i wella’r gwasanaeth hwn
+user-research.body-text=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau.
+user-research.link=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
+# ----------------------------------------------------------
+
 # Timeout Messages
 # ----------------------------------------------------------
 timeout.title=Rydych ar fin cael eich allgofnodi
