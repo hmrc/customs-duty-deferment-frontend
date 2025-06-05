@@ -16,11 +16,16 @@
 
 @import config.AppConfig
 @import views.html.components.confirmation_panel
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcNewTabLinkHelper
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablinkhelper.NewTabLinkHelper
 
 @this(
         layout: Layout,
         cancel_button: components.cancel_button,
-        inputText: components.input_text
+        inputText: components.input_text,
+        p: components.p,
+        h2: components.h2,
+        hmrcNewTabLinkHelper: HmrcNewTabLinkHelper
 )
 
 @(dan: String, isNi: Boolean = false)(
@@ -46,10 +51,24 @@
             accountNo = Some(dan),
             divClass = Some("govuk-!-margin-bottom-6"))
     }
-address
 
     @cancel_button(
         href = Some(routes.ShowContactDetailsController.show().url),
         message = messages("accountDetails.edit.confirm.back")
     )
+
+    @h2(
+        msg = messages("user-research.subheader-text"),
+        id=Some("improve-the-service-subheader-text")
+    )
+
+    @p(
+        id=Some("improve-the-service-body"),
+        content = Html(messages("user-research.help.body-text"))
+    )
+        
+    @hmrcNewTabLinkHelper(NewTabLinkHelper(
+        text = messages("user-research.help.link"),
+        href = Some(appConfig.helpMakeGovUkBetterUrl),
+    ))
 }
