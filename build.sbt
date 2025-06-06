@@ -42,7 +42,6 @@ lazy val microservice = Project(appName, file("."))
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.for3Use2_13With("", ".12")
     )
   )
-  .settings(resolvers += Resolver.jcenterRepo)
   .settings(scalastyleSettings)
   .settings(
     scalafmtDetailedError := true,

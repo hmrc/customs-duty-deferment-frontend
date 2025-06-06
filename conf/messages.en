@@ -40,6 +40,12 @@ feedback.link = feedback
 feedback.after = will help us to improve it.
 # ----------------------------------------------------------
 
+# User Research
+# ----------------------------------------------------------
+user-research.subheader-text=Help us improve the service
+user-research.help.body-text=Do you have an EU EORI number? We''re carrying out user research to help improve our services.
+user-research.help.link=Sign up to take part in user research
+
 # Timeout Messages
 # ----------------------------------------------------------
 timeout.title = You’re about to be signed out
