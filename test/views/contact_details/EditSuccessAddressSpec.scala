@@ -23,37 +23,41 @@ import util.SpecBase
 import play.api.test.FakeRequest
 import play.api.mvc.AnyContentAsEmpty
 
-class EditSuccessAddressSpec extends SpecBase  {
-    "EditSuccessAddress view" should {
-        "display recruitment info" in new Setup {
-            view.getElementById("improve-the-service-subheader-text")
-                .text()
-                .contains(messages("user-research.subheader-text")) mustBe true
+class EditSuccessAddressSpec extends SpecBase {
+  "EditSuccessAddress view" should {
+    "display recruitment info" in new Setup {
+      view
+        .getElementById("improve-the-service-subheader-text")
+        .text()
+        .contains(messages("user-research.subheader-text")) mustBe true
 
-            view.getElementById("improve-the-service-body")
-                .text()
-                .contains(messages("user-research.help.body-text")) mustBe true
+      view
+        .getElementById("improve-the-service-body")
+        .text()
+        .contains(messages("user-research.help.body-text")) mustBe true
 
-            view.getElementById("improve-the-service-link")
-                .text()
-                .contains(messages("user-research.help.link")) mustBe true
+      view
+        .getElementById("improve-the-service-link")
+        .text()
+        .contains(messages("user-research.help.link")) mustBe true
 
-            view.getElementById("improve-the-service-link")
-                .select("a")
-                .attr("href") mustBe appConfig.helpMakeGovUkBetterUrl
-        }
+      view
+        .getElementById("improve-the-service-link")
+        .select("a")
+        .attr("href") mustBe appConfig.helpMakeGovUkBetterUrl
     }
+  }
 
-    trait Setup {
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
+  trait Setup {
+    implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
-        val dan = "123"
-        val isNi = false
-         
-        val view: Document = Jsoup.parse(
-            instanceOf[edit_success_address]
-                .apply(dan, isNi)(request, messages, appConfig)
-                .body
-        )
-    }
+    val dan  = "123"
+    val isNi = false
+
+    val view: Document = Jsoup.parse(
+      instanceOf[edit_success_address]
+        .apply(dan, isNi)(request, messages, appConfig)
+        .body
+    )
+  }
 }
