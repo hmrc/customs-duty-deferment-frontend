@@ -77,20 +77,19 @@ class LayoutSpec extends SpecBase {
     viewDoc.html().contains("/accessibility-statement/customs-financials") mustBe true
   }
 
-  private def shouldContainCorrectBackLink(viewDoc: Document, backLinkUrl: Option[String] = None) =
-    if (backLinkUrl.isDefined) {
-      viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
-      viewDoc
-        .getElementsByClass("govuk-back-link")
-        .attr("href")
-        .contains(backLinkUrl.get) mustBe true
-    } else {
-      viewDoc.getElementsByClass("govuk-back-link").text() mustBe "Back"
-      viewDoc
-        .getElementsByClass("govuk-back-link")
-        .attr("href")
-        .contains("#") mustBe true
+  private def shouldContainCorrectBackLink(viewDoc: Document, backLinkUrl: Option[String] = None) = {
+    val backLinkElements = viewDoc.getElementsByClass("govuk-back-link")
+
+    backLinkUrl match {
+      case Some(url) =>
+        backLinkElements.size()       must be > 0
+        backLinkElements.text() mustBe "Back"
+        backLinkElements.attr("href") must include(url)
+
+      case None =>
+        backLinkElements.size() mustBe 0
     }
+  }
 
   private def shouldContainCorrectBanners(viewDoc: Document) = {
     viewDoc
