@@ -87,7 +87,7 @@ class LayoutSpec extends SpecBase {
         backLinkElements.attr("href") must include(url)
 
       case None =>
-        backLinkElements.size() mustBe 0 // Expect no backlink element
+        backLinkElements.size() mustBe 0
     }
   }
 
