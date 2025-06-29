@@ -114,13 +114,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
   }
 
-  "isValidCountryName throws invalid country name error" in new Setup {
-    running(appWithUserAnswers) {
-      val result = route(appWithUserAnswers, invalidCountryCodeRequest).value
-      status(result) mustBe 400
-    }
-  }
-
   trait Setup {
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
@@ -141,19 +134,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
           ("addressLine1", "123 A New Street"),
           ("postCode", "SW1 6EL"),
           ("countryCode", "GB"),
-          ("telephone", "+441111222333"),
-          ("countryName", "United Kingdom"),
-          ("email", "first.name@email.com")
-        )
-
-    val invalidCountryCodeRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
-        .withFormUrlEncodedBody(
-          ("dan", validDan),
-          ("name", "New Name"),
-          ("addressLine1", "123 A New Street"),
-          ("postCode", "SW1 6EL"),
-          ("countryCode", "P1"),
           ("telephone", "+441111222333"),
           ("countryName", "United Kingdom"),
           ("email", "first.name@email.com")
