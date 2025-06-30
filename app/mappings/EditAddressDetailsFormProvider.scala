@@ -21,13 +21,10 @@ import play.api.data.Forms.{mapping, of, optional}
 import play.api.data.format.Formats.*
 import play.api.data.validation.Constraint
 import play.api.data.{Form, Forms}
-import services.CountriesProviderService
 
 import javax.inject.Inject
 
-class EditAddressDetailsFormProvider @Inject() (
-  countriesProviderService: CountriesProviderService
-) extends Constraints {
+class EditAddressDetailsFormProvider @Inject() extends Constraints {
 
   def apply(): Form[EditAddressDetailsUserAnswers] =
     Form(
