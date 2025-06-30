@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichSelect
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+@import utils.Utils.emptyString
 
 
 @this(govukSelect: GovukSelect)
@@ -45,10 +46,6 @@
     }
 }
 
-@selectedValue = @{ form(field).value match { case Some(x) => x case None => ""}}
-
-@typedName = @{ form("countryName").value match { case Some(x) => x case None => ""}}
-
 <div class="govuk-form-group @inputClass @if(allErrors.nonEmpty){govuk-form-group--error}">
     <label for="@field" class="govuk-label">
         @messages(label)
@@ -59,7 +56,7 @@
     @govukSelect(Select(
         id = field,
         name = field,
-        items = countries.map(country =>
+        items = Seq(SelectItem(value = Some(emptyString), text = emptyString)) ++ countries.map(country =>
             SelectItem(
                 text = country.countryName,
                 value = Some(country.countryCode)
