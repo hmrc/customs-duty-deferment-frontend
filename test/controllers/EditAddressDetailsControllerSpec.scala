@@ -76,6 +76,7 @@ class EditAddressDetailsControllerSpec extends SpecBase {
 
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
+        contentAsString(result).contains(messages("accountDetails.edit.address.country.invalid")) mustBe true
       }
     }
 
