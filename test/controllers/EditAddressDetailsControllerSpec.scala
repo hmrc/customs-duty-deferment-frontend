@@ -31,6 +31,7 @@ import play.api.test.Helpers.*
 import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
+import utils.Utils.emptyString
 import views.html.contact_details.edit_address_details
 
 import scala.concurrent.Future
@@ -64,6 +65,15 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     "return BAD_REQUEST when form errors occur" in new Setup {
       running(appWithUserAnswers) {
         val result = route(appWithUserAnswers, invalidSubmitRequest).value
+        status(result) mustBe BAD_REQUEST
+        contentAsString(result) must include("""<a href="#countryCode"""")
+      }
+    }
+
+    "return BAD_REQUEST when country code is empty" in new Setup {
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, invalidCountryCodeSubmitRequest).value
+
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
       }
@@ -142,6 +152,15 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(("dan", validDan))
+
+    val invalidCountryCodeSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
+      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
+        .withFormUrlEncodedBody(
+          ("dan", validDan),
+          ("addressLine1", "123 A New Street"),
+          ("postCode", "SW1 6EL"),
+          ("countryCode", emptyString)
+        )
 
     val editedUserAnswers: UserAnswers =
       userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
