@@ -18,6 +18,7 @@
 @import utils.Utils.emptyString
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichSelect
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
 @import utils.Utils.emptyString
 
@@ -36,9 +37,12 @@
     request: Request[_]
 )
 
+@screenReaderHint = @{messages("country-picker.hint.screen-reader")}
+@labelContent = @{HtmlContent(messages(label) + s"<span class=\"visually-hidden\">$screenReaderHint</span>")}
+
 @govukSelect(Select(
     id = field,
-    label = Label(content = Text(messages(label)), classes = "govuk-label", forAttr = Some(field)),
+    label = Label(content = labelContent, classes = "govuk-label", forAttr = Some(field)),
     name = field,
     items = Seq(SelectItem(value = Some(emptyString), text = emptyString)) ++ countries.map(country =>
         SelectItem(
