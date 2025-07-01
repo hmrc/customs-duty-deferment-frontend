@@ -16,8 +16,13 @@
 
 @import views.html.helper._
 @import utils.Utils.emptyString
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichSelect
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
+@import utils.Utils.emptyString
 
-@this()
+
+@this(govukSelect: GovukSelect)
 
 @(
     form: Form[_],
@@ -41,66 +46,22 @@
     }
 }
 
-@selectedValue = @{ form(field).value match { case Some(x) => x case None => ""}}
-
-@typedName = @{ form("countryName").value match { case Some(x) => x case None => ""}}
-
 <div class="govuk-form-group @inputClass @if(allErrors.nonEmpty){govuk-form-group--error}">
     <label for="@field" class="govuk-label">
         @messages(label)
 
         <span class="visually-hidden">. @messages("country-picker.hint.screen-reader")</span>
-
-        @if(allErrors.nonEmpty) {
-            @allErrors.map { error => <span class="govuk-error-message">@messages(error.toString, Nil)</span> }
-        }
     </label>
-    <select
-    id="@field"
-    name="@field"
-    class="govuk-select @inputClass @if(allErrors.nonEmpty) {form-group-error}"
-    >
-        <option value="">@messages("country-picker.emptyValueText")</option>
-        @for(option <- countries.map(c => (c.countryCode, c.countryName))) {
-            <option id="@field-@option._1"
-            value="@option._1"
-                @if(selectedValue==option._1){selected="selected"}>@option._2</option>
-        }
-    </select>
 
-    @*set to 'countryNameNoJs' and updated if user has JS activated, this logic is used in server side validation*@
-    <input type="hidden" id="countryName" name="countryNameNoJs" value="@{form("countryName").value}"/>
+    @govukSelect(Select(
+        id = field,
+        name = field,
+        items = Seq(SelectItem(value = Some(emptyString), text = emptyString)) ++ countries.map(country =>
+            SelectItem(
+                text = country.countryName,
+                value = Some(country.countryCode)
+            ))
+        ).asAccessibleAutocomplete()
+        .withFormField(form(field))
+    )
 </div>
-
-<script @{CSPNonce.attr} type="text/javascript">
-        (function(){
-            var selectElements = document.getElementsByTagName('select');
-            var selectElement = selectElements[selectElements.length - 1]
-
-            openregisterLocationPicker({
-                defaultValue: '',
-                selectElement: selectElement,
-                tNoResults: () => '@messages("country-picker.no-results")',
-                url: '@routes.Assets.versioned("javascripts/location-autocomplete-graph.json")'
-            })
-
-            var inputElement = document.getElementsByClassName('autocomplete__input')
-            inputElement = inputElement[inputElement.length - 1];
-            inputElement.setAttribute('autocomplete', 'off');
-
-            if (selectElement.classList.contains("form-control-error")) {
-                inputElement.classList.add("form-control-error");
-            }
-
-            // this hidden component mirrors the text the user enters, and is used server side to validate that both the countryName and countryCode are valid
-            // this stops users from partially typing a country, without selecting and submitting
-            var hiddenCountryNameElement = document.getElementById('countryName')
-            hiddenCountryNameElement.setAttribute('name','countryName');
-
-            inputElement.addEventListener('blur', function(){
-                if(this.value === emptyString) selectElement.selectedIndex=0;
-                hiddenCountryNameElement.value = this.value
-            });
-
-        }())
-</script>

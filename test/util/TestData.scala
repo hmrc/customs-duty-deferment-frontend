@@ -123,6 +123,14 @@ trait TestData extends MockitoSugar {
   val heading                       = "test_heading"
   val message                       = "test_msg"
 
+  val addressLine1 = "66"
+  val addressLine2 = "London Road"
+  val addressLine3 = "Reading"
+  val addressLine4 = "Berkshire"
+  val postCode     = "RG61 7YB"
+  val countryCode  = "GB"
+  val countryName  = "UNITED KINGDOM"
+
   val testMsgKey   = "test_key"
   val testMsg      = "test_msg"
   val testClass    = "test_class"

@@ -31,6 +31,7 @@ import play.api.test.Helpers.*
 import services.{AccountLinkCacheService, ContactDetailsCacheService, CountriesProviderService}
 import util.SpecBase
 import util.TestImplicits.RemoveCsrf
+import utils.Utils.emptyString
 import views.html.contact_details.edit_address_details
 
 import scala.concurrent.Future
@@ -66,6 +67,16 @@ class EditAddressDetailsControllerSpec extends SpecBase {
         val result = route(appWithUserAnswers, invalidSubmitRequest).value
         status(result) mustBe BAD_REQUEST
         contentAsString(result) must include("""<a href="#countryCode"""")
+      }
+    }
+
+    "return BAD_REQUEST when country code is empty" in new Setup {
+      running(appWithUserAnswers) {
+        val result = route(appWithUserAnswers, invalidCountryCodeSubmitRequest).value
+
+        status(result) mustBe BAD_REQUEST
+        contentAsString(result) must include("""<a href="#countryCode"""")
+        contentAsString(result).contains(messages("accountDetails.edit.address.country.invalid")) mustBe true
       }
     }
 
@@ -114,13 +125,6 @@ class EditAddressDetailsControllerSpec extends SpecBase {
     }
   }
 
-  "isValidCountryName throws invalid country name error" in new Setup {
-    running(appWithUserAnswers) {
-      val result = route(appWithUserAnswers, invalidCountryCodeRequest).value
-      status(result) mustBe 400
-    }
-  }
-
   trait Setup {
     val mockCustomsFinancialsApiConnector: CustomsFinancialsApiConnector = mock[CustomsFinancialsApiConnector]
     val mockContactDetailsCacheServices: ContactDetailsCacheService      = mock[ContactDetailsCacheService]
@@ -146,22 +150,18 @@ class EditAddressDetailsControllerSpec extends SpecBase {
           ("email", "first.name@email.com")
         )
 
-    val invalidCountryCodeRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
-      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
-        .withFormUrlEncodedBody(
-          ("dan", validDan),
-          ("name", "New Name"),
-          ("addressLine1", "123 A New Street"),
-          ("postCode", "SW1 6EL"),
-          ("countryCode", "P1"),
-          ("telephone", "+441111222333"),
-          ("countryName", "United Kingdom"),
-          ("email", "first.name@email.com")
-        )
-
     val invalidSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
       fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
         .withFormUrlEncodedBody(("dan", validDan))
+
+    val invalidCountryCodeSubmitRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
+      fakeRequestWithCsrf(POST, routes.EditAddressDetailsController.submit.url)
+        .withFormUrlEncodedBody(
+          ("dan", validDan),
+          ("addressLine1", "123 A New Street"),
+          ("postCode", "SW1 6EL"),
+          ("countryCode", emptyString)
+        )
 
     val editedUserAnswers: UserAnswers =
       userAnswers.set(EditAddressDetailsPage, editAddressDetailsUserAnswers).get
