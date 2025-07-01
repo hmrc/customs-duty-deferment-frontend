@@ -18,6 +18,7 @@
 @import utils.Utils.emptyString
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.components.implicits.RichSelect
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.accessibleautocomplete.AccessibleAutocomplete
 @import utils.Utils.emptyString
 
@@ -36,32 +37,18 @@
     request: Request[_]
 )
 
-@elements = @{
-    FieldElements(form(field).id, form(field), null, args.toMap, messages)
-}
-@allErrors = @{
-    elements.errors ++ args.flatMap {
-        case (Symbol("otherErrors"), otherErrors: Seq[_]) => otherErrors.map(_.toString)
-        case _ => Seq.empty
-    }
-}
+@screenReaderHint = @{messages("country-picker.hint.screen-reader")}
+@labelContent = @{HtmlContent(messages(label) + s"<span class=\"visually-hidden\">$screenReaderHint</span>")}
 
-<div class="govuk-form-group @inputClass @if(allErrors.nonEmpty){govuk-form-group--error}">
-    <label for="@field" class="govuk-label">
-        @messages(label)
-
-        <span class="visually-hidden">. @messages("country-picker.hint.screen-reader")</span>
-    </label>
-
-    @govukSelect(Select(
-        id = field,
-        name = field,
-        items = Seq(SelectItem(value = Some(emptyString), text = emptyString)) ++ countries.map(country =>
-            SelectItem(
-                text = country.countryName,
-                value = Some(country.countryCode)
-            ))
-        ).asAccessibleAutocomplete()
-        .withFormField(form(field))
-    )
-</div>
+@govukSelect(Select(
+    id = field,
+    label = Label(content = labelContent, classes = "govuk-label", forAttr = Some(field)),
+    name = field,
+    items = Seq(SelectItem(value = Some(emptyString), text = emptyString)) ++ countries.map(country =>
+        SelectItem(
+            text = country.countryName,
+            value = Some(country.countryCode)
+        ))
+    ).asAccessibleAutocomplete()
+    .withFormField(form(field))
+)
