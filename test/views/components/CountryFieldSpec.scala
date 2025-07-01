@@ -25,7 +25,6 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.twirl.api.HtmlFormat
 import services.CountriesProviderService
-import play.api.Application
 
 class CountryFieldSpec extends SpecBase {
 
@@ -44,14 +43,13 @@ class CountryFieldSpec extends SpecBase {
   }
 
   trait Setup {
-    val app: Application                                      = applicationBuilder().build()
     implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("GET", "/some/resource/path")
 
     val validForm: Form[EditAddressDetailsUserAnswers] = new EditAddressDetailsFormProvider().apply()
-    val countries: CountriesProviderService            = app.injector.instanceOf[CountriesProviderService]
+    val countries: CountriesProviderService            = application.injector.instanceOf[CountriesProviderService]
 
     val countryFieldComponent: HtmlFormat.Appendable =
-      app.injector
+      application.injector
         .instanceOf[country_field]
         .apply(validForm, "countryCode", messages("country-picker.country.label"), countries.countries, None)
   }
