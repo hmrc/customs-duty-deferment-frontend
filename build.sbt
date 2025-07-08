@@ -2,11 +2,11 @@ import scoverage.ScoverageKeys
 
 val appName         = "customs-duty-deferment-frontend"
 val testDirectory   = "test"
-val scala3_3_4      = "3.3.4"
+val scala3_3_6      = "3.3.6"
 val silencerVersion = "1.7.14"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := scala3_3_4
+ThisBuild / scalaVersion := scala3_3_6
 
 lazy val scalastyleSettings = Seq(
   scalastyleConfig := baseDirectory.value / "scalastyle-config.xml",
