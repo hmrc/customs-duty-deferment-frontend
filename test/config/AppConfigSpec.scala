@@ -48,7 +48,7 @@ class AppConfigSpec extends SpecBase {
         "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/duty-deferment-scheme-general-enquiries"
       appConfig.timeout mustBe 900
       appConfig.countdown mustBe 120
-      appConfig.feedbackService mustBe "https://www.development.tax.service.gov.uk/feedback/CDS-FIN"
+      appConfig.feedbackService mustBe "http://localhost:9514/feedback/CDS-FIN"
       appConfig.customsFinancialsApi mustBe "http://localhost:9878/customs-financials-api"
       appConfig.customsSessionCacheUrl mustBe "http://localhost:9840/customs/session-cache"
       appConfig.customsDataStore mustBe "http://localhost:9893/customs-data-store"
