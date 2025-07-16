@@ -38,7 +38,7 @@ cf.account.detail.accordion.hide-all-sections=Cuddio bob adran
 # User Research
 # ----------------------------------------------------------
 user-research.subheader-text=Helpu ni i wella''r gwasanaeth hwn
-user-research.help.body-text=A oes gennych rif EORI yn yr UE? Rydym yn cynnal ymchwil defnyddwyr i helpu i wella ein gwasanaethau.
+user-research.help.body-text=Mae eich adborth yn werthfawr i ni. 
 user-research.help.link=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
 # ----------------------------------------------------------
 
