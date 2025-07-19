@@ -23,6 +23,7 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers.GET
 import util.SpecBase
+import play.api.libs.json.{JsResultException, JsSuccess, Json}
 
 class DutyDefermentStatementFileSpec extends SpecBase {
 
@@ -222,6 +223,27 @@ class DutyDefermentStatementFileSpec extends SpecBase {
     }
   }
 
+  "DutyDefermentStatementFile.format" should {
+    "generate correct output for Json Reads" in new Setup {
+
+      import DutyDefermentStatementFile.format
+
+      Json.fromJson(Json.parse(ddStatFileJsString)) mustBe JsSuccess(currentDutyDefermentFile)
+    }
+
+    "generate correct output for Json Writes" in new Setup {
+      Json.toJson(currentDutyDefermentFile) mustBe Json.parse(ddStatFileJsString)
+    }
+
+    "throw exception for invalid Json" in {
+      val invalidJson = "{ \"filename\": \"test\", \"downloadURL\": \"test_url\" }"
+
+      intercept[JsResultException] {
+        Json.parse(invalidJson).as[DutyDefermentStatementFile]
+      }
+    }
+  }
+
   trait Setup {
     val fileSize = 10L
 
@@ -334,6 +356,25 @@ class DutyDefermentStatementFileSpec extends SpecBase {
           None
         )
       )
+
+    val ddStatFileJsString: String =
+      """{"filename":"someFilename",
+        |"downloadURL":"downloadUrl",
+        |"fileSize":10,
+        |"metadata":{"periodStartYear":2023,
+        |"periodStartMonth":10,
+        |"periodStartDay":1,
+        |"periodEndYear":2023,
+        |"periodEndMonth":10,
+        |"periodEndDay":8,
+        |"fileFormat":"CSV",
+        |"fileRole":"DutyDefermentStatement",
+        |"defermentStatementType":"DD1720",
+        |"dutyOverLimit":true,
+        |"dutyPaymentType":"BACS",
+        |"dan":"123456"
+        |}
+        |}""".stripMargin
 
     val request: FakeRequest[AnyContentAsEmpty.type] =
       FakeRequest(GET, routes.AccountController.showAccountDetails("someLink").url)

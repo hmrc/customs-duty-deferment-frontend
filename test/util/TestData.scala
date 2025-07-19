@@ -41,8 +41,20 @@ trait TestData extends MockitoSugar {
   protected val sessionId: SessionId                                       = SessionId("session_1234")
   protected val fakeCountries: List[Country]                               = List()
   protected val emptyUserAnswers: UserAnswers                              = UserAnswers("someInternalId")
-  protected val accNumber                                                  = "12345678"
-  protected val testServiceUnavailableUrl                                  = "test_url"
+
+  protected val accNumber                 = "12345678"
+  protected val testServiceUnavailableUrl = "test_url"
+
+  protected val accountType    = "CDS Cash Account"
+  protected val testStatus     = "pending"
+  protected val testStatusText = "test_status"
+
+  protected val day10    = 10
+  protected val month1   = 1
+  protected val year2023 = 2023
+
+  protected val testKey      = "test_key"
+  protected val testKeyValue = "test_key_value"
 
   protected val validAccountContactDetails: ContactDetails = ContactDetails(
     Some("Mr First Name"),
@@ -107,6 +119,7 @@ trait TestData extends MockitoSugar {
   val periodEndMonth10              = 10
   val periodEndDay8                 = 8
   val fileSizeData: Long            = 10L
+  val fileName                      = "test_file_name"
   val someDan                       = "123456"
   val bacs                          = "BACS"
   val someLinkId                    = "test_link_id"
