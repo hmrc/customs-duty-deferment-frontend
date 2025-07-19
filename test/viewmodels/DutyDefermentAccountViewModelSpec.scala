@@ -26,6 +26,7 @@ import views.html.requested_statements
 import org.scalatest.matchers.must.Matchers._
 import config.AppConfig
 import play.api.i18n.Messages
+import play.twirl.api.HtmlFormat
 
 class DutyDefermentAccountViewModelSpec extends SpecBase {
 
@@ -174,6 +175,15 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
+    }
+  }
+
+  "TailingStatement" should {
+    "populate the object with correct default values" in {
+      val tailingStatOb = TailingStatement(accordian = HtmlFormat.empty)
+
+      tailingStatOb.historicEoriHeadingMsg mustBe empty
+      tailingStatOb.accordian mustBe HtmlFormat.empty
     }
   }
 
