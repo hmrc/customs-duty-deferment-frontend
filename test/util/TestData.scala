@@ -56,6 +56,8 @@ trait TestData extends MockitoSugar {
   protected val testKey      = "test_key"
   protected val testKeyValue = "test_key_value"
 
+  protected val testId = "test_123"
+
   protected val validAccountContactDetails: ContactDetails = ContactDetails(
     Some("Mr First Name"),
     "Example Road",
