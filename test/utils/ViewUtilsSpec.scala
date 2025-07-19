@@ -151,4 +151,21 @@ class ViewUtilsSpec extends SpecBase {
         new HmrcNewTabLink().apply(NewTabLink(language = Some(testLang), href = Some(testHref), text = testMsg))
     }
   }
+
+  "LinkComponentValues" should {
+    "populate the component with correct default values" in {
+      val linkComponentValues = LinkComponentValues(linkMessageKey = "test_msg", location = "test_location")
+
+      linkComponentValues.linkMessageKey mustBe "test_msg"
+      linkComponentValues.location mustBe "test_location"
+
+      linkComponentValues.linkId mustBe empty
+      linkComponentValues.linkClass mustBe "govuk-link"
+      linkComponentValues.pWrapped mustBe true
+      linkComponentValues.preLinkMessageKey mustBe empty
+      linkComponentValues.postLinkMessageKey mustBe empty
+      linkComponentValues.pId mustBe empty
+      linkComponentValues.pClass mustBe "govuk-body"
+    }
+  }
 }
