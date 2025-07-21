@@ -18,11 +18,11 @@ package mappings
 
 import models.EditAddressDetailsUserAnswers
 import play.api.data.Form
-import util.{SpecBase, TestData}
+import util.SpecBase
 import utils.Utils.emptyString
 import play.api.data.FormError
 
-class EditAddressDetailsFormProviderSpec extends SpecBase with TestData {
+class EditAddressDetailsFormProviderSpec extends SpecBase {
 
   "Form" should {
 

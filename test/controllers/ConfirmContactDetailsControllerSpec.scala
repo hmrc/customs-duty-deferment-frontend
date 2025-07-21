@@ -17,7 +17,8 @@
 package controllers
 
 import cache.UserAnswersCache
-import models.UserAnswers
+import models.{AccountStatusOpen, DutyDefermentAccountLink, UserAnswers}
+import org.mockito.Mockito.when
 import pages.{EditAddressDetailsPage, EditContactDetailsPage}
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.AnyContentAsEmpty
@@ -29,11 +30,54 @@ import util.SpecBase
 import views.html.contact_details.edit_success_address
 import views.html.contact_details.edit_success_contact
 
+import org.mockito.ArgumentMatchers.any
+import scala.concurrent.Future
 import scala.reflect.ClassTag
 
 class ConfirmContactDetailsControllerSpec extends SpecBase {
 
-  "success" must {
+  "successAddressDetails" should {
+
+    "return INTERNAL_SERVER_ERROR when user answers is empty for address details" in new Setup {
+      running(emptyUsersApp) {
+        val result = route(emptyUsersApp, successAddressDetailsRequest).value
+        status(result) mustBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "return OK when user answers has some data" in new Setup {
+      val ddAccLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
+        eori = validEori,
+        dan = validDan,
+        linkId = testLinkUrl,
+        status = AccountStatusOpen,
+        statusId = validStatus,
+        isNiAccount = false
+      )
+
+      when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Some(ddAccLink)))
+
+      running(appLinkService(userAnswersAddress)) {
+        val result = route(appLinkService(userAnswersAddress), successAddressDetailsRequest).value
+
+        status(result) mustBe OK
+      }
+    }
+
+    "return INTERNAL_SERVER_ERROR when user answers has some data but exception occurs while" +
+      " processing account link data" in new Setup {
+
+        when(mockAccountLinkCacheService.get(any)).thenReturn(Future.failed(new RuntimeException("Error occurred")))
+
+        running(appLinkService(userAnswersAddress)) {
+          val result = route(appLinkService(userAnswersAddress), successAddressDetailsRequest).value
+
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
+      }
+  }
+
+  "successContactDetails" must {
 
     "return INTERNAL_SERVER_ERROR when user answers is empty for contact details" in new Setup {
       running(emptyUsersApp) {
@@ -42,18 +86,41 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
       }
     }
 
-    "return INTERNAL_SERVER_ERROR when user answers is empty for address details" in new Setup {
-      running(emptyUsersApp) {
-        val result = route(emptyUsersApp, successAddressDetailsRequest).value
-        status(result) mustBe INTERNAL_SERVER_ERROR
+    "return OK when user answers has some data" in new Setup {
+      val ddAccLink: DutyDefermentAccountLink = DutyDefermentAccountLink(
+        eori = validEori,
+        dan = validDan,
+        linkId = testLinkUrl,
+        status = AccountStatusOpen,
+        statusId = validStatus,
+        isNiAccount = false
+      )
+
+      when(mockAccountLinkCacheService.get(any)).thenReturn(Future.successful(Some(ddAccLink)))
+
+      running(appLinkService()) {
+        val result = route(appLinkService(), successContactDetailsRequest).value
+
+        status(result) mustBe OK
       }
     }
+
+    "return INTERNAL_SERVER_ERROR when user answers has some data but exception occurs while" +
+      " processing account link data" in new Setup {
+
+        when(mockAccountLinkCacheService.get(any)).thenReturn(Future.failed(new RuntimeException("Error occurred")))
+
+        running(appLinkService()) {
+          val result = route(appLinkService(), successContactDetailsRequest).value
+          status(result) mustBe INTERNAL_SERVER_ERROR
+        }
+      }
   }
 
   "problem" must {
     "return INTERNAL_SERVER_ERROR" in new Setup {
-      running(appLinkService) {
-        val result = route(appLinkService, problemRequest).value
+      running(appLinkService()) {
+        val result = route(appLinkService(), problemRequest).value
         status(result) mustBe INTERNAL_SERVER_ERROR
       }
     }
@@ -78,12 +145,13 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     val mockUserAnswersCache: UserAnswersCache               = mock[UserAnswersCache]
     val mockAccountLinkCacheService: AccountLinkCacheService = mock[AccountLinkCacheService]
 
-    val appLinkService: Application = applicationBuilder(Option(userAnswers))
-      .overrides(
-        inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
-        inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
-      )
-      .build()
+    def appLinkService(userAnswersInput: UserAnswers = userAnswers): Application =
+      applicationBuilder(Option(userAnswersInput))
+        .overrides(
+          inject.bind[UserAnswersCache].toInstance(mockUserAnswersCache),
+          inject.bind[AccountLinkCacheService].toInstance(mockAccountLinkCacheService)
+        )
+        .build()
 
     val emptyUsersApp: Application = applicationBuilder(Some(emptyUserAnswers))
       .overrides(
@@ -98,6 +166,6 @@ class ConfirmContactDetailsControllerSpec extends SpecBase {
     val messages: Messages                = messagesApi.preferred(successContactDetailsRequest)
     val messagesAddress: Messages         = messagesApi.preferred(successAddressDetailsRequest)
 
-    def instanceOf[T: ClassTag]: T = appLinkService.injector.instanceOf[T]
+    def instanceOf[T: ClassTag]: T = appLinkService().injector.instanceOf[T]
   }
 }

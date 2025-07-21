@@ -1,6 +1,8 @@
 $govuk-assets-path: "/customs/duty-deferment/assets/lib/govuk-frontend/govuk/assets/";
 $hmrc-assets-path: "/customs/duty-deferment/assets/lib/hmrc-frontend/hmrc/";
 
+$govuk-suppressed-warnings: (libsass);
+
 @import "lib/govuk-frontend/dist/govuk/base";
 @import "_custom.css";
 

@@ -59,6 +59,24 @@ class OrderedByEoriHistorySpec extends SpecBase {
       result mustBe 1
     }
 
+    "sort the data in correct order" in {
+      val ddStatForEori1: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
+        eoriHistory.copy(validFrom = Some(LocalDate.of(year2023, month_12, day_01))),
+        dutyDefermentStatementFiles,
+        dutyDefermentStatementFiles,
+        LocalDate.of(year2023, month_12, day_01)
+      )
+
+      val ddStatForEori2: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
+        eoriHistory.copy(validFrom = Some(LocalDate.of(year2023, month_12, day10))),
+        dutyDefermentStatementFiles,
+        dutyDefermentStatementFiles,
+        LocalDate.of(year2023, month_12, day10)
+      )
+
+      List(ddStatForEori1, ddStatForEori2).sorted mustBe List(ddStatForEori2, ddStatForEori1)
+    }
+
     "compare DutyDefermentPeriod with another period" in {
       val year         = 2023
       val month        = 1

@@ -16,6 +16,7 @@
 
 package models
 
+import play.api.libs.json.{JsResultException, JsSuccess, Json}
 import util.SpecBase
 
 class UpdateContactDetailsRequestSpec extends SpecBase {
@@ -39,8 +40,10 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
         Some("example@email.com"),
         isNiAccount = false
       )
-      val request: UpdateContactDetailsRequest                      =
+
+      val request: UpdateContactDetailsRequest =
         UpdateContactDetailsRequest.apply("someDan", "someEori", validContactDetailsUserAnswers)
+
       assert(request.postCode.contains("SW1A 2BQ"))
     }
 
@@ -88,5 +91,58 @@ class UpdateContactDetailsRequestSpec extends SpecBase {
         UpdateContactDetailsRequest.apply("someDan", "someEori", invalidContactDetailsUserAnswers)
       assert(request.postCode.isEmpty)
     }
+
+    "formats" should {
+      "generate correct output for Json Reads" in new Setup {
+
+        import UpdateContactDetailsRequest.formats
+
+        Json.fromJson(Json.parse(updateContactDetailsReqJsString)) mustBe JsSuccess(updateContactDetailsReqOb)
+      }
+
+      "generate correct output for Json Writes" in new Setup {
+        Json.toJson(updateContactDetailsReqOb) mustBe Json.parse(updateContactDetailsReqJsString)
+      }
+
+      "throw exception for invalid Json" in {
+        val invalidJson = "{ \"status\": \"pending\", \"eventId1\": \"test_event\" }"
+
+        intercept[JsResultException] {
+          Json.parse(invalidJson).as[UpdateContactDetailsRequest]
+        }
+      }
+    }
+  }
+
+  trait Setup {
+    val validContactDetailsUserAnswers: ContactDetailsUserAnswers = ContactDetailsUserAnswers(
+      validDan,
+      Some("Example Name"),
+      "Example Road",
+      None,
+      None,
+      None,
+      Some("SW1A 2BQ"),
+      "GB",
+      Some("United Kingdom"),
+      Some("11111 222333"),
+      None,
+      Some("example@email.com"),
+      isNiAccount = false
+    )
+
+    val updateContactDetailsReqOb: UpdateContactDetailsRequest =
+      UpdateContactDetailsRequest(validDan, "someEori", validContactDetailsUserAnswers)
+
+    val updateContactDetailsReqJsString: String =
+      """{"dan":"someDan",
+        |"eori":"someEori",
+        |"name":"Example Name",
+        |"addressLine1":"Example Road",
+        |"postCode":"SW1A 2BQ",
+        |"countryCode":"GB",
+        |"telephone":"11111 222333",
+        |"email":"example@email.com"
+        |}""".stripMargin
   }
 }
