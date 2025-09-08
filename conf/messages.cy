@@ -39,7 +39,7 @@ cf.account.detail.accordion.hide-all-sections=Cuddio bob adran
 # ----------------------------------------------------------
 user-research.subheader-text=Helpu ni i wella''r gwasanaeth hwn
 user-research.help.body-text=Mae eich adborth yn werthfawr i ni. 
-user-research.help.link=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr (yn agor tab newydd)
+user-research.help.link=Cofrestrwch i gymryd rhan mewn ymchwil defnyddwyr
 # ----------------------------------------------------------
 
 # Timeout Messages
