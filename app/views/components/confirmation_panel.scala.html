@@ -22,7 +22,15 @@
         @message
     </h1>
     <div class="govuk-panel__body govuk-!-margin-bottom-6">
-        @accountDesc <br/>
-        <strong>@accountNo @isNi</strong>
+       <dl class="govuk-summary-list govuk-summary-list--no-border" style="color: #fff">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                        @accountDesc
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                        <strong>  @accountNo @isNi </strong>
+                    </dd>
+                </div>
+         </dl>
     </div>
 </div>
