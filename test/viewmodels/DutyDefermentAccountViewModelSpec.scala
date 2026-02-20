@@ -21,7 +21,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
-import views.html.components.{caption, h1, h2, inset, link, p}
+import views.html.components.{caption, h1, h2, inset, link, p, dl}
 import views.html.requested_statements
 import org.scalatest.matchers.must.Matchers._
 import config.AppConfig
@@ -188,16 +188,26 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   }
 
   private def shouldContainAccountNumberMsg(
-    accountNumber: String,
-    viewModel: DutyDefermentAccountViewModel,
-    isNiAccount: Boolean = false
-  )(implicit messages: Messages): Assertion =
+                                             accountNumber: String,
+                                             viewModel: DutyDefermentAccountViewModel,
+                                             isNiAccount: Boolean = false
+                                           )(implicit messages: Messages): Assertion =
     if (isNiAccount) {
-      viewModel.accountNumberMsg mustBe new caption()
-        .apply(messages("cf.account.NiAccount", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+      viewModel.accountNumberMsg mustBe new dl()
+        .apply(
+          dtMsg = messages("cf.account.NiAccount", accountNumber),
+          ddMsg = accountNumber,
+          id = Some("eori-heading"),
+          classes = "govuk-caption-xl"
+        )
     } else {
-      viewModel.accountNumberMsg mustBe new caption()
-        .apply(messages("cf.account-number", accountNumber), Some("eori-heading"), "govuk-caption-xl")
+      viewModel.accountNumberMsg mustBe new dl()
+        .apply(
+          dtMsg = messages("cf.account-number", accountNumber),
+          ddMsg = accountNumber,
+          id = Some("eori-heading"),
+          classes = "govuk-caption-xl"
+        )
     }
 
   private def shouldContainDDStatementHeading(
