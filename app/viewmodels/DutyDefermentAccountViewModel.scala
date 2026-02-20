@@ -107,7 +107,6 @@ object DutyDefermentAccountViewModel {
 
     dlComponent(
       dtMsg = messages(accNumberMsgKey, accountNumber),
-      ddMsg = accountNumber,
       id = Some("eori-heading")
     )
   }

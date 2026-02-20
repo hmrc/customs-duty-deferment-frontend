@@ -196,14 +196,12 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
       viewModel.accountNumberMsg mustBe new dl()
         .apply(
           dtMsg = messages("cf.account.NiAccount", accountNumber),
-          ddMsg = accountNumber,
           id = Some("eori-heading")
         )
     } else {
       viewModel.accountNumberMsg mustBe new dl()
         .apply(
           dtMsg = messages("cf.account-number", accountNumber),
-          ddMsg = accountNumber,
           id = Some("eori-heading")
         )
     }

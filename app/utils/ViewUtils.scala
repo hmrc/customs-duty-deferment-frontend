@@ -70,11 +70,10 @@ object ViewUtils {
 
   def dlComponent(
     dtMsg: String,
-    ddMsg: String,
     id: Option[String] = None,
     classes: String = "govuk-caption-xl"
   ): HtmlFormat.Appendable =
-    new dl().apply(dtMsg = dtMsg, ddMsg = ddMsg, id = id, classes = classes)
+    new dl().apply(dtMsg = dtMsg, id = id, classes = classes)
 
   def hmrcNewTabLinkComponent(
     text: String = emptyString,
