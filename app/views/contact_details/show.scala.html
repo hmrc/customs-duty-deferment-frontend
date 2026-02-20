@@ -50,9 +50,11 @@
         val captionKey = if(isNi) "accountDetails.caption.ni" else "accountDetails.caption"
         dlComponent(
             dtMsg   = messages(captionKey, accountDetails.dan),
-            classes = "govuk-caption-l hmrc-caption-l"
+            classes = "govuk-caption-l hmrc-caption-l",
+            id      = Some("account-details")
         )
     }
+
     @h1(
         messages("accountDetails.heading"), 
         classes = "govuk-heading-xl"
