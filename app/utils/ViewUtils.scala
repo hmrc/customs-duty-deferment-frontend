@@ -21,7 +21,7 @@ import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import utils.Utils.emptyString
-import views.html.components.{caption, h1, h2, inset, link, p}
+import views.html.components.{caption, dl, h1, h2, inset, link, p}
 
 object ViewUtils {
 
@@ -67,6 +67,13 @@ object ViewUtils {
 
   def captionComponent(msg: String, id: Option[String] = None, classes: String): HtmlFormat.Appendable =
     new caption().apply(msg = msg, id = id, classes = classes)
+
+  def dlComponent(
+    dtMsg: String,
+    id: Option[String] = None,
+    classes: String = "govuk-caption-xl"
+  ): HtmlFormat.Appendable =
+    new dl().apply(dtMsg = dtMsg, id = id, classes = classes)
 
   def hmrcNewTabLinkComponent(
     text: String = emptyString,
