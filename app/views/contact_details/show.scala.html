@@ -23,7 +23,6 @@
       govukSummaryList: GovukSummaryList,
       h1: components.h1,
       h2: components.h2,
-      dlComponent: components.dl,
       p: components.p,
       directDebitCard: components.direct_debit_card)
 
@@ -46,15 +45,13 @@
     helpAndSupport = false,
     deskpro = false) {
 
-    @{
-        val captionKey = if(isNi) "accountDetails.caption.ni" else "accountDetails.caption"
-        dlComponent(
-            dtMsg   = messages(captionKey, accountDetails.dan),
-            classes = "govuk-caption-l hmrc-caption-l",
-            id      = Some("account-details")
-        )
+    @if(isNi) {
+        @h2(messages("accountDetails.caption.ni", accountDetails.dan),
+        h2Class = Some("govuk-caption-l hmrc-caption-l"))
+    } else {
+        @h2(messages("accountDetails.caption", accountDetails.dan),
+        h2Class = Some("govuk-caption-l hmrc-caption-l"))
     }
-
     @h1(
         messages("accountDetails.heading"), 
         classes = "govuk-heading-xl"
