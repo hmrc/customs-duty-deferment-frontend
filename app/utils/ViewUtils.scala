@@ -69,12 +69,12 @@ object ViewUtils {
     new caption().apply(msg = msg, id = id, classes = classes)
 
   def spanComponent(
-                   msg: String,
-                   id: Option[String] = None,
-                   classes: String = "govuk-caption-xl"
-                 ): HtmlFormat.Appendable =
+    msg: String,
+    id: Option[String] = None,
+    classes: String = "govuk-caption-xl"
+  ): HtmlFormat.Appendable =
     new span().apply(msg = msg, id = id, classes = classes)
-    
+
   def hmrcNewTabLinkComponent(
     text: String = emptyString,
     href: Option[String] = None,
