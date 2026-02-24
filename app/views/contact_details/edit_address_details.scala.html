@@ -22,6 +22,7 @@
         layout: Layout,
         h1: components.h1,
         h2: components.h2,
+        spanComponent: components.span,
         button: components.button,
         cancel_button: components.cancel_button,
         inputText: components.input_text,
@@ -43,12 +44,12 @@
 
         @errorSummary(form)
 
-        @if(isNi) {
-            @h2(messages("accountDetails.editAddress.caption.ni", dan),
-            h2Class = Some("govuk-caption-l hmrc-caption-l"))
-        } else {
-            @h2(messages("accountDetails.editAddress.caption", dan),
-            h2Class = Some("govuk-caption-l hmrc-caption-l"))
+        @{
+            val captionKey = if(isNi) "accountDetails.caption.ni" else "accountDetails.caption"
+            spanComponent(
+                msg   = messages(captionKey, dan),
+                classes = "govuk-caption-l hmrc-caption-l"
+            )
         }
 
         @h1(
