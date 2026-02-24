@@ -38,8 +38,8 @@ class ShowSpec extends SpecBase {
 
     "display header2" in new Setup {
       running(application) {
-        view.getElementById("account-details").text mustBe
-          "Account: someDan"
+        view.getElementsByTag("h2").text mustBe
+          "Help make GOV.UK better Account: someDan Support links"
       }
     }
 
