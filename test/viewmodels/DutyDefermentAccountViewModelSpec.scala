@@ -195,7 +195,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     if (isNiAccount) {
       viewModel.accountNumberMsg mustBe new span()
         .apply(
-          msg = messages("cf.account-number", accountNumber),
+          msg = messages("cf.account.NiAccount", accountNumber),
           id = Some("eori-heading")
         )
     } else {
