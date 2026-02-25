@@ -18,6 +18,6 @@
 
 @(msg: String, id: Option[String] = None, classes: String = "govuk-caption-xl")
 
-<span @id.map(i => s"""id="$i"""") class="@classes">
+<span @id.map(i => Html(s"""id="$i"""")).getOrElse(Html("")) class="@classes">
   @msg
 </span>
