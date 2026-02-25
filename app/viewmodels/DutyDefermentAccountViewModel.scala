@@ -105,7 +105,10 @@ object DutyDefermentAccountViewModel {
 
     val accNumberMsgKey = if (isNiAccount) "cf.account.NiAccount" else "cf.account-number"
 
-    captionComponent(messages(accNumberMsgKey, accountNumber), Some("eori-heading"), "govuk-caption-xl")
+    spanComponent(
+      msg = messages(accNumberMsgKey, accountNumber),
+      id = Some("eori-heading")
+    )
   }
 
   private def ddStatementHeadingMsg(implicit messages: Messages): HtmlFormat.Appendable =
