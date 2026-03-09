@@ -21,7 +21,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNewTabLink
 import uk.gov.hmrc.hmrcfrontend.views.viewmodels.newtablink.NewTabLink
 import util.SpecBase
-import views.html.components.{caption, h1, h2, inset, link, p, span}
+import views.html.components.{h1, h2, inset, link, p, span}
 import views.html.requested_statements
 import org.scalatest.matchers.must.Matchers._
 import config.AppConfig

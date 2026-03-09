@@ -15,7 +15,7 @@
  *@
 
 @import config.AppConfig
-@import views.html.components.fieldset
+@import views.html.components.{legend, fieldset}
 @import views.html.helper._
 
 @this(
@@ -47,22 +47,24 @@
     helpAndSupport = false,
     deskpro = false) {
 
+    @errorSummary(form)
+
+    @{
+        val captionKey = if(isNi) "accountDetails.caption.ni" else "accountDetails.caption"
+        spanComponent(
+            msg   = messages(captionKey, dan),
+            classes = "govuk-caption-l hmrc-caption-l"
+        )
+    }
+
     @fieldset {
 
-        @errorSummary(form)
-
-        @{
-            val captionKey = if(isNi) "accountDetails.caption.ni" else "accountDetails.caption"
-            spanComponent(
-                msg   = messages(captionKey, dan),
-                classes = "govuk-caption-l hmrc-caption-l"
+        @legend {
+            @h1(
+                msg = messages("accountDetails.edit.title"),
+                classes = "govuk-fieldset__heading govuk-heading-xl govuk-!-margin-bottom-4"
             )
         }
-
-        @h1(
-            msg = messages("accountDetails.edit.title"),
-            classes = "govuk-fieldset__legend govuk-fieldset__legend--xl govuk-heading-xl govuk-!-margin-bottom-6"
-        )
 
         @p(content = Html(messages("accountDetails.edit.guidance")), classes = Some("govuk-body govuk-!-margin-bottom-7"))
 
