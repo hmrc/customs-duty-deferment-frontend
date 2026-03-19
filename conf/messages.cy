@@ -98,21 +98,24 @@ month.abbr.12 = Rhag
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 6 mis
-cf.accounts.older-statements.description.link=llenwch ac anfon cais am ddatganiad
-cf.accounts.older-statements.description=Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
+cf.accounts.older-statements.heading = Welsh (TBC) Your statements for the last 7 months
+cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 7 mis
+cf.accounts.older-statements.description.link=Welsh (TBC) llenwch ac anfon cais am ddatganiad
+cf.accounts.older-statements.description=Welsh (TBC) Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
+cf.accounts.older-statements.description.post-message=Welsh (TBC) We will send you an email when your transactions are ready to download.
+cf.accounts.older-statements.description.inset-message=Welsh (TBC) Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
 cf.common.chiefStatements.heading=Datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF
-cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES)
+cf.accounts.chiefStatements.description.link=Welsh (TBC) Datganiadau Electronig i Ohirio Tollau (DDES)
 cf.accounts.chiefStatements.description=Er mwyn bwrw golwg dros, argraffu neu lawrlwytho datganiadau gohirio tollau ar gyfer datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF, gallwch ddefnyddio’r gwasanaeth
 cf.accounts.support.heading=Help a chymorth
 cf.accounts.support.message=Os oes angen help arnoch, cysylltwch â’r
 cf.account.dd.support.link=Llinell Gymorth TAW ac Ecséis
 cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIEF
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
-cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis
+cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 7 mis
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
-cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 6 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
-cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 6 mis
+cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 7 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
+cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 7 mis
 
 
 # Not subscribed to CDS

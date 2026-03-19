@@ -48,7 +48,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainCurrentStatementSection(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -68,7 +68,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -88,7 +88,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -108,7 +108,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -128,7 +128,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -149,7 +149,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -170,7 +170,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel, someLinkId)(messages, appConfig)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -255,10 +255,10 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
   private def countOfShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Int =
     "show-all-sections".r.findAllIn(viewModel.toString).length
 
-  private def shouldContainStatementOlderThanSixMonthsGuidance(
+  private def shouldContainStatementOlderThanSevenMonthsGuidance(
     viewModel: DutyDefermentAccountViewModel
   ): Assertion =
-    viewModel.statOlderThanSixMonths mustBe
+    viewModel.statOlderThanSevenMonths mustBe
       GuidanceRow(
         h2Heading = new h2().apply(
           id = Some("missing-documents-guidance-heading"),

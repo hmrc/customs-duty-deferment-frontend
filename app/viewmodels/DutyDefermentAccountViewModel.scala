@@ -19,9 +19,8 @@ package viewmodels
 import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
-import uk.gov.hmrc.govukfrontend.views.html.components.GovukAccordion
-
-import utils.ViewUtils._
+import uk.gov.hmrc.govukfrontend.views.html.components.{GovukAccordion, GovukInsetText}
+import utils.ViewUtils.{insetComponent, *}
 import views.html.requested_statements
 import views.html.components.duty_deferment_accordian
 import views.html.duty_deferment_account.duty_deferment_head
@@ -52,7 +51,8 @@ case class CurrentStatementRow(
 case class GuidanceRow(
   h2Heading: HtmlFormat.Appendable,
   link: Option[HtmlFormat.Appendable] = None,
-  paragraph: Option[HtmlFormat.Appendable] = None
+  paragraph: Option[HtmlFormat.Appendable] = None,
+  inset: Option[HtmlFormat.Appendable] = None
 )
 
 case class DutyDefermentAccountViewModel(
@@ -61,7 +61,7 @@ case class DutyDefermentAccountViewModel(
   directDebitInfoMsg: HtmlFormat.Appendable,
   requestedStatement: Option[HtmlFormat.Appendable] = None,
   currentStatements: CurrentStatementRow,
-  statOlderThanSixMonths: GuidanceRow,
+  statOlderThanSevenMonths: GuidanceRow,
   chiefDeclaration: GuidanceRow,
   helpAndSupport: GuidanceRow
 )
@@ -93,7 +93,7 @@ object DutyDefermentAccountViewModel {
       requestedStatement = requestedStatements(linkId, hasRequestedStatements),
       currentStatements =
         currentStatements(accountNumber, hasCurrentStatements, firstPopulatedStatement, tailingStatements),
-      statOlderThanSixMonths = statOlderThanSixMonths(serviceUnavailableUrl),
+      statOlderThanSevenMonths = statOlderThanSevenMonths(serviceUnavailableUrl),
       chiefDeclaration = chiefDeclaration,
       helpAndSupport = helpAndSupport
     )
@@ -138,8 +138,19 @@ object DutyDefermentAccountViewModel {
         tailingStatements = prepareTailingStatements(tailingStatements)
       )
     } else {
-      CurrentStatementRow(noStatementMsg =
-        Some(insetComponent(msg = messages("cf.account.detail.no-statements", accountNumber)))
+      CurrentStatementRow(
+        noStatementMsg = Some(
+          HtmlFormat.fill(Seq(
+            h2Component(
+              id = Some("no-current-statements-heading"),
+              msg = messages("cf.accounts.older-statements.heading")
+            ),
+            insetComponent(
+                msg = messages("cf.account.detail.no-statements", accountNumber)
+              )
+            )
+          )
+        )
       )
     }
 
@@ -205,7 +216,7 @@ object DutyDefermentAccountViewModel {
       TailingStatement(historicEoriHeading, accordian)
     }
 
-  private def statOlderThanSixMonths(serviceUnavailableUrl: String)(implicit messages: Messages): GuidanceRow =
+  private def statOlderThanSevenMonths(serviceUnavailableUrl: String)(implicit messages: Messages): GuidanceRow =
     GuidanceRow(
       h2Heading = h2Component(
         id = Some("missing-documents-guidance-heading"),
@@ -219,10 +230,17 @@ object DutyDefermentAccountViewModel {
             location = serviceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessageKey = Some("cf.accounts.older-statements.description"),
+            postLinkMessageKey = Some("cf.accounts.older-statements.description.post-message"),
             linkSentence = true
           )
         )
+      ),
+      inset = Some(
+        insetComponent(
+          msg = messages("cf.accounts.older-statements.description.inset-message")
+        )
       )
+
     )
 
   private def chiefDeclaration(implicit appConfig: AppConfig, messages: Messages): GuidanceRow =
