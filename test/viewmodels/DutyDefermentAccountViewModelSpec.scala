@@ -248,8 +248,18 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel: DutyDefermentAccountViewModel
   )(implicit messages: Messages): Assertion = {
     viewModel.currentStatements.noStatementMsg.nonEmpty mustBe true
-    viewModel.currentStatements.noStatementMsg mustBe
-      Some(new inset().apply(messages("cf.account.detail.no-statements", accNumber)))
+
+    val noStatements = Some(
+      HtmlFormat.fill(
+        Seq(
+          new h2()
+            .apply(id = Some("no-current-statements-heading"), msg = messages("cf.accounts.older-statements.heading")),
+          new inset().apply(messages("cf.account.detail.no-statements", accNumber))
+        )
+      )
+    )
+
+    viewModel.currentStatements.noStatementMsg mustBe noStatements
   }
 
   private def countOfShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Int =
@@ -271,8 +281,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description"),
-            linkSentence = true
+            linkSentence = true,
+            postLinkMessage = Some("cf.accounts.older-statements.description.post-message")
           )(messages)
+        ),
+        inset = Some(
+          new inset().apply(
+            messages("cf.accounts.older-statements.description.inset-message")
+          )
         )
       )
 

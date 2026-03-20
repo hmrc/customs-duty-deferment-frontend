@@ -37,7 +37,6 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
 
       view
         .getElementById("no-statements")
-        .getElementsByTag("p")
         .html()
         .contains(messages("cf.duty-deferment-account.problem-with-service.text")) mustBe true
 

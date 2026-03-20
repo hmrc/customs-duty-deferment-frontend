@@ -140,12 +140,13 @@ object DutyDefermentAccountViewModel {
     } else {
       CurrentStatementRow(
         noStatementMsg = Some(
-          HtmlFormat.fill(Seq(
-            h2Component(
-              id = Some("no-current-statements-heading"),
-              msg = messages("cf.accounts.older-statements.heading")
-            ),
-            insetComponent(
+          HtmlFormat.fill(
+            Seq(
+              h2Component(
+                id = Some("no-current-statements-heading"),
+                msg = messages("cf.accounts.older-statements.heading")
+              ),
+              insetComponent(
                 msg = messages("cf.account.detail.no-statements", accountNumber)
               )
             )
@@ -240,7 +241,6 @@ object DutyDefermentAccountViewModel {
           msg = messages("cf.accounts.older-statements.description.inset-message")
         )
       )
-
     )
 
   private def chiefDeclaration(implicit appConfig: AppConfig, messages: Messages): GuidanceRow =
