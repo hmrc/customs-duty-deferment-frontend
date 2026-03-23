@@ -43,8 +43,8 @@ case class TailingStatement(
 )
 
 case class CurrentStatementRow(
-                                h2Heading: Option[HtmlFormat.Appendable],
-                                firstPopulatedStatements: Option[FirstPopulatedStatement] = None,
+  h2Heading: Option[HtmlFormat.Appendable],
+  firstPopulatedStatements: Option[FirstPopulatedStatement] = None,
   tailingStatements: Seq[TailingStatement] = Seq(),
   noStatementMsg: Option[HtmlFormat.Appendable] = None
 )
@@ -139,10 +139,12 @@ object DutyDefermentAccountViewModel {
       System.out.println("////////////////////////////////")
 
       CurrentStatementRow(
-        Some(h2Component(
-          id = Some("current-statements-heading"),
-          msg = messages("cf.accounts.older-statements.heading")
-        )),
+        Some(
+          h2Component(
+            id = Some("no-current-statements-heading"),
+            msg = messages("cf.accounts.older-statements.heading")
+          )
+        ),
         firstPopulatedStatements = populatedStatements(firstPopulatedStatements, accountNumber),
         tailingStatements = prepareTailingStatements(tailingStatements)
       )
