@@ -27,13 +27,14 @@
 
         @model.ddStatementHeading
 
-        @model.directDebitInfoMsg
-
         @model.requestedStatement.map(identity)
+
+        @model.directDebitInfoMsg
 
         @model.currentStatements.firstPopulatedStatements.map { statement =>
             @statement.historicEoriHeading.map(identity)
             @statement.ddHeadWithEntriesOrNoStatements.ddHeadWithEntry.map { headWithEntry =>
+                    @model.currentStatements.h2Heading
                     @headWithEntry.ddHead
                     @headWithEntry.entries
                 }
