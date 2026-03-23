@@ -134,6 +134,10 @@ object DutyDefermentAccountViewModel {
     tailingStatements: Seq[DutyDefermentStatementsForEori]
   )(implicit messages: Messages): CurrentStatementRow =
     if (hasCurrentStatements) {
+      System.out.println("////////////////////////////////")
+      System.out.println("IF STATEMENT HIT OVER HERE")
+      System.out.println("////////////////////////////////")
+
       CurrentStatementRow(
         Some(h2Component(
           id = Some("current-statements-heading"),
