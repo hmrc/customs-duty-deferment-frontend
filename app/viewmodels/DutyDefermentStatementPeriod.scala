@@ -22,10 +22,12 @@ import play.api.i18n.Messages
 import views.helpers.Formatters
 
 import java.time.LocalDate
+import scala.math.Ordered.orderingToOrdered
 
 case class DutyDefermentStatementPeriod(
   fileRole: FileRole,
   defermentStatementType: DDStatementType,
+  periodIssueNumber: Int,
   monthAndYear: LocalDate,
   startDate: LocalDate,
   endDate: LocalDate,

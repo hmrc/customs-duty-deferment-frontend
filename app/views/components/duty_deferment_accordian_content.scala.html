@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.DDStatementType.{Excise, Supplementary, ExciseDeferment, DutyDeferment}
+@import models.DDStatementType._
 @import models.FileFormat.{Csv, Pdf}
 @import viewmodels.DutyDefermentStatementPeriodsByMonth
 @import views.helpers.Formatters
@@ -26,7 +26,7 @@
     @for((period, index) <- group.periods.zipWithIndex) {
     <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__value"
-            id="statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-date-cell">
+            id="statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-statement-type-cell">
             @{
                 period.defermentStatementType match {
                     case Supplementary => messages("cf.account.detail.row.supplementary.info")
@@ -34,12 +34,23 @@
                     case ExciseDeferment => messages("cf.account.details.row.ExciseDeferment.info")
                     case DutyDeferment => messages("cf.account.details.row.DutyDeferment.info")
                     case _ =>
+                        messages(s"cf.account.detail.period.week.${period.periodIssueNumber}")
+                }
+            }
+        </dt>
+        <dt class="govuk-summary-list__value"
+            id="statements-list-@{historyIndex}-@{group.year}-@{group.month}-row-@{index}-date-cell">
+            @{ if (period.statementFiles.nonEmpty) {
+                period.defermentStatementType match {
+                    case Weekly =>
                         messages("cf.account.detail.period-group",
                                   Formatters.dateAsDay(period.startDate),
                                   Formatters.dateAsDay(period.endDate),
                                   Formatters.dateAsMonth(period.endDate)
                         )
+                    case _ => None
                 }
+            } else { messages("cf.account.detail.period.no-statements") }
             }
         </dt>
         <dd class="govuk-summary-list__actions">

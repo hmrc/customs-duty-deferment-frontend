@@ -91,7 +91,7 @@ object DDStatementType {
     val order = 3
   }
 
-  case object Supplementary extends DDStatementType(name = "Supplementary") {
+  case object Supplementary extends DDStatementType("Supplementary") {
     val order = 4
   }
 

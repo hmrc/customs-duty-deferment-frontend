@@ -32,7 +32,7 @@ p: components.p
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     @for((period, index) <- group.periods.zipWithIndex) {
     <div class="govuk-summary-list__row" id="statements-list-0-@{group.year}-@{group.month}-row-@{index}">
-        <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell"
+        <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-statement-type-cell"
             class="govuk-summary-list__value">
             @{
                 period.defermentStatementType match {
@@ -41,12 +41,23 @@ p: components.p
                     case ExciseDeferment => messages("cf.account.details.row.ExciseDeferment.info")
                     case DutyDeferment => messages("cf.account.details.row.DutyDeferment.info")
                     case _ =>
+                        messages(s"cf.account.detail.period.week.${period.periodIssueNumber}")
+                }
+            }
+        </dt>
+        <dt id="statements-list-0-@{group.year}-@{group.month}-row-@{index}-date-cell"
+            class="govuk-summary-list__value">
+            @{ if (period.statementFiles.nonEmpty) {
+                period.defermentStatementType match {
+                    case Weekly =>
                         messages("cf.account.detail.period-group",
                                   Formatters.dateAsDay(period.startDate),
                                   Formatters.dateAsDay(period.endDate),
                                   Formatters.dateAsMonth(period.endDate)
                         )
+                    case _ => None
                 }
+            } else { messages("cf.account.detail.period.no-statements") }
             }
         </dt>
         <dd class="govuk-summary-list__actions">

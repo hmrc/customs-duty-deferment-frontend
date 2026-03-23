@@ -35,6 +35,7 @@ case class Metadata(items: Seq[MetadataItem]) {
       metadata("PeriodEndYear").toInt,
       metadata("PeriodEndMonth").toInt,
       metadata("PeriodEndDay").toInt,
+      metadata("PeriodIssueNumber").toInt,
       FileFormat(metadata("FileType")),
       FileRole(metadata("FileRole")),
       DDStatementType(metadata("DefermentStatementType")),

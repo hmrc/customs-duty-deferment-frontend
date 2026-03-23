@@ -16,7 +16,9 @@
 
 package viewmodels
 
-import models.{DutyDefermentStatementFile, EoriHistory}
+import models.DDStatementType.{Weekly, Supplementary, Excise, ExciseDeferment, DutyDeferment}
+import models.FileRole.DutyDefermentStatement
+import models.{DDStatementType, DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
 import utils.Utils.{firstDayOfPastNthMonth, isEqualOrAfter, isEqualOrBefore}
 import utils.OrderedByEoriHistory
@@ -35,7 +37,7 @@ case class DutyDefermentStatementsForEori(
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] =
-    filterDates(startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod))
+    filterDates(startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod)).map(addEmptyStatements)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] =
     files
@@ -44,6 +46,7 @@ case class DutyDefermentStatementsForEori(
         DutyDefermentStatementPeriod(
           periodFiles.head.metadata.fileRole,
           periodFiles.head.metadata.defermentStatementType,
+          periodFiles.head.metadata.periodIssueNumber,
           periodFiles.head.monthAndYear,
           periodFiles.head.startDate,
           periodFiles.head.endDate,
@@ -68,9 +71,68 @@ case class DutyDefermentStatementsForEori(
       DutyDefermentStatementPeriodsByMonth(
         monthAndYear,
         statementPeriods
-          .sortWith(_.startDate > _.startDate)
-          .sortWith(_.defermentStatementType < _.defermentStatementType)
+          .sortBy(orderPeriods)
       )
     }
+  }
+
+  private def addEmptyStatements(month: DutyDefermentStatementPeriodsByMonth): DutyDefermentStatementPeriodsByMonth = {
+
+    val (weeklyPeriods, nonWeeklyPeriods) = month.periods.partition(_.defermentStatementType == Weekly)
+
+    val weeklyByWeek: Map[Int, DutyDefermentStatementPeriod] = weeklyPeriods.flatMap {
+      period => period.statementFiles.headOption.map {
+        file => val week = file.metadata.periodIssueNumber
+          week -> period
+      }
+    }.toMap
+
+    val completedWeeklyPeriod: Seq[DutyDefermentStatementPeriod] = (1 to 4).map { week =>
+       weeklyByWeek.getOrElse(
+         week,
+         createEmptyPeriod(month.monthAndYear, Weekly, week)
+       )
+    }
+
+    val expectedWeeklyTypes = Seq(Supplementary, Excise, DutyDeferment, ExciseDeferment)
+
+    val nonWeeklyByType: Map[DDStatementType, DutyDefermentStatementPeriod] = nonWeeklyPeriods.map(period =>
+      period.defermentStatementType -> period).toMap
+
+    val completeNonWeekly: Seq[DutyDefermentStatementPeriod] = expectedWeeklyTypes.map { statementType =>
+      nonWeeklyByType.getOrElse(
+        statementType,
+        createEmptyPeriod(month.monthAndYear, statementType, 0)
+      )
+    }
+
+    month.copy(
+      periods =
+        (completedWeeklyPeriod ++ completeNonWeekly).sortBy(orderPeriods)
+    )
+  }
+
+  private def createEmptyPeriod(month: LocalDate, statementType: DDStatementType, issueNumber: Int): DutyDefermentStatementPeriod = {
+
+    DutyDefermentStatementPeriod(
+      fileRole = DutyDefermentStatement,
+      defermentStatementType = statementType,
+      periodIssueNumber = issueNumber,
+      monthAndYear = month,
+      startDate = month,
+      endDate = month,
+      statementFiles = Seq.empty
+
+    )
+  }
+
+  private def orderPeriods(period: DutyDefermentStatementPeriod): (Int, Int) = {
+    val typeOrder = period.defermentStatementType.order
+
+    val weekOrder = if(period.defermentStatementType == Weekly) {
+      -period.periodIssueNumber
+    } else { 0 }
+
+    (typeOrder, weekOrder)
   }
 }

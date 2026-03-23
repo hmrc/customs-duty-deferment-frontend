@@ -31,6 +31,12 @@ cf.account.detail.accordion.show-section=Show
 cf.account.detail.accordion.show-all-sections=Show all sections
 cf.account.detail.accordion.hide-section=Hide
 cf.account.detail.accordion.hide-all-sections=Hide all sections
+cf.account.detail.period.week.1 = Week 1
+cf.account.detail.period.week.2 = Week 2
+cf.account.detail.period.week.3 = Week 3
+cf.account.detail.period.week.4 = Week 4
+cf.account.detail.period.no-statements = No statements
+
 # ----------------------------------------------------------
 
 # BETA Banner
