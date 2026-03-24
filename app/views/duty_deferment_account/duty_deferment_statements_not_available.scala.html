@@ -44,6 +44,10 @@
 
     @h1(msg = messages("cf.account.detail.deferment-account-heading"), id = Some("statements-heading"))
 
+    @p(id = Some("direct-debit-info"), content = Html(messages("cf.account.detail.direct-debit.duty-vat-and-excise")))
+
+    @h2(msg = messages("cf.accounts.older-statements.heading"), id = Some("no-current-statements-heading"))
+
     @inset(id = Some("no-statements"), msg = messages("cf.duty-deferment-account.problem-with-service.text"))
 
     <div id="missing-documents-guidance" class="govuk-!-padding-top-2">
