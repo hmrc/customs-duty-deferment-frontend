@@ -98,13 +98,13 @@ month.abbr.12 = Rhag
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.accounts.older-statements.heading = Welsh (TBC) Your statements for the last 7 months
+cf.accounts.older-statements.heading = Eich datganiadau ar gyfer y 7 mis diwethaf
 cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 7 mis
-cf.accounts.older-statements.description.link=Welsh (TBC) llenwch ac anfon cais am ddatganiad
-cf.accounts.older-statements.description=Welsh (TBC) Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
-cf.accounts.older-statements.description.post-message=Welsh (TBC) We will send you an email when your transactions are ready to download.
-cf.accounts.older-statements.description.inset-message=Welsh (TBC) Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
-cf.common.chiefStatements.heading=Welsh (TBC) Datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF
+cf.accounts.older-statements.description.link=wneud cais am ba ddatganiadau TAW mewnforio ohiriedig sydd eu hangen arnoch
+cf.accounts.older-statements.description=Os bydd angen datganiad sy’n hŷn na 7 mis arnoch ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau, gallwch
+cf.accounts.older-statements.description.post-message=Byddwn yn anfon e-bost atoch pan fydd eich datganiadau yn barod i’w lawrlwytho.
+cf.accounts.older-statements.description.inset-message=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
+cf.common.chiefStatements.heading= Datganiadau a wnaed gan ddefnyddio System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF)
 cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES)
 cf.accounts.chiefStatements.description=Er mwyn bwrw golwg dros, argraffu neu lawrlwytho datganiadau gohirio tollau ar gyfer datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF, gallwch ddefnyddio’r gwasanaeth
 cf.accounts.support.heading=Help a chymorth
