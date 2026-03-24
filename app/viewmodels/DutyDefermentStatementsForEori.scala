@@ -16,14 +16,15 @@
 
 package viewmodels
 
-import models.DDStatementType.{Weekly, Supplementary, Excise, ExciseDeferment, DutyDeferment}
+import models.DDStatementType.{DutyDeferment, Excise, ExciseDeferment, Supplementary, Weekly}
 import models.FileRole.DutyDefermentStatement
 import models.{DDStatementType, DutyDefermentStatementFile, EoriHistory}
 import utils.DateConverters.OrderedLocalDate
-import utils.Utils.{firstDayOfPastNthMonth, isEqualOrAfter, isEqualOrBefore}
+import utils.Utils.{firstDayOfPastNthMonth, isEqualOrAfter, isEqualOrBefore, listOfPastNthMonths}
 import utils.OrderedByEoriHistory
 
 import java.time.LocalDate
+import scala.util.chaining.scalaUtilChainingOps
 
 case class DutyDefermentStatementsForEori(
   eoriHistory: EoriHistory,
@@ -37,7 +38,7 @@ case class DutyDefermentStatementsForEori(
   private val currentStatementsByPeriod: Seq[DutyDefermentStatementPeriod] = groupByPeriod(currentStatements)
 
   val groups: Seq[DutyDefermentStatementPeriodsByMonth] =
-    filterDates(startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod)).map(addEmptyStatements)
+    filterDates(startDate, endDate, groupByMonthAndYear(currentStatementsByPeriod)).pipe(populateEmptyMonths).map(addEmptyStatements)
 
   private def groupByPeriod(files: Seq[DutyDefermentStatementFile]): Seq[DutyDefermentStatementPeriod] =
     files
@@ -135,4 +136,18 @@ case class DutyDefermentStatementsForEori(
 
     (typeOrder, weekOrder)
   }
+
+  private def populateEmptyMonths(statementMonthGroups: Seq[DutyDefermentStatementPeriodsByMonth]): Seq[DutyDefermentStatementPeriodsByMonth] = {
+    val existingMonths = statementMonthGroups.map(m => m.monthAndYear -> m).toMap
+
+    listOfPastNthMonths(endDate, numberOfMonths).map { month => existingMonths.getOrElse(
+      month,
+      DutyDefermentStatementPeriodsByMonth(
+        month,
+        periods = Seq.empty
+      )
+    )
+    }
+  }
+
 }
