@@ -20,6 +20,6 @@
 
 @(msg: String, id: Option[String] = None, classes: Option[String] = None)(implicit messages: Messages)
 
-<div class="@{classes.fold("govuk-!-margin-top-7 govuk-!-margin-bottom-9")(classes => s"$classes")}" @{id.fold(emptyString)(id => s"id=$id")}>
- <p class="govuk-body">@msg</p>
+<div class="govuk-inset-text @{classes.getOrElse("")}" @{id.map(i => s"id=$i").getOrElse("")}>
+ @msg
 </div>

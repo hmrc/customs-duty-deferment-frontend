@@ -98,10 +98,13 @@ month.abbr.12 = Rhag
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 6 mis
-cf.accounts.older-statements.description.link=llenwch ac anfon cais am ddatganiad
-cf.accounts.older-statements.description=Ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau,
-cf.common.chiefStatements.heading=Datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF
+cf.accounts.older-statements.heading = Eich datganiadau ar gyfer y 7 mis diwethaf
+cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 7 mis
+cf.accounts.older-statements.description.link=wneud cais am ba ddatganiadau TAW mewnforio ohiriedig sydd eu hangen arnoch
+cf.accounts.older-statements.description=Os bydd angen datganiad sy’n hŷn na 7 mis arnoch ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau, gallwch
+cf.accounts.older-statements.description.post-message=Byddwn yn anfon e-bost atoch pan fydd eich datganiadau yn barod i’w lawrlwytho.
+cf.accounts.older-statements.description.inset-message=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
+cf.common.chiefStatements.heading= Datganiadau a wnaed gan ddefnyddio System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF)
 cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES)
 cf.accounts.chiefStatements.description=Er mwyn bwrw golwg dros, argraffu neu lawrlwytho datganiadau gohirio tollau ar gyfer datganiadau a wnaed gan ddefnyddio’r gwasanaeth CHIEF, gallwch ddefnyddio’r gwasanaeth
 cf.accounts.support.heading=Help a chymorth
@@ -109,10 +112,10 @@ cf.accounts.support.message=Os oes angen help arnoch, cysylltwch â’r
 cf.account.dd.support.link=Llinell Gymorth TAW ac Ecséis
 cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIEF
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
-cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 6 mis
+cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 7 mis
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
-cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 6 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
-cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 6 mis
+cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 7 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
+cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 7 mis
 
 
 # Not subscribed to CDS

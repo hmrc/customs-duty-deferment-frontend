@@ -48,7 +48,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainCurrentStatementSection(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -68,7 +68,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -88,7 +88,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -108,7 +108,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
@@ -128,7 +128,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDDStatementHeading(viewModel)
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
@@ -149,7 +149,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -170,7 +170,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel, someLinkId)(messages, appConfig)
         shouldContainNoStatementsAvailableMsg(viewModel)
-        shouldContainStatementOlderThanSixMonthsGuidance(viewModel)
+        shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
@@ -248,17 +248,27 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
     viewModel: DutyDefermentAccountViewModel
   )(implicit messages: Messages): Assertion = {
     viewModel.currentStatements.noStatementMsg.nonEmpty mustBe true
-    viewModel.currentStatements.noStatementMsg mustBe
-      Some(new inset().apply(messages("cf.account.detail.no-statements", accNumber)))
+
+    val noStatements = Some(
+      HtmlFormat.fill(
+        Seq(
+          new h2()
+            .apply(id = Some("no-current-statements-heading"), msg = messages("cf.accounts.older-statements.heading")),
+          new inset().apply(messages("cf.account.detail.no-statements", accNumber))
+        )
+      )
+    )
+
+    viewModel.currentStatements.noStatementMsg mustBe noStatements
   }
 
   private def countOfShowAllSectionLink(viewModel: DutyDefermentAccountViewModel): Int =
     "show-all-sections".r.findAllIn(viewModel.toString).length
 
-  private def shouldContainStatementOlderThanSixMonthsGuidance(
+  private def shouldContainStatementOlderThanSevenMonthsGuidance(
     viewModel: DutyDefermentAccountViewModel
   ): Assertion =
-    viewModel.statOlderThanSixMonths mustBe
+    viewModel.statOlderThanSevenMonths mustBe
       GuidanceRow(
         h2Heading = new h2().apply(
           id = Some("missing-documents-guidance-heading"),
@@ -271,8 +281,14 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description"),
-            linkSentence = true
+            linkSentence = true,
+            postLinkMessage = Some("cf.accounts.older-statements.description.post-message")
           )(messages)
+        ),
+        inset = Some(
+          new inset().apply(
+            messages("cf.accounts.older-statements.description.inset-message")
+          )
         )
       )
 

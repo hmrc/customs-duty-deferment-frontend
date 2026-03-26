@@ -98,10 +98,13 @@ month.abbr.12 = Dec
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.common.missing-documents-guidance.cdsStatements.heading=Statements older than 6 months
-cf.accounts.older-statements.description.link=complete and send a statement request
-cf.accounts.older-statements.description=For declarations made using the Customs Declarations Service,
-cf.common.chiefStatements.heading=Declarations made using CHIEF
+cf.accounts.older-statements.heading = Your statements for the last 7 months
+cf.common.missing-documents-guidance.cdsStatements.heading=Statements older than 7 months
+cf.accounts.older-statements.description.link=request which duty deferment statements you need
+cf.accounts.older-statements.description=If you need a statement older than 7 months for declarations made using the Customs Declaration Service, you can
+cf.accounts.older-statements.description.post-message=We will send you an email when your statements are ready to download.
+cf.accounts.older-statements.description.inset-message=Requested statements will only be available to view and download for 10 days. After 10 days, the requested files will be deleted and you may need to request them again.
+cf.common.chiefStatements.heading=Declarations made using Customs and Handling of Import and Export Freights (CHIEF)
 cf.accounts.chiefStatements.description.link=Duty Deferment Electronic Statements (DDES)
 cf.accounts.chiefStatements.description=You can view, print or download duty deferment statements for declarations made using CHIEF from
 cf.accounts.support.heading=Help and support
@@ -109,10 +112,10 @@ cf.accounts.support.message=If you need help contact
 cf.account.dd.support.link=duty deferment general enquiries
 cf.common.missing-documents-guidance.chiefStatements.heading={0} made in CHIEF
 cf.common.missing-documents-guidance.text1={0} for import declarations made in Customs Handling of Import and Export Freight (CHIEF) are not available in this service.
-cf.common.missing-documents-guidance.olderStatements.heading={0} older than 6 months
+cf.common.missing-documents-guidance.olderStatements.heading={0} older than 7 months
 cf.common.missing-documents-guidance.text2={0} are only created for periods in which you imported goods.
-cf.duty-deferment-account.historic.description=This service will only show statements for the last 6 months.
-cf.duty-deferment-account.historic.request=Request a statement that’s older than 6 months
+cf.duty-deferment-account.historic.description=This service will only show statements for the last 7 months.
+cf.duty-deferment-account.historic.request=Request a statement that’s older than 7 months
 # ----------------------------------------------------------
 
 

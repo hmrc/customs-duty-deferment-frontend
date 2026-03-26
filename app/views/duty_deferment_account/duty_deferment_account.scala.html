@@ -27,9 +27,11 @@
 
         @model.ddStatementHeading
 
+        @model.requestedStatement.map(identity)
+
         @model.directDebitInfoMsg
 
-        @model.requestedStatement.map(identity)
+        @model.currentStatements.h2Heading.map(identity)
 
         @model.currentStatements.firstPopulatedStatements.map { statement =>
             @statement.historicEoriHeading.map(identity)
@@ -49,8 +51,9 @@
         @model.currentStatements.noStatementMsg.map(identity)
 
         <div id="missing-documents-guidance" class="govuk-!-padding-top-9">
-            @model.statOlderThanSixMonths.h2Heading
-            @model.statOlderThanSixMonths.link.map(identity)
+            @model.statOlderThanSevenMonths.h2Heading
+            @model.statOlderThanSevenMonths.link.map(identity)
+            @model.statOlderThanSevenMonths.inset.map(identity)
 
             @model.chiefDeclaration.h2Heading
             @model.chiefDeclaration.paragraph.map(identity)
@@ -59,6 +62,7 @@
         <div id="dd-support-heading" class="govuk-!-padding-top-2">
             @model.helpAndSupport.h2Heading
             @model.helpAndSupport.paragraph.map(identity)
+            @model.helpAndSupport.inset.map(identity)
         </div>
 
     }
