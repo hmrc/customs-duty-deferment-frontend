@@ -26,6 +26,16 @@ import utils.OrderedByEoriHistory
 import java.time.LocalDate
 import scala.util.chaining.scalaUtilChainingOps
 
+private case class DutyDefermentStatementsExpectedIssueDate(
+  weeklyStatementOneCutOff: LocalDate,
+  weeklyStatementTwoCutOff: LocalDate,
+  weeklyStatementThreeCutOff: LocalDate,
+  weeklyStatementFourCutOff: LocalDate,
+  supplementaryStatementCutOff: LocalDate,
+  exciseStatementCutOff: LocalDate,
+  dutyDefermentStatementCutOff: LocalDate,
+  exciseDefermentStatementCutOff: LocalDate
+)
 case class DutyDefermentStatementsForEori(
   eoriHistory: EoriHistory,
   currentStatements: Seq[DutyDefermentStatementFile],
@@ -78,6 +88,16 @@ case class DutyDefermentStatementsForEori(
   }
 
   private def addEmptyStatements(month: DutyDefermentStatementPeriodsByMonth): DutyDefermentStatementPeriodsByMonth = {
+    val expectedIssueDates = DutyDefermentStatementsExpectedIssueDate(
+      weeklyStatementOneCutOff = month.monthAndYear.withDayOfMonth(14),
+      weeklyStatementTwoCutOff = month.monthAndYear.withDayOfMonth(19),
+      weeklyStatementThreeCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.lengthOfMonth()),
+      weeklyStatementFourCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(5),
+      supplementaryStatementCutOff = month.monthAndYear.plusMonths(2).withDayOfMonth(18),
+      exciseStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth()),
+      dutyDefermentStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(16),
+      exciseDefermentStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth())
+    )
 
     val (weeklyPeriods, nonWeeklyPeriods) = month.periods.partition(_.defermentStatementType == Weekly)
 
@@ -88,11 +108,16 @@ case class DutyDefermentStatementsForEori(
       }
     }.toMap
 
-    val completedWeeklyPeriod: Seq[DutyDefermentStatementPeriod] = (1 to 4).map { week =>
-       weeklyByWeek.getOrElse(
-         week,
-         createEmptyPeriod(month.monthAndYear, Weekly, week)
-       )
+    val completedWeeklyPeriod: Seq[DutyDefermentStatementPeriod] = (1 to 4).flatMap { week =>
+       weeklyByWeek.get(week) match {
+         case Some(period) => Some(period)
+
+         case None => if (ignoreIfPeriodNotIssued(week, Weekly, expectedIssueDates)) {
+           Some(createEmptyPeriod(month.monthAndYear, Weekly, week))
+         } else {
+           None
+         }
+       }
     }
 
     val expectedWeeklyTypes = Seq(Supplementary, Excise, DutyDeferment, ExciseDeferment)
@@ -100,17 +125,37 @@ case class DutyDefermentStatementsForEori(
     val nonWeeklyByType: Map[DDStatementType, DutyDefermentStatementPeriod] = nonWeeklyPeriods.map(period =>
       period.defermentStatementType -> period).toMap
 
-    val completeNonWeekly: Seq[DutyDefermentStatementPeriod] = expectedWeeklyTypes.map { statementType =>
-      nonWeeklyByType.getOrElse(
-        statementType,
-        createEmptyPeriod(month.monthAndYear, statementType, 0)
-      )
+    val completeNonWeekly: Seq[DutyDefermentStatementPeriod] = expectedWeeklyTypes.flatMap { statementType =>
+
+      nonWeeklyByType.get(statementType) match {
+        case Some(period) => Some(period)
+        case None => if (ignoreIfPeriodNotIssued(0, statementType, expectedIssueDates)) {
+          Some(createEmptyPeriod(month.monthAndYear, statementType, 0))
+        } else {
+          None
+        }
+      }
     }
 
     month.copy(
       periods =
         (completedWeeklyPeriod ++ completeNonWeekly).sortBy(orderPeriods)
     )
+  }
+
+  private def ignoreIfPeriodNotIssued(periodIssueNumber: Int, statementType: DDStatementType, issueDates: DutyDefermentStatementsExpectedIssueDate): Boolean = {
+    val today = endDate
+    (periodIssueNumber, statementType) match {
+      case (1, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementOneCutOff)
+      case (2, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementTwoCutOff)
+      case (3, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementThreeCutOff)
+      case (4, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, Supplementary)   => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, Excise)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, DutyDeferment)   => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, ExciseDeferment) => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, _) => false
+    }
   }
 
   private def createEmptyPeriod(month: LocalDate, statementType: DDStatementType, issueNumber: Int): DutyDefermentStatementPeriod = {
