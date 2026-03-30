@@ -71,7 +71,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
-        countOfShowAllSectionLink(viewModel) mustBe 0
+        countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
       "current statements are available for tailing statements with historic eori" in {
@@ -281,7 +281,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description"),
-            linkSentence = true,
             postLinkMessage = Some("cf.accounts.older-statements.description.post-message")
           )(messages)
         ),

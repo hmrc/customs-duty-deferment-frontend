@@ -72,9 +72,12 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val endDate01   = LocalDate.of(year, month, day_25)
     val endDate02   = LocalDate.of(year, month, day_26)
 
+    val periodIssueNumber = 1
+
     val period1 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.Supplementary,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01
@@ -83,6 +86,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val period2 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.Excise,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01
@@ -91,6 +95,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val period3 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.Weekly,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01
@@ -99,6 +104,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val period4 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.ExciseDeferment,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01
@@ -107,6 +113,7 @@ class DutyDefermentStatementPeriodSpec extends SpecBase {
     val period5 = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.DutyDeferment,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01

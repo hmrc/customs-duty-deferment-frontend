@@ -49,9 +49,9 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
 
       dutyDefermentStatementsForEori.currentStatements.size   shouldBe 3
       dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.size              shouldBe 2
-      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.tail.size         shouldBe 1
+      dutyDefermentStatementsForEori.groups.size              shouldBe 7
+      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 8
+      dutyDefermentStatementsForEori.groups.tail.size         shouldBe 6
     }
 
     "correctly give no statements when dates are more than 7 months" in new Setup {
@@ -73,7 +73,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
 
       dutyDefermentStatementsForEori.currentStatements.size   shouldBe 1
       dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-      dutyDefermentStatementsForEori.groups.isEmpty           shouldBe true
+      dutyDefermentStatementsForEori.groups.isEmpty           shouldBe false
     }
 
   }
@@ -90,6 +90,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       startDate01.getYear,
       startDate01.getMonthValue,
       periodStartDay1,
+      periodIssueNumber1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,
@@ -106,6 +107,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       startDate02.getYear,
       startDate02.getMonthValue,
       periodStartDay1,
+      periodIssueNumber1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,
@@ -122,6 +124,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       startDate03.getYear,
       startDate03.getMonthValue,
       periodStartDay1,
+      periodIssueNumber1,
       FileFormat.Csv,
       DutyDefermentStatement,
       Weekly,

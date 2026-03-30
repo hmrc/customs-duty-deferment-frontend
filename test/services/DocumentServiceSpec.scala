@@ -47,13 +47,14 @@ class DocumentServiceSpec extends SpecBase {
 
     val eoriHist: EoriHistory = EoriHistory("GB123456789", None, None)
 
-    val startYear  = previousMonthDate.getYear
-    val startMonth = previousMonthDate.getMonthValue
-    val startDate  = 1
-    val endYear    = previousMonthDate.getYear
-    val endMonth   = previousMonthDate.getMonthValue
-    val endDate    = 8
-    val fileSize   = 10L
+    val startYear         = previousMonthDate.getYear
+    val startMonth        = previousMonthDate.getMonthValue
+    val startDate         = 1
+    val endYear           = previousMonthDate.getYear
+    val endMonth          = previousMonthDate.getMonthValue
+    val endDate           = 8
+    val fileSize          = 10L
+    val periodIssueNumber = 1
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
@@ -67,6 +68,7 @@ class DocumentServiceSpec extends SpecBase {
           endYear,
           endMonth,
           endDate,
+          periodIssueNumber,
           FileFormat.Csv,
           DutyDefermentStatement,
           Weekly,
@@ -89,6 +91,7 @@ class DocumentServiceSpec extends SpecBase {
           endYear,
           endMonth,
           endDate,
+          periodIssueNumber,
           FileFormat.Csv,
           DutyDefermentStatement,
           Weekly,

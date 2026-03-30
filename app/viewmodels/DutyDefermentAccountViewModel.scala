@@ -239,8 +239,7 @@ object DutyDefermentAccountViewModel {
             location = serviceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessageKey = Some("cf.accounts.older-statements.description"),
-            postLinkMessageKey = Some("cf.accounts.older-statements.description.post-message"),
-            linkSentence = true
+            postLinkMessageKey = Some("cf.accounts.older-statements.description.post-message")
           )
         )
       ),

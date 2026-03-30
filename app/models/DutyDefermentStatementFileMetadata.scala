@@ -25,6 +25,7 @@ case class DutyDefermentStatementFileMetadata(
   periodEndYear: Int,
   periodEndMonth: Int,
   periodEndDay: Int,
+  periodIssueNumber: Int,
   fileFormat: FileFormat,
   fileRole: FileRole,
   defermentStatementType: DDStatementType,
