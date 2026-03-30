@@ -98,11 +98,11 @@ month.abbr.12 = Rhag
 
 # Request statement guidance
 # ----------------------------------------------------------
-cf.accounts.older-statements.heading = Eich datganiadau ar gyfer y 7 mis diwethaf
-cf.common.missing-documents-guidance.cdsStatements.heading=Datganiadau sy’n hŷn na 7 mis
-cf.accounts.older-statements.description.link=wneud cais am ba ddatganiadau TAW mewnforio ohiriedig sydd eu hangen arnoch
-cf.accounts.older-statements.description=Os bydd angen datganiad sy’n hŷn na 7 mis arnoch ar gyfer datganiadau a wnaed gan ddefnyddio’r Gwasanaeth Datganiadau Tollau, gallwch
-cf.accounts.older-statements.description.post-message=Byddwn yn anfon e-bost atoch pan fydd eich datganiadau yn barod i’w lawrlwytho.
+cf.accounts.older-statements.heading = Eich datganiadau presennol
+cf.common.missing-documents-guidance.cdsStatements.heading=	Eich datganiadau blaenorol
+cf.accounts.older-statements.description.link=cais am ddatganiadau gohirio tollau
+cf.accounts.older-statements.description=Gallwch wneud
+cf.accounts.older-statements.description.post-message=nad ydynt yn eich datganiadau presennol. Byddwn yn anfon e-bost atoch pan fyddant yn barod i’w lawrlwytho.
 cf.accounts.older-statements.description.inset-message=Bydd datganiadau a ofynnwyd amdanynt ar gael i’w gweld a’u lawrlwytho am 10 diwrnod yn unig. Ar ôl 10 diwrnod, bydd y ffeiliau a ofynnwyd amdanynt yn cael eu dileu, ac mae’n bosibl y bydd angen i chi wneud cais amdanynt eto.
 cf.common.chiefStatements.heading= Datganiadau a wnaed gan ddefnyddio System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF)
 cf.accounts.chiefStatements.description.link=Datganiadau Electronig i Ohirio Tollau (DDES)
