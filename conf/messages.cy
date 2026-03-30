@@ -33,6 +33,11 @@ cf.account.detail.accordion.show-section=Dangos
 cf.account.detail.accordion.show-all-sections=Dangos pob adran
 cf.account.detail.accordion.hide-section=Cuddio
 cf.account.detail.accordion.hide-all-sections=Cuddio bob adran
+cf.account.detail.period.week.1 = Wythnos 1
+cf.account.detail.period.week.2 = Wythnos  2
+cf.account.detail.period.week.3 = Wythnos  3
+cf.account.detail.period.week.4 = Wythnos  4
+cf.account.detail.period.no-statements = Dim Datganiad
 # ----------------------------------------------------------
 
 # User Research
