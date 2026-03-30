@@ -97,10 +97,13 @@ class DutyDefermentHeadSpec extends SpecBase {
   trait Setup {
     val startDate01: LocalDate = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, day_01)
     val endDate01: LocalDate   = LocalDate.of(previousMonthDate.getYear, todaysDate.getMonth, day_26)
+    val periodIssueNumber = 1
+
 
     val ddSttPeriod01: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.ExciseDeferment,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01,
@@ -110,6 +113,7 @@ class DutyDefermentHeadSpec extends SpecBase {
     val ddSttPeriod02: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.DutyDeferment,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01,
@@ -119,6 +123,7 @@ class DutyDefermentHeadSpec extends SpecBase {
     val ddSttPeriod03: DutyDefermentStatementPeriod = DutyDefermentStatementPeriod(
       FileRole.DutyDefermentStatement,
       DDStatementType.Weekly,
+      periodIssueNumber,
       startDate01,
       startDate01,
       endDate01,

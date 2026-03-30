@@ -120,6 +120,7 @@ trait TestData extends MockitoSugar {
   val periodEndYear2023             = 2023
   val periodEndMonth10              = 10
   val periodEndDay8                 = 8
+  val periodIssueNumber1            = 1
   val fileSizeData: Long            = 10L
   val fileName                      = "test_file_name"
   val someDan                       = "123456"
@@ -158,6 +159,7 @@ trait TestData extends MockitoSugar {
     startDay: Int,
     endDate: LocalDate,
     endDay: Int,
+    periodIssueNumber: Int,
     fileFormat: FileFormat,
     ddSttType: DDStatementType,
     dutyOverLimit: Boolean
@@ -169,6 +171,7 @@ trait TestData extends MockitoSugar {
       endDate.getYear,
       endDate.getMonthValue,
       endDay,
+      periodIssueNumber,
       fileFormat,
       DutyDefermentStatement,
       ddSttType,
@@ -187,6 +190,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Csv,
       DDStatementType.Weekly,
       true
@@ -202,6 +206,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Pdf,
       DDStatementType.Supplementary,
       true
@@ -217,6 +222,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Csv,
       DDStatementType.Excise,
       false
@@ -232,6 +238,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Csv,
       DDStatementType.Weekly,
       true
@@ -247,6 +254,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       twoMonthsPriorDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Csv,
       DDStatementType.Weekly,
       false
@@ -262,6 +270,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       twoMonthsPriorDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Pdf,
       DDStatementType.Excise,
       false
@@ -277,6 +286,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Pdf,
       DDStatementType.Weekly,
       true
@@ -292,6 +302,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Csv,
       DDStatementType.ExciseDeferment,
       true
@@ -307,6 +318,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Pdf,
       DDStatementType.ExciseDeferment,
       true
@@ -322,6 +334,7 @@ trait TestData extends MockitoSugar {
       periodStartDay1,
       previousMonthDate,
       periodEndDay8,
+      periodIssueNumber1,
       FileFormat.Pdf,
       DDStatementType.DutyDeferment,
       true
@@ -346,6 +359,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("PeriodEndYear", previousMonthDate.getYear.toString),
     MetadataItem("PeriodEndMonth", previousMonthDate.getMonthValue.toString),
     MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("PeriodIssueNumber", "1"),
     MetadataItem("FileType", "CSV"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Weekly"),
@@ -361,6 +375,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("PeriodEndYear", previousMonthDate.getYear.toString),
     MetadataItem("PeriodEndMonth", previousMonthDate.getMonthValue.toString),
     MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("PeriodIssueNumber", "1"),
     MetadataItem("FileType", "PDF"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Supplementary"),
@@ -376,6 +391,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("PeriodEndYear", previousMonthDate.getYear.toString),
     MetadataItem("PeriodEndMonth", previousMonthDate.getMonthValue.toString),
     MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("PeriodIssueNumber", "1"),
     MetadataItem("FileType", "CSV"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Excise"),
@@ -391,6 +407,7 @@ trait TestData extends MockitoSugar {
     MetadataItem("PeriodEndYear", twoMonthsPriorDate.getYear.toString),
     MetadataItem("PeriodEndMonth", twoMonthsPriorDate.getMonthValue.toString),
     MetadataItem("PeriodEndDay", "8"),
+    MetadataItem("PeriodIssueNumber", "1"),
     MetadataItem("FileType", "PDF"),
     MetadataItem("FileRole", "DutyDefermentStatement"),
     MetadataItem("DefermentStatementType", "Excise"),

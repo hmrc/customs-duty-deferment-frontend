@@ -94,9 +94,9 @@ case class DutyDefermentStatementsForEori(
       weeklyStatementThreeCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.lengthOfMonth()),
       weeklyStatementFourCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(5),
       supplementaryStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(18),
-      exciseStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth()),
+      exciseStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.lengthOfMonth()),
       dutyDefermentStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(16),
-      exciseDefermentStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth())
+      exciseDefermentStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.lengthOfMonth())
     )
 
     val (weeklyPeriods, nonWeeklyPeriods) = month.periods.partition(_.defermentStatementType == Weekly)

@@ -31,6 +31,7 @@ class MetadataSpec extends SpecBase {
         MetadataItem("PeriodEndYear", "2023"),
         MetadataItem("PeriodEndMonth", "10"),
         MetadataItem("PeriodEndDay", "31"),
+        MetadataItem("PeriodIssueNumber", "01"),
         MetadataItem("FileType", "CSV"),
         MetadataItem("FileRole", "DutyDefermentStatement"),
         MetadataItem("DefermentStatementType", "DD"),
