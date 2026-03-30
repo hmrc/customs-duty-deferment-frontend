@@ -281,7 +281,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
             location = testServiceUnavailableUrl,
             linkClass = "govuk-link govuk-link--no-visited-state",
             preLinkMessage = Some("cf.accounts.older-statements.description"),
-            linkSentence = true,
             postLinkMessage = Some("cf.accounts.older-statements.description.post-message")
           )(messages)
         ),
