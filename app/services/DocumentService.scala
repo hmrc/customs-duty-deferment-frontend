@@ -37,8 +37,6 @@ class DocumentService @Inject() (sdesConnector: SDESConnector, dateTimeService: 
       .map(auditFiles(_))
       .map(_.partition(_.metadata.statementRequestId.isEmpty))
       .map { case (current, requested) =>
-        println("//////////// -> " + current)
-        println("//////////// -> " + requested)
         DutyDefermentStatementsForEori(eoriHistory, current, requested, dateTimeService.systemDateTime().toLocalDate)
       }
 
