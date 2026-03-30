@@ -71,7 +71,7 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
         shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
-        countOfShowAllSectionLink(viewModel) mustBe 0
+        countOfShowAllSectionLink(viewModel) mustBe 1
       }
 
       "current statements are available for tailing statements with historic eori" in {

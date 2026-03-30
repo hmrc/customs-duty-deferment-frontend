@@ -45,7 +45,7 @@ object Utils {
   def firstDayOfPastNthMonth(date: LocalDate, numberOfMonths: Int): LocalDate =
     date.minusMonths(numberOfMonths).withDayOfMonth(1)
 
-  def listOfPastNthMonths(date:LocalDate, numberOfMonths: Int): IndexedSeq[LocalDate] = {
+  def listOfPastNthMonths(date: LocalDate, numberOfMonths: Int): IndexedSeq[LocalDate] = {
     val monthRange: Range.Inclusive = 0 to numberOfMonths
     monthRange.map(n => date.minusMonths(n).withDayOfMonth(1))
   }
