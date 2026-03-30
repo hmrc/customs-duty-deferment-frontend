@@ -90,9 +90,12 @@ class OrderedByEoriHistorySpec extends SpecBase {
       val endDate01   = LocalDate.of(year, month, dayOfMonth30)
       val endDate02   = LocalDate.of(year, month, dayOfMonth31)
 
+      val periodIssueNumber = 1
+
       val period1 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement,
         DDStatementType.Supplementary,
+        periodIssueNumber,
         startDate01,
         startDate01,
         endDate01
@@ -100,6 +103,7 @@ class OrderedByEoriHistorySpec extends SpecBase {
       val period2 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement,
         DDStatementType.Supplementary,
+        periodIssueNumber,
         startDate02,
         startDate02,
         endDate02
@@ -107,6 +111,7 @@ class OrderedByEoriHistorySpec extends SpecBase {
       val period3 = DutyDefermentStatementPeriod(
         FileRole.DutyDefermentStatement,
         DDStatementType.Excise,
+        periodIssueNumber,
         startDate01,
         startDate01,
         endDate02

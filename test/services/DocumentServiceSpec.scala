@@ -54,6 +54,7 @@ class DocumentServiceSpec extends SpecBase {
     val endMonth   = previousMonthDate.getMonthValue
     val endDate    = 8
     val fileSize   = 10L
+    val periodIssueNumber = 1
 
     val currentFile: DutyDefermentStatementFile =
       DutyDefermentStatementFile(
@@ -67,6 +68,7 @@ class DocumentServiceSpec extends SpecBase {
           endYear,
           endMonth,
           endDate,
+          periodIssueNumber,
           FileFormat.Csv,
           DutyDefermentStatement,
           Weekly,
@@ -89,6 +91,7 @@ class DocumentServiceSpec extends SpecBase {
           endYear,
           endMonth,
           endDate,
+          periodIssueNumber,
           FileFormat.Csv,
           DutyDefermentStatement,
           Weekly,
