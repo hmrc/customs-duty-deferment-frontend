@@ -93,10 +93,10 @@ case class DutyDefermentStatementsForEori(
       weeklyStatementTwoCutOff = month.monthAndYear.withDayOfMonth(19),
       weeklyStatementThreeCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.lengthOfMonth()),
       weeklyStatementFourCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(5),
-      supplementaryStatementCutOff = month.monthAndYear.plusMonths(2).withDayOfMonth(18),
-      exciseStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth()),
+      supplementaryStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(18),
+      exciseStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth()),
       dutyDefermentStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(16),
-      exciseDefermentStatementCutOff = month.monthAndYear.plusMonths(1).withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth())
+      exciseDefermentStatementCutOff = month.monthAndYear.withDayOfMonth(month.monthAndYear.plusMonths(1).lengthOfMonth())
     )
 
     val (weeklyPeriods, nonWeeklyPeriods) = month.periods.partition(_.defermentStatementType == Weekly)
@@ -146,14 +146,14 @@ case class DutyDefermentStatementsForEori(
   private def ignoreIfPeriodNotIssued(periodIssueNumber: Int, statementType: DDStatementType, issueDates: DutyDefermentStatementsExpectedIssueDate): Boolean = {
     val today = endDate
     (periodIssueNumber, statementType) match {
-      case (1, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementOneCutOff)
-      case (2, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementTwoCutOff)
-      case (3, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementThreeCutOff)
-      case (4, Weekly)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
-      case (_, Supplementary)   => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
-      case (_, Excise)          => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
-      case (_, DutyDeferment)   => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
-      case (_, ExciseDeferment) => isEqualOrBefore(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (1, Weekly)          => isEqualOrAfter(endDate ,issueDates.weeklyStatementOneCutOff)
+      case (2, Weekly)          => isEqualOrAfter(endDate ,issueDates.weeklyStatementTwoCutOff)
+      case (3, Weekly)          => isEqualOrAfter(endDate ,issueDates.weeklyStatementThreeCutOff)
+      case (4, Weekly)          => isEqualOrAfter(endDate ,issueDates.weeklyStatementFourCutOff)
+      case (_, Supplementary)   => isEqualOrAfter(endDate ,issueDates.supplementaryStatementCutOff)
+      case (_, Excise)          => isEqualOrAfter(endDate ,issueDates.exciseStatementCutOff)
+      case (_, DutyDeferment)   => isEqualOrAfter(endDate ,issueDates.dutyDefermentStatementCutOff)
+      case (_, ExciseDeferment) => isEqualOrAfter(endDate ,issueDates.exciseDefermentStatementCutOff)
       case (_, _) => false
     }
   }
