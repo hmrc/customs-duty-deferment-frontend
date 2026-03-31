@@ -26,7 +26,6 @@ cf.account.detail.missing-file-type-duty-deferment-1720=Duty deferment 1720 {0} 
 cf.account.detail.missing-file-type={0} for {1} to {2} unavailable
 cf.account.detail.unavailable=Unavailable
 cf.account.detail.no-statements=No statements available for deferment account {0}.
-cf.duty-deferment-account.problem-with-service.text=Sorry, your statements are not available at the moment. Please try again later.
 cf.account.detail.accordion.show-section=Show
 cf.account.detail.accordion.show-all-sections=Show all sections
 cf.account.detail.accordion.hide-section=Hide
@@ -37,6 +36,13 @@ cf.account.detail.period.week.3 = Week 3
 cf.account.detail.period.week.4 = Week 4
 cf.account.detail.period.no-statements = No statements
 
+# ----------------------------------------------------------
+
+#Duty Deferment Account
+# ----------------------------------------------------------
+cf.duty-deferment-account.historic.description=This service will only show statements for the last 7 months.
+cf.duty-deferment-account.historic.request=Request a statement that’s older than 7 months
+cf.duty-deferment-account.problem-with-service.text=Sorry, your statements are not available at the moment. Please try again later.
 # ----------------------------------------------------------
 
 # BETA Banner
@@ -51,6 +57,7 @@ feedback.after = will help us to improve it.
 user-research.subheader-text=Help us improve the service
 user-research.help.body-text=Your feedback is valuable to us.
 user-research.help.link=Sign up to take part in user research
+# ----------------------------------------------------------
 
 # Timeout Messages
 # ----------------------------------------------------------
@@ -70,7 +77,6 @@ cf.error.standard-error-contact-details.title=Sorry, account details is unavaila
 cf.error.standard-error-contact-details.heading=Sorry, account details is unavailable at the moment
 cf.error.standard-error-contact-details.message=Please try again later
 # ----------------------------------------------------------
-
 
 # Date Format
 # ----------------------------------------------------------
@@ -101,7 +107,6 @@ month.abbr.11 = Nov
 month.abbr.12 = Dec
 # ----------------------------------------------------------
 
-
 # Request statement guidance
 # ----------------------------------------------------------
 cf.accounts.older-statements.heading =Your current statements
@@ -120,10 +125,7 @@ cf.common.missing-documents-guidance.chiefStatements.heading={0} made in CHIEF
 cf.common.missing-documents-guidance.text1={0} for import declarations made in Customs Handling of Import and Export Freight (CHIEF) are not available in this service.
 cf.common.missing-documents-guidance.olderStatements.heading={0} older than 7 months
 cf.common.missing-documents-guidance.text2={0} are only created for periods in which you imported goods.
-cf.duty-deferment-account.historic.description=This service will only show statements for the last 7 months.
-cf.duty-deferment-account.historic.request=Request a statement that’s older than 7 months
 # ----------------------------------------------------------
-
 
 # Not subscribed to CDS
 # ----------------------------------------------------------
@@ -160,7 +162,6 @@ cf.error.not-found.message.address-pasted-wrong=If you pasted the web address, c
 cf.error.not-found.message.go-to-home-page-text1=You can go
 cf.error.not-found.message.go-to-home-page-text2=back to manage import duties and VAT accounts
 cf.accounts.view-customs-account=manage import duties and VAT accounts
-
 # ----------------------------------------------------------
 
 accountDetails.title = Duty deferment account details
@@ -216,7 +217,6 @@ accountDetails.editAddress.caption.ni=Account: {0} (Northern Ireland)
 accountDetails.editAddress.heading=Address details for duty deferment account {0}
 accountDetails.editAddress.guidance=These address details will only be used for this duty deferment account.
 
-
 accountDetails.edit.name.empty=Enter your full name
 accountDetails.edit.address.line1.empty=Enter building and street
 accountDetails.edit.postcode.empty=Enter a postcode
@@ -266,10 +266,14 @@ country-picker.emptyValueText=Pick a country
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
+
 cf.customs-financials-home.recruitment-banner-heading=Help us improve this service
 cf.customs-financials-home.recruitment-banner-link-text=Sign up to be a potential user research participant
 cf.customs-financials-home.recruitment-banner.close=Close
 cf.customs-financials-home.recruitment-banner.hidden-text.close=the help us improve this service banner
+
+error.required=Enter a value
+error.summary.title=A problem has arisen
 
 # Service unavailable page
 # ----------------------------------------------------------------------------

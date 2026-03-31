@@ -26,9 +26,6 @@ cf.account.detail.missing-file-type-excise-deferment-1920=Nid yw gohiriad ecséi
 cf.account.detail.missing-file-type-duty-deferment-1720=Nid yw gohiriad tollau 1720 ar ffurf {0} ar gyfer {1} ar gael
 cf.account.detail.unavailable=Nid yw ar gael
 cf.account.detail.no-statements=Nid oes datganiadau ar gael ar gyfer cyfrif gohirio tollau {0}.
-cf.duty-deferment-account.historic.description=Rydym ond yn dangos datganiadau ar gyfer y 6 mis diwethaf. Os oes angen, gallwch
-cf.duty-deferment-account.historic.request=ofyn am ddatganiadau hŷn
-cf.duty-deferment-account.problem-with-service.text=Mae’n ddrwg gennym, nid yw’ch datganiadau ar gael ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
 cf.account.detail.accordion.show-section=Dangos
 cf.account.detail.accordion.show-all-sections=Dangos pob adran
 cf.account.detail.accordion.hide-section=Cuddio
@@ -38,6 +35,20 @@ cf.account.detail.period.week.2 = Wythnos  2
 cf.account.detail.period.week.3 = Wythnos  3
 cf.account.detail.period.week.4 = Wythnos  4
 cf.account.detail.period.no-statements = Dim Datganiad
+# ----------------------------------------------------------
+
+#Duty Deferment Account
+# ----------------------------------------------------------
+cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 7 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
+cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 7 mis
+cf.duty-deferment-account.problem-with-service.text=Mae’n ddrwg gennym, nid yw’ch datganiadau ar gael ar hyn o bryd. Rhowch gynnig arall arni yn nes ymlaen.
+# ----------------------------------------------------------
+
+# BETA Banner
+# ----------------------------------------------------------
+feedback.before =  Gwasanaeth newydd yw hwn – bydd eich
+feedback.link =  adborth
+feedback.after =  yn ein helpu i’w wella.
 # ----------------------------------------------------------
 
 # User Research
@@ -64,13 +75,6 @@ cf.error.standard-error-sdds.message=Rhowch gynnig arall arni yn nes ymlaen
 cf.error.standard-error-contact-details.title=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
 cf.error.standard-error-contact-details.heading=Mae’n ddrwg gennym, nid oes modd cael at fanylion y cyfrif ar hyn o bryd
 cf.error.standard-error-contact-details.message=Rhowch gynnig arall arni yn nes ymlaen
-# ----------------------------------------------------------
-
-# BETA Banner
-# ----------------------------------------------------------
-feedback.before =  Gwasanaeth newydd yw hwn – bydd eich
-feedback.link =  adborth
-feedback.after =  yn ein helpu i’w wella.
 # ----------------------------------------------------------
 
 # Date Format
@@ -100,6 +104,7 @@ month.abbr.9 = Medi
 month.abbr.10 = Hyd
 month.abbr.11 = Tach
 month.abbr.12 = Rhag
+# ----------------------------------------------------------
 
 # Request statement guidance
 # ----------------------------------------------------------
@@ -119,9 +124,7 @@ cf.common.missing-documents-guidance.chiefStatements.heading={0} a wneir yn CHIE
 cf.common.missing-documents-guidance.text1=Nid yw datganiadau ar gyfer datganiadau mewnforio a wneir yn System y Tollau ar gyfer Trin Nwyddau a Gaiff eu Mewnforio a’u Hallforio (CHIEF) ar gael yn y gwasanaeth hwn.
 cf.common.missing-documents-guidance.olderStatements.heading={0} sy’n hŷn na 7 mis
 cf.common.missing-documents-guidance.text2=Dim ond ar gyfer cyfnodau lle y gwnaethoch fewnforio nwyddau y mae datganiadau’n cael eu creu.
-cf.duty-deferment-account.historic.description=Dim ond ar gyfer y 7 mis diwethaf y bydd y gwasanaeth hwn yn dangos datganiadau.
-cf.duty-deferment-account.historic.request=Gwneud cais am ddatganiad sy’n hŷn na 7 mis
-
+# ----------------------------------------------------------
 
 # Not subscribed to CDS
 # ----------------------------------------------------------
@@ -249,48 +252,15 @@ emailAddress.edit.confirm.back=Dychwelwch i fanylion y cyfrif gohirio tollau
 emailAddress.edit.empty=Nodwch eich cyfeiriad e-bost
 emailAddress.edit.too-long=E-bost yn rhy hir
 emailAddress.edit.wrong-format=Nodwch gyfeiriad e-bost sy’n ddilys
-emailAddress.confirm.required=Dewiswch ai mai dyma’r cyfeiriad e-bost rydych am ei ddefnyddio
 
 accountDetails.confirm.heading = Gwirio'ch manylion
 accountDetails.confirm.details.heading = Manylion personol
 accountDetails.confirm.button = Cadarnhau
 
-# Unauthorised Error
-error.unauthorized.title=Nid ydych wedi’ch awdurdodi i fwrw golwg ar y dudalen hon
-error.unauthorized.heading=Heb awdurdod
-error.unauthorized.message=Nid ydych wedi’ch awdurdodi i fwrw golwg ar y dudalen hon
-
-error.techDifficulties.title=Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
-error.techDifficulties.heading=Mae’n ddrwg gennym. Mae anawsterau technegol wedi codi
-error.techDifficulties.message=Rhowch gynnig arall arni mewn ychydig o funudau.
-
-# Standard Error SDDS
-error.sdds.title=Mae’n ddrwg gennym, nid yw sefydlu debyd uniongyrchol ar gael ar hyn o bryd
-error.sdds.heading=Mae'n ddrwg gennym, nid yw sefydlu debyd uniongyrchol ar gael ar hyn o bryd
-error.sdds.message=Rhowch gynnig arall arni yn nes ymlaen
-
-error.browser.title.prefix=Gwall:
-error.boolean=Rhowch ateb
-error.invalid_date=Rhowch ddyddiad cywir
-error.date.day_blank=Nodwch ddiwrnod
-error.date.day_invalid=Rhowch ddiwrnod cywir gan ddefnyddio’r rhifau 1 i 31
-error.date.month_blank=Nodwch fis
-error.date.month_invalid=Rhowch fis cywir gan ddefnyddio’r rhifau 1 i 12
-error.date.year_blank=Nodwch flwyddyn
-error.date.year_invalid=Rhowch flwyddyn gywir
-error.integer=Rhowch ateb mewn rhifau cyfan
-error.non_numeric=Rhowch ateb gan ddefnyddio rhifau yn unig
-error.number=Nodwch rif dilys
-error.required=Nodwch werth
-error.summary.title=Mae problem wedi codi
-
 country-picker.country.label=Gwlad
 country-picker.hint.screen-reader=Dechreuwch deipio enw’r wlad ac yna defnyddiwch y botymau i fyny ac i lawr i adolygu a chadarnhau er mwyn dewis gwlad.
 country-picker.no-results=Dim canlyniadau wedi’u darganfod
 country-picker.emptyValueText=Dewiswch wlad
-
-dd.setup.unavailable.heading=Mae’n ddrwg gennym, ni allwch sefydlu debyd uniongyrchol newydd ar hyn o bryd.
-dd.setup.unavailable.message=Os ydych wedi dilysu’ch cyfeiriad e-bost yn ddiweddar, gallai gymryd hyd at 2 awr iddo gael ei nodi gan y gwasanaeth hwn.
 
 session_expired.title=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
 session_expired.heading=Er eich diogelwch, mae’r gwasanaeth hwn wedi’i ailosod
@@ -300,6 +270,9 @@ cf.customs-financials-home.recruitment-banner-heading=Helpu ni i wella’r gwasa
 cf.customs-financials-home.recruitment-banner-link-text=Cofrestrwch er mwyn cymryd rhan bosibl yn ein hymchwil defnyddiwr
 cf.customs-financials-home.recruitment-banner.close=Cau
 cf.customs-financials-home.recruitment-banner.hidden-text.close=Y faner ‘Helpu ni i wella’r gwasanaeth hwn’
+
+error.required=Nodwch werth
+error.summary.title=Mae problem wedi codi
 
 # Service unavailable page
 # ----------------------------------------------------------------------------
