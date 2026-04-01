@@ -125,9 +125,10 @@ case class DutyDefermentStatementsForEori(
 
         val completedWeeklyPeriod: Seq[DutyDefermentStatementPeriod] = (1 to 4).flatMap { week =>
           weeklyByWeek.get(week) match {
-            case Some(period)                                                       => Some(period)
-            case None if ignoreIfPeriodNotIssued(week, Weekly, expectedIssueDates) => Some(createEmptyPeriod(month.monthAndYear, Weekly, week))
-            case None                                                               => None
+            case Some(period)                                                      => Some(period)
+            case None if ignoreIfPeriodNotIssued(week, Weekly, expectedIssueDates) =>
+              Some(createEmptyPeriod(month.monthAndYear, Weekly, week))
+            case None                                                              => None
           }
         }
 
@@ -138,9 +139,10 @@ case class DutyDefermentStatementsForEori(
 
         val completeNonWeekly: Seq[DutyDefermentStatementPeriod] = expectedWeeklyTypes.flatMap { statementType =>
           nonWeeklyByType.get(statementType) match {
-            case Some(period)                                                              => Some(period)
-            case None if ignoreIfPeriodNotIssued(0, statementType, expectedIssueDates)    => Some(createEmptyPeriod(month.monthAndYear, statementType, 0))
-            case None                                                                      => None
+            case Some(period)                                                          => Some(period)
+            case None if ignoreIfPeriodNotIssued(0, statementType, expectedIssueDates) =>
+              Some(createEmptyPeriod(month.monthAndYear, statementType, 0))
+            case None                                                                  => None
           }
         }
 

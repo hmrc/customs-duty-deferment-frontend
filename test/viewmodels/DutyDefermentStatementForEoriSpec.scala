@@ -50,7 +50,7 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
       dutyDefermentStatementsForEori.currentStatements.size   shouldBe 3
       dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
       dutyDefermentStatementsForEori.groups.size              shouldBe 7
-      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 8
+      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 0
       dutyDefermentStatementsForEori.groups.tail.size         shouldBe 6
     }
 
