@@ -29,54 +29,6 @@ class DutyDefermentStatementForEoriSpec extends SpecBase {
 
   "groups" should {
 
-//    "correctly give statements by month which are less than 7 months" in new Setup {
-//
-//      val currentStatementsTestData: Seq[DutyDefermentStatementFile] = List(
-//        DutyDefermentStatementFile("someFilename", "downloadUrl", fileSizeData, metaData01),
-//        DutyDefermentStatementFile("someFilename2", "downloadUrl", fileSizeData, metaData02),
-//        DutyDefermentStatementFile("someFilename3", "downloadUrl", fileSizeData, metaData03)
-//      )
-//
-//      val requestedStatementsTestData: Seq[DutyDefermentStatementFile] = List(
-//        DutyDefermentStatementFile("someFilename", "downloadUrl", fileSizeData, metaData01)
-//      )
-//
-//      lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
-//        eoriHistory,
-//        currentStatementsTestData,
-//        requestedStatementsTestData,
-//        LocalDate.now()
-//      )
-//
-//      dutyDefermentStatementsForEori.currentStatements.size   shouldBe 3
-//      dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-//      dutyDefermentStatementsForEori.groups.size              shouldBe 7
-//      dutyDefermentStatementsForEori.groups.head.periods.size shouldBe 0
-//      dutyDefermentStatementsForEori.groups.tail.size         shouldBe 6
-//    }
-
-//    "correctly give no statements when dates are more than 7 months" in new Setup {
-//
-//      val currentStatementsTestData: Seq[DutyDefermentStatementFile] = List(
-//        DutyDefermentStatementFile("someFilename3", "downloadUrl", fileSizeData, metaData03)
-//      )
-//
-//      val requestedStatementsTestData: Seq[DutyDefermentStatementFile] = List(
-//        DutyDefermentStatementFile("someFilename", "downloadUrl", fileSizeData, metaData01)
-//      )
-//
-//      lazy val dutyDefermentStatementsForEori: DutyDefermentStatementsForEori = DutyDefermentStatementsForEori(
-//        eoriHistory,
-//        currentStatementsTestData,
-//        requestedStatementsTestData,
-//        LocalDate.now()
-//      )
-//
-//      dutyDefermentStatementsForEori.currentStatements.size   shouldBe 1
-//      dutyDefermentStatementsForEori.requestedStatements.size shouldBe 1
-//      dutyDefermentStatementsForEori.groups.isEmpty           shouldBe false
-//    }
-
     "month handling" should {
       "always return current month plus at least 6 months previous for partial data" in new Setup {
         override val currentStatements: Seq[DutyDefermentStatementFile] = dutyDefermentStatementFiles
