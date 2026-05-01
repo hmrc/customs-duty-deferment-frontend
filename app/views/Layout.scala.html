@@ -25,6 +25,8 @@
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.userresearchbanner.UserResearchBanner
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.backlink.BackLink
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation.ServiceNavigation
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 @import views.html.helper.CSPNonce
 @import utils.Utils.emptyString
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
@@ -44,60 +46,70 @@
         pageTitle: Option[String] = None,
         backLink: Option[String] = None,
         helpAndSupport: Boolean = true,
-        deskpro: Boolean = true,
-        welshToggle: Boolean = true
+        deskpro: Boolean = true
 )(contentBlock: Html)(implicit request: RequestHeader, messages: Messages)
 
-    @phaseBannerContent = {
-        @messages("feedback.before")
-            <a class='govuk-link' href='/contact/beta-feedback-unauthenticated?service=CDS-FIN'>@messages("feedback.link")</a>
-        @messages("feedback.after")
-    }
+@phaseBannerLink = {
+    <a class="govuk-link"
+       href="/contact/beta-feedback-unauthenticated?service=CDS-FIN"
+       target="_blank">
+        @messages("feedback.link")
+    </a>
+}
 
-    @fullPageTitle = @{
-        pageTitle match {
-            case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
-            case _ => Some(s"${messages("service.name")} - GOV.UK")
-        }
-    }
+@phaseBannerContent = {
+    @Html(messages("feedback.text", phaseBannerLink))
+}
 
-    @additionalHead = {
-        @autocompleteCss()
-        <link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
-        @hmrcTimeoutDialog(TimeoutDialog(
-        title = Some(messages("timeout.title")),
-        timeout = Some(appConfig.timeout),
-        countdown = Some(appConfig.countdown),
-        keepAliveUrl = Some(request.uri),
-        signOutUrl = Some(routes.LogoutController.logout.url),
-        timeoutUrl = Some(routes.LogoutController.logoutNoSurvey.url)
-    ))
+@fullPageTitle = @{
+    pageTitle match {
+        case Some(text) => Some(s"$text - ${messages("service.name")} - GOV.UK")
+        case _ => Some(s"${messages("service.name")} - GOV.UK")
     }
+}
 
-    @mainContent = {
-        @contentBlock
+@additionalHead = {
+    @autocompleteCss()
+    <link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="screen" rel="stylesheet" type="text/css"/>
+    @hmrcTimeoutDialog(TimeoutDialog(
+    title = Some(messages("timeout.title")),
+    timeout = Some(appConfig.timeout),
+    countdown = Some(appConfig.countdown),
+    keepAliveUrl = Some(request.uri),
+    signOutUrl = Some(routes.LogoutController.logout.url),
+    timeoutUrl = Some(routes.LogoutController.logoutNoSurvey.url)
+))
+}
 
-        @if(deskpro) {
-            @hmrcReportTechnicalIssueHelper()
-        }
+@mainContent = {
+    @contentBlock
+
+    @if(deskpro) {
+        @hmrcReportTechnicalIssueHelper()
     }
+}
 
 @hmrcStandardPage(
     HmrcStandardPageParams(
         pageTitle = fullPageTitle,
+        serviceName = Some(""),
         serviceURLs =  ServiceURLs(
-                            serviceUrl =  Some(appConfig.financialsHomepage),
-                            signOutUrl = Some(routes.LogoutController.logout.url),
-                            accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
-                    ),
+            signOutUrl = Some(routes.LogoutController.logout.url),
+            accessibilityStatementUrl = Some("/accessibility-statement/customs-financials")
+        ),
+        serviceNavigation = Some(
+            ServiceNavigation(
+                serviceName = Some(messages("service.name")),
+                serviceUrl = Some(appConfig.financialsHomepage)
+            ).withLanguageToggle()
+        ),
         backLink = backLink.map(href => BackLink(href = href)),
         templateOverrides = TemplateOverrides(
-                                additionalHeadBlock = Some(additionalHead),
-                                additionalScriptsBlock = Some(autocompleteJavascript())
-                            ),
+            additionalHeadBlock = Some(additionalHead),
+            additionalScriptsBlock = Some(autocompleteJavascript())
+        ),
         banners = Banners(
-                        phaseBanner = Some(PhaseBanner(tag = Some(Tag(content = Text("BETA"))), content = HtmlContent(phaseBannerContent))),
-                        userResearchBanner = Some(UserResearchBanner(url = appConfig.helpMakeGovUkBetterUrl))
-                    ),
-        isWelshTranslationAvailable = welshToggle
+            phaseBanner = Some(PhaseBanner(tag = Some(Tag(content = Text("Beta"))), content = HtmlContent(phaseBannerContent))),
+            userResearchBanner = Some(UserResearchBanner(url = appConfig.helpMakeGovUkBetterUrl))
+        )
 ))(mainContent)
