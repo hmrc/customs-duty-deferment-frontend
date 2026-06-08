@@ -12,7 +12,7 @@ addSbtPlugin("org.playframework"  % "sbt-plugin"                 % "3.0.10")
 addSbtPlugin("com.github.sbt"     % "sbt-gzip"                   % "2.0.0")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"              % "2.3.1")
 addSbtPlugin("uk.gov.hmrc"        % "sbt-play-cross-compilation" % "2.3.0")
-addSbtPlugin("io.github.irundaia" % "sbt-sassify"                % "1.5.2")
+addSbtPlugin("uk.gov.hmrc"        % "sbt-sass-compiler"          % "0.12.0")
 addSbtPlugin(
   "org.scalastyle"               %% "scalastyle-sbt-plugin"      % "1.0.0"
     exclude ("org.scala-lang.modules", "scala-xml_2.12")
