@@ -63,7 +63,6 @@ case class DutyDefermentAccountViewModel(
   requestedStatement: Option[HtmlFormat.Appendable] = None,
   currentStatements: CurrentStatementRow,
   statOlderThanSevenMonths: GuidanceRow,
-  chiefDeclaration: GuidanceRow,
   helpAndSupport: GuidanceRow
 )
 
@@ -95,7 +94,6 @@ object DutyDefermentAccountViewModel {
       currentStatements =
         currentStatements(accountNumber, hasCurrentStatements, firstPopulatedStatement, tailingStatements),
       statOlderThanSevenMonths = statOlderThanSevenMonths(serviceUnavailableUrl),
-      chiefDeclaration = chiefDeclaration,
       helpAndSupport = helpAndSupport
     )
   }
@@ -250,29 +248,6 @@ object DutyDefermentAccountViewModel {
       )
     )
 
-  private def chiefDeclaration(implicit appConfig: AppConfig, messages: Messages): GuidanceRow =
-    GuidanceRow(
-      h2Heading = h2Component(
-        id = Some("chief-guidance-heading"),
-        msg = messages("cf.common.chiefStatements.heading"),
-        h2Class = Some("govuk-!-margin-top-6")
-      ),
-      paragraph = Some(
-        pComponent(
-          id = Some("chief-documents-guidance-text1"),
-          classes = Some("govuk-body govuk-!-margin-bottom-7"),
-          content = Html(messages("cf.accounts.chiefStatements.description")),
-          tabLink = Some(
-            hmrcNewTabLinkComponent(
-              classList = Some("govuk-link govuk-link--no-visited-state"),
-              href = Some(appConfig.chiefDDstatementsLink),
-              text = messages("cf.accounts.chiefStatements.description.link")
-            )
-          )
-        )
-      )
-    )
-
   private def helpAndSupport(implicit appConfig: AppConfig, messages: Messages): GuidanceRow =
     GuidanceRow(
       h2Heading = h2Component(
@@ -294,5 +269,4 @@ object DutyDefermentAccountViewModel {
         )
       )
     )
-
 }

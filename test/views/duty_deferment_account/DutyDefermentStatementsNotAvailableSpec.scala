@@ -46,11 +46,6 @@ class DutyDefermentStatementsNotAvailableSpec extends SpecBase {
         .contains(messages("cf.common.missing-documents-guidance.cdsStatements.heading")) mustBe true
 
       view
-        .getElementById("chief-guidance-heading")
-        .text()
-        .contains(messages("cf.common.chiefStatements.heading")) mustBe true
-
-      view
         .getElementById("dd-support-message-heading")
         .text()
         .contains(messages("cf.accounts.support.heading")) mustBe true

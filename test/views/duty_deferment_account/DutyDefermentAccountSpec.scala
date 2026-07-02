@@ -84,11 +84,6 @@ class DutyDefermentAccountSpec extends SpecBase {
     viewDoc.getElementById("missing-documents-guidance-heading").text() mustBe
       messages("cf.common.missing-documents-guidance.cdsStatements.heading")
 
-    viewDoc.getElementById("chief-guidance-heading").text()         must not be empty
-    viewDoc.getElementById("chief-documents-guidance-text1").text() must not be empty
-    viewDoc.getElementById("chief-guidance-heading").text() mustBe
-      messages("cf.common.chiefStatements.heading")
-
     viewDoc.getElementById("dd-support-message-heading").text() mustBe messages("cf.accounts.support.heading")
     viewDoc.getElementById("dd-support-message-heading").text() must not be empty
     viewDoc.getElementById("dd-support-message").text()         must not be empty
