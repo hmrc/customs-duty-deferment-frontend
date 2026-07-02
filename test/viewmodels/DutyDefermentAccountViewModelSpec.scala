@@ -49,7 +49,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainCurrentStatementSection(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
@@ -69,7 +68,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
@@ -89,7 +87,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
@@ -109,7 +106,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 2
       }
@@ -129,7 +125,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainDirectDebitInfoMsg(viewModel)
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 1
       }
@@ -150,7 +145,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldNotContainRequestedStatementsMsg(viewModel)
         shouldContainNoStatementsAvailableMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
@@ -171,7 +165,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
         shouldContainRequestedStatementsMsg(viewModel, someLinkId)(messages, appConfig)
         shouldContainNoStatementsAvailableMsg(viewModel)
         shouldContainStatementOlderThanSevenMonthsGuidance(viewModel)
-        shouldContainChiefStatementGuidance(viewModel)(appConfig, messages)
         shouldContainHelpAndSupportGuidance(viewModel)(appConfig, messages)
         countOfShowAllSectionLink(viewModel) mustBe 0
       }
@@ -288,35 +281,6 @@ class DutyDefermentAccountViewModelSpec extends SpecBase {
           new inset().apply(
             messages("cf.accounts.older-statements.description.inset-message")
           )
-        )
-      )
-
-  private def shouldContainChiefStatementGuidance(
-    viewModel: DutyDefermentAccountViewModel
-  )(implicit appConfig: AppConfig, messages: Messages): Assertion =
-    viewModel.chiefDeclaration mustBe
-      GuidanceRow(
-        h2Heading = new h2().apply(
-          id = Some("chief-guidance-heading"),
-          msg = messages("cf.common.chiefStatements.heading"),
-          h2Class = Some("govuk-!-margin-top-6")
-        ),
-        paragraph = Some(
-          new p().apply(
-            id = Some("chief-documents-guidance-text1"),
-            classes = Some("govuk-body govuk-!-margin-bottom-7"),
-            content = Html(messages("cf.accounts.chiefStatements.description")),
-            tabLink = Some(
-              new HmrcNewTabLink().apply(
-                NewTabLink(
-                  language = Some(messages.lang.language),
-                  classList = Some("govuk-link govuk-link--no-visited-state"),
-                  href = Some(appConfig.chiefDDstatementsLink),
-                  text = messages("cf.accounts.chiefStatements.description.link")
-                )
-              )
-            )
-          )(messages)
         )
       )
 
