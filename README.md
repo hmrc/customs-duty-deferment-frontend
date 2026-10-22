@@ -90,7 +90,7 @@ These profiles are defined in [service-manager-config](https://github.com/hmrc/s
 Depending on what you wish to run, you can use one of these profiles (which include the CUSTOMS_DUTY_DEFERMENT_FRONTEND service):
 
 - CUSTOMS_FINANCIALS_ALL
-- CUSTOMS_FINANCIALS_TESTS"
+- CUSTOMS_FINANCIALS_TESTS
 - CUSTOMS_FINANCIALS_ACCOUNT_CONTACT_FRONTEND_ALL
 - CUSTOMS_FINANCIALS_ATS
 - CUSTOMS_DUTY_DEFERMENT_ATS
