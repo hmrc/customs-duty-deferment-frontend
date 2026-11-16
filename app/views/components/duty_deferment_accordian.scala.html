@@ -30,19 +30,20 @@
     hideAllSections: Option[String] = None
 )(implicit messages: Messages)
 
-    @if(statementPeriods.nonEmpty) {
+    @if(statementPeriods.exists(_.periods.nonEmpty)) {
         @govukAccordion(Accordion(
             id = "accordion-default",
             showSection = Some(messages("cf.account.detail.accordion.show-section")),
             showAllSections = Some(messages("cf.account.detail.accordion.show-all-sections")),
             hideSection = Some(messages("cf.account.detail.accordion.hide-section")),
             hideAllSections = Some(messages("cf.account.detail.accordion.hide-all-sections")),
-            items = statementPeriods.zipWithIndex.map { case (group, groupIndex) =>
+            items = statementPeriods.filter(_.periods.nonEmpty).zipWithIndex.map { case (group, groupIndex) =>
                 Section(
                     headingContent = Text({
                         Formatters.dateAsMonthAndYear(group.monthAndYear)
                     }),
-                    content = HtmlContent(duty_deferment_accordian_content(group, historyIndex))
+                    content = HtmlContent(duty_deferment_accordian_content(group, historyIndex)),
+                    expanded = Some(groupIndex == 0)
                 )
             }
         ))

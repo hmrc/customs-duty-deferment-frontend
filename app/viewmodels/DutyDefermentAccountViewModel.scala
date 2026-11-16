@@ -184,12 +184,12 @@ object DutyDefermentAccountViewModel {
       }
 
       val headWithEntriesOrNoStatement = if (statement.groups.nonEmpty) {
-        val ddHead = new duty_deferment_head(emptyH2Component, emptyPComponent).apply(statement.groups.head)
-
         val entries: HtmlFormat.Appendable =
-          new duty_deferment_accordian(new GovukAccordion()).apply(statement.groups.tail, 0)
+          new duty_deferment_accordian(new GovukAccordion()).apply(statement.groups, 0)
 
-        DDHeadWithEntriesOrNoStatements(ddHeadWithEntry = Some(DDHeadWithEntry(ddHead, entries)))
+        DDHeadWithEntriesOrNoStatements(
+          ddHeadWithEntry = Some(DDHeadWithEntry(HtmlFormat.empty, entries))
+        )
       } else {
         headWithNoStatement
       }
